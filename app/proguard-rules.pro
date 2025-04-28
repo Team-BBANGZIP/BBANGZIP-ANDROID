@@ -37,15 +37,11 @@
 # Retrofit
 -dontwarn retrofit2.KotlinExtensions
 -dontwarn retrofit2.KotlinExtensions$*
--keep,allowobfuscation interface <1>
--if interface * { @retrofit2.http.* <methods>; }
--keep,allowoptimization,allowshrinking,allowobfuscation class <3>
--keep,allowobfuscation,allowshrinking class retrofit2.Response
--keep,allowobfuscation,allowshrinking interface retrofit2.Call
--if interface * { @retrofit2.http.* public *** *(...); }
 -keepclassmembers,allowshrinking,allowobfuscation interface * {
     @retrofit2.http.* <methods>;
 }
+-keep,allowobfuscation,allowshrinking class retrofit2.Response
+-keep,allowobfuscation,allowshrinking interface retrofit2.Call
 
 # Compose
 -keep class androidx.compose.** { *; }
