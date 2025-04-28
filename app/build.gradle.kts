@@ -31,15 +31,21 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-        buildConfigField("String", "BASE_URL", properties["base.url"].toString())
         buildConfigField("String", "KAKAO_NATIVE_APP_KEY", properties["kakao.native.app.key"].toString())
 
         manifestPlaceholders["KAKAO_NATIVE_APP_KEY_MANIFEST"] = properties["kakao.native.app.key.manifest"] as String
     }
 
     buildTypes {
-        release {
+        debug {
             isMinifyEnabled = false
+            buildConfigField("String", "BASE_URL", properties["dev.base.url"].toString())
+        }
+
+        release {
+            isMinifyEnabled = true
+            isShrinkResources = true
+            buildConfigField("String", "BASE_URL", properties["prod.base.url"].toString())
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
