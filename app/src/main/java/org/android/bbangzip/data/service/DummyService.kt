@@ -10,6 +10,6 @@ import retrofit2.http.Path
 interface DummyService {
     @GET("$API/{$ID}")
     suspend fun getDummy(
-        @Path(ID) dummyId: Long
+        @Path(ID) dummyId: Long,
     ): BaseResponse<ResponseDummyDto>
 }

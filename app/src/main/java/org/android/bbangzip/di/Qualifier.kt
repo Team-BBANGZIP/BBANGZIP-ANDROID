@@ -1,6 +1,5 @@
 package org.android.bbangzip.di
 
-
 import javax.inject.Qualifier
 
 @Qualifier

@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
-import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -64,9 +63,7 @@ class MainNavigator(
 }
 
 @Composable
-fun rememberMainNavigator(
-    navHostController: NavHostController = rememberNavController(),
-): MainNavigator =
+fun rememberMainNavigator(navHostController: NavHostController = rememberNavController()): MainNavigator =
     remember(navHostController) {
         MainNavigator(navHostController = navHostController)
     }

@@ -7,7 +7,7 @@ import org.android.bbangzip.R
 import org.android.bbangzip.presentation.model.BottomNavigationRoute
 import org.android.bbangzip.presentation.model.Route
 
-enum class BottomNavigationType (
+enum class BottomNavigationType(
     @DrawableRes val bottomNaviIcon: Int,
     @StringRes val bottomNaviTitle: Int,
     val route: BottomNavigationRoute,

@@ -7,12 +7,12 @@ enum class DummyType(
     @StringRes val title: Int,
 ) {
     FIRST(
-        title = R.string.app_name
+        title = R.string.app_name,
     ),
     SECOND(
-        title = R.string.app_name
+        title = R.string.app_name,
     ),
     THIRD(
-        title = R.string.app_name
+        title = R.string.app_name,
     ),
 }

@@ -15,62 +15,62 @@ import javax.inject.Inject
 
 @HiltViewModel
 class DummyViewModel
-@Inject
-constructor(
-    private val userRepository: UserRepository,
-    private val fetchDummyUseCase: FetchDummyUseCase,
-    savedStateHandle: SavedStateHandle,
-) : BaseViewModel<DummyContract.DummyEvent, DummyContract.DummyState, DummyContract.DummyReduce, DummyContract.DummySideEffect>(
-    savedStateHandle = savedStateHandle,
-) {
-    val userPreferencesFlow: Flow<UserPreferences> = userRepository.userPreferenceFlow
+    @Inject
+    constructor(
+        private val userRepository: UserRepository,
+        private val fetchDummyUseCase: FetchDummyUseCase,
+        savedStateHandle: SavedStateHandle,
+    ) : BaseViewModel<DummyContract.DummyEvent, DummyContract.DummyState, DummyContract.DummyReduce, DummyContract.DummySideEffect>(
+            savedStateHandle = savedStateHandle,
+        ) {
+        val userPreferencesFlow: Flow<UserPreferences> = userRepository.userPreferenceFlow
 
-    fun setUserData(accessToken: String) {
-        viewModelScope.launch { userRepository.setAccessToken(accessToken) }
-    }
-
-    fun clearAccessToken() {
-        viewModelScope.launch {
-            userRepository.clearAccessToken()
+        fun setUserData(accessToken: String) {
+            viewModelScope.launch { userRepository.setAccessToken(accessToken) }
         }
-    }
 
-    override fun createInitialState(savedState: Parcelable?): DummyContract.DummyState {
-        return savedState as? DummyContract.DummyState ?: DummyContract.DummyState()
-    }
-
-    init {
-        setEvent(DummyContract.DummyEvent.Initialize)
-    }
-
-    override fun handleEvent(event: DummyContract.DummyEvent) {
-        when (event) {
-            is DummyContract.DummyEvent.Initialize -> launch { initDataLoad() }
-            is DummyContract.DummyEvent.OnClickNextBtn -> {
-                setSideEffect(DummyContract.DummySideEffect.ShowSnackBar("메세지 전송"))
-                updateState(DummyContract.DummyReduce.UpdateDummy(dummy = Dummy(dummyA = "", dummyB = "")))
+        fun clearAccessToken() {
+            viewModelScope.launch {
+                userRepository.clearAccessToken()
             }
         }
-    }
 
-    override fun reduceState(
-        state: DummyContract.DummyState,
-        reduce: DummyContract.DummyReduce,
-    ): DummyContract.DummyState {
-        return when (reduce) {
-            is DummyContract.DummyReduce.UpdateState -> reduce.state
-            is DummyContract.DummyReduce.UpdateLoading -> state.copy(loading = reduce.loading)
-            is DummyContract.DummyReduce.UpdateDummy -> state.copy(dummy = Dummy(dummyA = "", dummyB = ""))
+        override fun createInitialState(savedState: Parcelable?): DummyContract.DummyState {
+            return savedState as? DummyContract.DummyState ?: DummyContract.DummyState()
         }
-    }
 
-    private fun initDataLoad() {
-        fetchDummy(id = 3L)
-    }
+        init {
+            setEvent(DummyContract.DummyEvent.Initialize)
+        }
 
-    private fun fetchDummy(id: Long) {
-        viewModelScope.launch {
-            fetchDummyUseCase(id = id).onSuccess { data ->
+        override fun handleEvent(event: DummyContract.DummyEvent) {
+            when (event) {
+                is DummyContract.DummyEvent.Initialize -> launch { initDataLoad() }
+                is DummyContract.DummyEvent.OnClickNextBtn -> {
+                    setSideEffect(DummyContract.DummySideEffect.ShowSnackBar("메세지 전송"))
+                    updateState(DummyContract.DummyReduce.UpdateDummy(dummy = Dummy(dummyA = "", dummyB = "")))
+                }
+            }
+        }
+
+        override fun reduceState(
+            state: DummyContract.DummyState,
+            reduce: DummyContract.DummyReduce,
+        ): DummyContract.DummyState {
+            return when (reduce) {
+                is DummyContract.DummyReduce.UpdateState -> reduce.state
+                is DummyContract.DummyReduce.UpdateLoading -> state.copy(loading = reduce.loading)
+                is DummyContract.DummyReduce.UpdateDummy -> state.copy(dummy = Dummy(dummyA = "", dummyB = ""))
+            }
+        }
+
+        private fun initDataLoad() {
+            fetchDummy(id = 3L)
+        }
+
+        private fun fetchDummy(id: Long) {
+            viewModelScope.launch {
+                fetchDummyUseCase(id = id).onSuccess { data ->
                     updateState(
                         DummyContract.DummyReduce.UpdateDummy(
                             Dummy(
@@ -82,6 +82,6 @@ constructor(
                 }.onFailure {
                     setSideEffect(DummyContract.DummySideEffect.ShowSnackBar("오류남"))
                 }
+            }
         }
     }
-}

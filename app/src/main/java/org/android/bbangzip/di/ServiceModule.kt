@@ -15,6 +15,5 @@ object ServiceModule {
     @Singleton
     fun provideDummyService(
         @BbangZip retrofit: Retrofit,
-    ): DummyService =
-        retrofit.create(DummyService::class.java)
+    ): DummyService = retrofit.create(DummyService::class.java)
 }

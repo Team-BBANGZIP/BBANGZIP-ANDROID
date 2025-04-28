@@ -53,7 +53,7 @@ fun BbangZipBaseTopBar(
                         imageVector = ImageVector.vectorResource(it),
                         contentDescription = null,
                         modifier =
-                            Modifier.padding(8.dp)
+                            Modifier.padding(8.dp),
                     )
                 }
             }
@@ -62,7 +62,7 @@ fun BbangZipBaseTopBar(
                 text = title,
                 modifier = Modifier.weight(1f),
                 color = Color.Blue,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Box(
@@ -93,7 +93,7 @@ fun BbangZipMenuTopBarPreview() {
             modifier = Modifier.fillMaxSize(),
         ) {
             BbangZipBaseTopBar(
-                title = "제 과제 빵점"
+                title = "제 과제 빵점",
             )
         }
     }

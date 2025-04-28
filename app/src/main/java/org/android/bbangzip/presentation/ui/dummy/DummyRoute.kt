@@ -21,9 +21,10 @@ fun DummyRoute(
     LaunchedEffect(viewModel.uiSideEffect) {
         viewModel.uiSideEffect.collectLatest { effect ->
             when (effect) {
-                is DummyContract.DummySideEffect.ShowSnackBar -> snackbarHostState.showSnackbar(
-                    effect.message
-                )
+                is DummyContract.DummySideEffect.ShowSnackBar ->
+                    snackbarHostState.showSnackbar(
+                        effect.message,
+                    )
             }
         }
     }

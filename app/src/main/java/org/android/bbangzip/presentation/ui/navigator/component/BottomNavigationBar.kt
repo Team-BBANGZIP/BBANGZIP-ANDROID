@@ -89,10 +89,11 @@ private fun BottomNavigationItem(
     spacing: Dp = 4.dp,
 ) {
     Column(
-        modifier = modifier
-            .noRippleClickable {
-            onBottomNaviBarItemSelected(bottomNaviType)
-        },
+        modifier =
+            modifier
+                .noRippleClickable {
+                    onBottomNaviBarItemSelected(bottomNaviType)
+                },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
@@ -119,7 +120,7 @@ private fun BottomNavigationItem(
                     Color.Blue
                 } else {
                     Color.Yellow
-                }
+                },
         )
     }
 }

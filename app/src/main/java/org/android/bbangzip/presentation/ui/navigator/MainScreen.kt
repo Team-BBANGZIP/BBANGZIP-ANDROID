@@ -14,9 +14,7 @@ import org.android.bbangzip.presentation.ui.navigator.component.BottomNavigation
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 
 @Composable
-fun MainScreen(
-    navigator: MainNavigator,
-) {
+fun MainScreen(navigator: MainNavigator) {
     MainScreenContent(
         navigator = navigator,
     )
@@ -25,7 +23,7 @@ fun MainScreen(
 @Composable
 private fun MainScreenContent(
     navigator: MainNavigator,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier =
@@ -34,7 +32,7 @@ private fun MainScreenContent(
         content = { padding ->
             MainNavHost(
                 navigator = navigator,
-                padding = padding
+                padding = padding,
             )
         },
         bottomBar = {

@@ -56,7 +56,7 @@ fun Modifier.applyFilterOnClick(
             .clip(RoundedCornerShape(size = radius))
             .background(
                 if (isPressed && !isDisabled) finalFilteredColor else baseColor,
-                shape = RoundedCornerShape(size = radius)
+                shape = RoundedCornerShape(size = radius),
             )
             .clickable(
                 interactionSource = interactionSource,

@@ -15,7 +15,7 @@ import org.android.bbangzip.presentation.ui.dummy.navigation.dummyNavGraph
 fun MainNavHost(
     modifier: Modifier = Modifier,
     navigator: MainNavigator,
-    padding: PaddingValues
+    padding: PaddingValues,
 ) {
     Box(
         modifier =
@@ -26,7 +26,7 @@ fun MainNavHost(
     ) {
         NavHost(
             navController = navigator.navHostController,
-            startDestination = navigator.startDestination
+            startDestination = navigator.startDestination,
         ) {
             dummyNavGraph()
         }
