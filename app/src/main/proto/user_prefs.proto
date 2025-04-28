@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+option java_package = "org.android.bbangzip";
+option java_multiple_files = true;
+
+message UserPreferences {
+    string access_token = 1;
+    string refresh_token = 2;
+    bool is_login = 3;
+}
