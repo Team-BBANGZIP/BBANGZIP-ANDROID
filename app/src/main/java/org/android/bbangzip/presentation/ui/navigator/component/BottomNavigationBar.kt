@@ -31,7 +31,7 @@ import androidx.compose.ui.unit.dp
 import okhttp3.internal.toImmutableList
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.type.BottomNavigationType
-import org.android.bbangzip.presentation.util.modifier.noRippleClickable
+import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 
 @Composable

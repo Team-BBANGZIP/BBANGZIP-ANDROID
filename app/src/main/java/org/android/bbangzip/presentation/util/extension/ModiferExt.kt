@@ -1,4 +1,4 @@
-package org.android.bbangzip.presentation.util.modifier
+package org.android.bbangzip.presentation.util.extension
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
