@@ -13,7 +13,7 @@ fun BBANGZIPANDROIDTheme(
     MaterialTheme(
         content = {
             CompositionLocalProvider(
-                LocalBbangZipTypography provides bbangZipTypography
+                LocalBbangZipTypography provides bbangZipTypography,
             ) {
                 content()
             }
