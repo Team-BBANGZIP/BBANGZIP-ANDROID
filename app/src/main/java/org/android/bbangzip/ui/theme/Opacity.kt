@@ -30,7 +30,7 @@ val defaultBbangZipOpacity =
         opacity70 = 0.7f,
         opacity80 = 0.8f,
         opacity90 = 0.9f,
-        opacity100 = 1f
+        opacity100 = 1f,
     )
 
 val LocalBbangZipOpacity = staticCompositionLocalOf { defaultBbangZipOpacity }
