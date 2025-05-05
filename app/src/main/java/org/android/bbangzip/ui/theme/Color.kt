@@ -1,11 +1,130 @@
 package org.android.bbangzip.ui.theme
 
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+// Common
+val Common100: Color = Color(0xFF121212)
+val Common0: Color = Color(0xFFFFFFFF)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
+// Grayscale
+val Grayscale5 = Color(0xFFFDFDFD)
+val Grayscale7 = Color(0xFFF6F6F5)
+val Grayscale10 = Color(0xFFEDECEA)
+val Grayscale20 = Color(0xFFE4E2E0)
+val Grayscale30 = Color(0xFFC9C7C5)
+val Grayscale40 = Color(0xFFB6B4B1)
+val Grayscale50 = Color(0xFFA29D96)
+val Grayscale60 = Color(0xFF9A958F)
+val Grayscale70 = Color(0xFF706A63)
+val Grayscale80 = Color(0xFF6B6560)
+val Grayscale90 = Color(0xFF463D34)
+
+// Brown
+val Brown1 = Color(0xFFC8B5A2)
+val Brown50 = Color(0xFF897869)
+val Brown100 = Color(0xFF4B4137)
+
+// Apricot
+val Apricot1 = Color(0xFFFAF6F3)
+val Apricot50 = Color(0xFFF6F1EE)
+val Apricot100 = Color(0xFFF2EAE4)
+
+// Check Color
+val Todo1 = Color(0xFFEA7152)
+val Todo2 = Color(0xFFF09C86)
+val Todo3 = Color(0xFFFED45C)
+val Todo4 = Color(0xFFF6DDAF)
+val Todo5 = Color(0xFF7A946D)
+val Todo6 = Color(0xFFA2B499)
+val Todo7 = Color(0xFF5C62AC)
+val Todo8 = Color(0xFF8D91C5)
+val Todo9 = Color(0xFF8F63E9)
+val Todo10 = Color(0xFFB79FE8)
+
+@Immutable
+data class BbangZipColor(
+    // Primary
+    val primaryLight_C8B5A2: Color,
+    val primaryNormal_897869: Color,
+    val primaryStrong_4B4137: Color,
+    // Secondary
+    val secondaryLight_FAF6F3: Color,
+    val secondaryNormal_F6F1EE: Color,
+    val secondaryStrong_F2EAE4: Color,
+    // Label
+    val labelDisable_E4E2E0: Color,
+    val labelAssistive_C9C7C5: Color,
+    val labelAlternative_A29D96: Color,
+    val labelNeutral_706A63: Color,
+    val labelNormal_6B6560: Color,
+    val labelStrong_463D34: Color,
+    // Background
+    val backgroundNormal_FFFFFF: Color,
+    val backgroundGray_FDFDFD: Color,
+    val backgroundAlternative_FAF6F3: Color,
+    val backgroundStrong_F2EAE4: Color,
+    val backgroundDimmer_282119_52: Color,
+    // Static
+    val staticWhite_FFFFFF: Color,
+    val staticBlack_121212: Color,
+    // Component
+    val componentIvory_FDFDFD: Color,
+    val componentGrey_FFFFFF: Color,
+    // To-do
+    val todoRed1_EA7152: Color,
+    val todoRed2_F09C86: Color,
+    val todoYellow1_FED45C: Color,
+    val todoYellow2_F6DDAF: Color,
+    val todoGreen1_7A946D: Color,
+    val todoGreen2_A2B499: Color,
+    val todoBlue1_5C62AC: Color,
+    val todoBlue2_8D91C5: Color,
+    val todoPurple1_8F63E9: Color,
+    val todoPurple2_B79FE8: Color,
+)
+
+val defaultBbangZipColor =
+    BbangZipColor(
+        // Primary
+        primaryLight_C8B5A2 = Brown1,
+        primaryNormal_897869 = Brown50,
+        primaryStrong_4B4137 = Brown100,
+        // Secondary
+        secondaryLight_FAF6F3 = Apricot1,
+        secondaryNormal_F6F1EE = Apricot50,
+        secondaryStrong_F2EAE4 = Apricot100,
+        // Label
+        labelDisable_E4E2E0 = Grayscale20,
+        labelAssistive_C9C7C5 = Grayscale30,
+        labelAlternative_A29D96 = Grayscale50,
+        labelNeutral_706A63 = Grayscale70,
+        labelNormal_6B6560 = Grayscale80,
+        labelStrong_463D34 = Grayscale90,
+        // Background
+        backgroundNormal_FFFFFF = Common0,
+        backgroundGray_FDFDFD = Grayscale5,
+        backgroundAlternative_FAF6F3 = Apricot1,
+        backgroundStrong_F2EAE4 = Apricot100,
+        backgroundDimmer_282119_52 = Grayscale90.copy(alpha = defaultBbangZipOpacity.opacity50),
+        // Static
+        staticWhite_FFFFFF = Common0,
+        staticBlack_121212 = Common100,
+        // Component
+        componentIvory_FDFDFD = Grayscale5,
+        componentGrey_FFFFFF = Common0,
+        // To-do
+        todoRed1_EA7152 = Todo1,
+        todoRed2_F09C86 = Todo2,
+        todoYellow1_FED45C = Todo3,
+        todoYellow2_F6DDAF = Todo4,
+        todoGreen1_7A946D = Todo5,
+        todoGreen2_A2B499 = Todo6,
+        todoBlue1_5C62AC = Todo7,
+        todoBlue2_8D91C5 = Todo8,
+        todoPurple1_8F63E9 = Todo9,
+        todoPurple2_B79FE8 = Todo10,
+    )
+
+val LocalBbangZipColor = staticCompositionLocalOf { defaultBbangZipColor }
