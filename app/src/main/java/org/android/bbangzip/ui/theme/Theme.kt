@@ -9,11 +9,17 @@ fun BBANGZIPANDROIDTheme(
     content: @Composable () -> Unit,
 ) {
     val bbangZipTypography = defaultBbangZipTypography
+    val bbangZipColor = defaultBbangZipColor
+    val bbangZipOpacity = defaultBbangZipOpacity
+    val bbangZipBrush = defaultBbangZipBrush
 
     MaterialTheme(
         content = {
             CompositionLocalProvider(
                 LocalBbangZipTypography provides bbangZipTypography,
+                LocalBbangZipColor provides bbangZipColor,
+                LocalBbangZipOpacity provides bbangZipOpacity,
+                LocalBbangZipBrush provides bbangZipBrush,
             ) {
                 content()
             }
