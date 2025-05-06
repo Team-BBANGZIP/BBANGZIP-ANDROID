@@ -1,6 +1,10 @@
 package org.android.bbangzip.ui.theme
 
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.darkColorScheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 
@@ -8,6 +12,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 fun BBANGZIPANDROIDTheme(
     content: @Composable () -> Unit,
 ) {
+    val bbangZipTypography = defaultBbangZipTypography
     val bbangZipColor = defaultBbangZipColor
     val bbangZipOpacity = defaultBbangZipOpacity
     val bbangZipBrush = defaultBbangZipBrush
@@ -15,6 +20,7 @@ fun BBANGZIPANDROIDTheme(
     MaterialTheme(
         content = {
             CompositionLocalProvider(
+                LocalBbangZipTypography provides bbangZipTypography,
                 LocalBbangZipColor provides bbangZipColor,
                 LocalBbangZipOpacity provides bbangZipOpacity,
                 LocalBbangZipBrush provides bbangZipBrush,
