@@ -9,10 +9,10 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.sp
 import org.android.bbangzip.R
 
-val PretendardExtraBold = FontFamily(Font(R.font.pretendard_extrabold))
-val PretendardSemiBold = FontFamily(Font(R.font.pretendard_semibold))
-val PretendardMedium = FontFamily(Font(R.font.pretendard_medium))
-val PretendardRegular = FontFamily(Font(R.font.pretendard_regular))
+val pretendardExtraBold = FontFamily(Font(R.font.pretendard_extrabold))
+val pretendardSemiBold = FontFamily(Font(R.font.pretendard_semibold))
+val pretendardMedium = FontFamily(Font(R.font.pretendard_medium))
+val pretendardRegular = FontFamily(Font(R.font.pretendard_regular))
 
 @Immutable
 data class BbangZipTypography(
@@ -49,159 +49,140 @@ val defaultBbangZipTypography =
         timerExtraBold =
             TextStyle(
                 fontSize = 80.sp,
-                fontFamily = PretendardExtraBold,
+                fontFamily = pretendardExtraBold,
                 lineHeight = 80.sp,
                 letterSpacing = (-4).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         // Picker
         picker1SemiBold =
             TextStyle(
                 fontSize = 20.sp,
-                fontFamily = PretendardSemiBold,
+                fontFamily = pretendardSemiBold,
                 lineHeight = 28.sp,
                 letterSpacing = (-0.6).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         picker2SemiBold =
             TextStyle(
                 fontSize = 20.sp,
-                fontFamily = PretendardMedium,
+                fontFamily = pretendardMedium,
                 lineHeight = 28.sp,
                 letterSpacing = (-0.6).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         // Title
         title1SemiBold =
             TextStyle(
                 fontSize = 20.sp,
-                fontFamily = PretendardSemiBold,
+                fontFamily = pretendardSemiBold,
                 lineHeight = 24.sp,
                 letterSpacing = (-0.6).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         title2Medium =
             TextStyle(
                 fontSize = 18.sp,
-                fontFamily = PretendardMedium,
+                fontFamily = pretendardMedium,
                 lineHeight = 21.6.sp,
                 letterSpacing = (-0.54).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         title3SemiBold =
             TextStyle(
                 fontSize = 16.sp,
-                fontFamily = PretendardSemiBold,
+                fontFamily = pretendardSemiBold,
                 lineHeight = 19.2.sp,
                 letterSpacing = (-0.48).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         // Subtitle
         subTitle1Medium =
             TextStyle(
                 fontSize = 14.sp,
-                fontFamily = PretendardMedium,
+                fontFamily = pretendardMedium,
                 lineHeight = 19.6.sp,
                 letterSpacing = (-0.42).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         subTitle2Regular =
             TextStyle(
                 fontSize = 14.sp,
-                fontFamily = PretendardExtraBold,
+                fontFamily = pretendardExtraBold,
                 lineHeight = 19.6.sp,
                 letterSpacing = (-0.42).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         subTitle3Medium =
             TextStyle(
                 fontSize = 12.sp,
-                fontFamily = PretendardMedium,
+                fontFamily = pretendardMedium,
                 lineHeight = 18.sp,
                 letterSpacing = (-0.36).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         // Body
         body1Medium =
             TextStyle(
                 fontSize = 16.sp,
-                fontFamily = PretendardMedium,
+                fontFamily = pretendardMedium,
                 lineHeight = 22.4.sp,
                 letterSpacing = (-0.48).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         body2Medium =
             TextStyle(
                 fontSize = 14.sp,
-                fontFamily = PretendardMedium,
+                fontFamily = pretendardMedium,
                 lineHeight = 19.6.sp,
                 letterSpacing = (-0.42).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         body3Medium =
             TextStyle(
                 fontSize = 13.sp,
-                fontFamily = PretendardMedium,
+                fontFamily = pretendardMedium,
                 lineHeight = 18.2.sp,
                 letterSpacing = (0.26).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         body4Medium =
             TextStyle(
                 fontSize = 12.sp,
-                fontFamily = PretendardMedium,
+                fontFamily = pretendardMedium,
                 lineHeight = 16.8.sp,
                 letterSpacing = (-0.36).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         // Label
         label1SemiBold =
             TextStyle(
                 fontSize = 14.sp,
-                fontFamily = PretendardSemiBold,
+                fontFamily = pretendardSemiBold,
                 lineHeight = 16.8.sp,
                 letterSpacing = (-0.42).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         label2Regular =
             TextStyle(
                 fontSize = 14.sp,
-                fontFamily = PretendardRegular,
+                fontFamily = pretendardRegular,
                 lineHeight = 16.8.sp,
                 letterSpacing = (-0.42).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         label3SemiBold =
             TextStyle(
                 fontSize = 12.sp,
-                fontFamily = PretendardSemiBold,
+                fontFamily = pretendardSemiBold,
                 lineHeight = 14.4.sp,
                 letterSpacing = (-0.36).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         label4Regular =
             TextStyle(
                 fontSize = 12.sp,
-                fontFamily = PretendardRegular,
+                fontFamily = pretendardRegular,
                 lineHeight = 14.4.sp,
                 letterSpacing = (-0.36).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         label5SemiBold =
             TextStyle(
                 fontSize = 10.sp,
-                fontFamily = PretendardSemiBold,
+                fontFamily = pretendardSemiBold,
                 lineHeight = 14.sp,
                 letterSpacing = (0.2).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
         label6Medium =
             TextStyle(
                 fontSize = 10.sp,
-                fontFamily = PretendardMedium,
+                fontFamily = pretendardMedium,
                 lineHeight = 14.sp,
                 letterSpacing = (0.2).sp,
-                platformStyle = PlatformTextStyle(includeFontPadding = false),
             ),
     )
 
