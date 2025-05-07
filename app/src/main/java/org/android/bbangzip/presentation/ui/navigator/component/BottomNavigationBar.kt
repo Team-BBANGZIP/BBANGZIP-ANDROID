@@ -45,19 +45,19 @@ fun BottomNavigationBar(
     ) {
         Box(
             modifier =
-            modifier
-                .fillMaxWidth()
-                .background(color = BbangZipTheme.color.componentIvory_FDFDFD)
-                .border(
-                    width = 1.dp,
-                    color = BbangZipTheme.color.labelDisable_E4E2E0,
-                ),
+                modifier
+                    .fillMaxWidth()
+                    .background(color = BbangZipTheme.color.componentIvory_FDFDFD)
+                    .border(
+                        width = 1.dp,
+                        color = BbangZipTheme.color.labelDisable_E4E2E0,
+                    ),
         ) {
             Row(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 12.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 12.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
@@ -87,10 +87,10 @@ private fun BottomNavigationItem(
 ) {
     Column(
         modifier =
-        modifier
-            .noRippleClickable {
-                onBottomNaviBarItemSelected(bottomNaviType)
-            },
+            modifier
+                .noRippleClickable {
+                    onBottomNaviBarItemSelected(bottomNaviType)
+                },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
@@ -100,11 +100,11 @@ private fun BottomNavigationItem(
                 imageVector = ImageVector.vectorResource(id = bottomNaviIcon),
                 contentDescription = stringResource(bottomNaviTitle),
                 tint =
-                if (isSelected) {
-                    BbangZipTheme.color.labelStrong_463D34
-                } else {
-                    BbangZipTheme.color.labelAssistive_C9C7C5
-                },
+                    if (isSelected) {
+                        BbangZipTheme.color.labelStrong_463D34
+                    } else {
+                        BbangZipTheme.color.labelAssistive_C9C7C5
+                    },
             )
         }
 
@@ -113,17 +113,17 @@ private fun BottomNavigationItem(
         Text(
             text = stringResource(bottomNaviTitle),
             color =
-            if (isSelected) {
-                BbangZipTheme.color.labelStrong_463D34
-            } else {
-                BbangZipTheme.color.labelAssistive_C9C7C5
-            },
+                if (isSelected) {
+                    BbangZipTheme.color.labelStrong_463D34
+                } else {
+                    BbangZipTheme.color.labelAssistive_C9C7C5
+                },
             style =
-            if (isSelected) {
-                BbangZipTheme.typography.label5SemiBold
-            } else {
-                BbangZipTheme.typography.label6Medium
-            }
+                if (isSelected) {
+                    BbangZipTheme.typography.label5SemiBold
+                } else {
+                    BbangZipTheme.typography.label6Medium
+                },
         )
     }
 }
