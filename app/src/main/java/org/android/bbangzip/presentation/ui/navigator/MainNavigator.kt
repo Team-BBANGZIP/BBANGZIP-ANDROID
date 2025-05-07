@@ -39,7 +39,7 @@ class MainNavigator(
         navOptions {
             popUpTo(BottomNavigationRoute.Timer::class.qualifiedName.orEmpty()) {
                 saveState = true
-                Timber.d("[navigation] restoreState -> $saveState")
+                Timber.d("[navigation] saveState -> $saveState")
             }
             launchSingleTop = true
             restoreState = true
