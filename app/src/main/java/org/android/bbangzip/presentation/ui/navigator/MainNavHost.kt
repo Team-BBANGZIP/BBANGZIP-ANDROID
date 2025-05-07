@@ -21,26 +21,18 @@ fun MainNavHost(
     navigator: MainNavigator,
     padding: PaddingValues,
 ) {
-    Box(
-        modifier =
-            modifier
-                .padding(top = padding.calculateTopPadding())
-                .fillMaxSize()
-                .background(Color.White),
+    NavHost(
+        navController = navigator.navHostController,
+        startDestination = navigator.startDestination,
     ) {
-        NavHost(
-            navController = navigator.navHostController,
-            startDestination = navigator.startDestination,
-        ) {
-            dummyNavGraph()
+        dummyNavGraph()
 
-            timerNavGraph()
+        timerNavGraph()
 
-            todoNavGraph()
+        todoNavGraph()
 
-            myNavGraph()
+        myNavGraph()
 
-            friendNavGraph()
-        }
+        friendNavGraph()
     }
 }
