@@ -6,33 +6,29 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import okhttp3.internal.toImmutableList
-import org.android.bbangzip.R
 import org.android.bbangzip.presentation.type.BottomNavigationType
+import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
+import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @Composable
 fun BottomNavigationBar(
@@ -49,18 +45,19 @@ fun BottomNavigationBar(
     ) {
         Box(
             modifier =
-                modifier
-                    .fillMaxWidth()
-                    .background(color = Color.Transparent),
+            modifier
+                .fillMaxWidth()
+                .background(color = BbangZipTheme.color.componentIvory_FDFDFD)
+                .border(
+                    width = 1.dp,
+                    color = BbangZipTheme.color.labelDisable_E4E2E0,
+                ),
         ) {
             Row(
                 modifier =
-                    Modifier
-                        .fillMaxWidth()
-                        .clip(
-                            shape = RoundedCornerShape(topStart = 32.dp, topEnd = 32.dp),
-                        )
-                        .padding(top = 12.dp, bottom = 8.dp, start = 12.dp, end = 12.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(top = 12.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
@@ -86,41 +83,47 @@ private fun BottomNavigationItem(
     @DrawableRes bottomNaviIcon: Int,
     @StringRes bottomNaviTitle: Int,
     modifier: Modifier = Modifier,
-    spacing: Dp = 4.dp,
+    spacing: Int = 4,
 ) {
     Column(
         modifier =
-            modifier
-                .noRippleClickable {
-                    onBottomNaviBarItemSelected(bottomNaviType)
-                },
+        modifier
+            .noRippleClickable {
+                onBottomNaviBarItemSelected(bottomNaviType)
+            },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
-            modifier = Modifier.padding(horizontal = 24.dp),
+            modifier = Modifier.padding(horizontal = 26.dp),
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = bottomNaviIcon),
-                contentDescription = stringResource(id = R.string.app_name),
+                contentDescription = stringResource(bottomNaviTitle),
                 tint =
-                    if (isSelected) {
-                        Color.Blue
-                    } else {
-                        Color.Yellow
-                    },
+                if (isSelected) {
+                    BbangZipTheme.color.labelStrong_463D34
+                } else {
+                    BbangZipTheme.color.labelAssistive_C9C7C5
+                },
             )
         }
 
-        Spacer(modifier = Modifier.height(spacing))
+        Gap(spacing)
 
         Text(
             text = stringResource(bottomNaviTitle),
             color =
-                if (isSelected) {
-                    Color.Blue
-                } else {
-                    Color.Yellow
-                },
+            if (isSelected) {
+                BbangZipTheme.color.labelStrong_463D34
+            } else {
+                BbangZipTheme.color.labelAssistive_C9C7C5
+            },
+            style =
+            if (isSelected) {
+                BbangZipTheme.typography.label5SemiBold
+            } else {
+                BbangZipTheme.typography.label6Medium
+            }
         )
     }
 }
