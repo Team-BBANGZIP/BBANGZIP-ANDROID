@@ -12,29 +12,24 @@ enum class BottomNavigationType(
     @StringRes val bottomNaviTitle: Int,
     val route: BottomNavigationRoute,
 ) {
-    DUMMY(
-        bottomNaviIcon = R.drawable.ic_dummy_x_24,
-        bottomNaviTitle = R.string.dummy,
-        route = BottomNavigationRoute.Dummy,
-    ),
     TIMER(
-        bottomNaviIcon = R.drawable.ic_dummy_x_24,
-        bottomNaviTitle = R.string.dummy,
+        bottomNaviIcon = R.drawable.ic_timer_default_24,
+        bottomNaviTitle = R.string.bottom_navi_timer_tab_title,
         route = BottomNavigationRoute.Timer,
     ),
     TODO(
-        bottomNaviIcon = R.drawable.ic_dummy_x_24,
-        bottomNaviTitle = R.string.dummy,
+        bottomNaviIcon = R.drawable.ic_book_default_24,
+        bottomNaviTitle = R.string.bottom_navi_todo_tab_title,
         route = BottomNavigationRoute.Todo,
     ),
     FRIEND(
-        bottomNaviIcon = R.drawable.ic_dummy_x_24,
-        bottomNaviTitle = R.string.dummy,
+        bottomNaviIcon = R.drawable.ic_bubble_default_24,
+        bottomNaviTitle = R.string.bottom_navi_friend_tab_title,
         route = BottomNavigationRoute.Friend,
     ),
     MY(
-        bottomNaviIcon = R.drawable.ic_dummy_x_24,
-        bottomNaviTitle = R.string.dummy,
+        bottomNaviIcon = R.drawable.ic_person_default_24,
+        bottomNaviTitle = R.string.bottom_navi_my_title,
         route = BottomNavigationRoute.My,
     ),
     ;
