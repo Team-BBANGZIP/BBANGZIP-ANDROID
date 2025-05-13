@@ -71,7 +71,7 @@ data class BbangZipColor(
     val staticBlack_121212: Color,
     // Component
     val componentIvory_FDFDFD: Color,
-    val componentGrey_FFFFFF: Color,
+    val componentStrong_F6F6F5: Color,
     // To-do
     val todoRed1_EA7152: Color,
     val todoRed2_F09C86: Color,
@@ -113,7 +113,7 @@ val defaultBbangZipColor =
         staticBlack_121212 = Common100,
         // Component
         componentIvory_FDFDFD = Grayscale5,
-        componentGrey_FFFFFF = Common0,
+        componentStrong_F6F6F5 = Grayscale7 ,
         // To-do
         todoRed1_EA7152 = Todo1,
         todoRed2_F09C86 = Todo2,
