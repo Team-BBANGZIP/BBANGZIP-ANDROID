@@ -3,7 +3,9 @@ package org.android.bbangzip.presentation.type
 import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import androidx.compose.ui.text.TextStyle
 import kotlinx.parcelize.Parcelize
+import org.android.bbangzip.ui.theme.defaultBbangZipTypography
 
 @Parcelize
 sealed class BbangZipTextFieldInputState : Parcelable {
@@ -24,17 +26,12 @@ private val stateToTypeMap =
         BbangZipTextFieldInputState.Field to BbangZipTextFieldType.FIELD,
     )
 
-
-fun BbangZipTextFieldInputState.getIconColor(): Color {
-    return stateToTypeMap[this]?.iconColor ?: Color.Transparent
-}
-
 fun BbangZipTextFieldInputState.getTextColor(): Color {
     return stateToTypeMap[this]?.textColor ?: Color.Transparent
 }
 
-fun BbangZipTextFieldInputState.getCharacterCheckColor(): Color {
-    return stateToTypeMap[this]?.characterCheckColor ?: Color.Transparent
+fun BbangZipTextFieldInputState.getTextStyle(): TextStyle {
+    return stateToTypeMap[this]?.textStyle ?: defaultBbangZipTypography.body1Medium
 }
 
 fun BbangZipTextFieldInputState.getBorderColor(): Color {
@@ -47,4 +44,8 @@ fun BbangZipTextFieldInputState.getBackgroundColor(): Color {
 
 fun BbangZipTextFieldInputState.getGuidelineColor(): Color {
     return stateToTypeMap[this]?.guidelineColor ?: Color.Transparent
+}
+
+fun BbangZipTextFieldInputState.getGuidelineTextStyle(): TextStyle {
+    return stateToTypeMap[this]?.guidelineTextStyle ?: defaultBbangZipTypography.body1Medium
 }
