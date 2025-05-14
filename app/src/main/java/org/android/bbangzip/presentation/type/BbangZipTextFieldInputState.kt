@@ -2,7 +2,6 @@ package org.android.bbangzip.presentation.type
 
 import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.text.TextStyle
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.ui.theme.defaultBbangZipTypography

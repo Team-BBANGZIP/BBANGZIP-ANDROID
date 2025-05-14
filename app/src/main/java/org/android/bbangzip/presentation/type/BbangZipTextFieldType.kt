@@ -26,4 +26,3 @@ enum class BbangZipTextFieldType(
         textColor = defaultBbangZipColor.labelNormal_6B6560,
     ),
 }
-

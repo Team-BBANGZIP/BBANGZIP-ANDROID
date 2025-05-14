@@ -113,7 +113,7 @@ val defaultBbangZipColor =
         staticBlack_121212 = Common100,
         // Component
         componentIvory_FDFDFD = Grayscale5,
-        componentStrong_F6F6F5 = Grayscale7 ,
+        componentStrong_F6F6F5 = Grayscale7,
         // To-do
         todoRed1_EA7152 = Todo1,
         todoRed2_F09C86 = Todo2,
