@@ -36,23 +36,24 @@ fun BbangzipBaseButton(
     contentColor: Color,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
-    content: @Composable RowScope.() -> Unit
+    content: @Composable RowScope.() -> Unit,
 ) {
     Button(
         onClick = onClick,
         modifier = modifier.height(48.dp),
         shape = RoundedCornerShape(32.dp),
         enabled = enabled,
-        colors = ButtonDefaults.buttonColors(
-            containerColor = containerColor,
-            contentColor = contentColor,
-            disabledContainerColor = BbangZipTheme.color.labelDisable_E4E2E0,
-            disabledContentColor = BbangZipTheme.color.labelAssistive_C9C7C5
-        )
+        colors =
+            ButtonDefaults.buttonColors(
+                containerColor = containerColor,
+                contentColor = contentColor,
+                disabledContainerColor = BbangZipTheme.color.labelDisable_E4E2E0,
+                disabledContentColor = BbangZipTheme.color.labelAssistive_C9C7C5,
+            ),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center
+            horizontalArrangement = Arrangement.Center,
         ) {
             leadingIcon?.let {
                 it()
@@ -74,15 +75,15 @@ fun BbangzipBaseButton(
 private fun BbangzipBaseButtonPreview() {
     BBANGZIPANDROIDTheme {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(horizontal = 20.dp)
-            ,
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 20.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             Row(
-                modifier = Modifier.fillMaxWidth()
-            ){
+                modifier = Modifier.fillMaxWidth(),
+            ) {
                 BbangzipBaseButton(
                     modifier = Modifier.weight(140f),
                     onClick = {},
@@ -90,7 +91,7 @@ private fun BbangzipBaseButtonPreview() {
                         Icon(
                             painter = painterResource(R.drawable.ic_plus_bold_24),
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(16.dp),
                         )
                     },
                     containerColor = BbangZipTheme.color.primaryNormal_897869,
@@ -98,9 +99,9 @@ private fun BbangzipBaseButtonPreview() {
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_30minutes_more),
-                            style = BbangZipTheme.typography.body2Medium
+                            style = BbangZipTheme.typography.body2Medium,
                         )
-                    }
+                    },
                 )
 
                 Gap(width = 8)
@@ -112,7 +113,7 @@ private fun BbangzipBaseButtonPreview() {
                         Icon(
                             painter = painterResource(R.drawable.ic_book_default_24),
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(16.dp),
                         )
                     },
                     containerColor = BbangZipTheme.color.primaryStrong_4B4137,
@@ -120,15 +121,15 @@ private fun BbangzipBaseButtonPreview() {
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_complete_task_check),
-                            style = BbangZipTheme.typography.body2Medium
+                            style = BbangZipTheme.typography.body2Medium,
                         )
-                    }
+                    },
                 )
             }
 
             Row(
-                modifier = Modifier.fillMaxWidth()
-            ){
+                modifier = Modifier.fillMaxWidth(),
+            ) {
                 BbangzipBaseButton(
                     modifier = Modifier.weight(140f),
                     onClick = {},
@@ -136,7 +137,7 @@ private fun BbangzipBaseButtonPreview() {
                         Icon(
                             painter = painterResource(R.drawable.ic_plus_bold_24),
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(16.dp),
                         )
                     },
                     containerColor = BbangZipTheme.color.primaryNormal_897869,
@@ -144,9 +145,9 @@ private fun BbangzipBaseButtonPreview() {
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_60minutes_more),
-                            style = BbangZipTheme.typography.body2Medium
+                            style = BbangZipTheme.typography.body2Medium,
                         )
-                    }
+                    },
                 )
 
                 Gap(width = 8)
@@ -158,7 +159,7 @@ private fun BbangzipBaseButtonPreview() {
                         Icon(
                             painter = painterResource(R.drawable.ic_book_default_24),
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(16.dp),
                         )
                     },
                     containerColor = BbangZipTheme.color.primaryStrong_4B4137,
@@ -166,15 +167,15 @@ private fun BbangzipBaseButtonPreview() {
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_complete_task_check),
-                            style = BbangZipTheme.typography.body2Medium
+                            style = BbangZipTheme.typography.body2Medium,
                         )
-                    }
+                    },
                 )
             }
 
             Row(
-                modifier = Modifier.fillMaxWidth()
-            ){
+                modifier = Modifier.fillMaxWidth(),
+            ) {
                 BbangzipBaseButton(
                     modifier = Modifier.weight(1f),
                     onClick = {},
@@ -182,7 +183,7 @@ private fun BbangzipBaseButtonPreview() {
                         Icon(
                             painter = painterResource(R.drawable.ic_go_back_default_24),
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(16.dp),
                         )
                     },
                     containerColor = BbangZipTheme.color.primaryNormal_897869,
@@ -190,9 +191,9 @@ private fun BbangzipBaseButtonPreview() {
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_go_back),
-                            style = BbangZipTheme.typography.body2Medium
+                            style = BbangZipTheme.typography.body2Medium,
                         )
-                    }
+                    },
                 )
 
                 Gap(width = 8)
@@ -204,7 +205,7 @@ private fun BbangzipBaseButtonPreview() {
                         Icon(
                             painter = painterResource(R.drawable.ic_x_default_24),
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(16.dp),
                         )
                     },
                     containerColor = BbangZipTheme.color.primaryStrong_4B4137,
@@ -212,15 +213,15 @@ private fun BbangzipBaseButtonPreview() {
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_initialize),
-                            style = BbangZipTheme.typography.body2Medium
+                            style = BbangZipTheme.typography.body2Medium,
                         )
-                    }
+                    },
                 )
             }
 
             Row(
-                modifier = Modifier.fillMaxWidth()
-            ){
+                modifier = Modifier.fillMaxWidth(),
+            ) {
                 BbangzipBaseButton(
                     modifier = Modifier.weight(1f),
                     onClick = {},
@@ -228,7 +229,7 @@ private fun BbangzipBaseButtonPreview() {
                         Icon(
                             painter = painterResource(R.drawable.ic_go_back_default_24),
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(16.dp),
                         )
                     },
                     containerColor = BbangZipTheme.color.primaryNormal_897869,
@@ -236,9 +237,9 @@ private fun BbangzipBaseButtonPreview() {
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_go_back),
-                            style = BbangZipTheme.typography.body2Medium
+                            style = BbangZipTheme.typography.body2Medium,
                         )
-                    }
+                    },
                 )
 
                 Gap(width = 8)
@@ -250,7 +251,7 @@ private fun BbangzipBaseButtonPreview() {
                         Icon(
                             painter = painterResource(R.drawable.ic_x_default_24),
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(16.dp),
                         )
                     },
                     containerColor = BbangZipTheme.color.primaryStrong_4B4137,
@@ -258,15 +259,15 @@ private fun BbangzipBaseButtonPreview() {
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_exit),
-                            style = BbangZipTheme.typography.body2Medium
+                            style = BbangZipTheme.typography.body2Medium,
                         )
-                    }
+                    },
                 )
             }
 
             Row(
-                modifier = Modifier.fillMaxWidth()
-            ){
+                modifier = Modifier.fillMaxWidth(),
+            ) {
                 BbangzipBaseButton(
                     modifier = Modifier.weight(140f),
                     onClick = {},
@@ -274,7 +275,7 @@ private fun BbangzipBaseButtonPreview() {
                         Icon(
                             painter = painterResource(R.drawable.ic_plus_bold_24),
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(16.dp),
                         )
                     },
                     containerColor = BbangZipTheme.color.primaryNormal_897869,
@@ -282,9 +283,9 @@ private fun BbangzipBaseButtonPreview() {
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_30minutes_more),
-                            style = BbangZipTheme.typography.body2Medium
+                            style = BbangZipTheme.typography.body2Medium,
                         )
-                    }
+                    },
                 )
 
                 Gap(width = 8)
@@ -296,7 +297,7 @@ private fun BbangzipBaseButtonPreview() {
                         Icon(
                             painter = painterResource(R.drawable.ic_x_default_24),
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(16.dp),
                         )
                     },
                     containerColor = BbangZipTheme.color.primaryStrong_4B4137,
@@ -304,15 +305,15 @@ private fun BbangzipBaseButtonPreview() {
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_exit),
-                            style = BbangZipTheme.typography.body2Medium
+                            style = BbangZipTheme.typography.body2Medium,
                         )
-                    }
+                    },
                 )
             }
 
             Row(
-                modifier = Modifier.fillMaxWidth()
-            ){
+                modifier = Modifier.fillMaxWidth(),
+            ) {
                 BbangzipBaseButton(
                     modifier = Modifier.weight(1f),
                     onClick = {},
@@ -320,7 +321,7 @@ private fun BbangzipBaseButtonPreview() {
                         Icon(
                             painter = painterResource(R.drawable.ic_x_default_24),
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(16.dp),
                         )
                     },
                     containerColor = BbangZipTheme.color.primaryNormal_897869,
@@ -328,9 +329,9 @@ private fun BbangzipBaseButtonPreview() {
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_cancellation),
-                            style = BbangZipTheme.typography.body2Medium
+                            style = BbangZipTheme.typography.body2Medium,
                         )
-                    }
+                    },
                 )
 
                 Gap(width = 8)
@@ -342,7 +343,7 @@ private fun BbangzipBaseButtonPreview() {
                         Icon(
                             painter = painterResource(R.drawable.ic_check_default_24),
                             contentDescription = null,
-                            modifier = Modifier.size(16.dp)
+                            modifier = Modifier.size(16.dp),
                         )
                     },
                     containerColor = BbangZipTheme.color.primaryStrong_4B4137,
@@ -350,9 +351,9 @@ private fun BbangzipBaseButtonPreview() {
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_setting),
-                            style = BbangZipTheme.typography.body2Medium
+                            style = BbangZipTheme.typography.body2Medium,
                         )
-                    }
+                    },
                 )
             }
 
@@ -363,7 +364,7 @@ private fun BbangzipBaseButtonPreview() {
                     Icon(
                         painter = painterResource(R.drawable.ic_trash_default_24),
                         contentDescription = null,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp),
                     )
                 },
                 containerColor = BbangZipTheme.color.primaryLight_C8B5A2,
@@ -371,21 +372,22 @@ private fun BbangzipBaseButtonPreview() {
                 content = {
                     Text(
                         text = stringResource(R.string.button_label_delete),
-                        style = BbangZipTheme.typography.body2Medium
+                        style = BbangZipTheme.typography.body2Medium,
                     )
-                }
+                },
             )
 
             BbangzipBaseButton(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 28.dp),
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 28.dp),
                 onClick = {},
                 leadingIcon = {
                     Icon(
                         painter = painterResource(R.drawable.ic_calendar_default_24),
                         contentDescription = null,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp),
                     )
                 },
                 containerColor = BbangZipTheme.color.primaryStrong_4B4137,
@@ -393,9 +395,9 @@ private fun BbangzipBaseButtonPreview() {
                 content = {
                     Text(
                         text = stringResource(R.string.button_label_save),
-                        style = BbangZipTheme.typography.body2Medium
+                        style = BbangZipTheme.typography.body2Medium,
                     )
-                }
+                },
             )
 
             BbangzipBaseButton(
@@ -406,7 +408,7 @@ private fun BbangzipBaseButtonPreview() {
                     Icon(
                         painter = painterResource(R.drawable.ic_trash_default_24),
                         contentDescription = null,
-                        modifier = Modifier.size(20.dp)
+                        modifier = Modifier.size(20.dp),
                     )
                 },
                 containerColor = BbangZipTheme.color.primaryLight_C8B5A2,
@@ -414,14 +416,14 @@ private fun BbangzipBaseButtonPreview() {
                 content = {
                     Text(
                         text = stringResource(R.string.button_label_delete),
-                        style = BbangZipTheme.typography.body2Medium
+                        style = BbangZipTheme.typography.body2Medium,
                     )
-                }
+                },
             )
 
             Row(
-                modifier = Modifier.fillMaxWidth()
-            ){
+                modifier = Modifier.fillMaxWidth(),
+            ) {
                 BbangzipBaseButton(
                     modifier = Modifier.weight(1f),
                     onClick = {},
@@ -429,7 +431,7 @@ private fun BbangzipBaseButtonPreview() {
                         Icon(
                             painter = painterResource(R.drawable.ic_return_thin_24),
                             contentDescription = null,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(20.dp),
                         )
                     },
                     containerColor = BbangZipTheme.color.primaryNormal_897869,
@@ -437,9 +439,9 @@ private fun BbangzipBaseButtonPreview() {
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_go_back),
-                            style = BbangZipTheme.typography.body2Medium
+                            style = BbangZipTheme.typography.body2Medium,
                         )
-                    }
+                    },
                 )
 
                 Gap(width = 8)
@@ -451,7 +453,7 @@ private fun BbangzipBaseButtonPreview() {
                         Icon(
                             painter = painterResource(R.drawable.ic_trash_default_24),
                             contentDescription = null,
-                            modifier = Modifier.size(20.dp)
+                            modifier = Modifier.size(20.dp),
                         )
                     },
                     containerColor = BbangZipTheme.color.primaryStrong_4B4137,
@@ -459,12 +461,11 @@ private fun BbangzipBaseButtonPreview() {
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_delete),
-                            style = BbangZipTheme.typography.body2Medium
+                            style = BbangZipTheme.typography.body2Medium,
                         )
-                    }
+                    },
                 )
             }
         }
     }
 }
-
