@@ -2,6 +2,7 @@ package org.android.bbangzip.presentation.component.button
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -40,9 +41,10 @@ fun BbangzipBaseButton(
 ) {
     Button(
         onClick = onClick,
-        modifier = modifier.height(48.dp),
+        modifier = modifier,
         shape = RoundedCornerShape(32.dp),
         enabled = enabled,
+        contentPadding = PaddingValues(vertical = 14.dp),
         colors =
             ButtonDefaults.buttonColors(
                 containerColor = containerColor,
@@ -52,6 +54,7 @@ fun BbangzipBaseButton(
             ),
     ) {
         Row(
+            modifier = Modifier,
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.Center,
         ) {
