@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
@@ -26,9 +27,6 @@ import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
-/**
- * @param onClick 버튼 클릭 이벤트
- */
 @Composable
 fun BbangzipBaseButton(
     onClick: () -> Unit,
@@ -99,7 +97,7 @@ private fun BbangzipBaseButtonPreview() {
                     contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                     content = {
                         Text(
-                            text = "30분 더",
+                            text = stringResource(R.string.button_label_30minutes_more),
                             style = BbangZipTheme.typography.body2Medium
                         )
                     }
@@ -121,7 +119,7 @@ private fun BbangzipBaseButtonPreview() {
                     contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                     content = {
                         Text(
-                            text = "완료한 일 체크",
+                            text = stringResource(R.string.button_label_complete_task_check),
                             style = BbangZipTheme.typography.body2Medium
                         )
                     }
@@ -145,7 +143,7 @@ private fun BbangzipBaseButtonPreview() {
                     contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                     content = {
                         Text(
-                            text = "60분 더",
+                            text = stringResource(R.string.button_label_60minutes_more),
                             style = BbangZipTheme.typography.body2Medium
                         )
                     }
@@ -167,7 +165,7 @@ private fun BbangzipBaseButtonPreview() {
                     contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                     content = {
                         Text(
-                            text = "완료한 일 체크",
+                            text = stringResource(R.string.button_label_complete_task_check),
                             style = BbangZipTheme.typography.body2Medium
                         )
                     }
@@ -191,7 +189,7 @@ private fun BbangzipBaseButtonPreview() {
                     contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                     content = {
                         Text(
-                            text = "돌아가기",
+                            text = stringResource(R.string.button_label_go_back),
                             style = BbangZipTheme.typography.body2Medium
                         )
                     }
@@ -213,7 +211,7 @@ private fun BbangzipBaseButtonPreview() {
                     contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                     content = {
                         Text(
-                            text = "초기화 하기",
+                            text = stringResource(R.string.button_label_initialize),
                             style = BbangZipTheme.typography.body2Medium
                         )
                     }
@@ -237,7 +235,7 @@ private fun BbangzipBaseButtonPreview() {
                     contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                     content = {
                         Text(
-                            text = "돌아가기",
+                            text = stringResource(R.string.button_label_go_back),
                             style = BbangZipTheme.typography.body2Medium
                         )
                     }
@@ -259,7 +257,7 @@ private fun BbangzipBaseButtonPreview() {
                     contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                     content = {
                         Text(
-                            text = "종료 하기",
+                            text = stringResource(R.string.button_label_exit),
                             style = BbangZipTheme.typography.body2Medium
                         )
                     }
@@ -283,7 +281,7 @@ private fun BbangzipBaseButtonPreview() {
                     contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                     content = {
                         Text(
-                            text = "30분 더",
+                            text = stringResource(R.string.button_label_30minutes_more),
                             style = BbangZipTheme.typography.body2Medium
                         )
                     }
@@ -293,7 +291,7 @@ private fun BbangzipBaseButtonPreview() {
 
                 BbangzipBaseButton(
                     modifier = Modifier.weight(187f),
-                    onClick = {},
+                    onClick = { },
                     trailingIcon = {
                         Icon(
                             painter = painterResource(R.drawable.ic_x_default_24),
@@ -305,7 +303,7 @@ private fun BbangzipBaseButtonPreview() {
                     contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                     content = {
                         Text(
-                            text = "종료하기",
+                            text = stringResource(R.string.button_label_exit),
                             style = BbangZipTheme.typography.body2Medium
                         )
                     }
@@ -329,7 +327,7 @@ private fun BbangzipBaseButtonPreview() {
                     contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                     content = {
                         Text(
-                            text = "취소",
+                            text = stringResource(R.string.button_label_cancellation),
                             style = BbangZipTheme.typography.body2Medium
                         )
                     }
@@ -351,7 +349,7 @@ private fun BbangzipBaseButtonPreview() {
                     contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                     content = {
                         Text(
-                            text = "설정",
+                            text = stringResource(R.string.button_label_setting),
                             style = BbangZipTheme.typography.body2Medium
                         )
                     }
@@ -372,14 +370,16 @@ private fun BbangzipBaseButtonPreview() {
                 contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                 content = {
                     Text(
-                        text ="삭제하기",
+                        text = stringResource(R.string.button_label_delete),
                         style = BbangZipTheme.typography.body2Medium
                     )
                 }
             )
 
             BbangzipBaseButton(
-                modifier = Modifier.fillMaxWidth().padding(horizontal = 28.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 28.dp),
                 onClick = {},
                 leadingIcon = {
                     Icon(
@@ -392,7 +392,7 @@ private fun BbangzipBaseButtonPreview() {
                 contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                 content = {
                     Text(
-                        text = "저장하기",
+                        text = stringResource(R.string.button_label_save),
                         style = BbangZipTheme.typography.body2Medium
                     )
                 }
@@ -413,7 +413,7 @@ private fun BbangzipBaseButtonPreview() {
                 contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                 content = {
                     Text(
-                        text ="삭제하기",
+                        text = stringResource(R.string.button_label_delete),
                         style = BbangZipTheme.typography.body2Medium
                     )
                 }
@@ -436,7 +436,7 @@ private fun BbangzipBaseButtonPreview() {
                     contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                     content = {
                         Text(
-                            text = "돌아가기",
+                            text = stringResource(R.string.button_label_go_back),
                             style = BbangZipTheme.typography.body2Medium
                         )
                     }
@@ -458,7 +458,7 @@ private fun BbangzipBaseButtonPreview() {
                     contentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                     content = {
                         Text(
-                            text = "삭제하기",
+                            text = stringResource(R.string.button_label_delete),
                             style = BbangZipTheme.typography.body2Medium
                         )
                     }
