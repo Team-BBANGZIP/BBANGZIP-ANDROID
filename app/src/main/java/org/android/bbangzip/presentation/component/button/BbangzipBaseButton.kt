@@ -1,8 +1,9 @@
 package org.android.bbangzip.presentation.component.button
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,23 +11,43 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.util.extension.Gap
+import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
+/**
+ * 빵집 앱의 기본 버튼
+ *
+ * @param onClick 버튼 클릭 시 실행할 콜백
+ * @param modifier 버튼에 적용할 수정자
+ * @param enabled 버튼 활성화 여부
+ * @param containerColor 버튼 활성화 시 배경색
+ * @param contentColor 버튼 활성화 시 내용 색상
+ * @param disabledContainerColor 비활성화 상태 배경색
+ * @param disabledContentColor 비활성화 상태 내용 색상
+ * @param borderRadius 버튼 모서리 둥글기
+ * @param verticalPadding 버튼 세로 패딩
+ * @param contentGap 아이콘과 콘텐츠 사이 간격
+ * @param leadingIcon 버튼 앞에 표시할 아이콘
+ * @param trailingIcon 버튼 뒤에 표시할 아이콘
+ * @param content 버튼 내용
+ */
 @Composable
 fun BbangzipBaseButton(
     onClick: () -> Unit,
@@ -34,38 +55,50 @@ fun BbangzipBaseButton(
     enabled: Boolean = true,
     containerColor: Color,
     contentColor: Color,
+    disabledContainerColor: Color = BbangZipTheme.color.labelDisable_E4E2E0,
+    disabledContentColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
+    borderRadius: Dp = 32.dp,
+    verticalPadding: Dp = 14.dp,
+    contentGap: Int = 4,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     content: @Composable RowScope.() -> Unit,
 ) {
-    Button(
-        onClick = onClick,
-        modifier = modifier,
-        shape = RoundedCornerShape(32.dp),
-        enabled = enabled,
-        contentPadding = PaddingValues(vertical = 14.dp),
-        colors =
-            ButtonDefaults.buttonColors(
-                containerColor = containerColor,
-                contentColor = contentColor,
-                disabledContainerColor = BbangZipTheme.color.labelDisable_E4E2E0,
-                disabledContentColor = BbangZipTheme.color.labelAssistive_C9C7C5,
-            ),
+    val currentContentColor = if (enabled) contentColor else disabledContentColor
+    val currentContainerColor = if (enabled) containerColor else disabledContainerColor
+    val buttonShape = RoundedCornerShape(borderRadius)
+
+    Box(
+        modifier = modifier
+            .clip(buttonShape)
+            .background(
+                color = currentContainerColor,
+                shape = buttonShape
+            )
+            .noRippleClickable(
+                enabled = enabled,
+                onClick = onClick
+            )
+            .padding(vertical = verticalPadding),
+        contentAlignment = Alignment.Center
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.Center,
-        ) {
-            leadingIcon?.let {
-                it()
-                Gap(width = 4)
-            }
+        CompositionLocalProvider(LocalContentColor provides currentContentColor) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.Center,
+            ) {
+                leadingIcon?.let {
+                    it()
+                    Gap(width = contentGap)
+                }
 
-            content()
+                    content()
 
-            trailingIcon?.let {
-                Gap(width = 4)
-                it()
+                trailingIcon?.let {
+                    Gap(width = contentGap)
+                    it()
+                }
             }
         }
     }
