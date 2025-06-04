@@ -55,20 +55,21 @@ fun BbangZipSegmentedButton(
     val indicatorBorderRadius = containerBorderRadius - containerPadding
 
     BoxWithConstraints(
-        modifier = modifier
-            .background(
-                color = containerColor,
-                shape = RoundedCornerShape(containerBorderRadius)
-            )
-            .innerShadow(
-                shape = RoundedCornerShape(containerBorderRadius),
-                color = Color(0xFF535752).copy(alpha = 0.08f),
-                blur = 4.dp,
-                offsetX = 0.dp,
-                offsetY = 1.dp,
-                spread = 0.dp
-            )
-            .padding(containerPadding)
+        modifier =
+            modifier
+                .background(
+                    color = containerColor,
+                    shape = RoundedCornerShape(containerBorderRadius),
+                )
+                .innerShadow(
+                    shape = RoundedCornerShape(containerBorderRadius),
+                    color = Color(0xFF535752).copy(alpha = 0.08f),
+                    blur = 4.dp,
+                    offsetX = 0.dp,
+                    offsetY = 1.dp,
+                    spread = 0.dp,
+                )
+                .padding(containerPadding),
     ) {
         val itemWidth = maxWidth / options.size
 
@@ -86,34 +87,38 @@ fun BbangZipSegmentedButton(
                 height = rowHeight,
                 indicatorOffset = indicatorOffset,
                 indicatorColor = indicatorColor,
-                indicatorBorderRadius = indicatorBorderRadius
+                indicatorBorderRadius = indicatorBorderRadius,
             )
         }
 
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .onGloballyPositioned { coordinates ->
-                    rowHeight = with(localDensity) {
-                        coordinates.size.height.toDp()
-                    }
-                }
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .onGloballyPositioned { coordinates ->
+                        rowHeight =
+                            with(localDensity) {
+                                coordinates.size.height.toDp()
+                            }
+                    },
         ) {
             options.forEachIndexed { index, option ->
                 val isSelected = index == indexOfSelectedOption
 
                 Box(
-                    modifier = Modifier
-                        .weight(1f)
-                        .padding(vertical = 4.5.dp)
-                        .noRippleClickable { onOptionSelect(index) },
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .weight(1f)
+                            .padding(vertical = 4.5.dp)
+                            .noRippleClickable { onOptionSelect(index) },
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = option,
-                        color = animateColorAsState(
-                            targetValue = if (isSelected) selectedOptionColor else unselectedOptionColor,
-                        ).value,
+                        color =
+                            animateColorAsState(
+                                targetValue = if (isSelected) selectedOptionColor else unselectedOptionColor,
+                            ).value,
                         style = BbangZipTheme.typography.body4Medium,
                     )
                 }
@@ -128,44 +133,44 @@ private fun Indicator(
     height: Dp,
     indicatorOffset: Dp,
     indicatorColor: Color,
-    indicatorBorderRadius: Dp
+    indicatorBorderRadius: Dp,
 ) {
     Box(
-        modifier = Modifier
-            .width(itemWidth)
-            .height(height)
-            .offset { IntOffset(indicatorOffset.roundToPx(), 0) }
-            .background(
-                color = indicatorColor,
-                shape = RoundedCornerShape(indicatorBorderRadius)
-            )
-            .innerShadow(
-                shape = RoundedCornerShape(indicatorBorderRadius),
-                color = Color(0xFFEDEDED).copy(alpha = 0.3f),
-                blur = 1.dp,
-                offsetX = 0.dp,
-                offsetY = 1.dp,
-                spread = 0.dp
-            )
-            .dropShadow(
-                shape = RoundedCornerShape(indicatorBorderRadius),
-                color = Color(0xFF5C636D).copy(alpha = 0.12f),
-                blur = 3.dp,
-                offsetX = 1.dp,
-                offsetY = (-1).dp,
-                spread = 0.dp
-            )
+        modifier =
+            Modifier
+                .width(itemWidth)
+                .height(height)
+                .offset { IntOffset(indicatorOffset.roundToPx(), 0) }
+                .background(
+                    color = indicatorColor,
+                    shape = RoundedCornerShape(indicatorBorderRadius),
+                )
+                .innerShadow(
+                    shape = RoundedCornerShape(indicatorBorderRadius),
+                    color = Color(0xFFEDEDED).copy(alpha = 0.3f),
+                    blur = 1.dp,
+                    offsetX = 0.dp,
+                    offsetY = 1.dp,
+                    spread = 0.dp,
+                )
+                .dropShadow(
+                    shape = RoundedCornerShape(indicatorBorderRadius),
+                    color = Color(0xFF5C636D).copy(alpha = 0.12f),
+                    blur = 3.dp,
+                    offsetX = 1.dp,
+                    offsetY = (-1).dp,
+                    spread = 0.dp,
+                ),
     )
 }
 
-
 @Preview(showBackground = true)
 @Composable
-fun BbangZipToggleSegmentedButtonPreview(){
+fun BbangZipToggleSegmentedButtonPreview() {
     BBANGZIPANDROIDTheme {
         Column(
-            modifier = Modifier.fillMaxSize()
-        ){
+            modifier = Modifier.fillMaxSize(),
+        ) {
             var selectedIndex by remember { mutableIntStateOf(0) }
 
             var selectedThreeOptionsIndex by remember { mutableIntStateOf(0) }
@@ -173,15 +178,15 @@ fun BbangZipToggleSegmentedButtonPreview(){
             BbangZipSegmentedButton(
                 options = listOf("30분", "60분"),
                 indexOfSelectedOption = selectedIndex,
-                onOptionSelect = {index -> selectedIndex = index},
-                modifier = Modifier.fillMaxWidth(0.25f)
+                onOptionSelect = { index -> selectedIndex = index },
+                modifier = Modifier.fillMaxWidth(0.25f),
             )
 
             BbangZipSegmentedButton(
                 options = listOf("Option 1", "Option 2", "Option 3"),
                 indexOfSelectedOption = selectedThreeOptionsIndex,
-                onOptionSelect = {index -> selectedThreeOptionsIndex = index},
-                modifier = Modifier.fillMaxWidth()
+                onOptionSelect = { index -> selectedThreeOptionsIndex = index },
+                modifier = Modifier.fillMaxWidth(),
             )
         }
     }

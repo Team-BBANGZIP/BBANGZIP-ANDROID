@@ -83,15 +83,16 @@ fun Modifier.innerShadow(
     blur: Dp,
     offsetY: Dp,
     offsetX: Dp,
-    spread: Dp
+    spread: Dp,
 ) = drawWithContent {
     drawContent()
 
     val rect = Rect(Offset.Zero, size)
-    val paint = Paint().apply {
-        this.color = color
-        this.isAntiAlias = true
-    }
+    val paint =
+        Paint().apply {
+            this.color = color
+            this.isAntiAlias = true
+        }
 
     val shadowOutline = shape.createOutline(size, layoutDirection, this)
 
@@ -113,7 +114,6 @@ fun Modifier.innerShadow(
         canvas.drawOutline(shadowOutline, paint)
         canvas.restore()
     }
-
 }
 
 fun Modifier.dropShadow(
@@ -122,14 +122,15 @@ fun Modifier.dropShadow(
     blur: Dp = 4.dp,
     offsetY: Dp = 4.dp,
     offsetX: Dp = 0.dp,
-    spread: Dp = 0.dp
+    spread: Dp = 0.dp,
 ) = this.drawBehind {
     val shadowSize = Size(size.width + spread.toPx(), size.height + spread.toPx())
     val shadowOutline = shape.createOutline(shadowSize, layoutDirection, this)
 
-    val paint = Paint().apply {
-        this.color = color
-    }
+    val paint =
+        Paint().apply {
+            this.color = color
+        }
 
     if (blur.toPx() > 0) {
         paint.asFrameworkPaint().apply {
