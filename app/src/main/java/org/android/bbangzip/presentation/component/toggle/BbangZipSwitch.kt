@@ -41,7 +41,7 @@ fun BbangZipSwitch(
     modifier: Modifier = Modifier,
     checkedThumbColor: Color = BbangZipTheme.color.primaryNormal_897869,
     uncheckedThumbColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
-    switchPadding: Dp = ComponentConstants.Switch.DEFAULT_SWITCH_PADDING_DP.dp
+    switchPadding: Dp = ComponentConstants.Switch.DEFAULT_CONTAINER_PADDING_DP.dp
 ) {
     BoxWithConstraints(modifier = modifier) {
         val switchWidth = maxWidth
