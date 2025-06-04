@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import org.android.bbangzip.presentation.util.constant.ComponentConstants
 import org.android.bbangzip.presentation.util.extension.dropShadow
 import org.android.bbangzip.presentation.util.extension.innerShadow
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
@@ -46,8 +47,8 @@ fun BbangZipSegmentedButton(
     unselectedOptionColor: Color = BbangZipTheme.color.primaryNormal_897869,
     containerColor: Color = BbangZipTheme.color.secondaryStrong_F2EAE4,
     indicatorColor: Color = BbangZipTheme.color.primaryNormal_897869,
-    containerPadding: Dp = 1.dp,
-    containerBorderRadius: Dp = 30.dp,
+    containerPadding: Dp = ComponentConstants.SegmentedButton.DEFAULT_CONTAINER_PADDING_DP.dp,
+    containerBorderRadius: Dp = ComponentConstants.SegmentedButton.DEFAULT_CONTAINER_BORDER_RADIUS_DP.dp,
 ) {
     val localDensity = LocalDensity.current
 
