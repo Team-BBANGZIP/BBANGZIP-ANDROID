@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
@@ -71,18 +70,19 @@ fun BbangzipBaseButton(
     val buttonShape = RoundedCornerShape(borderRadius)
 
     Box(
-        modifier = modifier
-            .clip(buttonShape)
-            .background(
-                color = currentContainerColor,
-                shape = buttonShape
-            )
-            .noRippleClickable(
-                enabled = enabled,
-                onClick = onClick
-            )
-            .padding(vertical = verticalPadding),
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .clip(buttonShape)
+                .background(
+                    color = currentContainerColor,
+                    shape = buttonShape,
+                )
+                .noRippleClickable(
+                    enabled = enabled,
+                    onClick = onClick,
+                )
+                .padding(vertical = verticalPadding),
+        contentAlignment = Alignment.Center,
     ) {
         CompositionLocalProvider(LocalContentColor provides currentContentColor) {
             Row(
@@ -95,7 +95,7 @@ fun BbangzipBaseButton(
                     Gap(width = contentGap)
                 }
 
-                    content()
+                content()
 
                 trailingIcon?.let {
                     Gap(width = contentGap)
