@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
@@ -26,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
+import org.android.bbangzip.presentation.util.constant.ComponentConstants
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
@@ -51,15 +53,15 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
 @Composable
 fun BbangzipBaseButton(
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    enabled: Boolean = true,
     containerColor: Color,
     contentColor: Color,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     disabledContainerColor: Color = BbangZipTheme.color.labelDisable_E4E2E0,
     disabledContentColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
-    borderRadius: Dp = 32.dp,
-    verticalPadding: Dp = 14.dp,
-    contentGap: Int = 4,
+    borderRadius: Dp = ComponentConstants.Button.DEFAULT_BORDER_RADIUS_DP.dp,
+    verticalPadding: Dp = ComponentConstants.Button.DEFAULT_VERTICAL_PADDING_DP.dp,
+    contentGap: Int = ComponentConstants.Button.DEFAULT_CONTENT_GAP,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     content: @Composable RowScope.() -> Unit,
