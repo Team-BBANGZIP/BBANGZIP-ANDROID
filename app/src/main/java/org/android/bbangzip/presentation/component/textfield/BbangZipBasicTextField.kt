@@ -199,8 +199,8 @@ fun BbangZipBasicTextFieldPreview() {
             BbangZipBasicTextField(
                 placeholder = R.string.app_name,
                 modifier =
-                Modifier
-                    .padding(8.dp),
+                    Modifier
+                        .padding(8.dp),
                 value = text,
                 bbangZipTextFieldInputState = validationState,
                 onValueChange = { newValue ->
@@ -215,8 +215,8 @@ fun BbangZipBasicTextFieldPreview() {
             BbangZipBasicTextField(
                 placeholder = R.string.app_name,
                 modifier =
-                Modifier
-                    .padding(8.dp),
+                    Modifier
+                        .padding(8.dp),
                 value = text,
                 bbangZipTextFieldInputState = validationState,
                 onValueChange = { newValue ->
@@ -236,8 +236,8 @@ fun BbangZipBasicTextFieldPreview() {
             BbangZipBasicTextField(
                 placeholder = R.string.app_name,
                 modifier =
-                Modifier
-                    .padding(8.dp),
+                    Modifier
+                        .padding(8.dp),
                 value = text1,
                 bbangZipTextFieldInputState = validationState1,
                 onValueChange = { newValue ->
