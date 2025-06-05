@@ -25,6 +25,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
 import androidx.compose.ui.input.key.key
@@ -32,6 +33,7 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -40,6 +42,7 @@ import org.android.bbangzip.R
 import org.android.bbangzip.presentation.type.BbangZipTextFieldInputState
 import org.android.bbangzip.presentation.type.getBackgroundColor
 import org.android.bbangzip.presentation.type.getBorderColor
+import org.android.bbangzip.presentation.type.getCursorColor
 import org.android.bbangzip.presentation.type.getGuidelineColor
 import org.android.bbangzip.presentation.type.getGuidelineTextStyle
 import org.android.bbangzip.presentation.type.getTextColor
@@ -66,6 +69,7 @@ fun BbangZipBasicTextField(
     contentHeight: Dp? = null,
     maxCharacter: Int = 100,
     borderSize: Dp = 0.dp,
+    isOutLined: Boolean = false,
     keyboardOptions: KeyboardOptions =
         KeyboardOptions.Default.copy(
             imeAction = ImeAction.Default,
@@ -91,31 +95,31 @@ fun BbangZipBasicTextField(
     BbangZipTextFieldSlot(
         columnModifier = modifier,
         rowModifier =
-            Modifier
-                .background(color = bbangZipTextFieldInputState.getBackgroundColor(), shape = RoundedCornerShape(8.dp))
-                .border(width = borderSize, color = bbangZipTextFieldInputState.getBorderColor(), shape = RoundedCornerShape(8.dp))
-                .padding(paddingValues = contentPadding),
+        Modifier
+            .background(color = bbangZipTextFieldInputState.getBackgroundColor(isOutLined), shape = RoundedCornerShape(8.dp))
+            .border(width = borderSize, color = bbangZipTextFieldInputState.getBorderColor(), shape = RoundedCornerShape(8.dp))
+            .padding(paddingValues = contentPadding),
         leadingIcon = { leadingIcon?.invoke() },
         content = {
             BasicTextField(
                 modifier =
-                    Modifier
-                        .weight(1f)
-                        .focusRequester(focusRequester)
-                        .onFocusChanged { focusState ->
-                            isFocused = focusState.isFocused
-                            onFocusChange(focusState.isFocused)
+                Modifier
+                    .weight(1f)
+                    .focusRequester(focusRequester)
+                    .onFocusChanged { focusState ->
+                        isFocused = focusState.isFocused
+                        onFocusChange(focusState.isFocused)
+                    }
+                    .onKeyEvent { keyEvent ->
+                        if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp) {
+                            focusManager.clearFocus(force = true)
+                            onFocusChange(false)
+                            true
+                        } else {
+                            false
                         }
-                        .onKeyEvent { keyEvent ->
-                            if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp) {
-                                focusManager.clearFocus(force = true)
-                                onFocusChange(false)
-                                true
-                            } else {
-                                false
-                            }
-                        }
-                        .then(heightModifier),
+                    }
+                    .then(heightModifier),
                 value = value,
                 onValueChange = {
                     if (it.length <= maxCharacter) onValueChange(it)
@@ -123,6 +127,7 @@ fun BbangZipBasicTextField(
                 keyboardActions = keyboardActions,
                 keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Done),
                 textStyle = bbangZipTextFieldInputState.getTextStyle(),
+                cursorBrush = SolidColor(bbangZipTextFieldInputState.getCursorColor()),
                 decorationBox = { innerTextField ->
                     innerTextField()
 
@@ -180,8 +185,8 @@ fun BbangZipBasicTextFieldPreview() {
             BbangZipBasicTextField(
                 placeholder = R.string.app_name,
                 modifier =
-                    Modifier
-                        .padding(8.dp),
+                Modifier
+                    .padding(8.dp),
                 value = text,
                 bbangZipTextFieldInputState = validationState,
                 onValueChange = { newValue ->

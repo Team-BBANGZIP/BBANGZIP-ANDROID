@@ -34,15 +34,16 @@ fun BbangZipTextFieldInputState.getTextColor(): Color {
 }
 
 fun BbangZipTextFieldInputState.getTextStyle(): TextStyle {
-    return stateToTypeMap[this]?.textStyle ?: defaultBbangZipTypography.body1Medium
+    return stateToTypeMap[this]?.textStyle?.merge(TextStyle(color = stateToTypeMap[this]!!.textColor)) ?: defaultBbangZipTypography.body1Medium
 }
 
 fun BbangZipTextFieldInputState.getBorderColor(): Color {
     return stateToTypeMap[this]?.borderColor ?: Color.Transparent
 }
 
-fun BbangZipTextFieldInputState.getBackgroundColor(): Color {
-    return stateToTypeMap[this]?.backgroundColor ?: Color.Transparent
+fun BbangZipTextFieldInputState.getBackgroundColor(isOutLined: Boolean): Color {
+    return if (!isOutLined) stateToTypeMap[this]?.backgroundColor ?: Color.Transparent
+    else Color.Transparent
 }
 
 fun BbangZipTextFieldInputState.getGuidelineColor(): Color {
