@@ -25,6 +25,7 @@ import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.input.key.Key
 import androidx.compose.ui.input.key.KeyEventType
@@ -46,6 +47,7 @@ import org.android.bbangzip.presentation.type.getGuidelineColor
 import org.android.bbangzip.presentation.type.getGuidelineTextStyle
 import org.android.bbangzip.presentation.type.getTextColor
 import org.android.bbangzip.presentation.type.getTextStyle
+import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 
 /*
@@ -165,8 +167,21 @@ fun BbangZipBasicTextFieldPreview() {
         var text by remember { mutableStateOf("") }
         var validationState by remember { mutableStateOf<BbangZipTextFieldInputState>(BbangZipTextFieldInputState.Default) }
 
+        var text1 by remember { mutableStateOf("") }
+        var validationState1 by remember { mutableStateOf<BbangZipTextFieldInputState>(BbangZipTextFieldInputState.Default) }
+
         fun validateText(text: String) {
             validationState =
+                when {
+                    text.isEmpty() -> BbangZipTextFieldInputState.Default
+                    text.length == 1 -> BbangZipTextFieldInputState.Typing
+                    text.length == 3 -> BbangZipTextFieldInputState.Placeholder
+                    else -> BbangZipTextFieldInputState.Field
+                }
+        }
+
+        fun validateText1(text: String) {
+            validationState1 =
                 when {
                     text.isEmpty() -> BbangZipTextFieldInputState.Default
                     text.length == 1 -> BbangZipTextFieldInputState.Typing
@@ -177,15 +192,15 @@ fun BbangZipBasicTextFieldPreview() {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxSize().background(Color(0XFFE3FFD6)),
         ) {
             Text("나만의 다짐 작성하기")
 
             BbangZipBasicTextField(
                 placeholder = R.string.app_name,
                 modifier =
-                    Modifier
-                        .padding(8.dp),
+                Modifier
+                    .padding(8.dp),
                 value = text,
                 bbangZipTextFieldInputState = validationState,
                 onValueChange = { newValue ->
@@ -194,6 +209,45 @@ fun BbangZipBasicTextFieldPreview() {
                 },
                 onFocusChange = {
                     if (validationState == BbangZipTextFieldInputState.Default) validationState = BbangZipTextFieldInputState.Typing else Unit
+                },
+                focusManager = LocalFocusManager.current,
+            )
+            BbangZipBasicTextField(
+                placeholder = R.string.app_name,
+                modifier =
+                Modifier
+                    .padding(8.dp),
+                value = text,
+                bbangZipTextFieldInputState = validationState,
+                onValueChange = { newValue ->
+                    text = newValue
+                    validateText(text = newValue)
+                },
+                isOutLined = true,
+                contentPadding = PaddingValues(top = 4.dp, bottom = 14.dp),
+                onFocusChange = {
+                    if (validationState == BbangZipTextFieldInputState.Default) validationState = BbangZipTextFieldInputState.Typing else Unit
+                },
+                focusManager = LocalFocusManager.current,
+            )
+
+            Gap(50)
+
+            BbangZipBasicTextField(
+                placeholder = R.string.app_name,
+                modifier =
+                Modifier
+                    .padding(8.dp),
+                value = text1,
+                bbangZipTextFieldInputState = validationState1,
+                onValueChange = { newValue ->
+                    text1 = newValue
+                    validateText1(text = newValue)
+                },
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                contentHeight = 90.dp,
+                onFocusChange = {
+                    if (validationState1 == BbangZipTextFieldInputState.Default) validationState1 = BbangZipTextFieldInputState.Typing else Unit
                 },
                 focusManager = LocalFocusManager.current,
             )
