@@ -7,6 +7,7 @@ import org.android.bbangzip.ui.theme.defaultBbangZipTypography
 
 enum class BbangZipTextFieldType(
     val textColor: Color = defaultBbangZipColor.labelNormal_6B6560,
+    val cursorColor : Color = defaultBbangZipColor.labelStrong_463D34,
     val textStyle: TextStyle = defaultBbangZipTypography.body1Medium,
     val borderColor: Color = Color.Transparent,
     val backgroundColor: Color = defaultBbangZipColor.componentStrong_F6F6F5,

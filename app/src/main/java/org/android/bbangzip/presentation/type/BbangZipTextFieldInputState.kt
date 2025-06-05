@@ -25,6 +25,10 @@ private val stateToTypeMap =
         BbangZipTextFieldInputState.Field to BbangZipTextFieldType.FIELD,
     )
 
+fun BbangZipTextFieldInputState.getCursorColor(): Color {
+    return stateToTypeMap[this]?.cursorColor ?: Color.Transparent
+}
+
 fun BbangZipTextFieldInputState.getTextColor(): Color {
     return stateToTypeMap[this]?.textColor ?: Color.Transparent
 }
