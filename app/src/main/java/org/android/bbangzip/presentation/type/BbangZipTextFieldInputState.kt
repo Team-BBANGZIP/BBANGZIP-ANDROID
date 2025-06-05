@@ -42,8 +42,11 @@ fun BbangZipTextFieldInputState.getBorderColor(): Color {
 }
 
 fun BbangZipTextFieldInputState.getBackgroundColor(isOutLined: Boolean): Color {
-    return if (!isOutLined) stateToTypeMap[this]?.backgroundColor ?: Color.Transparent
-    else Color.Transparent
+    return if (!isOutLined) {
+        stateToTypeMap[this]?.backgroundColor ?: Color.Transparent
+    } else {
+        Color.Transparent
+    }
 }
 
 fun BbangZipTextFieldInputState.getGuidelineColor(): Color {

@@ -33,7 +33,6 @@ import androidx.compose.ui.input.key.onKeyEvent
 import androidx.compose.ui.input.key.type
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -95,31 +94,31 @@ fun BbangZipBasicTextField(
     BbangZipTextFieldSlot(
         columnModifier = modifier,
         rowModifier =
-        Modifier
-            .background(color = bbangZipTextFieldInputState.getBackgroundColor(isOutLined), shape = RoundedCornerShape(8.dp))
-            .border(width = borderSize, color = bbangZipTextFieldInputState.getBorderColor(), shape = RoundedCornerShape(8.dp))
-            .padding(paddingValues = contentPadding),
+            Modifier
+                .background(color = bbangZipTextFieldInputState.getBackgroundColor(isOutLined), shape = RoundedCornerShape(8.dp))
+                .border(width = borderSize, color = bbangZipTextFieldInputState.getBorderColor(), shape = RoundedCornerShape(8.dp))
+                .padding(paddingValues = contentPadding),
         leadingIcon = { leadingIcon?.invoke() },
         content = {
             BasicTextField(
                 modifier =
-                Modifier
-                    .weight(1f)
-                    .focusRequester(focusRequester)
-                    .onFocusChanged { focusState ->
-                        isFocused = focusState.isFocused
-                        onFocusChange(focusState.isFocused)
-                    }
-                    .onKeyEvent { keyEvent ->
-                        if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp) {
-                            focusManager.clearFocus(force = true)
-                            onFocusChange(false)
-                            true
-                        } else {
-                            false
+                    Modifier
+                        .weight(1f)
+                        .focusRequester(focusRequester)
+                        .onFocusChanged { focusState ->
+                            isFocused = focusState.isFocused
+                            onFocusChange(focusState.isFocused)
                         }
-                    }
-                    .then(heightModifier),
+                        .onKeyEvent { keyEvent ->
+                            if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp) {
+                                focusManager.clearFocus(force = true)
+                                onFocusChange(false)
+                                true
+                            } else {
+                                false
+                            }
+                        }
+                        .then(heightModifier),
                 value = value,
                 onValueChange = {
                     if (it.length <= maxCharacter) onValueChange(it)
@@ -185,8 +184,8 @@ fun BbangZipBasicTextFieldPreview() {
             BbangZipBasicTextField(
                 placeholder = R.string.app_name,
                 modifier =
-                Modifier
-                    .padding(8.dp),
+                    Modifier
+                        .padding(8.dp),
                 value = text,
                 bbangZipTextFieldInputState = validationState,
                 onValueChange = { newValue ->
