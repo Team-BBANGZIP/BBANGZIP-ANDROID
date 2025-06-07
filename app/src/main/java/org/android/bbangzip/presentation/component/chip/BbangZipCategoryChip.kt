@@ -34,55 +34,61 @@ fun BbangZipCategoryChip(
     onclick: () -> Unit = {},
     isClickable: Boolean = true,
     isDraggable: Boolean = true,
-    maxCharacters: Int = 20
+    maxCharacters: Int = 20,
 ) {
-    val displayText = truncateText(
-        text = categoryName,
-        maxCharacters = maxCharacters
-    )
+    val displayText =
+        truncateText(
+            text = categoryName,
+            maxCharacters = maxCharacters,
+        )
 
     Row(
-        modifier = modifier
-            .clip(RoundedCornerShape(32.dp))
-            .noRippleClickable(
-                enabled = isClickable,
-                onClick = onclick
-            )
-            .background(
-                color = BbangZipTheme.color.secondaryLight_FAF6F3
-            )
-            .padding(
-                horizontal = 10.dp,
-                vertical = 7.dp
-            ),
+        modifier =
+            modifier
+                .clip(RoundedCornerShape(32.dp))
+                .noRippleClickable(
+                    enabled = isClickable,
+                    onClick = onclick,
+                )
+                .background(
+                    color = BbangZipTheme.color.secondaryLight_FAF6F3,
+                )
+                .padding(
+                    horizontal = 10.dp,
+                    vertical = 7.dp,
+                ),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(6.dp)
+        horizontalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         Box(
-            modifier = Modifier
-                .size(11.dp)
-                .clip(CircleShape)
-                .background(color = categoryColor)
+            modifier =
+                Modifier
+                    .size(11.dp)
+                    .clip(CircleShape)
+                    .background(color = categoryColor),
         )
 
         Text(
             text = displayText,
             style = BbangZipTheme.typography.label3SemiBold,
             color = BbangZipTheme.color.labelStrong_463D34,
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
         )
 
         Icon(
             painter = painterResource(id = R.drawable.ic_plus_bold_24),
             contentDescription = null,
             modifier = Modifier.size(18.dp),
-            tint = BbangZipTheme.color.labelAlternative_A29D96
+            tint = BbangZipTheme.color.labelAlternative_A29D96,
         )
     }
 }
 
 @Composable
-private fun truncateText(text: String, maxCharacters: Int): String {
+private fun truncateText(
+    text: String,
+    maxCharacters: Int,
+): String {
     return remember(text, maxCharacters) {
         if (text.length > maxCharacters) {
             text.take(maxCharacters) + "..."
@@ -96,16 +102,15 @@ private fun truncateText(text: String, maxCharacters: Int): String {
 @Composable
 private fun BbangZipCategoryChipPreview() {
     Column(
-        modifier = Modifier.fillMaxSize()
-    ){
+        modifier = Modifier.fillMaxSize(),
+    ) {
         BbangZipCategoryChip(
             categoryColor = BbangZipTheme.color.todoRed1_EA7152,
-            categoryName = "label"
+            categoryName = "label",
         )
         BbangZipCategoryChip(
             categoryColor = BbangZipTheme.color.todoBlue1_5C62AC,
-            categoryName = "abcdefghijklmnabcdefghijklmnabcdefghijklmn"
+            categoryName = "abcdefghijklmnabcdefghijklmnabcdefghijklmn",
         )
     }
 }
-
