@@ -55,13 +55,36 @@ import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import org.android.bbangzip.ui.theme.constant.ComponentConstants
 
-/*
-    기본 한줄 TextField 사용시 value , onVauleChange , TextFieldInputState , focusManager 만 넣어주면 됩니다.
-    bottomSheet에서 사용시 contentPadding,contentHeight , maxCharacter를 추가로 넣어주세요
-    2. 아래에 선 추가
-    3. enterclick 추가
-    4.
+/**
+ * 빵집 앱의 커스텀 텍스트 필드 컴포넌트입니다.
+ *
+ * 기본적으로 한 줄짜리 입력 필드를 제공합니다.
+ *
+ * @param value 현재 텍스트 필드의 값
+ * @param onValueChange 텍스트가 변경될 때 호출되는 콜백
+ * @param bbangZipTextFieldInputState 텍스트 필드 상태 (Default, Typing 등)
+ * @param focusManager 포커스를 제어하기 위한 객체
+ * @param modifier 전체 컴포넌트에 적용할 Modifier
+ * @param onFocusChange 포커스 변경 시 호출되는 콜백
+ * @param onEnterClick 엔터 키 입력 시 호출되는 콜백
+ * @param trailingIcon 텍스트 필드 우측에 표시할 아이콘 슬롯
+ * @param leadingIcon 텍스트 필드 좌측에 표시할 아이콘 슬롯
+ * @param placeholder 입력 전 표시할 플레이스홀더 문자열 리소스 ID
+ * @param guideline 하단에 표시할 가이드라인 문자열 리소스 ID
+ * @param contentPadding 텍스트 필드 내부 여백 설정
+ * ->   기본값은 [ComponentConstants.TextField.DEFAULT_CONTENT_PADDING]입니다.
+ * ->   Character Count가 있는 텍스트 필드 사용시 [ComponentConstants.TextField.CHARACTER_COUNT_CONTENT_PADDING]
+ * ->   외곽선이 없는 텍스트 필드 사용시 [ComponentConstants.TextField.OUTLINED_CONTENT_PADDING]
+ * @param borderSize 테두리 두께 설정
+ * @param contentHeight 텍스트 필드 최소 높이
+ * @param maxCharacter 최대 입력 가능 문자 수 (null이면 제한 없음)
+ * ->   matCharacter 입력시 Character Count가 표시됩니다.
+ * @param isOutLined true일 경우 하단 Divider 선이 추가로 나타남
+ * @param underLineColor 밑줄 Divider 색상
+ * @param keyboardOptions 키보드 동작 옵션 (IME Action 등)
+ * @param keyboardActions 키보드 액션 시 동작 정의
  */
+
 @Composable
 fun BbangZipBaseTextField(
     value: String,
@@ -76,6 +99,7 @@ fun BbangZipBaseTextField(
     @StringRes placeholder: Int? = null,
     @StringRes guideline: Int? = null,
     contentPadding: PaddingValues = ComponentConstants.TextField.DEFAULT_CONTENT_PADDING,
+    borderRadius :Dp = ComponentConstants.TextField.DEFAULT_BORDER_RADIUS.dp,
     borderSize: Dp = ComponentConstants.TextField.DEFAULT_BORDER_SIZE_DP.dp,
     contentHeight: Dp? = null,
     maxCharacter: Int? = null,
@@ -107,8 +131,8 @@ fun BbangZipBaseTextField(
         rowModifier =
         Modifier
             .fillMaxWidth()
-            .background(color = bbangZipTextFieldInputState.getBackgroundColor(isOutLined), shape = RoundedCornerShape(8.dp))
-            .border(width = borderSize, color = bbangZipTextFieldInputState.getBorderColor(), shape = RoundedCornerShape(8.dp))
+            .background(color = bbangZipTextFieldInputState.getBackgroundColor(isOutLined), shape = RoundedCornerShape(borderRadius))
+            .border(width = borderSize, color = bbangZipTextFieldInputState.getBorderColor(), shape = RoundedCornerShape(borderRadius))
             .padding(paddingValues = contentPadding),
         leadingIcon = { leadingIcon?.invoke() },
         content = {
