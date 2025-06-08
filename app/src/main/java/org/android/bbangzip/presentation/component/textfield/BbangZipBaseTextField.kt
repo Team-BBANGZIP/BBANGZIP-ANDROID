@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
@@ -49,27 +51,34 @@ import org.android.bbangzip.presentation.type.getTextColor
 import org.android.bbangzip.presentation.type.getTextStyle
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
+import org.android.bbangzip.ui.theme.BbangZipTheme
+import org.android.bbangzip.ui.theme.constant.ComponentConstants
 
 /*
     기본 한줄 TextField 사용시 value , onVauleChange , TextFieldInputState , focusManager 만 넣어주면 됩니다.
     bottomSheet에서 사용시 contentPadding,contentHeight , maxCharacter를 추가로 넣어주세요
+    1. characterCount 추가
+    2. 아래에 선 추가
+    3. enterclick 추가
+    4.
  */
 @Composable
-fun BbangZipBasicTextField(
+fun BbangZipBaseTextField(
     value: String,
     onValueChange: (String) -> Unit,
     bbangZipTextFieldInputState: BbangZipTextFieldInputState,
     focusManager: FocusManager,
     modifier: Modifier = Modifier,
     onFocusChange: (Boolean) -> Unit = {},
+    onEnterClick: () -> Unit = {},
     trailingIcon: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
     @StringRes placeholder: Int? = null,
     @StringRes guideline: Int? = null,
-    contentPadding: PaddingValues = PaddingValues(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 10.dp),
+    contentPadding: PaddingValues = ComponentConstants.TextField.DEFAULT_CONTENT_PADDING,
+    borderSize: Dp = ComponentConstants.TextField.DEFAULT_BORDER_SIZE_DP.dp,
     contentHeight: Dp? = null,
-    maxCharacter: Int = 100,
-    borderSize: Dp = 0.dp,
+    maxCharacter: Int? = null,
     isOutLined: Boolean = false,
     keyboardOptions: KeyboardOptions =
         KeyboardOptions.Default.copy(
@@ -92,38 +101,38 @@ fun BbangZipBasicTextField(
         } else {
             Modifier
         }
-
     BbangZipTextFieldSlot(
         columnModifier = modifier,
         rowModifier =
-            Modifier
-                .background(color = bbangZipTextFieldInputState.getBackgroundColor(isOutLined), shape = RoundedCornerShape(8.dp))
-                .border(width = borderSize, color = bbangZipTextFieldInputState.getBorderColor(), shape = RoundedCornerShape(8.dp))
-                .padding(paddingValues = contentPadding),
+        Modifier
+            .background(color = bbangZipTextFieldInputState.getBackgroundColor(isOutLined), shape = RoundedCornerShape(8.dp))
+            .border(width = borderSize, color = bbangZipTextFieldInputState.getBorderColor(), shape = RoundedCornerShape(8.dp))
+            .padding(paddingValues = contentPadding),
         leadingIcon = { leadingIcon?.invoke() },
         content = {
             BasicTextField(
                 modifier =
-                    Modifier
-                        .weight(1f)
-                        .focusRequester(focusRequester)
-                        .onFocusChanged { focusState ->
-                            isFocused = focusState.isFocused
-                            onFocusChange(focusState.isFocused)
+                Modifier
+                    .weight(1f)
+                    .focusRequester(focusRequester)
+                    .onFocusChanged { focusState ->
+                        isFocused = focusState.isFocused
+                        onFocusChange(focusState.isFocused)
+                    }
+                    .onKeyEvent { keyEvent ->
+                        if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp) {
+                            focusManager.clearFocus(force = true)
+                            onFocusChange(false)
+                            true
+                        } else {
+                            false
                         }
-                        .onKeyEvent { keyEvent ->
-                            if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp) {
-                                focusManager.clearFocus(force = true)
-                                onFocusChange(false)
-                                true
-                            } else {
-                                false
-                            }
-                        }
-                        .then(heightModifier),
+                    }
+                    .then(heightModifier),
                 value = value,
                 onValueChange = {
-                    if (it.length <= maxCharacter) onValueChange(it)
+                    if (maxCharacter == null || value.length <= maxCharacter) onValueChange(it)
+
                 },
                 keyboardActions = keyboardActions,
                 keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Done),
@@ -157,6 +166,19 @@ fun BbangZipBasicTextField(
                 )
             }
         },
+        characterCount = {
+            if (maxCharacter != null) {
+                Text(
+                    text = stringResource(R.string.textfield_character_counter, value.length.toString(), maxCharacter.toString()),
+                    modifier = Modifier
+                        .padding(top = 10.dp)
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.End),
+                    color = BbangZipTheme.color.labelAlternative_A29D96,
+                    style = BbangZipTheme.typography.body3Medium,
+                )
+            }
+        }
     )
 }
 
@@ -192,15 +214,17 @@ fun BbangZipBasicTextFieldPreview() {
         Column(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.fillMaxSize().background(Color(0XFFE3FFD6)),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color(0XFFE3FFD6)),
         ) {
             Text("나만의 다짐 작성하기")
 
-            BbangZipBasicTextField(
+            BbangZipBaseTextField(
                 placeholder = R.string.app_name,
                 modifier =
-                    Modifier
-                        .padding(8.dp),
+                Modifier
+                    .padding(8.dp),
                 value = text,
                 bbangZipTextFieldInputState = validationState,
                 onValueChange = { newValue ->
@@ -212,11 +236,11 @@ fun BbangZipBasicTextFieldPreview() {
                 },
                 focusManager = LocalFocusManager.current,
             )
-            BbangZipBasicTextField(
+            BbangZipBaseTextField(
                 placeholder = R.string.app_name,
                 modifier =
-                    Modifier
-                        .padding(8.dp),
+                Modifier
+                    .padding(8.dp),
                 value = text,
                 bbangZipTextFieldInputState = validationState,
                 onValueChange = { newValue ->
@@ -233,11 +257,11 @@ fun BbangZipBasicTextFieldPreview() {
 
             Gap(50)
 
-            BbangZipBasicTextField(
+            BbangZipBaseTextField(
                 placeholder = R.string.app_name,
                 modifier =
-                    Modifier
-                        .padding(8.dp),
+                Modifier
+                    .padding(8.dp),
                 value = text1,
                 bbangZipTextFieldInputState = validationState1,
                 onValueChange = { newValue ->
@@ -246,6 +270,7 @@ fun BbangZipBasicTextFieldPreview() {
                 },
                 contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
                 contentHeight = 90.dp,
+                maxCharacter = 50,
                 onFocusChange = {
                     if (validationState1 == BbangZipTextFieldInputState.Default) validationState1 = BbangZipTextFieldInputState.Typing else Unit
                 },
