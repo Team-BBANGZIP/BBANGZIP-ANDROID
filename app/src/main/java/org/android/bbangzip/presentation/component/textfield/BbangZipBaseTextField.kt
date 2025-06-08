@@ -125,6 +125,7 @@ fun BbangZipBaseTextField(
                         if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp) {
                             focusManager.clearFocus(force = true)
                             onFocusChange(false)
+                            onEnterClick()
                             true
                         } else {
                             false
