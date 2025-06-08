@@ -6,5 +6,5 @@ data class ButtonColors(
     val enabledContainerColor: Color,
     val enabledContentColor: Color,
     val disabledContainerColor: Color,
-    val disabledContentColor: Color
+    val disabledContentColor: Color,
 )
