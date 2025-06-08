@@ -114,6 +114,7 @@ fun BbangZipBaseTextField(
             onDone = {
                 val trimmedValue = value.trim()
                 onValueChange(trimmedValue)
+                onEnterClick()
                 focusManager.clearFocus(force = true)
             },
         ),
