@@ -15,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -57,7 +58,6 @@ import org.android.bbangzip.ui.theme.constant.ComponentConstants
 /*
     기본 한줄 TextField 사용시 value , onVauleChange , TextFieldInputState , focusManager 만 넣어주면 됩니다.
     bottomSheet에서 사용시 contentPadding,contentHeight , maxCharacter를 추가로 넣어주세요
-    1. characterCount 추가
     2. 아래에 선 추가
     3. enterclick 추가
     4.
@@ -80,6 +80,7 @@ fun BbangZipBaseTextField(
     contentHeight: Dp? = null,
     maxCharacter: Int? = null,
     isOutLined: Boolean = false,
+    underLineColor: Color = BbangZipTheme.color.primaryNormal_897869,
     keyboardOptions: KeyboardOptions =
         KeyboardOptions.Default.copy(
             imeAction = ImeAction.Default,
@@ -105,6 +106,7 @@ fun BbangZipBaseTextField(
         columnModifier = modifier,
         rowModifier =
         Modifier
+            .fillMaxWidth()
             .background(color = bbangZipTextFieldInputState.getBackgroundColor(isOutLined), shape = RoundedCornerShape(8.dp))
             .border(width = borderSize, color = bbangZipTextFieldInputState.getBorderColor(), shape = RoundedCornerShape(8.dp))
             .padding(paddingValues = contentPadding),
@@ -131,7 +133,7 @@ fun BbangZipBaseTextField(
                     .then(heightModifier),
                 value = value,
                 onValueChange = {
-                    if (maxCharacter == null || value.length <= maxCharacter) onValueChange(it)
+                    if (maxCharacter == null || it.length <= maxCharacter) onValueChange(it)
 
                 },
                 keyboardActions = keyboardActions,
@@ -178,7 +180,16 @@ fun BbangZipBaseTextField(
                     style = BbangZipTheme.typography.body3Medium,
                 )
             }
-        }
+        },
+        underLine = {
+            if (isOutLined) {
+                HorizontalDivider(
+                    modifier = Modifier.padding(top = 8.dp),
+                    thickness = 2.dp,
+                    color = underLineColor,
+                )
+            }
+        },
     )
 }
 
@@ -248,7 +259,7 @@ fun BbangZipBasicTextFieldPreview() {
                     validateText(text = newValue)
                 },
                 isOutLined = true,
-                contentPadding = PaddingValues(top = 4.dp, bottom = 14.dp),
+                contentPadding = ComponentConstants.TextField.OUTLINED_CONTENT_PADDING,
                 onFocusChange = {
                     if (validationState == BbangZipTextFieldInputState.Default) validationState = BbangZipTextFieldInputState.Typing else Unit
                 },
@@ -268,7 +279,7 @@ fun BbangZipBasicTextFieldPreview() {
                     text1 = newValue
                     validateText1(text = newValue)
                 },
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 12.dp),
+                contentPadding = ComponentConstants.TextField.CHARACTER_COUNT_CONTENT_PADDING,
                 contentHeight = 90.dp,
                 maxCharacter = 50,
                 onFocusChange = {

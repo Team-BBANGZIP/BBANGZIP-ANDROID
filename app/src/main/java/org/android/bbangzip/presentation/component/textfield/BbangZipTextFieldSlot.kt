@@ -19,6 +19,7 @@ fun BbangZipTextFieldSlot(
     trailingIcon: @Composable (RowScope.() -> Unit) = {},
     characterCount: @Composable (() -> Unit) = {},
     guideline: @Composable (ColumnScope.() -> Unit) = {},
+    underLine: @Composable (ColumnScope.() -> Unit) = {},
 ) {
     Column(
         modifier = columnModifier.then(modifier),
@@ -34,5 +35,6 @@ fun BbangZipTextFieldSlot(
         }
         guideline()
         characterCount()
+        underLine()
     }
 }
