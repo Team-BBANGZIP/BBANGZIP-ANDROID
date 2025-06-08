@@ -74,7 +74,7 @@ private fun BbangZipBottomSheetSlotPreview() {
             onDismissRequest = {
                 isBottomSheetVisible = !isBottomSheetVisible
                 isBottomSheetVisible2 = !isBottomSheetVisible2
-                               },
+            },
             title = {
                 Text(
                     text = "할 일 추가",
@@ -83,8 +83,8 @@ private fun BbangZipBottomSheetSlotPreview() {
             content = {
                 TextField(
                     value = text,
-                    onValueChange = {newText -> text = newText},
-                    modifier = Modifier.fillMaxWidth()
+                    onValueChange = { newText -> text = newText },
+                    modifier = Modifier.fillMaxWidth(),
                 )
             },
         )
@@ -106,19 +106,18 @@ private fun BbangZipBottomSheetSlotPreview() {
             },
             interactRow = {
                 Row(
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 ) {
                     Button(
                         modifier = Modifier.weight(1f),
-                        onClick = {}
+                        onClick = {},
                     ) { }
                     Button(
                         modifier = Modifier.weight(1f),
-                        onClick = {}
+                        onClick = {},
                     ) { }
                 }
-            }
+            },
         )
     }
 }
-

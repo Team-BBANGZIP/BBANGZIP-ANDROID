@@ -30,18 +30,20 @@ object BbangZipBottomSheetDefaults {
 
     // Shape 객체
     val DRAG_HANDLE_SHAPE = RoundedCornerShape(DRAG_HANDLE_CORNER_RADIUS)
-    val BOTTOM_SHEET_SHAPE = RoundedCornerShape(
-        topStart = BOTTOM_SHEET_CORNER_RADIUS,
-        topEnd = BOTTOM_SHEET_CORNER_RADIUS
-    )
+    val BOTTOM_SHEET_SHAPE =
+        RoundedCornerShape(
+            topStart = BOTTOM_SHEET_CORNER_RADIUS,
+            topEnd = BOTTOM_SHEET_CORNER_RADIUS,
+        )
 
     // PaddingValues 객체
-    val CONTENT_PADDING = PaddingValues(
-        top = CONTENT_PADDING_TOP,
-        start = CONTENT_PADDING_HORIZONTAL,
-        end = CONTENT_PADDING_HORIZONTAL,
-        bottom = CONTENT_PADDING_BOTTOM
-    )
+    val CONTENT_PADDING =
+        PaddingValues(
+            top = CONTENT_PADDING_TOP,
+            start = CONTENT_PADDING_HORIZONTAL,
+            end = CONTENT_PADDING_HORIZONTAL,
+            bottom = CONTENT_PADDING_BOTTOM,
+        )
 
     // 색상
     @Composable
@@ -51,12 +53,14 @@ object BbangZipBottomSheetDefaults {
     fun dragHandleColor() = BbangZipTheme.color.labelDisable_E4E2E0
 
     @Composable
-    fun DragHandle() = Box(
-        modifier = Modifier
-            .padding(top = DRAG_HANDLE_TOP_PADDING)
-            .width(DRAG_HANDLE_WIDTH)
-            .height(DRAG_HANDLE_HEIGHT)
-            .clip(shape = DRAG_HANDLE_SHAPE)
-            .background(color = dragHandleColor())
-    )
+    fun DragHandle() =
+        Box(
+            modifier =
+                Modifier
+                    .padding(top = DRAG_HANDLE_TOP_PADDING)
+                    .width(DRAG_HANDLE_WIDTH)
+                    .height(DRAG_HANDLE_HEIGHT)
+                    .clip(shape = DRAG_HANDLE_SHAPE)
+                    .background(color = dragHandleColor()),
+        )
 }
