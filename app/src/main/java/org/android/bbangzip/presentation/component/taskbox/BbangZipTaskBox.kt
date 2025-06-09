@@ -58,14 +58,14 @@ fun BbangZipTaskBox(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
-    ){
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
         CheckBox(
             isCompleted = isCompleted,
             checkedBoxColor = categoryColor,
             uncheckedBoxColor = colors.unCheckedBoxColor,
             checkIconColor = colors.checkIconColor,
-            onCheckBoxClick = onCheckBoxClick
+            onCheckBoxClick = onCheckBoxClick,
         )
 
         Gap(8)
@@ -76,7 +76,7 @@ fun BbangZipTaskBox(
             timeContentColor = colors.timeContentColor,
             taskBoxTextStyle = textStyles,
             modifier = Modifier.weight(1f),
-            startTime = startTime
+            startTime = startTime,
         )
 
         Gap(12)
@@ -88,7 +88,7 @@ fun BbangZipTaskBox(
                 Modifier
                     .size(BbangZipTaskBoxDefaults.MENU_ICON_SIZE)
                     .noRippleClickable { onMenuClick() },
-            tint = colors.menuIconColor
+            tint = colors.menuIconColor,
         )
     }
 }
@@ -100,10 +100,10 @@ private fun CheckBox(
     checkIconColor: Color,
     modifier: Modifier = Modifier,
     isCompleted: Boolean = false,
-    onCheckBoxClick: () -> Unit = {}
-){
+    onCheckBoxClick: () -> Unit = {},
+) {
     Box(
-        modifier = Modifier.noRippleClickable{onCheckBoxClick()}
+        modifier = Modifier.noRippleClickable { onCheckBoxClick() },
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_bread_default_24),
@@ -111,19 +111,19 @@ private fun CheckBox(
             modifier =
                 modifier
                     .size(BbangZipTaskBoxDefaults.CHECK_BOX_SIZE),
-            tint = if (isCompleted) checkedBoxColor else uncheckedBoxColor
+            tint = if (isCompleted) checkedBoxColor else uncheckedBoxColor,
         )
         if (isCompleted) {
             Box(
-                modifier = Modifier.align(Alignment.Center)
-            ){
+                modifier = Modifier.align(Alignment.Center),
+            ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_check_default_24),
                     contentDescription = null,
                     modifier =
                         Modifier
                             .size(BbangZipTaskBoxDefaults.CHECK_ICON_SIZE),
-                    tint = checkIconColor
+                    tint = checkIconColor,
                 )
             }
         }
@@ -138,14 +138,14 @@ private fun TaskText(
     taskBoxTextStyle: TaskBoxTextStyle,
     modifier: Modifier = Modifier,
     startTime: LocalTime? = null,
-){
+) {
     Column(
-        modifier = modifier
-    ){
+        modifier = modifier,
+    ) {
         Text(
             text = task,
             style = taskBoxTextStyle.taskTextStyle,
-            color = taskTextColor
+            color = taskTextColor,
         )
 
         if (startTime != null) {
@@ -154,7 +154,7 @@ private fun TaskText(
             Time(
                 startTime = startTime,
                 timeContentColor = timeContentColor,
-                timeTextStyle = taskBoxTextStyle.timeTextStyle
+                timeTextStyle = taskBoxTextStyle.timeTextStyle,
             )
         }
     }
@@ -167,13 +167,14 @@ private fun Time(
     timeTextStyle: TextStyle,
     modifier: Modifier = Modifier,
 ) {
-    val displayTime = remember(startTime){
-        startTime.formatTimeWithAmPm()
-    }
+    val displayTime =
+        remember(startTime) {
+            startTime.formatTimeWithAmPm()
+        }
 
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_clock_default_24),
@@ -181,7 +182,7 @@ private fun Time(
             modifier =
                 Modifier
                     .size(BbangZipTaskBoxDefaults.CLOCK_ICON_SIZE),
-            tint = timeContentColor
+            tint = timeContentColor,
         )
 
         Gap(3)
@@ -189,7 +190,7 @@ private fun Time(
         Text(
             text = displayTime,
             style = timeTextStyle,
-            color = timeContentColor
+            color = timeContentColor,
         )
     }
 }
@@ -199,27 +200,28 @@ private fun Time(
 fun BbangZipTaskBoxPreview() {
     BBANGZIPANDROIDTheme {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(30.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(30.dp),
+            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             BbangZipTaskBox(
                 task = "두줄 텍스트 두줄 텍스트 두줄 텍스트 두줄 텍스트 두줄 텍스트",
-                categoryColor = Color.Red
-            )
-
-            BbangZipTaskBox(
-                task = "한줄 텍스트",
                 categoryColor = Color.Red,
-                isCompleted = true
             )
 
             BbangZipTaskBox(
                 task = "한줄 텍스트",
                 categoryColor = Color.Red,
                 isCompleted = true,
-                startTime = LocalTime.now()
+            )
+
+            BbangZipTaskBox(
+                task = "한줄 텍스트",
+                categoryColor = Color.Red,
+                isCompleted = true,
+                startTime = LocalTime.now(),
             )
         }
     }

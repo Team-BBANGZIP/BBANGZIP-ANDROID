@@ -10,7 +10,6 @@ import org.android.bbangzip.presentation.component.taskbox.model.TaskBoxTextStyl
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
 object BbangZipTaskBoxDefaults {
-
     val CHECK_BOX_SIZE = 28.dp
     val CHECK_ICON_SIZE = 18.dp
     val MENU_ICON_SIZE = 20.dp
@@ -23,30 +22,31 @@ object BbangZipTaskBoxDefaults {
         menuIconColor: Color = BbangZipTheme.color.secondaryStrong_F2EAE4,
         taskTextColor: Color = BbangZipTheme.color.labelNormal_6B6560,
         timeContentColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
-    ): TaskBoxColors = remember(
-        unCheckedBoxColor,
-        checkIconColor,
-        taskTextColor,
-        timeContentColor,
-    ){
-        TaskBoxColors(
-            unCheckedBoxColor = unCheckedBoxColor,
-            checkIconColor = checkIconColor,
-            menuIconColor = menuIconColor,
-            taskTextColor = taskTextColor,
-            timeContentColor = timeContentColor,
-        )
-    }
+    ): TaskBoxColors =
+        remember(
+            unCheckedBoxColor,
+            checkIconColor,
+            taskTextColor,
+            timeContentColor,
+        ) {
+            TaskBoxColors(
+                unCheckedBoxColor = unCheckedBoxColor,
+                checkIconColor = checkIconColor,
+                menuIconColor = menuIconColor,
+                taskTextColor = taskTextColor,
+                timeContentColor = timeContentColor,
+            )
+        }
 
     @Composable
     fun textStyles(
         taskTextStyle: TextStyle = BbangZipTheme.typography.body2Medium,
         timeTextStyle: TextStyle = BbangZipTheme.typography.label4Regular,
-    ): TaskBoxTextStyle = remember(
-        taskTextStyle,
-        timeTextStyle,
-    )
-        {
+    ): TaskBoxTextStyle =
+        remember(
+            taskTextStyle,
+            timeTextStyle,
+        ) {
             TaskBoxTextStyle(
                 taskTextStyle = taskTextStyle,
                 timeTextStyle = timeTextStyle,
