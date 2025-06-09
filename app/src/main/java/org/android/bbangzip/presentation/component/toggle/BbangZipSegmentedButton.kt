@@ -31,12 +31,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import org.android.bbangzip.presentation.util.constant.ComponentConstants
+import org.android.bbangzip.presentation.component.toggle.model.SegmentedButtonColors
 import org.android.bbangzip.presentation.util.extension.dropShadow
 import org.android.bbangzip.presentation.util.extension.innerShadow
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
-import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -45,26 +44,26 @@ fun BbangZipSegmentedButton(
     indexOfSelectedOption: Int,
     onOptionSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
-    selectedOptionColor: Color = BbangZipTheme.color.staticWhite_FFFFFF,
-    unselectedOptionColor: Color = BbangZipTheme.color.primaryNormal_897869,
-    containerColor: Color = BbangZipTheme.color.secondaryStrong_F2EAE4,
-    indicatorColor: Color = BbangZipTheme.color.primaryNormal_897869,
-    containerPadding: Dp = ComponentConstants.SegmentedButton.DEFAULT_CONTAINER_PADDING_DP.dp,
-    containerBorderRadius: Dp = ComponentConstants.SegmentedButton.DEFAULT_CONTAINER_BORDER_RADIUS_DP.dp,
+    colors: SegmentedButtonColors = BbangZipSegmentedButtonDefaults.colors(),
+    containerPadding: Dp = BbangZipSegmentedButtonDefaults.CONTAINER_PADDING,
+    indicatorVerticalPadding: Dp = BbangZipSegmentedButtonDefaults.INDICATOR_VERTICAL_PADDING,
+    containerCornerRadius: Dp = BbangZipSegmentedButtonDefaults.CONTAINER_CORNER_RADIUS,
 ) {
     val localDensity = LocalDensity.current
 
-    val indicatorBorderRadius = containerBorderRadius - containerPadding
+    val indicatorCornerRadius = containerCornerRadius - containerPadding
+
+    val containerShape = RoundedCornerShape(containerCornerRadius)
 
     BoxWithConstraints(
         modifier =
             modifier
                 .background(
-                    color = containerColor,
-                    shape = RoundedCornerShape(containerBorderRadius),
+                    color = colors.containerColor,
+                    shape = containerShape,
                 )
                 .innerShadow(
-                    shape = RoundedCornerShape(containerBorderRadius),
+                    shape = containerShape,
                     color = Color(0xFF535752).copy(alpha = 0.08f),
                     blur = 4.dp,
                     offsetX = 0.dp,
@@ -82,14 +81,13 @@ fun BbangZipSegmentedButton(
 
         var buttonHeight by remember { mutableStateOf(0.dp) }
 
-        // 인디케이터
         if (buttonHeight > 0.dp) {
             Indicator(
                 itemWidth = itemWidth,
                 height = buttonHeight,
                 indicatorOffset = indicatorOffset,
-                indicatorColor = indicatorColor,
-                indicatorBorderRadius = indicatorBorderRadius,
+                indicatorColor = colors.indicatorColor,
+                indicatorCornerRadius = indicatorCornerRadius,
             )
         }
 
@@ -111,7 +109,7 @@ fun BbangZipSegmentedButton(
                     modifier =
                         Modifier
                             .weight(1f)
-                            .padding(vertical = 4.5.dp)
+                            .padding(vertical = indicatorVerticalPadding)
                             .noRippleClickable { onOptionSelect(index) },
                     contentAlignment = Alignment.Center,
                 ) {
@@ -119,9 +117,9 @@ fun BbangZipSegmentedButton(
                         text = option,
                         color =
                             animateColorAsState(
-                                targetValue = if (isSelected) selectedOptionColor else unselectedOptionColor,
+                                targetValue = if (isSelected) colors.selectedOptionColor else colors.unselectedOptionColor,
                             ).value,
-                        style = BbangZipTheme.typography.body4Medium,
+                        style = BbangZipSegmentedButtonDefaults.optionStyle(),
                     )
                 }
             }
@@ -135,8 +133,10 @@ private fun Indicator(
     height: Dp,
     indicatorOffset: Dp,
     indicatorColor: Color,
-    indicatorBorderRadius: Dp,
+    indicatorCornerRadius: Dp,
 ) {
+    val indicatorShape = RoundedCornerShape(indicatorCornerRadius)
+
     Box(
         modifier =
             Modifier
@@ -145,10 +145,10 @@ private fun Indicator(
                 .offset { IntOffset(indicatorOffset.roundToPx(), 0) }
                 .background(
                     color = indicatorColor,
-                    shape = RoundedCornerShape(indicatorBorderRadius),
+                    shape = indicatorShape,
                 )
                 .innerShadow(
-                    shape = RoundedCornerShape(indicatorBorderRadius),
+                    shape = indicatorShape,
                     color = Color(0xFFEDEDED).copy(alpha = 0.3f),
                     blur = 1.dp,
                     offsetX = 0.dp,
@@ -156,7 +156,7 @@ private fun Indicator(
                     spread = 0.dp,
                 )
                 .dropShadow(
-                    shape = RoundedCornerShape(indicatorBorderRadius),
+                    shape = indicatorShape,
                     color = Color(0xFF5C636D).copy(alpha = 0.12f),
                     blur = 3.dp,
                     offsetX = 1.dp,
