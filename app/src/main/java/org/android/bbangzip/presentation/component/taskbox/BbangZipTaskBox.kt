@@ -16,17 +16,32 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.component.taskbox.model.TaskBoxColors
+import org.android.bbangzip.presentation.component.taskbox.model.TaskBoxTextStyle
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.formatTimeWithAmPm
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
-import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
 
+/**
+ * 각각의 작업을 나타낼 Box
+ *
+ * 작업 완료 여부 체크 및 드래그/드롭(미구현) 이벤트 처리가 가능
+ *
+ * @param task 작업 내용
+ * @param categoryColor 카테고리 색상이 체크 박스의 색상이 됌
+ * @param isCompleted 작업 완료 여부를 나타냄. true일 경우 체크 아이콘이 표시
+ * @param startTime 작업의 시작 시간. 지정 시 AM/PM 형식으로 표시
+ * @param onCheckBoxClick 체크박스 클릭 시 호출되는 콜백
+ * @param onMenuClick 메뉴 아이콘 클릭 시 호출되는 콜백
+ * @param onDrag 드래그 시작 시 호출되는 콜백
+ * @param onDrop 드롭 완료 시 호출되는 콜백
+ */
 @Composable
 fun BbangZipTaskBox(
     task: String,
@@ -34,6 +49,8 @@ fun BbangZipTaskBox(
     modifier: Modifier = Modifier,
     isCompleted: Boolean = false,
     startTime: LocalTime? = null,
+    colors: TaskBoxColors = BbangZipTaskBoxDefaults.colors(),
+    textStyles: TaskBoxTextStyle = BbangZipTaskBoxDefaults.textStyles(),
     onCheckBoxClick: () -> Unit = {},
     onMenuClick: () -> Unit = {},
     onDrag: () -> Unit = {},
@@ -46,6 +63,8 @@ fun BbangZipTaskBox(
         CheckBox(
             isCompleted = isCompleted,
             checkedBoxColor = categoryColor,
+            uncheckedBoxColor = colors.unCheckedBoxColor,
+            checkIconColor = colors.checkIconColor,
             onCheckBoxClick = onCheckBoxClick
         )
 
@@ -53,6 +72,9 @@ fun BbangZipTaskBox(
 
         TaskText(
             task = task,
+            taskTextColor = colors.taskTextColor,
+            timeContentColor = colors.timeContentColor,
+            taskBoxTextStyle = textStyles,
             modifier = Modifier.weight(1f),
             startTime = startTime
         )
@@ -66,7 +88,7 @@ fun BbangZipTaskBox(
                 Modifier
                     .size(BbangZipTaskBoxDefaults.MENU_ICON_SIZE)
                     .noRippleClickable { onMenuClick() },
-            tint = BbangZipTaskBoxDefaults.colors().menuIconColor
+            tint = colors.menuIconColor
         )
     }
 }
@@ -74,18 +96,22 @@ fun BbangZipTaskBox(
 @Composable
 private fun CheckBox(
     checkedBoxColor: Color,
+    uncheckedBoxColor: Color,
+    checkIconColor: Color,
     modifier: Modifier = Modifier,
     isCompleted: Boolean = false,
     onCheckBoxClick: () -> Unit = {}
 ){
     Box(
-        modifier = Modifier.noRippleClickable{onCheckBoxClick}
+        modifier = Modifier.noRippleClickable{onCheckBoxClick()}
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_bread_default_24),
             contentDescription = null,
-            modifier = modifier.size(BbangZipTaskBoxDefaults.CHECK_BOX_SIZE),
-            tint = if (isCompleted) checkedBoxColor else BbangZipTaskBoxDefaults.colors().unCheckedBoxColor
+            modifier =
+                modifier
+                    .size(BbangZipTaskBoxDefaults.CHECK_BOX_SIZE),
+            tint = if (isCompleted) checkedBoxColor else uncheckedBoxColor
         )
         if (isCompleted) {
             Box(
@@ -97,7 +123,7 @@ private fun CheckBox(
                     modifier =
                         Modifier
                             .size(BbangZipTaskBoxDefaults.CHECK_ICON_SIZE),
-                    tint = BbangZipTaskBoxDefaults.colors().checkIconColor
+                    tint = checkIconColor
                 )
             }
         }
@@ -107,22 +133,29 @@ private fun CheckBox(
 @Composable
 private fun TaskText(
     task: String,
+    taskTextColor: Color,
+    timeContentColor: Color,
+    taskBoxTextStyle: TaskBoxTextStyle,
     modifier: Modifier = Modifier,
     startTime: LocalTime? = null,
 ){
     Column(
-        modifier = modifier.fillMaxWidth()
+        modifier = modifier
     ){
         Text(
             text = task,
-            style = BbangZipTaskBoxDefaults.textStyles().taskTextStyle,
-            color = BbangZipTaskBoxDefaults.colors().taskTextColor
+            style = taskBoxTextStyle.taskTextStyle,
+            color = taskTextColor
         )
 
-        Gap(4)
-
         if (startTime != null) {
-            Time(startTime = startTime)
+            Gap(4)
+
+            Time(
+                startTime = startTime,
+                timeContentColor = timeContentColor,
+                timeTextStyle = taskBoxTextStyle.timeTextStyle
+            )
         }
     }
 }
@@ -130,6 +163,8 @@ private fun TaskText(
 @Composable
 private fun Time(
     startTime: LocalTime,
+    timeContentColor: Color,
+    timeTextStyle: TextStyle,
     modifier: Modifier = Modifier,
 ) {
     val displayTime = remember(startTime){
@@ -137,7 +172,7 @@ private fun Time(
     }
 
     Row(
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Icon(
@@ -146,15 +181,15 @@ private fun Time(
             modifier =
                 Modifier
                     .size(BbangZipTaskBoxDefaults.CLOCK_ICON_SIZE),
-            tint = BbangZipTaskBoxDefaults.colors().timeContentColor
+            tint = timeContentColor
         )
 
         Gap(3)
 
         Text(
             text = displayTime,
-            style = BbangZipTaskBoxDefaults.textStyles().timeTextStyle,
-            color = BbangZipTaskBoxDefaults.colors().timeContentColor
+            style = timeTextStyle,
+            color = timeContentColor
         )
     }
 }
