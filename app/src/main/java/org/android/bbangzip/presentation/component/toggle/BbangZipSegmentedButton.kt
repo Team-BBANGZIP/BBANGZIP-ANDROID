@@ -38,6 +38,20 @@ import org.android.bbangzip.presentation.util.extension.innerShadow
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 
+/**
+ * BbangZip의 Segmented Button
+ *
+ * 각 옵션은 동일한 너비를 가지며 선택된 항목으로 인디케이터가 애니메이션으로 이동한다.
+ *
+ * @param options 표시할 옵션 문자열 리스트
+ * @param indexOfSelectedOption 현재 선택된 옵션의 인덱스
+ * @param onOptionSelect 옵션 선택 시 호출되는 콜백 함수
+ * @param modifier 외부에서 전달하는 Modifier
+ * @param colors SegmentedButton에 사용할 색상들
+ * @param containerPadding 컨테이너의 패딩으로 내부 인디케이터 및 텍스트 영역을 감싼다.
+ * @param indicatorVerticalPadding 인디케이터와 텍스트 간의 수직 패딩
+ * @param containerCornerRadius 컨테이너의 모서리 반지름
+ */
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun BbangZipSegmentedButton(
