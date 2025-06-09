@@ -48,15 +48,15 @@ fun BbangzipBaseButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     enabled: Boolean = true,
-    buttonColors: ButtonColors = BbangZipButtonDefaults.defaultButtonColors(),
+    colors: ButtonColors = BbangZipButtonDefaults.defaultButtonColors(),
     verticalPadding: Dp = BbangZipButtonDefaults.BUTTON_VERTICAL_PADDING,
     contentGap: Dp = BbangZipButtonDefaults.BUTTON_CONTENT_GAP,
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     content: @Composable RowScope.() -> Unit,
 ) {
-    val currentContentColor = if (enabled) buttonColors.enabledContentColor else buttonColors.disabledContentColor
-    val currentContainerColor = if (enabled) buttonColors.enabledContainerColor else buttonColors.disabledContainerColor
+    val currentContentColor = if (enabled) colors.enabledContentColor else colors.disabledContentColor
+    val currentContainerColor = if (enabled) colors.enabledContainerColor else colors.disabledContainerColor
     Box(
         modifier =
             modifier
@@ -111,7 +111,7 @@ private fun BbangzipBaseButtonPreview() {
                             modifier = Modifier.size(16.dp),
                         )
                     },
-                    buttonColors = BbangZipButtonDefaults.defaultButtonColors(),
+                    colors = BbangZipButtonDefaults.defaultButtonColors(),
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_30minutes_more),
@@ -132,7 +132,7 @@ private fun BbangzipBaseButtonPreview() {
                             modifier = Modifier.size(16.dp),
                         )
                     },
-                    buttonColors =
+                    colors =
                         BbangZipButtonDefaults.defaultButtonColors(
                             enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
                         ),
@@ -158,7 +158,7 @@ private fun BbangzipBaseButtonPreview() {
                             modifier = Modifier.size(16.dp),
                         )
                     },
-                    buttonColors = BbangZipButtonDefaults.defaultButtonColors(),
+                    colors = BbangZipButtonDefaults.defaultButtonColors(),
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_60minutes_more),
@@ -179,7 +179,7 @@ private fun BbangzipBaseButtonPreview() {
                             modifier = Modifier.size(16.dp),
                         )
                     },
-                    buttonColors =
+                    colors =
                         BbangZipButtonDefaults.defaultButtonColors(
                             enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
                         ),
@@ -205,7 +205,7 @@ private fun BbangzipBaseButtonPreview() {
                             modifier = Modifier.size(16.dp),
                         )
                     },
-                    buttonColors = BbangZipButtonDefaults.defaultButtonColors(),
+                    colors = BbangZipButtonDefaults.defaultButtonColors(),
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_go_back),
@@ -226,7 +226,7 @@ private fun BbangzipBaseButtonPreview() {
                             modifier = Modifier.size(16.dp),
                         )
                     },
-                    buttonColors =
+                    colors =
                         BbangZipButtonDefaults.defaultButtonColors(
                             enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
                         ),
@@ -252,7 +252,7 @@ private fun BbangzipBaseButtonPreview() {
                             modifier = Modifier.size(16.dp),
                         )
                     },
-                    buttonColors = BbangZipButtonDefaults.defaultButtonColors(),
+                    colors = BbangZipButtonDefaults.defaultButtonColors(),
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_go_back),
@@ -273,7 +273,7 @@ private fun BbangzipBaseButtonPreview() {
                             modifier = Modifier.size(16.dp),
                         )
                     },
-                    buttonColors =
+                    colors =
                         BbangZipButtonDefaults.defaultButtonColors(
                             enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
                         ),
@@ -299,7 +299,7 @@ private fun BbangzipBaseButtonPreview() {
                             modifier = Modifier.size(16.dp),
                         )
                     },
-                    buttonColors = BbangZipButtonDefaults.defaultButtonColors(),
+                    colors = BbangZipButtonDefaults.defaultButtonColors(),
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_30minutes_more),
@@ -320,7 +320,7 @@ private fun BbangzipBaseButtonPreview() {
                             modifier = Modifier.size(16.dp),
                         )
                     },
-                    buttonColors =
+                    colors =
                         BbangZipButtonDefaults.defaultButtonColors(
                             enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
                         ),
@@ -346,7 +346,7 @@ private fun BbangzipBaseButtonPreview() {
                             modifier = Modifier.size(16.dp),
                         )
                     },
-                    buttonColors = BbangZipButtonDefaults.defaultButtonColors(),
+                    colors = BbangZipButtonDefaults.defaultButtonColors(),
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_cancellation),
@@ -367,7 +367,7 @@ private fun BbangzipBaseButtonPreview() {
                             modifier = Modifier.size(16.dp),
                         )
                     },
-                    buttonColors =
+                    colors =
                         BbangZipButtonDefaults.defaultButtonColors(
                             enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
                         ),
@@ -390,7 +390,7 @@ private fun BbangzipBaseButtonPreview() {
                         modifier = Modifier.size(20.dp),
                     )
                 },
-                buttonColors =
+                colors =
                     BbangZipButtonDefaults.defaultButtonColors(
                         enabledContainerColor = BbangZipTheme.color.primaryLight_C8B5A2,
                     ),
@@ -415,7 +415,7 @@ private fun BbangzipBaseButtonPreview() {
                         modifier = Modifier.size(20.dp),
                     )
                 },
-                buttonColors =
+                colors =
                     BbangZipButtonDefaults.defaultButtonColors(
                         enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
                     ),
@@ -438,7 +438,7 @@ private fun BbangzipBaseButtonPreview() {
                         modifier = Modifier.size(20.dp),
                     )
                 },
-                buttonColors = BbangZipButtonDefaults.defaultButtonColors(),
+                colors = BbangZipButtonDefaults.defaultButtonColors(),
                 content = {
                     Text(
                         text = stringResource(R.string.button_label_delete),
@@ -460,7 +460,7 @@ private fun BbangzipBaseButtonPreview() {
                             modifier = Modifier.size(20.dp),
                         )
                     },
-                    buttonColors = BbangZipButtonDefaults.defaultButtonColors(),
+                    colors = BbangZipButtonDefaults.defaultButtonColors(),
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_go_back),
@@ -481,7 +481,7 @@ private fun BbangzipBaseButtonPreview() {
                             modifier = Modifier.size(20.dp),
                         )
                     },
-                    buttonColors =
+                    colors =
                         BbangZipButtonDefaults.defaultButtonColors(
                             enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
                         ),
