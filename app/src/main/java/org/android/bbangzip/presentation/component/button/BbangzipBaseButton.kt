@@ -36,10 +36,7 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
  * @param onClick 버튼 클릭 시 실행할 콜백
  * @param modifier 버튼에 적용할 수정자
  * @param enabled 버튼 활성화 여부
- * @param enabledContainerColor 버튼 활성화 시 배경색
- * @param enabledContentColor 버튼 활성화 시 내용 색상
- * @param disabledContainerColor 비활성화 상태 배경색
- * @param disabledContentColor 비활성화 상태 내용 색상
+ * @param buttonColors 버튼에 관한 색상들
  * @param verticalPadding 버튼 세로 패딩
  * @param contentGap 아이콘과 콘텐츠 사이 간격
  * @param leadingIcon 버튼 앞에 표시할 아이콘
