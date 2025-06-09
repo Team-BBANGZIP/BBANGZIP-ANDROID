@@ -34,13 +34,25 @@ import org.android.bbangzip.presentation.util.extension.innerShadow
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 
+/**
+ * BbangZip의 토글 스위치
+ *
+ * 스위치는 너비를 기반으로 thumb 크기, 위치, radius 등을 동적으로 계산하도록
+ * 설계되었다.
+ *
+ * @param isChecked 현재 스위치의 상태. `true`면 켜진 상태
+ * @param onCheckedChange 스위치를 클릭했을 때 호출되는 콜백 함수
+ * @param modifier 외부에서 전달하는 Modifier
+ * @param switchColors 스위치의 색상들
+ * @param containerPadding 스위치 내부 패딩
+ */
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun BbangZipSwitch(
     isChecked: Boolean,
     onCheckedChange: () -> Unit,
     modifier: Modifier = Modifier,
-    switchColors: SwitchColors = BbangZipSwitchDefaults.colors(),
+    colors: SwitchColors = BbangZipSwitchDefaults.colors(),
     containerPadding: Dp = BbangZipSwitchDefaults.CONTAINER_PADDING,
 ) {
     BoxWithConstraints(modifier = modifier) {
@@ -55,12 +67,12 @@ fun BbangZipSwitch(
 
         // thumb 색상 애니메이션
         val thumbColor by transition.animateColor { isChecked ->
-            if (isChecked) switchColors.checkedThumbColor else switchColors.uncheckedThumbColor
+            if (isChecked) colors.checkedThumbColor else colors.uncheckedThumbColor
         }
 
         // 배경색 애니메이션
         val containerColor by transition.animateColor { isChecked ->
-            if (isChecked) switchColors.checkedContainerColor else switchColors.uncheckedContainerColor
+            if (isChecked) colors.checkedContainerColor else colors.uncheckedContainerColor
         }
 
         // thumb 이동 애니메이션
@@ -186,7 +198,7 @@ private fun AnimatedToggleButtonPreview() {
             BbangZipSwitch(
                 isChecked = isChecked2,
                 onCheckedChange = { isChecked2 = !isChecked2 },
-                switchColors = BbangZipSwitchDefaults.colors(
+                colors = BbangZipSwitchDefaults.colors(
                     checkedThumbColor = Color.Green,
                     uncheckedThumbColor = Color.Red,
                 ),
@@ -197,7 +209,7 @@ private fun AnimatedToggleButtonPreview() {
                 isChecked = isChecked3,
                 onCheckedChange = { isChecked3 = !isChecked3 },
                 modifier = Modifier.fillMaxWidth(0.25f),
-                switchColors = BbangZipSwitchDefaults.colors(
+                colors = BbangZipSwitchDefaults.colors(
                     checkedThumbColor = Color.Green,
                     uncheckedThumbColor = Color.Red,
                     checkedContainerColor = Color.Blue,
