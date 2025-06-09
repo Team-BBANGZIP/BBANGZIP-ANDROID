@@ -1,5 +1,6 @@
 package org.android.bbangzip.presentation.component.toggle
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
@@ -37,6 +38,7 @@ import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun BbangZipSegmentedButton(
     options: List<String>,
@@ -78,13 +80,13 @@ fun BbangZipSegmentedButton(
             targetValue = itemWidth * indexOfSelectedOption,
         )
 
-        var rowHeight by remember { mutableStateOf(0.dp) }
+        var buttonHeight by remember { mutableStateOf(0.dp) }
 
         // 인디케이터
-        if (rowHeight > 0.dp) {
+        if (buttonHeight > 0.dp) {
             Indicator(
                 itemWidth = itemWidth,
-                height = rowHeight,
+                height = buttonHeight,
                 indicatorOffset = indicatorOffset,
                 indicatorColor = indicatorColor,
                 indicatorBorderRadius = indicatorBorderRadius,
@@ -96,7 +98,7 @@ fun BbangZipSegmentedButton(
                 Modifier
                     .fillMaxWidth()
                     .onGloballyPositioned { coordinates ->
-                        rowHeight =
+                        buttonHeight =
                             with(localDensity) {
                                 coordinates.size.height.toDp()
                             }

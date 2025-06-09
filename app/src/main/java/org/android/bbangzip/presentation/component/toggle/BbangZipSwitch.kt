@@ -1,5 +1,6 @@
 package org.android.bbangzip.presentation.component.toggle
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.animateColor
 import androidx.compose.animation.core.animateDp
 import androidx.compose.animation.core.updateTransition
@@ -34,6 +35,7 @@ import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
+@SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
 fun BbangZipSwitch(
     isChecked: Boolean,
