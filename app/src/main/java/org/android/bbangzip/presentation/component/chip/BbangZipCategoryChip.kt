@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,11 +20,23 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
+private const val MAX_CATEGORY_NAME_CHARACTER = 20
+
+/**
+ * 카테고리를 표현하는 칩 컴포넌트
+ *
+ * @param categoryColor 카테고리를 나타내는 색상
+ * @param categoryName 표시할 카테고리 이름
+ * @param modifier Modifier 설정
+ * @param onclick 클릭 시 실행되는 콜백
+ * @param isClickable 클릭 가능 여부
+ * @param isDraggable 드래그 가능 여부 (현재는 사용되지 않음)
+ * @param maxCharacters 카테고리 이름의 최대 글자 수
+ */
 @Composable
 fun BbangZipCategoryChip(
     categoryColor: Color,
@@ -34,7 +45,7 @@ fun BbangZipCategoryChip(
     onclick: () -> Unit = {},
     isClickable: Boolean = true,
     isDraggable: Boolean = true,
-    maxCharacters: Int = 20,
+    maxCharacters: Int = MAX_CATEGORY_NAME_CHARACTER,
 ) {
     val displayText =
         truncateText(
@@ -45,41 +56,40 @@ fun BbangZipCategoryChip(
     Row(
         modifier =
             modifier
-                .clip(RoundedCornerShape(32.dp))
+                .clip(BbangZipCategoryChipDefaults.CHIP_SHAPE)
                 .noRippleClickable(
                     enabled = isClickable,
                     onClick = onclick,
                 )
                 .background(
-                    color = BbangZipTheme.color.secondaryLight_FAF6F3,
+                    color = BbangZipCategoryChipDefaults.containerColor(),
                 )
                 .padding(
-                    horizontal = 10.dp,
-                    vertical = 7.dp,
+                    BbangZipCategoryChipDefaults.CHIP_PADDING
                 ),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.spacedBy(6.dp),
+        horizontalArrangement = Arrangement.spacedBy(BbangZipCategoryChipDefaults.CONTENT_GAP),
     ) {
         Box(
             modifier =
                 Modifier
-                    .size(11.dp)
+                    .size(BbangZipCategoryChipDefaults.DOT_SIZE)
                     .clip(CircleShape)
                     .background(color = categoryColor),
         )
 
         Text(
             text = displayText,
-            style = BbangZipTheme.typography.label3SemiBold,
-            color = BbangZipTheme.color.labelStrong_463D34,
+            style = BbangZipCategoryChipDefaults.categoryNameStyle(),
+            color = BbangZipCategoryChipDefaults.categoryNameColor(),
             overflow = TextOverflow.Ellipsis,
         )
 
         Icon(
             painter = painterResource(id = R.drawable.ic_plus_bold_24),
             contentDescription = null,
-            modifier = Modifier.size(18.dp),
-            tint = BbangZipTheme.color.labelAlternative_A29D96,
+            modifier = Modifier.size(BbangZipCategoryChipDefaults.ICON_SIZE),
+            tint = BbangZipCategoryChipDefaults.iconColor(),
         )
     }
 }
