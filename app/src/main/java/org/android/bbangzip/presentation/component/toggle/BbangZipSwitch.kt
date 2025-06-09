@@ -28,12 +28,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import org.android.bbangzip.presentation.util.constant.ComponentConstants
+import org.android.bbangzip.presentation.component.toggle.model.SwitchColors
 import org.android.bbangzip.presentation.util.extension.dropShadow
 import org.android.bbangzip.presentation.util.extension.innerShadow
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
-import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @SuppressLint("UnusedBoxWithConstraintsScope")
 @Composable
@@ -41,23 +40,27 @@ fun BbangZipSwitch(
     isChecked: Boolean,
     onCheckedChange: () -> Unit,
     modifier: Modifier = Modifier,
-    checkedThumbColor: Color = BbangZipTheme.color.primaryNormal_897869,
-    uncheckedThumbColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
-    switchPadding: Dp = ComponentConstants.Switch.DEFAULT_CONTAINER_PADDING_DP.dp,
+    switchColors: SwitchColors = BbangZipSwitchDefaults.colors(),
+    containerPadding: Dp = BbangZipSwitchDefaults.CONTAINER_PADDING,
 ) {
     BoxWithConstraints(modifier = modifier) {
         val switchWidth = maxWidth
 
         val dimensions =
-            remember(switchWidth, switchPadding) {
-                calculateToggleDimensions(switchWidth, switchPadding)
+            remember(switchWidth, containerPadding) {
+                calculateSwitchDimensions(switchWidth, containerPadding)
             }
 
         val transition = updateTransition(targetState = isChecked)
 
-        // 배경색 애니메이션
+        // thumb 색상 애니메이션
         val thumbColor by transition.animateColor { isChecked ->
-            if (isChecked) checkedThumbColor else uncheckedThumbColor
+            if (isChecked) switchColors.checkedThumbColor else switchColors.uncheckedThumbColor
+        }
+
+        // 배경색 애니메이션
+        val containerColor by transition.animateColor { isChecked ->
+            if (isChecked) switchColors.checkedContainerColor else switchColors.uncheckedContainerColor
         }
 
         // thumb 이동 애니메이션
@@ -70,10 +73,10 @@ fun BbangZipSwitch(
                 Modifier
                     .width(switchWidth)
                     .height(dimensions.switchHeight)
-                    .clip(RoundedCornerShape(dimensions.switchBorderRadius))
-                    .background(BbangZipTheme.color.componentIvory_FDFDFD)
+                    .clip(dimensions.switchShape())
+                    .background(containerColor)
                     .innerShadow(
-                        shape = RoundedCornerShape(dimensions.switchBorderRadius),
+                        shape = dimensions.switchShape(),
                         color = Color(0xFF505459).copy(alpha = 0.08f),
                         blur = 4.dp,
                         offsetX = 0.dp,
@@ -83,16 +86,16 @@ fun BbangZipSwitch(
                     .noRippleClickable(
                         onClick = onCheckedChange,
                     )
-                    .padding(switchPadding),
+                    .padding(containerPadding),
         ) {
             Box(
                 modifier =
                     Modifier
                         .size(dimensions.thumbDiameter)
                         .offset { IntOffset(x = thumbOffset.roundToPx(), y = 0) }
-                        .clip(RoundedCornerShape(dimensions.thumbBorderRadius))
+                        .clip(dimensions.thumbShape())
                         .innerShadow(
-                            shape = RoundedCornerShape(dimensions.thumbBorderRadius),
+                            shape = dimensions.thumbShape(),
                             color = Color(0xFFEDEDED).copy(alpha = 0.3f),
                             blur = 1.dp,
                             offsetX = 0.dp,
@@ -100,7 +103,7 @@ fun BbangZipSwitch(
                             spread = 0.dp,
                         )
                         .dropShadow(
-                            shape = RoundedCornerShape(dimensions.thumbBorderRadius),
+                            shape = dimensions.thumbShape(),
                             color = Color(0xFF5C636D).copy(alpha = 0.12f),
                             blur = 3.dp,
                             offsetX = 1.dp,
@@ -114,7 +117,7 @@ fun BbangZipSwitch(
 }
 
 // 토글 스위치 치수 계산 함수
-private fun calculateToggleDimensions(
+private fun calculateSwitchDimensions(
     switchWidth: Dp,
     switchPadding: Dp,
 ): SwitchDimensions {
@@ -139,9 +142,9 @@ private fun calculateToggleDimensions(
     return SwitchDimensions(
         availableWidth = availableWidth,
         thumbDiameter = thumbDiameter,
-        thumbBorderRadius = thumbBorderRadius,
+        thumbCornerRadius = thumbBorderRadius,
         switchHeight = switchHeight,
-        switchBorderRadius = switchBorderRadius,
+        switchCornerRadius = switchBorderRadius,
         maxThumbOffset = maxThumbOffset,
     )
 }
@@ -150,16 +153,22 @@ private fun calculateToggleDimensions(
 private data class SwitchDimensions(
     val availableWidth: Dp,
     val thumbDiameter: Dp,
-    val thumbBorderRadius: Dp,
+    val thumbCornerRadius: Dp,
     val switchHeight: Dp,
-    val switchBorderRadius: Dp,
+    val switchCornerRadius: Dp,
     val maxThumbOffset: Dp,
-)
+) {
+    fun thumbShape() = RoundedCornerShape(thumbCornerRadius)
+
+    fun switchShape() = RoundedCornerShape(switchCornerRadius)
+}
 
 @Preview(showBackground = true)
 @Composable
 private fun AnimatedToggleButtonPreview() {
-    var isChecked by remember { mutableStateOf(false) }
+    var isChecked1 by remember { mutableStateOf(false) }
+    var isChecked2 by remember { mutableStateOf(false) }
+    var isChecked3 by remember { mutableStateOf(false) }
 
     BBANGZIPANDROIDTheme {
         Column(
@@ -170,20 +179,30 @@ private fun AnimatedToggleButtonPreview() {
                     .padding(16.dp),
         ) {
             BbangZipSwitch(
-                isChecked = isChecked,
-                onCheckedChange = { isChecked = !isChecked },
+                isChecked = isChecked1,
+                onCheckedChange = { isChecked1 = !isChecked1 },
             )
 
             BbangZipSwitch(
-                isChecked = isChecked,
-                onCheckedChange = { isChecked = !isChecked },
+                isChecked = isChecked2,
+                onCheckedChange = { isChecked2 = !isChecked2 },
+                switchColors = BbangZipSwitchDefaults.colors(
+                    checkedThumbColor = Color.Green,
+                    uncheckedThumbColor = Color.Red,
+                ),
                 modifier = Modifier.fillMaxWidth(0.5f),
             )
 
             BbangZipSwitch(
-                isChecked = isChecked,
-                onCheckedChange = { isChecked = !isChecked },
+                isChecked = isChecked3,
+                onCheckedChange = { isChecked3 = !isChecked3 },
                 modifier = Modifier.fillMaxWidth(0.25f),
+                switchColors = BbangZipSwitchDefaults.colors(
+                    checkedThumbColor = Color.Green,
+                    uncheckedThumbColor = Color.Red,
+                    checkedContainerColor = Color.Blue,
+                    uncheckedContainerColor = Color.Yellow,
+                )
             )
         }
     }
