@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -18,8 +19,10 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
+import org.android.bbangzip.presentation.component.taskbox.model.TaskBoxColors
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.formatTimeWithAmPm
+import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
@@ -42,7 +45,8 @@ fun BbangZipTaskBox(
     ){
         CheckBox(
             isCompleted = isCompleted,
-            categoryColor = categoryColor
+            checkedBoxColor = categoryColor,
+            onCheckBoxClick = onCheckBoxClick
         )
 
         Gap(8)
@@ -58,24 +62,30 @@ fun BbangZipTaskBox(
         Icon(
             painter = painterResource(R.drawable.ic_meatball_menu_default_24),
             contentDescription = null,
-            modifier = Modifier.size(20.dp),
-            tint = BbangZipTheme.color.secondaryStrong_F2EAE4
+            modifier =
+                Modifier
+                    .size(BbangZipTaskBoxDefaults.MENU_ICON_SIZE)
+                    .noRippleClickable { onMenuClick() },
+            tint = BbangZipTaskBoxDefaults.colors().menuIconColor
         )
     }
 }
 
 @Composable
 private fun CheckBox(
-    categoryColor: Color,
+    checkedBoxColor: Color,
     modifier: Modifier = Modifier,
-    isCompleted: Boolean = false
+    isCompleted: Boolean = false,
+    onCheckBoxClick: () -> Unit = {}
 ){
-    Box {
+    Box(
+        modifier = Modifier.noRippleClickable{onCheckBoxClick}
+    ) {
         Icon(
             painter = painterResource(R.drawable.ic_bread_default_24),
             contentDescription = null,
-            modifier = modifier.size(28.dp),
-            tint = if(isCompleted) categoryColor else BbangZipTheme.color.secondaryNormal_F6F1EE
+            modifier = modifier.size(BbangZipTaskBoxDefaults.CHECK_BOX_SIZE),
+            tint = if (isCompleted) checkedBoxColor else BbangZipTaskBoxDefaults.colors().unCheckedBoxColor
         )
         if (isCompleted) {
             Box(
@@ -84,8 +94,10 @@ private fun CheckBox(
                 Icon(
                     painter = painterResource(R.drawable.ic_check_default_24),
                     contentDescription = null,
-                    modifier = Modifier.size(18.dp),
-                    tint = BbangZipTheme.color.staticWhite_FFFFFF
+                    modifier =
+                        Modifier
+                            .size(BbangZipTaskBoxDefaults.CHECK_ICON_SIZE),
+                    tint = BbangZipTaskBoxDefaults.colors().checkIconColor
                 )
             }
         }
@@ -103,33 +115,47 @@ private fun TaskText(
     ){
         Text(
             text = task,
-            style = BbangZipTheme.typography.body2Medium,
-            color = BbangZipTheme.color.labelNormal_6B6560
+            style = BbangZipTaskBoxDefaults.textStyles().taskTextStyle,
+            color = BbangZipTaskBoxDefaults.colors().taskTextColor
         )
 
         Gap(4)
 
         if (startTime != null) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically
-            ){
-                Icon(
-                    painter = painterResource(R.drawable.ic_clock_default_24),
-                    contentDescription = null,
-                    modifier = Modifier.size(12.dp),
-                    tint = BbangZipTheme.color.labelAssistive_C9C7C5
-                )
-
-                Gap(3)
-
-                Text(
-                    text = startTime.formatTimeWithAmPm(),
-                    style = BbangZipTheme.typography.label4Regular,
-                    color = BbangZipTheme.color.labelAssistive_C9C7C5
-                )
-            }
+            Time(startTime = startTime)
         }
+    }
+}
+
+@Composable
+private fun Time(
+    startTime: LocalTime,
+    modifier: Modifier = Modifier,
+) {
+    val displayTime = remember(startTime){
+        startTime.formatTimeWithAmPm()
+    }
+
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Icon(
+            painter = painterResource(R.drawable.ic_clock_default_24),
+            contentDescription = null,
+            modifier =
+                Modifier
+                    .size(BbangZipTaskBoxDefaults.CLOCK_ICON_SIZE),
+            tint = BbangZipTaskBoxDefaults.colors().timeContentColor
+        )
+
+        Gap(3)
+
+        Text(
+            text = displayTime,
+            style = BbangZipTaskBoxDefaults.textStyles().timeTextStyle,
+            color = BbangZipTaskBoxDefaults.colors().timeContentColor
+        )
     }
 }
 
