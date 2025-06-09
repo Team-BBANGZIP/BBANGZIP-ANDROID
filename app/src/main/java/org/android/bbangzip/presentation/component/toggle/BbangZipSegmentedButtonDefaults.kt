@@ -22,17 +22,18 @@ object BbangZipSegmentedButtonDefaults {
         unselectedOptionColor: Color = BbangZipTheme.color.primaryNormal_897869,
         containerColor: Color = BbangZipTheme.color.secondaryStrong_F2EAE4,
         indicatorColor: Color = BbangZipTheme.color.primaryNormal_897869,
-    ): SegmentedButtonColors = remember(
-        selectedOptionColor,
-        unselectedOptionColor,
-        containerColor,
-        indicatorColor,
-    ){
-        SegmentedButtonColors(
-            selectedOptionColor = selectedOptionColor,
-            unselectedOptionColor = unselectedOptionColor,
-            containerColor = containerColor,
-            indicatorColor = indicatorColor,
-        )
-    }
+    ): SegmentedButtonColors =
+        remember(
+            selectedOptionColor,
+            unselectedOptionColor,
+            containerColor,
+            indicatorColor,
+        ) {
+            SegmentedButtonColors(
+                selectedOptionColor = selectedOptionColor,
+                unselectedOptionColor = unselectedOptionColor,
+                containerColor = containerColor,
+                indicatorColor = indicatorColor,
+            )
+        }
 }

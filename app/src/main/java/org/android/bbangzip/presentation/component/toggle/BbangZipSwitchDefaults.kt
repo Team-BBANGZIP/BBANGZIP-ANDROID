@@ -16,17 +16,18 @@ object BbangZipSwitchDefaults {
         uncheckedThumbColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
         checkedContainerColor: Color = BbangZipTheme.color.componentIvory_FDFDFD,
         uncheckedContainerColor: Color = BbangZipTheme.color.componentIvory_FDFDFD,
-    ): SwitchColors = remember(
-        checkedThumbColor,
-        uncheckedThumbColor,
-        checkedContainerColor,
-        uncheckedContainerColor,
-    ){
+    ): SwitchColors =
+        remember(
+            checkedThumbColor,
+            uncheckedThumbColor,
+            checkedContainerColor,
+            uncheckedContainerColor,
+        ) {
             SwitchColors(
                 checkedThumbColor = checkedThumbColor,
                 uncheckedThumbColor = uncheckedThumbColor,
                 checkedContainerColor = checkedContainerColor,
                 uncheckedContainerColor = uncheckedContainerColor,
             )
-    }
+        }
 }

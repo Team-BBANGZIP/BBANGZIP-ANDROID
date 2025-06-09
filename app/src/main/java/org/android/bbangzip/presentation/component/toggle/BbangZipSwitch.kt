@@ -198,10 +198,11 @@ private fun AnimatedToggleButtonPreview() {
             BbangZipSwitch(
                 isChecked = isChecked2,
                 onCheckedChange = { isChecked2 = !isChecked2 },
-                colors = BbangZipSwitchDefaults.colors(
-                    checkedThumbColor = Color.Green,
-                    uncheckedThumbColor = Color.Red,
-                ),
+                colors =
+                    BbangZipSwitchDefaults.colors(
+                        checkedThumbColor = Color.Green,
+                        uncheckedThumbColor = Color.Red,
+                    ),
                 modifier = Modifier.fillMaxWidth(0.5f),
             )
 
@@ -209,12 +210,13 @@ private fun AnimatedToggleButtonPreview() {
                 isChecked = isChecked3,
                 onCheckedChange = { isChecked3 = !isChecked3 },
                 modifier = Modifier.fillMaxWidth(0.25f),
-                colors = BbangZipSwitchDefaults.colors(
-                    checkedThumbColor = Color.Green,
-                    uncheckedThumbColor = Color.Red,
-                    checkedContainerColor = Color.Blue,
-                    uncheckedContainerColor = Color.Yellow,
-                )
+                colors =
+                    BbangZipSwitchDefaults.colors(
+                        checkedThumbColor = Color.Green,
+                        uncheckedThumbColor = Color.Red,
+                        checkedContainerColor = Color.Blue,
+                        uncheckedContainerColor = Color.Yellow,
+                    ),
             )
         }
     }

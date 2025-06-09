@@ -6,5 +6,5 @@ data class SwitchColors(
     val checkedThumbColor: Color,
     val uncheckedThumbColor: Color,
     val checkedContainerColor: Color,
-    val uncheckedContainerColor: Color
+    val uncheckedContainerColor: Color,
 )
