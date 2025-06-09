@@ -65,7 +65,7 @@ fun BbangZipCategoryChip(
                     color = BbangZipCategoryChipDefaults.containerColor(),
                 )
                 .padding(
-                    BbangZipCategoryChipDefaults.CHIP_PADDING
+                    BbangZipCategoryChipDefaults.CHIP_PADDING,
                 ),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(BbangZipCategoryChipDefaults.CONTENT_GAP),
