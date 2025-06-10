@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
@@ -30,24 +31,9 @@ object TextFieldDefaults {
         bottom: Dp = CONTENT_PADDING_BOTTOM,
     ): PaddingValues = PaddingValues(start, top, end, bottom)
 
-    @Composable
-    fun defaultTextFieldColors(): TextFieldColors =
-        TextFieldColors(
-            focusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
-            unfocusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
-            focusedContainerColor = BbangZipTheme.color.componentStrong_F6F6F5,
-            unfocusedContainerColor = BbangZipTheme.color.componentStrong_F6F6F5,
-            focusedPlaceholderColor = BbangZipTheme.color.labelAssistive_C9C7C5,
-            unfocusedPlaceholderColor = BbangZipTheme.color.labelAssistive_C9C7C5,
-            characterCountColor = BbangZipTheme.color.labelAlternative_A29D96,
-            cursorColor = BbangZipTheme.color.labelStrong_463D34,
-            borderColor = Color.Transparent,
-            underLineColor = BbangZipTheme.color.primaryNormal_897869,
-            guideLineColor = Color.Transparent,
-        )
 
     @Composable
-    fun defaultTextFieldColors(
+    fun colors(
         focusedTextColor: Color = BbangZipTheme.color.labelNormal_6B6560,
         unfocusedTextColor: Color = BbangZipTheme.color.labelNormal_6B6560,
         focusedContainerColor: Color = BbangZipTheme.color.componentStrong_F6F6F5,
@@ -60,27 +46,51 @@ object TextFieldDefaults {
         underLineColor: Color = BbangZipTheme.color.primaryNormal_897869,
         guideLineColor: Color = Color.Transparent,
     ): TextFieldColors =
-        TextFieldColors(
-            focusedTextColor = focusedTextColor,
-            unfocusedTextColor = unfocusedTextColor,
-            focusedContainerColor = focusedContainerColor,
-            unfocusedContainerColor = unfocusedContainerColor,
-            focusedPlaceholderColor = focusedPlaceholderColor,
-            unfocusedPlaceholderColor = unfocusedPlaceholderColor,
-            characterCountColor = characterCountColor,
-            cursorColor = cursorColor,
-            borderColor = borderColor,
-            underLineColor = underLineColor,
-            guideLineColor = guideLineColor,
-        )
+        remember(
+            focusedTextColor,
+            unfocusedTextColor,
+            focusedContainerColor,
+            unfocusedContainerColor,
+            focusedPlaceholderColor,
+            unfocusedPlaceholderColor,
+            characterCountColor,
+            cursorColor,
+            borderColor,
+            underLineColor,
+            guideLineColor,
+        ) {
+            TextFieldColors(
+                focusedTextColor = focusedTextColor,
+                unfocusedTextColor = unfocusedTextColor,
+                focusedContainerColor = focusedContainerColor,
+                unfocusedContainerColor = unfocusedContainerColor,
+                focusedPlaceholderColor = focusedPlaceholderColor,
+                unfocusedPlaceholderColor = unfocusedPlaceholderColor,
+                characterCountColor = characterCountColor,
+                cursorColor = cursorColor,
+                borderColor = borderColor,
+                underLineColor = underLineColor,
+                guideLineColor = guideLineColor,
+            )
+        }
 
     @Composable
-    fun defaultTextFieldTypography(): TextFieldTypography =
-        TextFieldTypography(
-            textStyle = BbangZipTheme.typography.body1Medium,
-            guidelineTextStyle = BbangZipTheme.typography.body1Medium,
-            characterCountTextStyle = BbangZipTheme.typography.body3Medium,
-        )
+    fun typography(
+        textStyle: TextStyle = BbangZipTheme.typography.body1Medium,
+        guidelineTextStyle: TextStyle = BbangZipTheme.typography.body1Medium,
+        characterCountTextStyle: TextStyle = BbangZipTheme.typography.body3Medium,
+    ): TextFieldTypography =
+        remember(
+            textStyle,
+            guidelineTextStyle,
+            characterCountTextStyle,
+        ) {
+            TextFieldTypography(
+                textStyle = textStyle,
+                guidelineTextStyle = guidelineTextStyle,
+                characterCountTextStyle = characterCountTextStyle,
+            )
+        }
 }
 
 object UnderlinedTextFieldDefaults {
@@ -97,23 +107,7 @@ object UnderlinedTextFieldDefaults {
     ): PaddingValues = PaddingValues(start, top, end, bottom)
 
     @Composable
-    fun defaultUnderLinedTextFieldColors(): TextFieldColors =
-        TextFieldColors(
-            focusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
-            unfocusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
-            focusedContainerColor = Color.Transparent,
-            unfocusedContainerColor = Color.Transparent,
-            focusedPlaceholderColor = BbangZipTheme.color.labelDisable_E4E2E0,
-            unfocusedPlaceholderColor = BbangZipTheme.color.labelAssistive_C9C7C5,
-            characterCountColor = BbangZipTheme.color.labelAlternative_A29D96,
-            cursorColor = BbangZipTheme.color.labelStrong_463D34,
-            borderColor = Color.Transparent,
-            underLineColor = BbangZipTheme.color.primaryNormal_897869,
-            guideLineColor = Color.Transparent,
-        )
-
-    @Composable
-    fun defaultUnderLinedTextFieldColors(
+    fun colors(
         focusedTextColor: Color = BbangZipTheme.color.labelNormal_6B6560,
         unfocusedTextColor: Color = BbangZipTheme.color.labelNormal_6B6560,
         focusedContainerColor: Color = Color.Transparent,
@@ -126,27 +120,51 @@ object UnderlinedTextFieldDefaults {
         underLineColor: Color = BbangZipTheme.color.primaryNormal_897869,
         guideLineColor: Color = Color.Transparent,
     ): TextFieldColors =
-        TextFieldColors(
-            focusedTextColor = focusedTextColor,
-            unfocusedTextColor = unfocusedTextColor,
-            focusedContainerColor = focusedContainerColor,
-            unfocusedContainerColor = unfocusedContainerColor,
-            focusedPlaceholderColor = focusedPlaceholderColor,
-            unfocusedPlaceholderColor = unfocusedPlaceholderColor,
-            characterCountColor = characterCountColor,
-            cursorColor = cursorColor,
-            borderColor = borderColor,
-            underLineColor = underLineColor,
-            guideLineColor = guideLineColor,
-        )
+        remember(
+            focusedTextColor,
+            unfocusedTextColor,
+            focusedContainerColor,
+            unfocusedContainerColor,
+            focusedPlaceholderColor,
+            unfocusedPlaceholderColor,
+            characterCountColor,
+            cursorColor,
+            borderColor,
+            underLineColor,
+            guideLineColor,
+        ) {
+            TextFieldColors(
+                focusedTextColor = focusedTextColor,
+                unfocusedTextColor = unfocusedTextColor,
+                focusedContainerColor = focusedContainerColor,
+                unfocusedContainerColor = unfocusedContainerColor,
+                focusedPlaceholderColor = focusedPlaceholderColor,
+                unfocusedPlaceholderColor = unfocusedPlaceholderColor,
+                characterCountColor = characterCountColor,
+                cursorColor = cursorColor,
+                borderColor = borderColor,
+                underLineColor = underLineColor,
+                guideLineColor = guideLineColor,
+            )
+        }
 
     @Composable
-    fun defaultUnderLinedTextFieldTypography(): TextFieldTypography =
-        TextFieldTypography(
-            textStyle = BbangZipTheme.typography.body1Medium,
-            guidelineTextStyle = BbangZipTheme.typography.body1Medium,
-            characterCountTextStyle = BbangZipTheme.typography.body3Medium,
-        )
+    fun typography(
+        textStyle: TextStyle = BbangZipTheme.typography.body1Medium,
+        guidelineTextStyle: TextStyle = BbangZipTheme.typography.body1Medium,
+        characterCountTextStyle: TextStyle = BbangZipTheme.typography.body3Medium,
+    ): TextFieldTypography =
+        remember(
+            textStyle,
+            guidelineTextStyle,
+            characterCountTextStyle,
+        ) {
+            TextFieldTypography(
+                textStyle = textStyle,
+                guidelineTextStyle = guidelineTextStyle,
+                characterCountTextStyle = characterCountTextStyle,
+            )
+        }
 }
 
 @Immutable
