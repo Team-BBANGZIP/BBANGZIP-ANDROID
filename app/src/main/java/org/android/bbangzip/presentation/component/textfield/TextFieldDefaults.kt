@@ -1,34 +1,131 @@
 package org.android.bbangzip.presentation.component.textfield
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import org.android.bbangzip.ui.theme.BbangZipTheme
 
 object TextFieldDefaults {
-        val DEFAULT_CONTENT_PADDING = PaddingValues(start = 12.dp, end = 12.dp, top = 12.dp, bottom = 10.dp)
-        val CHARACTER_COUNT_CONTENT_PADDING = PaddingValues(horizontal = 16.dp, vertical = 12.dp)
-        val OUTLINED_CONTENT_PADDING = PaddingValues(start = 2.dp, top = 4.dp)
-        const val DEFAULT_BORDER_RADIUS = 8
-        const val DEFAULT_BORDER_SIZE_DP = 0
+    // ContentPadding values for the text field
+    val CONTENT_PADDING_TOP = 12.dp
+    val CONTENT_PADDING_BOTTOM = 10.dp
+    val CONTENT_PADDING_START = 12.dp
+    val CONTENT_PADDING_END = 12.dp
+
+    val BORDER_RADIUS = 8.dp
+    val BORDER_SIZE = 0.dp
+
+    @Composable
+    fun contentPadding(
+        start: Dp = CONTENT_PADDING_START,
+        top: Dp = CONTENT_PADDING_TOP,
+        end: Dp = CONTENT_PADDING_END,
+        bottom: Dp = CONTENT_PADDING_BOTTOM
+    ): PaddingValues = PaddingValues(start, top, end, bottom)
+
+    @Composable
+    fun defaultTextFieldColors(): TextFieldColors = TextFieldColors(
+        focusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
+        unfocusedTextColor = BbangZipTheme.color.labelAssistive_C9C7C5,
+        focusedContainerColor = BbangZipTheme.color.labelStrong_463D34,
+        unfocusedContainerColor = BbangZipTheme.color.labelStrong_463D34,
+        focusedPlaceholderColor = BbangZipTheme.color.labelAssistive_C9C7C5,
+        unfocusedPlaceholderColor = BbangZipTheme.color.labelAssistive_C9C7C5,
+        cursorColor = BbangZipTheme.color.labelStrong_463D34,
+        borderColor = Color.Transparent,
+        underLineColor = BbangZipTheme.color.primaryNormal_897869,
+    )
+
+    @Composable
+    fun defaultTextFieldColors(
+        focusedTextColor: Color = BbangZipTheme.color.labelNormal_6B6560,
+        unfocusedTextColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
+        focusedContainerColor: Color = Color.Transparent,
+        unfocusedContainerColor: Color = Color.Transparent,
+        focusedPlaceholderColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
+        unfocusedPlaceholderColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
+        cursorColor: Color = BbangZipTheme.color.labelStrong_463D34,
+        underLineColor: Color = BbangZipTheme.color.primaryNormal_897869,
+    ): TextFieldColors = TextFieldColors(
+        focusedTextColor = focusedTextColor,
+        unfocusedTextColor = unfocusedTextColor,
+        focusedContainerColor = focusedContainerColor,
+        unfocusedContainerColor = unfocusedContainerColor,
+        focusedPlaceholderColor = focusedPlaceholderColor,
+        unfocusedPlaceholderColor = unfocusedPlaceholderColor,
+        cursorColor = cursorColor,
+        borderColor = Color.Transparent,
+        underLineColor = underLineColor
+    )
 }
 
+object UnderlinedTextFieldDefaults {
+    val CONTENT_PADDING_TOP = 4.dp
+    val CONTENT_PADDING_BOTTOM = 0.dp
+    val CONTENT_PADDING_START = 2.dp
+    val CONTENT_PADDING_END = 0.dp
+
+    fun contentPadding(
+        start: Dp = CONTENT_PADDING_START,
+        top: Dp = CONTENT_PADDING_TOP,
+        end: Dp = CONTENT_PADDING_END,
+        bottom: Dp = CONTENT_PADDING_BOTTOM
+    ): PaddingValues = PaddingValues(start, top, end, bottom)
+
+    @Composable
+    fun defaultUnderLinedTextFieldColors(): TextFieldColors = TextFieldColors(
+        focusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
+        unfocusedTextColor = BbangZipTheme.color.labelAssistive_C9C7C5,
+        focusedContainerColor = BbangZipTheme.color.labelStrong_463D34,
+        unfocusedContainerColor = BbangZipTheme.color.labelStrong_463D34,
+        focusedPlaceholderColor = BbangZipTheme.color.labelDisable_E4E2E0,
+        unfocusedPlaceholderColor = BbangZipTheme.color.labelAssistive_C9C7C5,
+        cursorColor = BbangZipTheme.color.labelStrong_463D34,
+        borderColor = Color.Transparent,
+        underLineColor = BbangZipTheme.color.primaryNormal_897869,
+    )
+
+    @Composable
+    fun defaultUnderLinedTextFieldColors(
+        focusedTextColor: Color = BbangZipTheme.color.labelNormal_6B6560,
+        unfocusedTextColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
+        focusedContainerColor: Color = Color.Transparent,
+        unfocusedContainerColor: Color = Color.Transparent,
+        focusedPlaceholderColor: Color = BbangZipTheme.color.labelDisable_E4E2E0,
+        unfocusedPlaceholderColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
+        cursorColor: Color = BbangZipTheme.color.labelStrong_463D34,
+        borderColor: Color = Color.Transparent,
+        underLineColor: Color = BbangZipTheme.color.primaryNormal_897869,
+    ): TextFieldColors = TextFieldColors(
+        focusedTextColor = focusedTextColor,
+        unfocusedTextColor = unfocusedTextColor,
+        focusedContainerColor = focusedContainerColor,
+        unfocusedContainerColor = unfocusedContainerColor,
+        focusedPlaceholderColor = focusedPlaceholderColor,
+        unfocusedPlaceholderColor = unfocusedPlaceholderColor,
+        cursorColor = cursorColor,
+        borderColor = borderColor,
+        underLineColor = underLineColor
+    )
+}
 
 @Immutable
 data class TextFieldColors(
     val focusedTextColor: Color,
     val unfocusedTextColor: Color,
-    val disabledTextColor: Color,
     val focusedContainerColor: Color,
     val unfocusedContainerColor: Color,
-    val disabledContainerColor: Color,
-    val cursorColor: Color,
     val focusedPlaceholderColor: Color,
     val unfocusedPlaceholderColor: Color,
-    val disabledPlaceholderColor: Color,
+    val cursorColor: Color,
+    val borderColor: Color,
     val underLineColor: Color
-){
+) {
     @Stable
     fun textColor(
         isFocused: Boolean,
