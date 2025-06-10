@@ -31,7 +31,7 @@ object BbangZipButtonDefaults {
             enabledContentColor,
             disabledContainerColor,
             disabledContentColor,
-        ){
+        ) {
             ButtonColors(
                 enabledContainerColor = enabledContainerColor,
                 enabledContentColor = enabledContentColor,
