@@ -2,6 +2,7 @@ package org.android.bbangzip.presentation.component.button
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.presentation.component.button.model.ButtonColors
@@ -19,25 +20,23 @@ object BbangZipButtonDefaults {
     val BUTTON_SHAPE = RoundedCornerShape(BUTTON_BORDER_RADIUS)
 
     @Composable
-    fun defaultButtonColors(): ButtonColors =
-        ButtonColors(
-            enabledContainerColor = BbangZipTheme.color.primaryNormal_897869,
-            enabledContentColor = BbangZipTheme.color.staticWhite_FFFFFF,
-            disabledContainerColor = BbangZipTheme.color.labelDisable_E4E2E0,
-            disabledContentColor = BbangZipTheme.color.labelAssistive_C9C7C5,
-        )
-
-    @Composable
-    fun defaultButtonColors(
+    fun colors(
         enabledContainerColor: Color = BbangZipTheme.color.primaryNormal_897869,
         enabledContentColor: Color = BbangZipTheme.color.staticWhite_FFFFFF,
         disabledContainerColor: Color = BbangZipTheme.color.labelDisable_E4E2E0,
         disabledContentColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
     ): ButtonColors =
-        defaultButtonColors().copy(
-            enabledContainerColor = enabledContainerColor,
-            enabledContentColor = enabledContentColor,
-            disabledContainerColor = disabledContainerColor,
-            disabledContentColor = disabledContentColor,
-        )
+        remember(
+            enabledContainerColor,
+            enabledContentColor,
+            disabledContainerColor,
+            disabledContentColor,
+        ){
+            ButtonColors(
+                enabledContainerColor = enabledContainerColor,
+                enabledContentColor = enabledContentColor,
+                disabledContainerColor = disabledContainerColor,
+                disabledContentColor = disabledContentColor,
+            )
+        }
 }
