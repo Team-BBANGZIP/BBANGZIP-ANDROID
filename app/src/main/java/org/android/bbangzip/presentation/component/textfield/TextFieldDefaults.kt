@@ -33,7 +33,7 @@ object TextFieldDefaults {
     @Composable
     fun defaultTextFieldColors(): TextFieldColors = TextFieldColors(
         focusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
-        unfocusedTextColor = BbangZipTheme.color.labelAssistive_C9C7C5,
+        unfocusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
         focusedContainerColor = BbangZipTheme.color.componentStrong_F6F6F5,
         unfocusedContainerColor = BbangZipTheme.color.componentStrong_F6F6F5,
         focusedPlaceholderColor = BbangZipTheme.color.labelAssistive_C9C7C5,
@@ -48,7 +48,7 @@ object TextFieldDefaults {
     @Composable
     fun defaultTextFieldColors(
         focusedTextColor: Color = BbangZipTheme.color.labelNormal_6B6560,
-        unfocusedTextColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
+        unfocusedTextColor: Color = BbangZipTheme.color.labelNormal_6B6560,
         focusedContainerColor: Color = BbangZipTheme.color.componentStrong_F6F6F5,
         unfocusedContainerColor: Color = BbangZipTheme.color.componentStrong_F6F6F5,
         focusedPlaceholderColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
@@ -97,7 +97,7 @@ object UnderlinedTextFieldDefaults {
     @Composable
     fun defaultUnderLinedTextFieldColors(): TextFieldColors = TextFieldColors(
         focusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
-        unfocusedTextColor = BbangZipTheme.color.labelAssistive_C9C7C5,
+        unfocusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
         focusedContainerColor = Color.Transparent,
         unfocusedContainerColor =Color.Transparent,
         focusedPlaceholderColor = BbangZipTheme.color.labelDisable_E4E2E0,
@@ -112,7 +112,7 @@ object UnderlinedTextFieldDefaults {
     @Composable
     fun defaultUnderLinedTextFieldColors(
         focusedTextColor: Color = BbangZipTheme.color.labelNormal_6B6560,
-        unfocusedTextColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
+        unfocusedTextColor: Color = BbangZipTheme.color.labelNormal_6B6560,
         focusedContainerColor: Color = Color.Transparent,
         unfocusedContainerColor: Color = Color.Transparent,
         focusedPlaceholderColor: Color = BbangZipTheme.color.labelDisable_E4E2E0,
