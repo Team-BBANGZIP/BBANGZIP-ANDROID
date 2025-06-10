@@ -83,12 +83,13 @@ private fun UnderLineTextFieldPreview() {
         var underlinedText by remember { mutableStateOf("") }
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFE3FFD6))
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(Color(0xFFE3FFD6))
+                    .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text("✅ BbangZipUnderLinedTextField 예시")
 
@@ -96,7 +97,7 @@ private fun UnderLineTextFieldPreview() {
                 value = underlinedText,
                 onValueChange = { underlinedText = it },
                 focusManager = focusManager,
-                placeholder = R.string.app_name
+                placeholder = R.string.app_name,
             )
         }
     }

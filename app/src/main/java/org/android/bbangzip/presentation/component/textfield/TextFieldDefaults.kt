@@ -27,23 +27,24 @@ object TextFieldDefaults {
         start: Dp = CONTENT_PADDING_START,
         top: Dp = CONTENT_PADDING_TOP,
         end: Dp = CONTENT_PADDING_END,
-        bottom: Dp = CONTENT_PADDING_BOTTOM
+        bottom: Dp = CONTENT_PADDING_BOTTOM,
     ): PaddingValues = PaddingValues(start, top, end, bottom)
 
     @Composable
-    fun defaultTextFieldColors(): TextFieldColors = TextFieldColors(
-        focusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
-        unfocusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
-        focusedContainerColor = BbangZipTheme.color.componentStrong_F6F6F5,
-        unfocusedContainerColor = BbangZipTheme.color.componentStrong_F6F6F5,
-        focusedPlaceholderColor = BbangZipTheme.color.labelAssistive_C9C7C5,
-        unfocusedPlaceholderColor = BbangZipTheme.color.labelAssistive_C9C7C5,
-        characterCountColor = BbangZipTheme.color.labelAlternative_A29D96,
-        cursorColor = BbangZipTheme.color.labelStrong_463D34,
-        borderColor = Color.Transparent,
-        underLineColor = BbangZipTheme.color.primaryNormal_897869,
-        guideLineColor = Color.Transparent
-    )
+    fun defaultTextFieldColors(): TextFieldColors =
+        TextFieldColors(
+            focusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
+            unfocusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
+            focusedContainerColor = BbangZipTheme.color.componentStrong_F6F6F5,
+            unfocusedContainerColor = BbangZipTheme.color.componentStrong_F6F6F5,
+            focusedPlaceholderColor = BbangZipTheme.color.labelAssistive_C9C7C5,
+            unfocusedPlaceholderColor = BbangZipTheme.color.labelAssistive_C9C7C5,
+            characterCountColor = BbangZipTheme.color.labelAlternative_A29D96,
+            cursorColor = BbangZipTheme.color.labelStrong_463D34,
+            borderColor = Color.Transparent,
+            underLineColor = BbangZipTheme.color.primaryNormal_897869,
+            guideLineColor = Color.Transparent,
+        )
 
     @Composable
     fun defaultTextFieldColors(
@@ -57,29 +58,30 @@ object TextFieldDefaults {
         cursorColor: Color = BbangZipTheme.color.labelStrong_463D34,
         borderColor: Color = Color.Transparent,
         underLineColor: Color = BbangZipTheme.color.primaryNormal_897869,
-        guideLineColor: Color = Color.Transparent
-    ): TextFieldColors = TextFieldColors(
-        focusedTextColor = focusedTextColor,
-        unfocusedTextColor = unfocusedTextColor,
-        focusedContainerColor = focusedContainerColor,
-        unfocusedContainerColor = unfocusedContainerColor,
-        focusedPlaceholderColor = focusedPlaceholderColor,
-        unfocusedPlaceholderColor = unfocusedPlaceholderColor,
-        characterCountColor = characterCountColor,
-        cursorColor = cursorColor,
-        borderColor = borderColor,
-        underLineColor = underLineColor,
-        guideLineColor = guideLineColor
-    )
+        guideLineColor: Color = Color.Transparent,
+    ): TextFieldColors =
+        TextFieldColors(
+            focusedTextColor = focusedTextColor,
+            unfocusedTextColor = unfocusedTextColor,
+            focusedContainerColor = focusedContainerColor,
+            unfocusedContainerColor = unfocusedContainerColor,
+            focusedPlaceholderColor = focusedPlaceholderColor,
+            unfocusedPlaceholderColor = unfocusedPlaceholderColor,
+            characterCountColor = characterCountColor,
+            cursorColor = cursorColor,
+            borderColor = borderColor,
+            underLineColor = underLineColor,
+            guideLineColor = guideLineColor,
+        )
 
     @Composable
-    fun defaultTextFieldTypography(): TextFieldTypography = TextFieldTypography(
-        textStyle = BbangZipTheme.typography.body1Medium,
-        guidelineTextStyle = BbangZipTheme.typography.body1Medium,
-        characterCountTextStyle = BbangZipTheme.typography.body3Medium
-    )
+    fun defaultTextFieldTypography(): TextFieldTypography =
+        TextFieldTypography(
+            textStyle = BbangZipTheme.typography.body1Medium,
+            guidelineTextStyle = BbangZipTheme.typography.body1Medium,
+            characterCountTextStyle = BbangZipTheme.typography.body3Medium,
+        )
 }
-
 
 object UnderlinedTextFieldDefaults {
     private val CONTENT_PADDING_TOP = 4.dp
@@ -91,23 +93,24 @@ object UnderlinedTextFieldDefaults {
         start: Dp = CONTENT_PADDING_START,
         top: Dp = CONTENT_PADDING_TOP,
         end: Dp = CONTENT_PADDING_END,
-        bottom: Dp = CONTENT_PADDING_BOTTOM
+        bottom: Dp = CONTENT_PADDING_BOTTOM,
     ): PaddingValues = PaddingValues(start, top, end, bottom)
 
     @Composable
-    fun defaultUnderLinedTextFieldColors(): TextFieldColors = TextFieldColors(
-        focusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
-        unfocusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
-        focusedContainerColor = Color.Transparent,
-        unfocusedContainerColor =Color.Transparent,
-        focusedPlaceholderColor = BbangZipTheme.color.labelDisable_E4E2E0,
-        unfocusedPlaceholderColor = BbangZipTheme.color.labelAssistive_C9C7C5,
-        characterCountColor = BbangZipTheme.color.labelAlternative_A29D96,
-        cursorColor = BbangZipTheme.color.labelStrong_463D34,
-        borderColor = Color.Transparent,
-        underLineColor = BbangZipTheme.color.primaryNormal_897869,
-        guideLineColor = Color.Transparent
-    )
+    fun defaultUnderLinedTextFieldColors(): TextFieldColors =
+        TextFieldColors(
+            focusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
+            unfocusedTextColor = BbangZipTheme.color.labelNormal_6B6560,
+            focusedContainerColor = Color.Transparent,
+            unfocusedContainerColor = Color.Transparent,
+            focusedPlaceholderColor = BbangZipTheme.color.labelDisable_E4E2E0,
+            unfocusedPlaceholderColor = BbangZipTheme.color.labelAssistive_C9C7C5,
+            characterCountColor = BbangZipTheme.color.labelAlternative_A29D96,
+            cursorColor = BbangZipTheme.color.labelStrong_463D34,
+            borderColor = Color.Transparent,
+            underLineColor = BbangZipTheme.color.primaryNormal_897869,
+            guideLineColor = Color.Transparent,
+        )
 
     @Composable
     fun defaultUnderLinedTextFieldColors(
@@ -121,27 +124,29 @@ object UnderlinedTextFieldDefaults {
         cursorColor: Color = BbangZipTheme.color.labelStrong_463D34,
         borderColor: Color = Color.Transparent,
         underLineColor: Color = BbangZipTheme.color.primaryNormal_897869,
-        guideLineColor: Color = Color.Transparent
-    ): TextFieldColors = TextFieldColors(
-        focusedTextColor = focusedTextColor,
-        unfocusedTextColor = unfocusedTextColor,
-        focusedContainerColor = focusedContainerColor,
-        unfocusedContainerColor = unfocusedContainerColor,
-        focusedPlaceholderColor = focusedPlaceholderColor,
-        unfocusedPlaceholderColor = unfocusedPlaceholderColor,
-        characterCountColor = characterCountColor,
-        cursorColor = cursorColor,
-        borderColor = borderColor,
-        underLineColor = underLineColor,
-        guideLineColor = guideLineColor
-    )
+        guideLineColor: Color = Color.Transparent,
+    ): TextFieldColors =
+        TextFieldColors(
+            focusedTextColor = focusedTextColor,
+            unfocusedTextColor = unfocusedTextColor,
+            focusedContainerColor = focusedContainerColor,
+            unfocusedContainerColor = unfocusedContainerColor,
+            focusedPlaceholderColor = focusedPlaceholderColor,
+            unfocusedPlaceholderColor = unfocusedPlaceholderColor,
+            characterCountColor = characterCountColor,
+            cursorColor = cursorColor,
+            borderColor = borderColor,
+            underLineColor = underLineColor,
+            guideLineColor = guideLineColor,
+        )
 
     @Composable
-    fun defaultUnderLinedTextFieldTypography(): TextFieldTypography = TextFieldTypography(
-        textStyle = BbangZipTheme.typography.body1Medium,
-        guidelineTextStyle = BbangZipTheme.typography.body1Medium,
-        characterCountTextStyle = BbangZipTheme.typography.body3Medium
-    )
+    fun defaultUnderLinedTextFieldTypography(): TextFieldTypography =
+        TextFieldTypography(
+            textStyle = BbangZipTheme.typography.body1Medium,
+            guidelineTextStyle = BbangZipTheme.typography.body1Medium,
+            characterCountTextStyle = BbangZipTheme.typography.body3Medium,
+        )
 }
 
 @Immutable
@@ -156,35 +161,38 @@ data class TextFieldColors(
     val cursorColor: Color,
     val borderColor: Color,
     val underLineColor: Color,
-    val guideLineColor: Color
+    val guideLineColor: Color,
 ) {
     @Stable
     fun textColor(
         isFocused: Boolean,
-    ): Color = when {
-        isFocused -> focusedTextColor
-        else -> unfocusedTextColor
-    }
+    ): Color =
+        when {
+            isFocused -> focusedTextColor
+            else -> unfocusedTextColor
+        }
 
     fun placeholderColor(
         isFocused: Boolean,
-    ): Color = when {
-        isFocused -> focusedPlaceholderColor
-        else -> unfocusedPlaceholderColor
-    }
+    ): Color =
+        when {
+            isFocused -> focusedPlaceholderColor
+            else -> unfocusedPlaceholderColor
+        }
 
     @Stable
     fun containerColor(
         isFocused: Boolean,
-    ): Color = when {
-        isFocused -> focusedContainerColor
-        else -> unfocusedContainerColor
-    }
+    ): Color =
+        when {
+            isFocused -> focusedContainerColor
+            else -> unfocusedContainerColor
+        }
 }
 
 @Stable
 data class TextFieldTypography(
     val textStyle: TextStyle,
     val guidelineTextStyle: TextStyle,
-    val characterCountTextStyle: TextStyle
+    val characterCountTextStyle: TextStyle,
 )

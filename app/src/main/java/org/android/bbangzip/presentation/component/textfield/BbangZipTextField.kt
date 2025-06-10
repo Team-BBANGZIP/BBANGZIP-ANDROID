@@ -85,7 +85,6 @@ fun BbangZipTextField(
 @Preview
 @Composable
 private fun TextFieldPreview() {
-
     BBANGZIPANDROIDTheme {
         val focusManager = LocalFocusManager.current
 
@@ -93,12 +92,13 @@ private fun TextFieldPreview() {
         var textWithLimit by remember { mutableStateOf("") }
 
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(Color(0xFFE3FFD6))
-                .padding(16.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .background(Color(0xFFE3FFD6))
+                    .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(24.dp, Alignment.CenterVertically),
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             Text("✅ BbangZipTextField 예시")
 
@@ -106,7 +106,7 @@ private fun TextFieldPreview() {
                 value = text,
                 onValueChange = { text = it },
                 focusManager = focusManager,
-                placeholder = R.string.app_name
+                placeholder = R.string.app_name,
             )
 
             Text("✅ Character Count 텍스트 필드")
@@ -117,7 +117,7 @@ private fun TextFieldPreview() {
                 focusManager = focusManager,
                 placeholder = R.string.app_name,
                 contentHeight = 90.dp,
-                maxCharacter = 50
+                maxCharacter = 50,
             )
         }
     }
