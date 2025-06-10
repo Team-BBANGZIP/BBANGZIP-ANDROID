@@ -1,9 +1,7 @@
 package org.android.bbangzip.presentation.component.taskbox
 
 import androidx.compose.animation.core.EaseInOutCubic
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
 import androidx.compose.foundation.layout.Arrangement
@@ -50,14 +48,14 @@ data class TaskCategory(
     val id: String = UUID.randomUUID().toString(),
     val name: String,
     val color: Color,
-    val tasks: SnapshotStateList<TaskItem> = mutableStateListOf()
+    val tasks: SnapshotStateList<TaskItem> = mutableStateListOf(),
 )
 
 @Composable
 fun BbangzipDraggableList(
     taskList: SnapshotStateList<TaskItem>,
-    modifier: Modifier = Modifier
-){
+    modifier: Modifier = Modifier,
+) {
     // 현재 드래그 중인 아이템의 ID. 드래그 중이 아니면 null
     var draggingItemId by remember { mutableStateOf<String?>(null) }
     // 드래그 중인 아이템의 Y축 이동량
@@ -69,207 +67,218 @@ fun BbangzipDraggableList(
     // 두 줄 이상의 텍스트가 존재하므로 각 아이템의 정확한 위치와 크기를 파악하는 데 사용
     val itemBounds = remember { mutableStateMapOf<String, Rect>() }
 
-    // 아이템의 기본 높이(Px 단위). itemBounds에서 실제 높이를 가져오기 전 또는 실패 시 사용됩니다.
-    val defaultItemPxHeight = with(LocalDensity.current) { 47.dp.toPx() }
-    // LazyColumn에서 아이템 간의 간격(Px 단위).
+    // LazyColumn에서 아이템 간의 간격(Px)
     val itemSpacingPx = with(LocalDensity.current) { 4.dp.toPx() }
 
-
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(horizontal = 16.dp, vertical = 8.dp)
-            .padding(top = 50.dp),
-        verticalArrangement = Arrangement.spacedBy(4.dp)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .padding(top = 50.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         itemsIndexed(
             items = taskList,
-            key = { _, item -> item.id }
+            key = { _, item -> item.id },
         ) { index, item ->
             // 현재 아이템(item)이 드래그 중인 아이템(draggingItemId)인지 여부를 판단
-            val isCurrentlyDraggingThisItem = item.id == draggingItemId
+            val isDragging = item.id == draggingItemId
 
             // 현재 드래그 중인 아이템이 있다면, taskList에서의 실제 인덱스 (없으면 null)
-            val currentDraggingItemIndex = remember(draggingItemId, taskList.toList()) {
-                draggingItemId?.let { id -> taskList.indexOfFirst { it.id == id } }
-            }
+            val currentDraggingItemIndex =
+                remember(draggingItemId, taskList.toList()) {
+                    draggingItemId?.let { id -> taskList.indexOfFirst { it.id == id } }
+                }
 
             // 드래그 발생 시, 드래그되지 않는 다른 아이템들이 밀려나는 애니메이션을 위한 Y축 오프셋 목표값을 계산
             // draggingItemId, currentTargetIndex, item.id, taskList 내용이 변경될 때 재계산
-            val animatedShiftTarget = remember(draggingItemId, targetIndex, item.id, taskList.toList()) {
-                calculateAnimatedShift(
-                    draggingItemId = draggingItemId,
-                    currentDraggingItemIndex = currentDraggingItemIndex,
-                    targetDropIndex = targetIndex,
-                    currentItemId = item.id,
-                    taskList = taskList.map{it.id},
-                    itemBounds = itemBounds,
-                    itemSpacing = itemSpacingPx
-                )
-            }
+            val animatedShiftTarget =
+                remember(draggingItemId, targetIndex, item.id, taskList.toList()) {
+                    calculateAnimatedShift(
+                        draggingItemId = draggingItemId,
+                        currentDraggingItemIndex = currentDraggingItemIndex,
+                        targetIndex = targetIndex,
+                        currentItemId = item.id,
+                        taskList = taskList.map { it.id },
+                        itemBounds = itemBounds,
+                        itemSpacing = itemSpacingPx,
+                    )
+                }
 
             // animatedShiftTarget 값으로 부드럽게 애니메이션되는 Y축 오프셋
-            val animatedShiftY = if (draggingItemId == null) {
-                0f // 드래그가 끝났다면 애니메이션 없이 바로 제자리로
-            } else {
-                animateFloatAsState(
-                    targetValue = animatedShiftTarget,
-                    animationSpec = tween(
-                        durationMillis = 300,
-                        easing = EaseInOutCubic
-                    ),
-                    label = "animatedShiftY_${item.id}"
-                ).value
-            }
+            // 드래그가 끝났다면 애니메이션 없이 바로 제자리로
+            val animatedShiftY =
+                if (draggingItemId == null) {
+                    0f
+                } else {
+                    animateFloatAsState(
+                        targetValue = animatedShiftTarget,
+                        animationSpec =
+                            tween(
+                                durationMillis = 300,
+                                easing = EaseInOutCubic,
+                            ),
+                        label = "animatedShiftY_${item.id}",
+                    ).value
+                }
 
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .onGloballyPositioned { coordinates ->
-                        val newBounds = coordinates.boundsInParent()
-                        // 실제 변경이 있을 때만 업데이트 (불필요한 리컴포지션 방지)
-                        if (itemBounds[item.id] != newBounds) {
-                            itemBounds[item.id] = newBounds
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .onGloballyPositioned { coordinates ->
+                            val newBound = coordinates.boundsInParent()
+                            // 실제 변경이 있을 때만 업데이트
+                            if (itemBounds[item.id] != newBound) {
+                                itemBounds[item.id] = newBound
+                            }
                         }
-                    }
-                    .graphicsLayer {
-                        translationY = if (isCurrentlyDraggingThisItem) dragOffsetY else animatedShiftY
-                        shadowElevation = if (isCurrentlyDraggingThisItem) 8.dp.toPx() else 0f
-                        alpha = if (isCurrentlyDraggingThisItem) 0.95f else 1f
-                    }
-                    .zIndex(if (isCurrentlyDraggingThisItem) 1f else 0f)
-                    .pointerInput(item.id) { // key를 item.id로 하여 제스처 리스너가 해당 아이템에 고정되도록 함
-                        val currentItemIdForPointer = item.id
+                        .graphicsLayer {
+                            translationY = if (isDragging) dragOffsetY else animatedShiftY
+                            shadowElevation = if (isDragging) 8.dp.toPx() else 0f
+                            alpha = if (isDragging) 0.95f else 1f
+                        }
+                        .zIndex(if (isDragging) 1f else 0f)
+                        .pointerInput(item.id) {
+                            // key를 item.id로 하여 제스처 리스너가 해당 아이템에 고정되도록 함
+                            val currentItemIdForPointer = item.id
 
-                        detectDragGesturesAfterLongPress(
-                            onDragStart = { offset ->
-                                // taskList에서 현재 터치된 아이템의 실제 인덱스를 찾음
-                                val actualPressedItemIndexInList = taskList.indexOfFirst { it.id == currentItemIdForPointer }
+                            detectDragGesturesAfterLongPress(
+                                onDragStart = { offset ->
+                                    // taskList에서 현재 터치된 아이템의 실제 인덱스를 찾음
+                                    val actualPressedItemIndexInList = taskList.indexOfFirst { it.id == currentItemIdForPointer }
 
-                                if (actualPressedItemIndexInList != -1) {
-                                    draggingItemId = currentItemIdForPointer // ID로 드래그 아이템 설정
-                                    targetIndex = actualPressedItemIndexInList // 초기 타겟은 자기 자신
-                                    dragOffsetY = 0f // 드래그 오프셋 초기화
-                                }
-                            },
-                            onDragEnd = {
-                                val finalDraggingItemId = draggingItemId
-                                val finalTargetIndex = targetIndex
-
-                                if (finalDraggingItemId != null && finalTargetIndex != null) {
-                                    val currentDraggingIdxInList = taskList.indexOfFirst { it.id == finalDraggingItemId }
-                                    if (currentDraggingIdxInList != -1 &&
-                                        currentDraggingIdxInList != finalTargetIndex &&
-                                        finalTargetIndex in taskList.indices
-                                    ) {
-                                        val movedItem = taskList.removeAt(currentDraggingIdxInList)
-                                        taskList.add(finalTargetIndex, movedItem)
+                                    if (actualPressedItemIndexInList != -1) {
+                                        // ID로 드래그 아이템 설정
+                                        draggingItemId = currentItemIdForPointer
+                                        // 초기 타겟은 자기 자신
+                                        targetIndex = actualPressedItemIndexInList
+                                        // 드래그 오프셋 초기화
+                                        dragOffsetY = 0f
                                     }
-                                }
+                                },
+                                onDragEnd = {
+                                    val finalDraggingItemId = draggingItemId
+                                    val finalTargetIndex = targetIndex
 
-                                // 상태 초기화
-                                draggingItemId = null
-                                targetIndex = null
-                                dragOffsetY = 0f
-                            },
-                            onDragCancel = {
-                                // 상태 초기화
-                                draggingItemId = null
-                                targetIndex = null
-                                dragOffsetY = 0f
-                            },
-                            onDrag = { change, dragAmount ->
-                                val currentDrgId = draggingItemId
-                                if (currentDrgId == null) {
-                                    change.consume()
-                                    return@detectDragGesturesAfterLongPress
-                                }
-                                change.consume()
-                                dragOffsetY += dragAmount.y
+                                    if (finalDraggingItemId != null && finalTargetIndex != null) {
+                                        val currentDraggingIdxInList = taskList.indexOfFirst { it.id == finalDraggingItemId }
+                                        if (currentDraggingIdxInList != -1 &&
+                                            currentDraggingIdxInList != finalTargetIndex &&
+                                            finalTargetIndex in taskList.indices
+                                        ) {
+                                            val movedItem = taskList.removeAt(currentDraggingIdxInList)
+                                            taskList.add(finalTargetIndex, movedItem)
+                                        }
+                                    }
 
-                                val draggingItemCurrentActualIdx = taskList.indexOfFirst { it.id == currentDrgId }
-                                if (draggingItemCurrentActualIdx == -1) {
+                                    // 상태 초기화
                                     draggingItemId = null
                                     targetIndex = null
                                     dragOffsetY = 0f
-                                    return@detectDragGesturesAfterLongPress
-                                }
+                                },
+                                onDragCancel = {
+                                    // 상태 초기화
+                                    draggingItemId = null
+                                    targetIndex = null
+                                    dragOffsetY = 0f
+                                },
+                                onDrag = { change, dragAmount ->
+                                    val currentDraggingItemId = draggingItemId
+                                    if (currentDraggingItemId == null) {
+                                        change.consume()
+                                        return@detectDragGesturesAfterLongPress
+                                    }
+                                    change.consume()
+                                    dragOffsetY += dragAmount.y
 
-                                val draggingItemInitialBounds = itemBounds[currentDrgId]
-
-                                val draggingItemCenterY = (draggingItemInitialBounds?.center?.y ?: (taskList.indexOfFirst { it.id == currentDrgId } * (defaultItemPxHeight + itemSpacingPx) + defaultItemPxHeight/2)) + dragOffsetY
-
-                                var newTargetIndexFound = draggingItemCurrentActualIdx // 기본값은 현재 위치
-                                var minDistanceToCenter = Float.MAX_VALUE
-
-                                taskList.forEachIndexed { index, task ->
-                                    val taskRect = itemBounds[task.id]
-                                    if (taskRect == null) {
-                                        return@forEachIndexed // bounds 없으면 비교 불가
+                                    val currentDraggingItemIndex = taskList.indexOfFirst { it.id == currentDraggingItemId }
+                                    if (currentDraggingItemIndex == -1) {
+                                        draggingItemId = null
+                                        targetIndex = null
+                                        dragOffsetY = 0f
+                                        return@detectDragGesturesAfterLongPress
                                     }
 
-                                    // 드래그 중인 아이템의 중심이 다른 아이템의 영역 중간을 넘어섰는지 판단
-                                    val isOverlapping = draggingItemCenterY > taskRect.top && draggingItemCenterY < taskRect.bottom
-                                    val distance = abs(draggingItemCenterY - taskRect.center.y)
+                                    val draggingItemBounds = itemBounds[currentDraggingItemId]
 
-                                    if (isOverlapping) {
-                                        if (distance < minDistanceToCenter) {
-                                            minDistanceToCenter = distance
-                                            newTargetIndexFound = index
+                                    val draggingItemCenterY = draggingItemBounds?.center?.y!! + dragOffsetY
+
+                                    // 기본값은 현재 위치
+                                    var newTargetIndex = currentDraggingItemIndex
+                                    var minDistanceToCenter = Float.MAX_VALUE
+
+                                    taskList.forEachIndexed { index, task ->
+                                        val taskRect = itemBounds[task.id]
+                                        if (taskRect == null) {
+                                            return@forEachIndexed
                                         }
-                                    } else {
-                                        if (draggingItemCurrentActualIdx < index) { // 아래로 드래그 중
-                                            if (draggingItemCenterY > taskRect.center.y && distance < minDistanceToCenter) {
+
+                                        // 드래그 중인 아이템의 중심이 다른 아이템의 영역 중간을 넘어섰는지 판단
+                                        val isOverlapping = draggingItemCenterY > taskRect.top && draggingItemCenterY < taskRect.bottom
+                                        val distance = abs(draggingItemCenterY - taskRect.center.y)
+
+                                        if (isOverlapping) {
+                                            if (distance < minDistanceToCenter) {
                                                 minDistanceToCenter = distance
-                                                newTargetIndexFound = index
+                                                newTargetIndex = index
                                             }
-                                        } else if (draggingItemCurrentActualIdx > index) { // 위로 드래그 중
-                                            if (draggingItemCenterY < taskRect.center.y && distance < minDistanceToCenter) {
-                                                minDistanceToCenter = distance
-                                                newTargetIndexFound = index
+                                        } else {
+                                            // 아래로 드래그 중
+                                            if (currentDraggingItemIndex < index) {
+                                                if (draggingItemCenterY > taskRect.center.y && distance < minDistanceToCenter) {
+                                                    minDistanceToCenter = distance
+                                                    newTargetIndex = index
+                                                }
+                                            } else if (currentDraggingItemIndex > index) {
+                                                // 위로 드래그 중
+                                                if (draggingItemCenterY < taskRect.center.y && distance < minDistanceToCenter) {
+                                                    minDistanceToCenter = distance
+                                                    newTargetIndex = index
+                                                }
                                             }
                                         }
                                     }
-                                }
 
-                                if (newTargetIndexFound != targetIndex && newTargetIndexFound in taskList.indices) {
-                                    targetIndex = newTargetIndexFound
-                                }
-                            }
-                        )
-                    }
-            ){
+                                    if (newTargetIndex != targetIndex && newTargetIndex in taskList.indices) {
+                                        targetIndex = newTargetIndex
+                                    }
+                                },
+                            )
+                        },
+            ) {
                 BbangZipTaskBox(
                     task = item.text,
                     categoryColor = item.color,
                     isCompleted = item.isCompleted,
                     startTime = item.startTime,
-                    modifier = Modifier.fillMaxWidth()
+                    modifier = Modifier.fillMaxWidth(),
                 )
             }
         }
     }
 }
+
 private fun calculateAnimatedShift(
     draggingItemId: String?,
     currentDraggingItemIndex: Int?,
-    targetDropIndex: Int?,
+    targetIndex: Int?,
     currentItemId: String,
     taskList: List<String>,
     itemBounds: Map<String, Rect>,
-    itemSpacing: Float
+    itemSpacing: Float,
 ): Float {
-    if (draggingItemId == null || currentDraggingItemIndex == null || targetDropIndex == null) {
-        return 0f // 드래그 중이 아니면 오프셋 없음
+    // 드래그 중이 아니면 오프셋 없음
+    if (draggingItemId == null || currentDraggingItemIndex == null || targetIndex == null) {
+        return 0f
     }
+    // 드래그 중인 아이템 자신은 이 애니메이션의 대상이 아님
     if (currentItemId == draggingItemId) {
-        return 0f // 드래그 중인 아이템 자신은 이 애니메이션의 대상이 아님
+        return 0f
     }
 
     val currentItemActualIndex = taskList.indexOf(currentItemId)
-    if (currentItemActualIndex == -1) {
-        return 0f // 리스트에 없는 아이템 (이론상 발생 안 함)
-    }
 
     // 드래그 중인 아이템의 실제 높이를 가져오거나, 없으면 기본 높이 사용
     val draggingItemHeight = itemBounds[draggingItemId]?.height
@@ -277,46 +286,47 @@ private fun calculateAnimatedShift(
 
     return when {
         // 드래그 아이템이 아래로 이동 중이고, 현재 아이템이 그 사이에 있다면 위로 이동
-        currentDraggingItemIndex < targetDropIndex && currentItemActualIndex in (currentDraggingItemIndex + 1)..targetDropIndex -> -shiftAmount
+        currentDraggingItemIndex < targetIndex && currentItemActualIndex in (currentDraggingItemIndex + 1)..targetIndex -> -shiftAmount
         // 드래그 아이템이 위로 이동 중이고, 현재 아이템이 그 사이에 있다면 아래로 이동
-        currentDraggingItemIndex > targetDropIndex && currentItemActualIndex in targetDropIndex until currentDraggingItemIndex -> shiftAmount
+        currentDraggingItemIndex > targetIndex && currentItemActualIndex in targetIndex until currentDraggingItemIndex -> shiftAmount
         else -> 0f
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun BbangzipDraggableListPreview(){
+fun BbangzipDraggableListPreview() {
     BBANGZIPANDROIDTheme {
         BbangzipDraggableList(
-            taskList = remember {
-            mutableStateListOf(
-                TaskItem(
-                    text = "Lo-Fi Wireframe 회의 진행중입니다. 두줄 텍스트일 경우 이렇게 표기합니다.",
-                    color = Color.Red,
-                    isCompleted = true,
-                    startTime = LocalTime.now(),
-                ),
-                TaskItem(
-                    text = "HI-Fi Wireframe 확정",
-                    color = Color.Red
-                ),
-                TaskItem(
-                    text = "Lo-Fi Wireframe 확정",
-                    color = Color.Red,
-                    isCompleted = true
-                ),
-                TaskItem(
-                    text = "경제학 과제 제출",
-                    color = Color.Yellow,
-                    isCompleted = true,
-                ),
-                TaskItem(
-                    text = "PPT 32p~36p 암기",
-                    color = Color.Yellow
-                )
-            )
-        }
+            taskList =
+                remember {
+                    mutableStateListOf(
+                        TaskItem(
+                            text = "Lo-Fi Wireframe 회의 진행중입니다. 두줄 텍스트일 경우 이렇게 표기합니다.",
+                            color = Color.Red,
+                            isCompleted = true,
+                            startTime = LocalTime.now(),
+                        ),
+                        TaskItem(
+                            text = "HI-Fi Wireframe 확정",
+                            color = Color.Red,
+                        ),
+                        TaskItem(
+                            text = "Lo-Fi Wireframe 확정",
+                            color = Color.Red,
+                            isCompleted = true,
+                        ),
+                        TaskItem(
+                            text = "경제학 과제 제출",
+                            color = Color.Yellow,
+                            isCompleted = true,
+                        ),
+                        TaskItem(
+                            text = "PPT 32p~36p 암기",
+                            color = Color.Yellow,
+                        ),
+                    )
+                },
         )
     }
 }
