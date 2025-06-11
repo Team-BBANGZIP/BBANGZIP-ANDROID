@@ -38,9 +38,9 @@ fun BbangZipUnderLinedTextField(
     leadingIcon: @Composable (() -> Unit)? = null,
     @StringRes placeholder: Int? = null,
     @StringRes guideline: Int? = null,
-    textStyles: TextFieldTypography = UnderlinedTextFieldDefaults.typography(),
-    colors: TextFieldColors = UnderlinedTextFieldDefaults.colors(),
-    contentPadding: PaddingValues = UnderlinedTextFieldDefaults.contentPadding(),
+    textStyles: TextFieldTypography = BbangZipUnderlinedTextFieldDefaults.typography(),
+    colors: TextFieldColors = BbangZipUnderlinedTextFieldDefaults.colors(),
+    contentPadding: PaddingValues = BbangZipUnderlinedTextFieldDefaults.CONTENT_PADDING,
     isUnderLined: Boolean = true,
     keyboardOptions: KeyboardOptions =
         KeyboardOptions.Default.copy(

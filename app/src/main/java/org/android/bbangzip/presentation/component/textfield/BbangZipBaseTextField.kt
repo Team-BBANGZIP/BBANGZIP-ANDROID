@@ -76,11 +76,11 @@ fun BbangZipBaseTextField(
     leadingIcon: @Composable (() -> Unit)? = null,
     @StringRes placeholder: Int? = null,
     @StringRes guideline: Int? = null,
-    textStyles: TextFieldTypography = TextFieldDefaults.typography(),
-    colors: TextFieldColors = TextFieldDefaults.colors(),
-    contentPadding: PaddingValues = TextFieldDefaults.contentPadding(),
-    borderRadius: Dp = TextFieldDefaults.BORDER_RADIUS,
-    borderSize: Dp = TextFieldDefaults.BORDER_SIZE,
+    textStyles: TextFieldTypography = BbangZipTextFieldDefaults.typography(),
+    colors: TextFieldColors = BbangZipTextFieldDefaults.colors(),
+    contentPadding: PaddingValues = BbangZipTextFieldDefaults.CONTENT_PADDING,
+    borderRadius: Dp = BbangZipTextFieldDefaults.BORDER_RADIUS,
+    borderSize: Dp = BbangZipTextFieldDefaults.BORDER_SIZE,
     contentHeight: Dp? = null,
     maxCharacter: Int? = null,
     isUnderLined: Boolean = false,
@@ -183,7 +183,7 @@ fun BbangZipBaseTextField(
                     text = stringResource(R.string.textfield_character_counter, value.length.toString(), maxCharacter.toString()),
                     modifier =
                         Modifier
-                            .padding(top = TextFieldDefaults.CHARACTER_COUNT_PADDING_TOP)
+                            .padding(top = BbangZipTextFieldDefaults.CHARACTER_COUNT_PADDING_TOP)
                             .fillMaxWidth()
                             .wrapContentWidth(Alignment.End),
                     color = colors.characterCountColor,

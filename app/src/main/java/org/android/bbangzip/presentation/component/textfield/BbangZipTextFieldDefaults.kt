@@ -7,11 +7,10 @@ import androidx.compose.runtime.Stable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
-object TextFieldDefaults {
+object BbangZipTextFieldDefaults {
     // ContentPadding values for the text field
     private val CONTENT_PADDING_TOP = 12.dp
     private val CONTENT_PADDING_BOTTOM = 10.dp
@@ -23,13 +22,12 @@ object TextFieldDefaults {
 
     val CHARACTER_COUNT_PADDING_TOP = 10.dp
 
-    @Composable
-    fun contentPadding(
-        start: Dp = CONTENT_PADDING_START,
-        top: Dp = CONTENT_PADDING_TOP,
-        end: Dp = CONTENT_PADDING_END,
-        bottom: Dp = CONTENT_PADDING_BOTTOM,
-    ): PaddingValues = PaddingValues(start, top, end, bottom)
+    val CONTENT_PADDING = PaddingValues(
+        start = CONTENT_PADDING_START,
+        top = CONTENT_PADDING_TOP,
+        end = CONTENT_PADDING_END,
+        bottom = CONTENT_PADDING_BOTTOM,
+    )
 
 
     @Composable
@@ -93,18 +91,18 @@ object TextFieldDefaults {
         }
 }
 
-object UnderlinedTextFieldDefaults {
+object BbangZipUnderlinedTextFieldDefaults {
     private val CONTENT_PADDING_TOP = 4.dp
     private val CONTENT_PADDING_BOTTOM = 0.dp
     private val CONTENT_PADDING_START = 2.dp
     private val CONTENT_PADDING_END = 0.dp
 
-    fun contentPadding(
-        start: Dp = CONTENT_PADDING_START,
-        top: Dp = CONTENT_PADDING_TOP,
-        end: Dp = CONTENT_PADDING_END,
-        bottom: Dp = CONTENT_PADDING_BOTTOM,
-    ): PaddingValues = PaddingValues(start, top, end, bottom)
+    val CONTENT_PADDING = PaddingValues(
+        start = CONTENT_PADDING_START,
+        top = CONTENT_PADDING_TOP,
+        end = CONTENT_PADDING_END,
+        bottom = CONTENT_PADDING_BOTTOM,
+    )
 
     @Composable
     fun colors(
