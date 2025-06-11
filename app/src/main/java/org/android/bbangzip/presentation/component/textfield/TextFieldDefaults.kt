@@ -190,6 +190,7 @@ data class TextFieldColors(
             else -> unfocusedTextColor
         }
 
+    @Stable
     fun placeholderColor(
         isFocused: Boolean,
     ): Color =
@@ -208,7 +209,7 @@ data class TextFieldColors(
         }
 }
 
-@Stable
+@Immutable
 data class TextFieldTypography(
     val textStyle: TextStyle,
     val guidelineTextStyle: TextStyle,
