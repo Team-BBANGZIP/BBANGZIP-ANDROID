@@ -41,11 +41,11 @@ fun BbangZipTextField(
     leadingIcon: @Composable (() -> Unit)? = null,
     @StringRes placeholder: Int? = null,
     @StringRes guideline: Int? = null,
-    textStyles: TextFieldTypography = TextFieldDefaults.typography(),
-    colors: TextFieldColors = TextFieldDefaults.colors(),
-    contentPadding: PaddingValues = TextFieldDefaults.contentPadding(),
-    borderRadius: Dp = TextFieldDefaults.BORDER_RADIUS,
-    borderSize: Dp = TextFieldDefaults.BORDER_SIZE,
+    textStyles: TextFieldTypography = BbangZipTextFieldDefaults.typography(),
+    colors: TextFieldColors = BbangZipTextFieldDefaults.colors(),
+    contentPadding: PaddingValues = BbangZipTextFieldDefaults.CONTENT_PADDING,
+    borderRadius: Dp = BbangZipTextFieldDefaults.BORDER_RADIUS,
+    borderSize: Dp = BbangZipTextFieldDefaults.BORDER_SIZE,
     keyboardOptions: KeyboardOptions =
         KeyboardOptions.Default.copy(
             imeAction = ImeAction.Default,
