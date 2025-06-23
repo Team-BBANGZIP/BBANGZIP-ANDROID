@@ -5,7 +5,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -36,6 +36,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
+import org.android.bbangzip.presentation.util.cache.RegexCaches
 
 /**
  * 빵집 앱의 커스텀 텍스트 필드 컴포넌트입니다.
@@ -102,7 +103,7 @@ fun BbangZipBaseTextField(
     val focusRequester = remember { FocusRequester() }
     val heightModifier =
         if (contentHeight != null) {
-            Modifier.heightIn(min = contentHeight)
+            Modifier.height(height = contentHeight)
         } else {
             Modifier
         }
@@ -114,36 +115,37 @@ fun BbangZipBaseTextField(
     BbangZipTextFieldSlot(
         columnModifier = modifier,
         rowModifier =
-            Modifier
-                .fillMaxWidth()
-                .background(color = containerColor, shape = RoundedCornerShape(borderRadius))
-                .border(width = borderSize, color = colors.borderColor, shape = RoundedCornerShape(borderRadius))
-                .padding(paddingValues = contentPadding),
+        Modifier
+            .fillMaxWidth()
+            .background(color = containerColor, shape = RoundedCornerShape(borderRadius))
+            .border(width = borderSize, color = colors.borderColor, shape = RoundedCornerShape(borderRadius))
+            .padding(paddingValues = contentPadding),
         leadingIcon = { leadingIcon?.invoke() },
         content = {
             BasicTextField(
                 modifier =
-                    Modifier
-                        .weight(1f)
-                        .focusRequester(focusRequester)
-                        .onFocusChanged { focusState ->
-                            isFocused = focusState.isFocused
-                            onFocusChange(focusState.isFocused)
+                Modifier
+                    .weight(1f)
+                    .focusRequester(focusRequester)
+                    .onFocusChanged { focusState ->
+                        isFocused = focusState.isFocused
+                        onFocusChange(focusState.isFocused)
+                    }
+                    .onKeyEvent { keyEvent ->
+                        if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp) {
+                            focusManager.clearFocus(force = true)
+                            onFocusChange(false)
+                            onEnterClick()
+                            true
+                        } else {
+                            false
                         }
-                        .onKeyEvent { keyEvent ->
-                            if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp) {
-                                focusManager.clearFocus(force = true)
-                                onFocusChange(false)
-                                onEnterClick()
-                                true
-                            } else {
-                                false
-                            }
-                        }
-                        .then(heightModifier),
+                    }
+                    .then(heightModifier),
                 value = value,
                 onValueChange = {
-                    if (maxCharacter == null || it.length <= maxCharacter) onValueChange(it)
+                    val filtered = it.replace(RegexCaches.EMOJI_AND_UNASSIGNED_REGEX, "")
+                    if (maxCharacter == null || it.length <= maxCharacter) onValueChange(filtered)
                 },
                 keyboardActions = keyboardActions,
                 keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Done),
@@ -182,10 +184,10 @@ fun BbangZipBaseTextField(
                 Text(
                     text = stringResource(R.string.textfield_character_counter, value.length.toString(), maxCharacter.toString()),
                     modifier =
-                        Modifier
-                            .padding(top = BbangZipTextFieldDefaults.CHARACTER_COUNT_PADDING_TOP)
-                            .fillMaxWidth()
-                            .wrapContentWidth(Alignment.End),
+                    Modifier
+                        .padding(top = BbangZipTextFieldDefaults.CHARACTER_COUNT_PADDING_TOP)
+                        .fillMaxWidth()
+                        .wrapContentWidth(Alignment.End),
                     color = colors.characterCountColor,
                     style = textStyles.characterCountTextStyle,
                 )
