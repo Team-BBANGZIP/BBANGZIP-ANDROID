@@ -24,7 +24,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import org.android.bbangzip.R
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 
@@ -60,11 +59,12 @@ fun BbangZipTextField(
             },
         ),
 ) {
-    val maxLines = if (maxCharacter != null) {
-        Int.MAX_VALUE
-    } else {
-        3
-    }
+    val maxLines =
+        if (maxCharacter != null) {
+            Int.MAX_VALUE
+        } else {
+            3
+        }
     BbangZipBaseTextField(
         value = value,
         onValueChange = onValueChange,

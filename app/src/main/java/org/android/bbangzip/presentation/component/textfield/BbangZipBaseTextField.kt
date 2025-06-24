@@ -6,7 +6,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -119,33 +118,33 @@ fun BbangZipBaseTextField(
     BbangZipTextFieldSlot(
         columnModifier = modifier,
         rowModifier =
-        Modifier
-            .fillMaxWidth()
-            .background(color = containerColor, shape = RoundedCornerShape(borderRadius))
-            .border(width = borderSize, color = colors.borderColor, shape = RoundedCornerShape(borderRadius))
-            .padding(paddingValues = contentPadding),
+            Modifier
+                .fillMaxWidth()
+                .background(color = containerColor, shape = RoundedCornerShape(borderRadius))
+                .border(width = borderSize, color = colors.borderColor, shape = RoundedCornerShape(borderRadius))
+                .padding(paddingValues = contentPadding),
         leadingIcon = { leadingIcon?.invoke() },
         content = {
             BasicTextField(
                 modifier =
-                Modifier
-                    .weight(1f)
-                    .focusRequester(focusRequester)
-                    .onFocusChanged { focusState ->
-                        isFocused = focusState.isFocused
-                        onFocusChange(focusState.isFocused)
-                    }
-                    .onKeyEvent { keyEvent ->
-                        if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp) {
-                            focusManager.clearFocus(force = true)
-                            onFocusChange(false)
-                            onEnterClick()
-                            true
-                        } else {
-                            false
+                    Modifier
+                        .weight(1f)
+                        .focusRequester(focusRequester)
+                        .onFocusChanged { focusState ->
+                            isFocused = focusState.isFocused
+                            onFocusChange(focusState.isFocused)
                         }
-                    }
-                    .then(heightModifier),
+                        .onKeyEvent { keyEvent ->
+                            if (keyEvent.key == Key.Enter && keyEvent.type == KeyEventType.KeyUp) {
+                                focusManager.clearFocus(force = true)
+                                onFocusChange(false)
+                                onEnterClick()
+                                true
+                            } else {
+                                false
+                            }
+                        }
+                        .then(heightModifier),
                 value = value,
                 onValueChange = {
                     val filtered = it.replace(RegexCaches.EMOJI_AND_UNASSIGNED_REGEX, "")
@@ -189,10 +188,10 @@ fun BbangZipBaseTextField(
                 Text(
                     text = stringResource(R.string.textfield_character_counter, value.length.toString(), maxCharacter.toString()),
                     modifier =
-                    Modifier
-                        .padding(top = BbangZipTextFieldDefaults.CHARACTER_COUNT_PADDING_TOP)
-                        .fillMaxWidth()
-                        .wrapContentWidth(Alignment.End),
+                        Modifier
+                            .padding(top = BbangZipTextFieldDefaults.CHARACTER_COUNT_PADDING_TOP)
+                            .fillMaxWidth()
+                            .wrapContentWidth(Alignment.End),
                     color = colors.characterCountColor,
                     style = textStyles.characterCountTextStyle,
                 )

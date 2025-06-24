@@ -22,13 +22,13 @@ object BbangZipTextFieldDefaults {
 
     val CHARACTER_COUNT_PADDING_TOP = 10.dp
 
-    val CONTENT_PADDING = PaddingValues(
-        start = CONTENT_PADDING_START,
-        top = CONTENT_PADDING_TOP,
-        end = CONTENT_PADDING_END,
-        bottom = CONTENT_PADDING_BOTTOM,
-    )
-
+    val CONTENT_PADDING =
+        PaddingValues(
+            start = CONTENT_PADDING_START,
+            top = CONTENT_PADDING_TOP,
+            end = CONTENT_PADDING_END,
+            bottom = CONTENT_PADDING_BOTTOM,
+        )
 
     @Composable
     fun colors(
@@ -97,12 +97,13 @@ object BbangZipUnderlinedTextFieldDefaults {
     private val CONTENT_PADDING_START = 2.dp
     private val CONTENT_PADDING_END = 0.dp
 
-    val CONTENT_PADDING = PaddingValues(
-        start = CONTENT_PADDING_START,
-        top = CONTENT_PADDING_TOP,
-        end = CONTENT_PADDING_END,
-        bottom = CONTENT_PADDING_BOTTOM,
-    )
+    val CONTENT_PADDING =
+        PaddingValues(
+            start = CONTENT_PADDING_START,
+            top = CONTENT_PADDING_TOP,
+            end = CONTENT_PADDING_END,
+            bottom = CONTENT_PADDING_BOTTOM,
+        )
 
     @Composable
     fun colors(
