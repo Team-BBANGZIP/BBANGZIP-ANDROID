@@ -1,8 +1,13 @@
 <resources>
     <string name="app_name">BBANGZIP-ANDROID</string>
     <string name="dummy">더미</string>
+
+    <!-- bottom - navigation -->
     <string name="bottom_navi_timer_tab_title">빵굽기</string>
     <string name="bottom_navi_todo_tab_title">할 일</string>
     <string name="bottom_navi_friend_tab_title">이웃</string>
     <string name="bottom_navi_my_title">마이</string>
+
+    <!-- component - textfield -->
+    <string name="textfield_character_counter">%s/%s</string>
 </resources>
