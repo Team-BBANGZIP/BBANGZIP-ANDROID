@@ -70,6 +70,7 @@ fun BbangZipUnderLinedTextField(
         colors = colors,
         contentPadding = contentPadding,
         isUnderLined = isUnderLined,
+        maxLines = 1,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
     )

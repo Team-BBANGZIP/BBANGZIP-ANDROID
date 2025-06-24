@@ -24,6 +24,7 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.max
 import org.android.bbangzip.R
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 
@@ -35,7 +36,6 @@ fun BbangZipTextField(
     modifier: Modifier = Modifier,
     onFocusChange: (Boolean) -> Unit = {},
     onEnterClick: () -> Unit = {},
-    contentHeight: Dp? = null,
     maxCharacter: Int? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     leadingIcon: @Composable (() -> Unit)? = null,
@@ -60,6 +60,11 @@ fun BbangZipTextField(
             },
         ),
 ) {
+    val maxLines = if (maxCharacter != null) {
+        Int.MAX_VALUE
+    } else {
+        3
+    }
     BbangZipBaseTextField(
         value = value,
         onValueChange = onValueChange,
@@ -75,8 +80,8 @@ fun BbangZipTextField(
         contentPadding = contentPadding,
         borderRadius = borderRadius,
         borderSize = borderSize,
-        contentHeight = contentHeight,
         maxCharacter = maxCharacter,
+        maxLines = maxLines,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
     )
@@ -116,7 +121,6 @@ private fun TextFieldPreview() {
                 onValueChange = { textWithLimit = it },
                 focusManager = focusManager,
                 placeholder = R.string.app_name,
-                contentHeight = 90.dp,
                 maxCharacter = 50,
             )
         }

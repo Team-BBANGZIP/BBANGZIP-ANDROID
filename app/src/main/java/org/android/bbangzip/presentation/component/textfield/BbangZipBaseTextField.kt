@@ -4,6 +4,7 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -35,6 +36,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import kotlinx.serialization.json.JsonNull.content
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.util.cache.RegexCaches
 
@@ -82,7 +84,7 @@ fun BbangZipBaseTextField(
     contentPadding: PaddingValues = BbangZipTextFieldDefaults.CONTENT_PADDING,
     borderRadius: Dp = BbangZipTextFieldDefaults.BORDER_RADIUS,
     borderSize: Dp = BbangZipTextFieldDefaults.BORDER_SIZE,
-    contentHeight: Dp? = null,
+    maxLines: Int = 1,
     maxCharacter: Int? = null,
     isUnderLined: Boolean = false,
     keyboardOptions: KeyboardOptions =
@@ -101,9 +103,11 @@ fun BbangZipBaseTextField(
 ) {
     var isFocused by remember { mutableStateOf(false) }
     val focusRequester = remember { FocusRequester() }
+    val aspectRatio = 336f / 90f
     val heightModifier =
-        if (contentHeight != null) {
-            Modifier.height(height = contentHeight)
+        if (maxCharacter != null) {
+            Modifier
+                .aspectRatio(aspectRatio)
         } else {
             Modifier
         }
@@ -150,6 +154,7 @@ fun BbangZipBaseTextField(
                 keyboardActions = keyboardActions,
                 keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Done),
                 textStyle = textStyle,
+                maxLines = maxLines,
                 cursorBrush = SolidColor(colors.cursorColor),
                 decorationBox = { innerTextField ->
                     innerTextField()
