@@ -1,8 +1,25 @@
 <resources>
     <string name="app_name">BBANGZIP-ANDROID</string>
     <string name="dummy">더미</string>
+
+    <!-- bottom - navigation -->
     <string name="bottom_navi_timer_tab_title">빵굽기</string>
     <string name="bottom_navi_todo_tab_title">할 일</string>
     <string name="bottom_navi_friend_tab_title">이웃</string>
     <string name="bottom_navi_my_title">마이</string>
+
+    <!-- component - button -->
+    <string name="button_label_30minutes_more">30분 더</string>
+    <string name="button_label_complete_task_check">완료한 일 체크</string>
+    <string name="button_label_60minutes_more">60분 더</string>
+    <string name="button_label_go_back">돌아가기</string>
+    <string name="button_label_initialize">초기화 하기</string>
+    <string name="button_label_exit">종료 하기</string>
+    <string name="button_label_cancellation">취소</string>
+    <string name="button_label_setting">설정</string>
+    <string name="button_label_delete">삭제하기</string>
+    <string name="button_label_save">저장하기</string>
+
+    <!-- component - textfield -->
+    <string name="textfield_character_counter">%s/%s</string>
 </resources>
