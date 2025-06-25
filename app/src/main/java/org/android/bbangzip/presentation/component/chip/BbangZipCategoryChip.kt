@@ -42,7 +42,7 @@ fun BbangZipCategoryChip(
     categoryColor: Color,
     categoryName: String,
     modifier: Modifier = Modifier,
-    onclick: () -> Unit = {},
+    onClick: () -> Unit = {},
     isClickable: Boolean = true,
     isDraggable: Boolean = true,
     maxCharacters: Int = MAX_CATEGORY_NAME_CHARACTER,
@@ -59,7 +59,7 @@ fun BbangZipCategoryChip(
                 .clip(BbangZipCategoryChipDefaults.CHIP_SHAPE)
                 .noRippleClickable(
                     enabled = isClickable,
-                    onClick = onclick,
+                    onClick = onClick,
                 )
                 .background(
                     color = BbangZipCategoryChipDefaults.containerColor(),
