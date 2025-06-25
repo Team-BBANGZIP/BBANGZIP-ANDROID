@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -65,7 +66,7 @@ fun BottomNavigationBar(
                 modifier =
                     Modifier
                         .fillMaxWidth()
-                        .padding(top = 12.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
+                        .padding(top = 4.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
@@ -107,6 +108,7 @@ private fun BottomNavigationItem(
             Icon(
                 imageVector = ImageVector.vectorResource(id = bottomNaviIcon),
                 contentDescription = stringResource(bottomNaviTitle),
+                modifier = Modifier.size(20.dp),
                 tint =
                     if (isSelected) {
                         BbangZipTheme.color.labelStrong_463D34
