@@ -15,6 +15,10 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -90,6 +94,7 @@ fun BbangzipBaseButton(
 @Preview(showBackground = true)
 @Composable
 private fun BbangzipBaseButtonPreview() {
+    var isEnable by remember { mutableStateOf(true) }
     BBANGZIPANDROIDTheme {
         Column(
             modifier =
@@ -423,8 +428,8 @@ private fun BbangzipBaseButtonPreview() {
 
             BbangzipBaseButton(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = {},
-                enabled = false,
+                onClick = { isEnable = !isEnable },
+                enabled = isEnable,
                 leadingIcon = {
                     Icon(
                         painter = painterResource(R.drawable.ic_trash_default_24),
