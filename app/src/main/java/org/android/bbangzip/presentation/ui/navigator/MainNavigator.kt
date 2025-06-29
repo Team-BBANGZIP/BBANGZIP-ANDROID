@@ -2,6 +2,7 @@ package org.android.bbangzip.presentation.ui.navigator
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
@@ -9,6 +10,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import org.android.bbangzip.presentation.model.BottomNavigationRoute
 import org.android.bbangzip.presentation.model.Route
 import org.android.bbangzip.presentation.type.BottomNavigationType
@@ -32,6 +36,10 @@ class MainNavigator(
             BottomNavigationType.find { mainBottomNavigationRoute ->
                 currentDestination?.route == mainBottomNavigationRoute::class.qualifiedName
             }
+
+    private val _isBottomBarVisible = MutableStateFlow(true)
+    private val isBottomBarVisible: StateFlow<Boolean> = _isBottomBarVisible.asStateFlow()
+
 
     @SuppressLint("RestrictedApi")
     fun navigateBottomNavigation(bottomNavigationType: BottomNavigationType) {
@@ -79,14 +87,26 @@ class MainNavigator(
         navHostController.popBackStack()
     }
 
+    fun showBottomBar() {
+        _isBottomBarVisible.value = true
+    }
+
+    fun hideBottomBar() {
+        _isBottomBarVisible.value = false
+    }
+
     private inline fun <reified T : Route> isSameCurrentDestination(): Boolean =
         navHostController.currentDestination?.route == T::class.qualifiedName
 
     @Composable
-    fun showBottomBar(): Boolean =
-        BottomNavigationType.any {
+    fun isBottomBarVisible(): Boolean {
+        val isVisibleByRoute = BottomNavigationType.any {
             currentDestination?.route == it::class.qualifiedName
         }
+        val isVisibleByState =  isBottomBarVisible.collectAsState()
+
+        return isVisibleByRoute && isVisibleByState.value
+    }
 }
 
 @Composable

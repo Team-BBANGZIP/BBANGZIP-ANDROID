@@ -37,7 +37,7 @@ private fun MainScreenContent(
         },
         bottomBar = {
             BottomNavigationBar(
-                isVisible = navigator.showBottomBar(),
+                isVisible = navigator.isBottomBarVisible(),
                 bottomNaviBarItems = BottomNavigationType.entries.toImmutableList(),
                 currentNaviBarItemSelected = navigator.currentBottomNavigationBarItem,
                 onBottomNaviBarItemSelected = { navigator.navigateBottomNavigation(it) },
