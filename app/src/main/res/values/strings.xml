@@ -22,4 +22,9 @@
 
     <!-- component - textfield -->
     <string name="textfield_character_counter">%s/%s</string>
+
+    <!-- timer - view -->
+    <string name="timer_idle_title">오늘의 빵을 구워보세요!</string>
+    <string name="timer_paused_title">잠시 쉬는 중...</string>
+    <string name="timer_complete_title">빵이 완성됐어요!</string>
 </resources>
