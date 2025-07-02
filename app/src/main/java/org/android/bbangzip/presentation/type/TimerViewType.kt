@@ -1,10 +1,12 @@
 package org.android.bbangzip.presentation.type
 
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
 import org.android.bbangzip.R
 import org.android.bbangzip.ui.theme.defaultBbangZipColor
 
+@Stable
 enum class TimerViewType(
     @StringRes val titleText: Int? = null,
     val timerFontColor: Color = defaultBbangZipColor.primaryLight_C8B5A2,
