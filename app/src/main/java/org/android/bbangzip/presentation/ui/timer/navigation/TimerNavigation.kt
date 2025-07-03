@@ -14,8 +14,16 @@ fun NavController.navigateToTimer(navOptions: NavOptions) {
     )
 }
 
-fun NavGraphBuilder.timerNavGraph() {
+fun NavGraphBuilder.timerNavGraph(
+    showBottomBar: () -> Unit = {},
+    hideBottomBar: () -> Unit = {},
+    navigateToCompleteTask: () -> Unit = {},
+) {
     composable<BottomNavigationRoute.Timer> {
-        TimerRoute()
+        TimerRoute(
+            showBottomBar = showBottomBar,
+            hideBottomBar = hideBottomBar,
+            navigateToCompleteTask = navigateToCompleteTask,
+        )
     }
 }
