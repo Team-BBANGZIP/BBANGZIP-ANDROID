@@ -10,6 +10,7 @@ class TimerContract {
     @Parcelize
     data class TimerState(
         val remainingTime: Long = 0L, // 타이머 시간
+        val pausedTime: Long = 0L, // 일시정지된 시간
         val timerStatus: TimerStatus = TimerStatus.Idle,
         @DrawableRes val breadImg: Int = 0,  // 빵 이미지 리소스
         val todayBreadCount: Int = 0,// 오늘 구운 빵의 개수ㅡ
@@ -29,10 +30,14 @@ class TimerContract {
         data object OnRepeatBtnClick : TimerEvent
         data object OnResetBtnClick : TimerEvent
         data object OnBreadIconClick : TimerEvent
-        data object OnTimeOptionToggleClick : TimerEvent
-        data class OnBreadSelectionSheetClick(
-            val breadId: String,
+        data class OnTimeOptionToggleClick(
+            val selectedTimeOptionIndex: Int
         ) : TimerEvent
+
+        data class OnBreadSelectionSheetClick(
+           @DrawableRes val breadType: Int,
+        ) : TimerEvent
+
         data object OnRepeatSheetDismissBtnClick : TimerEvent
         data object OnRepeatSheetApproveBtnClick : TimerEvent
         data object OnEndConfirmSheetDismissBtnClick : TimerEvent
@@ -84,5 +89,7 @@ class TimerContract {
 
     sealed interface TimerSideEffect : BaseContract.SideEffect {
         data object NavigateToCompleteTask : TimerSideEffect
+        data object ShowBottomBar : TimerSideEffect
+        data object HideBottomBar : TimerSideEffect
     }
 }

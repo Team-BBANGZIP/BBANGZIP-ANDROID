@@ -3,13 +3,19 @@ package org.android.bbangzip.presentation.ui.timer
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.android.bbangzip.presentation.model.TimerStatus
 import org.android.bbangzip.presentation.util.base.BaseViewModel
+import org.android.bbangzip.presentation.util.constant.TimerDuration
+import javax.inject.Inject
 
-class TimerViewModel(
+@HiltViewModel
+class TimerViewModel
+@Inject
+constructor(
     savedStateHandle: SavedStateHandle
 ) : BaseViewModel<TimerContract.TimerEvent, TimerContract.TimerState, TimerContract.TimerReduce, TimerContract.TimerSideEffect>(
     savedStateHandle = savedStateHandle,
@@ -80,6 +86,15 @@ class TimerViewModel(
         }
     }
 
+    private fun getStartTimeForOption(index: Int): Long {
+        return when (index) {
+            0 -> TimerDuration.THIRTY_MINUTES
+            1 -> TimerDuration.SIXTY_MINUTES
+            else -> throw IllegalArgumentException("Invalid time option index")
+        }
+    }
+
+    //Timer 관련 로직
     private fun startTimer(duration: Long) {
         timerJob?.cancel()
 
@@ -93,6 +108,7 @@ class TimerViewModel(
                 val newRemainingTime = currentUiState.remainingTime - 1000L
 
                 if (newRemainingTime <= 0) {
+                    updateState(TimerContract.TimerReduce.UpdateRemainingTime(0L))
                     updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Complete))
                     updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(true)) // 완료 BottomSheet 표시
                 } else {
@@ -115,14 +131,14 @@ class TimerViewModel(
 
     private fun repeatTimer() {
         timerJob?.cancel()
-        updateState(TimerContract.TimerReduce.UpdateRemainingTime(0L)) //TODO 토글에따른 타이머 시간 배정
+        updateState(TimerContract.TimerReduce.UpdateRemainingTime(getStartTimeForOption(currentUiState.selectedTimeOptionIndex)))
         startTimer(currentUiState.remainingTime) // 현재 남은 시간을 그대로 사용하여 타이머 재시작
         updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(false)) // 완료 BottomSheet 숨김
     }
 
     private fun resetTimer() {
         timerJob?.cancel()
-        updateState(TimerContract.TimerReduce.UpdateRemainingTime(0L)) // ㅅTODO 토글에 딸느 타이머 시간 배정
+        updateState(TimerContract.TimerReduce.UpdateRemainingTime(getStartTimeForOption(currentUiState.selectedTimeOptionIndex)))
         updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle)) // 타이머 상태를 Idle로 변경
         updateState(TimerContract.TimerReduce.UpdateResetConfirmSheetState(false)) // 완료 BottomSheet 숨김
     }
