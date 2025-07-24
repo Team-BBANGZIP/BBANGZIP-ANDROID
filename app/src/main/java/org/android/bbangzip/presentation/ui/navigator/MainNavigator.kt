@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
+import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
@@ -95,6 +96,10 @@ class MainNavigator(
         _isBottomBarVisible.value = false
     }
 
+    fun <T : Any> getBackStackEntry(route: T): NavBackStackEntry {
+        return navHostController.getBackStackEntry(route = route)
+    }
+
     private inline fun <reified T : Route> isSameCurrentDestination(): Boolean =
         navHostController.currentDestination?.route == T::class.qualifiedName
 
@@ -103,7 +108,7 @@ class MainNavigator(
         val isVisibleByRoute = BottomNavigationType.any {
             currentDestination?.route == it::class.qualifiedName
         }
-        val isVisibleByState =  isBottomBarVisible.collectAsState()
+        val isVisibleByState = isBottomBarVisible.collectAsState()
 
         return isVisibleByRoute && isVisibleByState.value
     }
