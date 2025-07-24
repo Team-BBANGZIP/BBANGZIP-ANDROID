@@ -7,9 +7,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 
 @Composable
 fun TimerRoute(
+    sharedViewModel: SharedViewModel,
     modifier: Modifier = Modifier,
     showBottomBar: () -> Unit = {},
     hideBottomBar: () -> Unit = {},

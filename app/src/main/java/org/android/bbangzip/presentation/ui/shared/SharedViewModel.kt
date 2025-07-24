@@ -3,6 +3,7 @@ package org.android.bbangzip.presentation.ui.shared
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
+import org.android.bbangzip.presentation.ui.timer.TimerContract
 import org.android.bbangzip.presentation.util.base.BaseViewModel
 import javax.inject.Inject
 
@@ -16,8 +17,7 @@ savedStateHandle = savedStateHandle
 ) {
 
     override fun createInitialState(savedState: Parcelable?): SharedContract.SharedState {
-        return SharedContract.SharedState()
-    }
+        return savedState as? SharedContract.SharedState ?: SharedContract.SharedState()    }
 
     override fun handleEvent(event: SharedContract.SharedEvent) {
         when (event) {

@@ -2,6 +2,7 @@ package org.android.bbangzip.presentation.ui.shared
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import kotlinx.serialization.Serializable
 import org.android.bbangzip.presentation.util.base.BaseContract
 
 class SharedContract {
@@ -22,3 +23,6 @@ class SharedContract {
 
     sealed class SharedSideEffect : BaseContract.SideEffect
 }
+
+@Serializable
+object Shared
