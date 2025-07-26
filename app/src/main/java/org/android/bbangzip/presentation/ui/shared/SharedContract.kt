@@ -3,7 +3,6 @@ package org.android.bbangzip.presentation.ui.shared
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import kotlinx.parcelize.Parcelize
-import kotlinx.serialization.Serializable
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.type.BreadType
 import org.android.bbangzip.presentation.util.base.BaseContract
@@ -27,6 +26,3 @@ class SharedContract {
 
     sealed class SharedSideEffect : BaseContract.SideEffect
 }
-
-@Serializable
-object Shared
