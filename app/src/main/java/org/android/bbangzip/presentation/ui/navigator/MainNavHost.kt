@@ -5,7 +5,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
 import org.android.bbangzip.presentation.ui.friend.navigation.friendNavGraph
 import org.android.bbangzip.presentation.ui.my.navigation.myNavGraph
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
@@ -18,12 +17,13 @@ fun MainNavHost(
     navigator: MainNavigator,
     padding: PaddingValues,
 ) {
+    val sharedViewModel : SharedViewModel = hiltViewModel()
     NavHost(
         navController = navigator.navHostController,
         startDestination = navigator.startDestination,
     ) {
         timerNavGraph(
-            getBackStackEntry = navigator.navHostController::getBackStackEntry,
+            sharedViewModel = sharedViewModel,
             showBottomBar = navigator::showBottomBar,
             hideBottomBar = navigator::hideBottomBar,
         )

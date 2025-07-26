@@ -20,16 +20,12 @@ fun NavController.navigateToTimer(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.timerNavGraph(
-    getBackStackEntry: (t: Any) -> NavBackStackEntry,
+    sharedViewModel: SharedViewModel,
     showBottomBar: () -> Unit = {},
     hideBottomBar: () -> Unit = {},
     navigateToCompleteTask: () -> Unit = {},
 ) {
-    composable<BottomNavigationRoute.Timer> { backStackEntry ->
-        val sharedEntry = remember(backStackEntry) {
-            getBackStackEntry(Shared)
-        }
-        val sharedViewModel = hiltViewModel<SharedViewModel>(sharedEntry)
+    composable<BottomNavigationRoute.Timer> {
         TimerRoute(
             sharedViewModel = sharedViewModel,
             showBottomBar = showBottomBar,

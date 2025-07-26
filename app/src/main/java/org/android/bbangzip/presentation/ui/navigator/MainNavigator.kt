@@ -96,10 +96,6 @@ class MainNavigator(
         _isBottomBarVisible.value = false
     }
 
-    fun <T : Any> getBackStackEntry(route: T): NavBackStackEntry {
-        return navHostController.getBackStackEntry(route = route)
-    }
-
     private inline fun <reified T : Route> isSameCurrentDestination(): Boolean =
         navHostController.currentDestination?.route == T::class.qualifiedName
 
