@@ -5,20 +5,25 @@ import androidx.annotation.DrawableRes
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.presentation.model.TimerStatus
 import org.android.bbangzip.presentation.util.base.BaseContract
+import org.android.bbangzip.presentation.util.extension.formatTime
 
 class TimerContract {
     @Parcelize
     data class TimerState(
         val remainingTime: Long = 0L, // 타이머 시간
+        val totalTime: Long = 30 * 60 * 1000L, // 타이머 총 시간
+        val formattedTime: String = remainingTime.formatTime(), // 포맷된 타이머 시간
+        val progress: Float = 0f, // 타이머 진행률
+        val progressPercentage: Float = ((totalTime - remainingTime).toFloat() / totalTime.toFloat()) * 100f,
         val pausedTime: Long = 0L, // 일시정지된 시간
         val timerStatus: TimerStatus = TimerStatus.Idle,
         @DrawableRes val breadImg: Int = 0,  // 빵 이미지 리소스
         val todayBreadCount: Int = 0,// 오늘 구운 빵의 개수ㅡ
         val selectedTimeOptionIndex: Int = 0, // 타이머 시간변경 토글 인덱스,
-        val isBreadSelectionSheetVisible: Boolean = false, // 빵 이미지 선택 BottomSheet 가시성
-        val isRepeatSheetVisible: Boolean = false, // 초기화 버튼 클릭시 BottomSheet 가시성
-        val isResetConfirmSheetVisible: Boolean = false, // 종료 버튼 클릭시 정말 끝내시겠습니까? BottomSheet 가시성
-        val isCompleteSheetVisible: Boolean = false,// 타이머 완료시 BottomSheet 가시성
+        val isBreadSelectionSheetVisible: Boolean = false,
+        val isRestartSheetVisible: Boolean = false,
+        val isResetSheetVisible: Boolean = false,
+        val isCompleteSheetVisible: Boolean = false,
     ) : BaseContract.State, Parcelable {
         override fun toParcelable(): Parcelable = this
     }
@@ -27,26 +32,26 @@ class TimerContract {
         data object Initialize : TimerEvent
         data object OnStartBtnClick : TimerEvent
         data object OnStopBtnClick : TimerEvent
-        data object OnRepeatBtnClick : TimerEvent
+        data object OnRestartBtnClick : TimerEvent
+        data object OnRestartSheetDismissBtnClick : TimerEvent
+        data object OnRestartSheetApproveBtnClick : TimerEvent
         data object OnResetBtnClick : TimerEvent
+        data object OnResetSheetDismissBtnClick : TimerEvent
+        data object OnResetSheetApproveBtnClick : TimerEvent
         data object OnBreadIconClick : TimerEvent
+        data object OnBreadSelectionSheetDismissRequest : TimerEvent
+        data object OnTimerCompleted : TimerEvent
+        data object OnCompleteSheetRetryBtnClick : TimerEvent
+        data object OnCompleteSheetCheckBtnClick : TimerEvent
+        data object OnCompleteSheetDismissRequest : TimerEvent
+        data object OnTimerTick : TimerEvent
         data class OnTimeOptionToggleClick(
             val selectedTimeOptionIndex: Int
         ) : TimerEvent
 
         data class OnBreadSelectionSheetClick(
-           @DrawableRes val breadType: Int,
+            val breadId: Int,
         ) : TimerEvent
-
-        data object OnRepeatSheetDismissBtnClick : TimerEvent
-        data object OnRepeatSheetApproveBtnClick : TimerEvent
-        data object OnEndConfirmSheetDismissBtnClick : TimerEvent
-        data object OnEndConfirmSheetApproveBtnClick : TimerEvent
-        data object OnCompleteSheetRetryBtnClick : TimerEvent
-        data object OnCompleteSheetCheckBtnClick : TimerEvent
-        data object OnCompleteSheetDismissRequest : TimerEvent
-
-
     }
 
     sealed interface TimerReduce : BaseContract.Reduce {
@@ -74,16 +79,20 @@ class TimerContract {
             val isBreadSelectionSheetVisible: Boolean
         ) : TimerReduce
 
-        data class UpdateRepeatSheetState(
-            val isRepeatSheetVisible: Boolean
+        data class UpdateRestartSheetState(
+            val isRestartSheetVisible: Boolean
         ) : TimerReduce
 
-        data class UpdateResetConfirmSheetState(
-            val isResetConfirmSheetVisible: Boolean
+        data class UpdateResetSheetState(
+            val isResetSheetVisible: Boolean
         ) : TimerReduce
 
         data class UpdateCompleteSheetState(
             val isCompleteSheetVisible: Boolean
+        ) : TimerReduce
+
+        data class  UpdateTotalTime(
+            val totalTime: Long
         ) : TimerReduce
     }
 

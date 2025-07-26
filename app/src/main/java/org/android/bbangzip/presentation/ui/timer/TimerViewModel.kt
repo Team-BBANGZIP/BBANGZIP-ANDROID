@@ -37,27 +37,94 @@ constructor(
                     updateState(TimerContract.TimerReduce.UpdateBreadImg(0)) // 초기 빵 이미지 리소스 설정
                 }
 
-            is TimerContract.TimerEvent.OnBreadIconClick -> {
-                updateState(TimerContract.TimerReduce.UpdateBreadSelectionSheetState(true)) // 빵 선택 BottomSheet 표시
+            //Start
+            is TimerContract.TimerEvent.OnStartBtnClick -> {
+                if (currentUiState.timerStatus == TimerStatus.Idle) {
+                    startTimer(currentUiState.totalTime)
+                } else if (currentUiState.timerStatus == TimerStatus.Paused) {
+                    resumeTimer()
+                }
             }
 
-            is TimerContract.TimerEvent.OnResetBtnClick -> TODO()
+            //Reset
+            is TimerContract.TimerEvent.OnResetBtnClick -> {
+                stopTimer() // 타이머 정지
+                updateState(TimerContract.TimerReduce.UpdateResetSheetState(true))
+            }
 
-            is TimerContract.TimerEvent.OnRepeatSheetApproveBtnClick -> TODO()
-            is TimerContract.TimerEvent.OnRepeatSheetDismissBtnClick -> TODO()
-            is TimerContract.TimerEvent.OnRepeatBtnClick -> TODO()
-            is TimerContract.TimerEvent.OnStartBtnClick -> TODO()
-            is TimerContract.TimerEvent.OnStopBtnClick -> TODO()
-            is TimerContract.TimerEvent.OnTimeOptionToggleClick -> TODO()
-            is TimerContract.TimerEvent.OnBreadSelectionSheetClick -> TODO()
-            is TimerContract.TimerEvent.OnCompleteSheetCheckBtnClick -> TODO()
-            is TimerContract.TimerEvent.OnCompleteSheetRetryBtnClick -> TODO()
+            is TimerContract.TimerEvent.OnResetSheetApproveBtnClick -> {
+                resetTimer() // 타이머 리셋
+            }
+
+            is TimerContract.TimerEvent.OnResetSheetDismissBtnClick -> {
+                updateState(TimerContract.TimerReduce.UpdateResetSheetState(false))
+            }
+
+            //Restart
+            is TimerContract.TimerEvent.OnRestartBtnClick -> {
+                stopTimer() // 타이머 정지
+                updateState(TimerContract.TimerReduce.UpdateRestartSheetState(true))
+            }
+
+            is TimerContract.TimerEvent.OnRestartSheetApproveBtnClick -> {
+                resetTimer() // 타이머 리셋
+            }
+
+            is TimerContract.TimerEvent.OnRestartSheetDismissBtnClick -> {
+                updateState(TimerContract.TimerReduce.UpdateRestartSheetState(false)) // 리셋 BottomSheet 숨김
+            }
+
+            //Stop
+            is TimerContract.TimerEvent.OnStopBtnClick -> {
+                stopTimer()
+            }
+
+            //Complete
+            is TimerContract.TimerEvent.OnTimerCompleted -> {
+                updateState(TimerContract.TimerReduce.UpdateRemainingTime(0L))
+                updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Complete)) // 타이머 완료 상태로 변경
+                updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(true)) // 완료 BottomSheet 표시
+                //Todo: 완료시 오늘 구운 빵 개수 증가 -> Index 개수로 판단
+            }
+
+            is TimerContract.TimerEvent.OnCompleteSheetCheckBtnClick -> {
+                // navigate TO 완료한일 체크로 가기!
+            }
+
+            is TimerContract.TimerEvent.OnCompleteSheetRetryBtnClick -> {
+                restartTimer() // 타이머 재시작
+            }
+
             is TimerContract.TimerEvent.OnCompleteSheetDismissRequest -> {
                 updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(false)) // 완료 BottomSheet 숨김
             }
 
-            is TimerContract.TimerEvent.OnEndConfirmSheetApproveBtnClick -> TODO()
-            is TimerContract.TimerEvent.OnEndConfirmSheetDismissBtnClick -> TODO()
+            is TimerContract.TimerEvent.OnTimeOptionToggleClick -> {
+                updateState(TimerContract.TimerReduce.UpdateSelectedTimeOptionIndex(event.selectedTimeOptionIndex))
+                getStartTimeForOption(event.selectedTimeOptionIndex)
+            }
+
+            is TimerContract.TimerEvent.OnBreadIconClick -> {
+                updateState(TimerContract.TimerReduce.UpdateBreadSelectionSheetState(true)) // 빵 선택 BottomSheet 표시
+            }
+
+            is TimerContract.TimerEvent.OnBreadSelectionSheetClick -> {
+                TODO()
+            }
+
+            is TimerContract.TimerEvent.OnBreadSelectionSheetDismissRequest -> {
+                updateState(TimerContract.TimerReduce.UpdateBreadSelectionSheetState(false)) // 빵 선택 BottomSheet 숨김
+            }
+
+            is TimerContract.TimerEvent.OnTimerTick -> {
+                val newRemainingTime = currentUiState.remainingTime - 1000L
+                if (newRemainingTime <= 0) {
+                    updateState(TimerContract.TimerReduce.UpdateRemainingTime(0L))
+                    setEvent(TimerContract.TimerEvent.OnTimerCompleted)
+                } else {
+                    updateState(TimerContract.TimerReduce.UpdateRemainingTime(newRemainingTime))
+                }
+            }
         }
     }
 
@@ -76,20 +143,22 @@ constructor(
                 isCompleteSheetVisible = reduce.isCompleteSheetVisible
             )
 
-            is TimerContract.TimerReduce.UpdateResetConfirmSheetState -> state.copy(
-                isResetConfirmSheetVisible = reduce.isResetConfirmSheetVisible
+            is TimerContract.TimerReduce.UpdateResetSheetState -> state.copy(
+                isResetSheetVisible = reduce.isResetSheetVisible
             )
 
-            is TimerContract.TimerReduce.UpdateRepeatSheetState -> state.copy(
-                isRepeatSheetVisible = reduce.isRepeatSheetVisible
+            is TimerContract.TimerReduce.UpdateRestartSheetState -> state.copy(
+                isRestartSheetVisible = reduce.isRestartSheetVisible
             )
+
+            is TimerContract.TimerReduce.UpdateTotalTime -> state.copy(totalTime = reduce.totalTime)
         }
     }
 
-    private fun getStartTimeForOption(index: Int): Long {
+    private fun getStartTimeForOption(index: Int) {
         return when (index) {
-            0 -> TimerDuration.THIRTY_MINUTES
-            1 -> TimerDuration.SIXTY_MINUTES
+            0 -> updateState(TimerContract.TimerReduce.UpdateTotalTime(TimerDuration.THIRTY_MINUTES))
+            1 -> updateState(TimerContract.TimerReduce.UpdateTotalTime(TimerDuration.SIXTY_MINUTES))
             else -> throw IllegalArgumentException("Invalid time option index")
         }
     }
@@ -104,16 +173,8 @@ constructor(
         timerJob = viewModelScope.launch {
             while (currentUiState.remainingTime > 0 && currentUiState.timerStatus == TimerStatus.Running) {
                 // 타이머 로직 구현
-                delay(1000L) // 1초마다 업데이트
-                val newRemainingTime = currentUiState.remainingTime - 1000L
-
-                if (newRemainingTime <= 0) {
-                    updateState(TimerContract.TimerReduce.UpdateRemainingTime(0L))
-                    updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Complete))
-                    updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(true)) // 완료 BottomSheet 표시
-                } else {
-                    updateState(TimerContract.TimerReduce.UpdateRemainingTime(newRemainingTime))
-                }
+                delay(1000L)
+                setEvent(TimerContract.TimerEvent.OnTimerTick)
             }
         }
     }
@@ -129,17 +190,17 @@ constructor(
         }
     }
 
-    private fun repeatTimer() {
+    private fun restartTimer() {
         timerJob?.cancel()
-        updateState(TimerContract.TimerReduce.UpdateRemainingTime(getStartTimeForOption(currentUiState.selectedTimeOptionIndex)))
-        startTimer(currentUiState.remainingTime) // 현재 남은 시간을 그대로 사용하여 타이머 재시작
+        updateState(TimerContract.TimerReduce.UpdateRemainingTime(currentUiState.totalTime))
         updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(false)) // 완료 BottomSheet 숨김
+        startTimer(currentUiState.remainingTime) // 현재 남은 시간을 그대로 사용하여 타이머 재시작
     }
 
     private fun resetTimer() {
         timerJob?.cancel()
-        updateState(TimerContract.TimerReduce.UpdateRemainingTime(getStartTimeForOption(currentUiState.selectedTimeOptionIndex)))
+        updateState(TimerContract.TimerReduce.UpdateRemainingTime(currentUiState.totalTime))
+        updateState(TimerContract.TimerReduce.UpdateResetSheetState(false)) // 완료 BottomSheet 숨김
         updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle)) // 타이머 상태를 Idle로 변경
-        updateState(TimerContract.TimerReduce.UpdateResetConfirmSheetState(false)) // 완료 BottomSheet 숨김
     }
 }
