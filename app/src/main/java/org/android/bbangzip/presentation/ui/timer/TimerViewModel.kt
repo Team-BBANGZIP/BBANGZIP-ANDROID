@@ -34,7 +34,7 @@ constructor(
         when (event) {
             is TimerContract.TimerEvent.Initialize ->
                 launch {
-                    updateState(TimerContract.TimerReduce.UpdateBreadImg(0)) // 초기 빵 이미지 리소스 설정
+                    updateState(TimerContract.TimerReduce.UpdateBreadLevel(0)) // 초기 빵 이미지 리소스 설정
                 }
 
             //Start
@@ -118,12 +118,16 @@ constructor(
 
             is TimerContract.TimerEvent.OnTimerTick -> {
                 val newRemainingTime = currentUiState.remainingTime - 1000L
+
                 if (newRemainingTime <= 0) {
                     updateState(TimerContract.TimerReduce.UpdateRemainingTime(0L))
                     setEvent(TimerContract.TimerEvent.OnTimerCompleted)
                 } else {
                     updateState(TimerContract.TimerReduce.UpdateRemainingTime(newRemainingTime))
+                    updateBreadLevelByRemainingTime()
                 }
+
+
             }
         }
     }
@@ -132,7 +136,7 @@ constructor(
         return when (reduce) {
             is TimerContract.TimerReduce.UpdateTimerStatus -> state.copy(timerStatus = reduce.timerStatus)
             is TimerContract.TimerReduce.UpdateRemainingTime -> state.copy(remainingTime = reduce.remainingTime)
-            is TimerContract.TimerReduce.UpdateBreadImg -> state.copy(breadImg = reduce.breadImg)
+            is TimerContract.TimerReduce.UpdateBreadLevel -> state.copy(breadLevel = reduce.breadLevel)
             is TimerContract.TimerReduce.UpdateTodayBreadCount -> state.copy(todayBreadCount = reduce.todayBreadCount)
             is TimerContract.TimerReduce.UpdateSelectedTimeOptionIndex -> state.copy(selectedTimeOptionIndex = reduce.selectedTimeOptionIndex)
             is TimerContract.TimerReduce.UpdateBreadSelectionSheetState -> state.copy(
@@ -156,14 +160,22 @@ constructor(
     }
 
     private fun getStartTimeForOption(index: Int) {
-        return when (index) {
-            0 -> updateState(TimerContract.TimerReduce.UpdateTotalTime(TimerDuration.THIRTY_MINUTES))
-            1 -> updateState(TimerContract.TimerReduce.UpdateTotalTime(TimerDuration.SIXTY_MINUTES))
+        when (index) {
+            0 -> {
+                updateState(TimerContract.TimerReduce.UpdateTotalTime(TimerDuration.THIRTY_MINUTES))
+                updateState(TimerContract.TimerReduce.UpdateRemainingTime(TimerDuration.THIRTY_MINUTES))
+            }
+
+            1 -> {
+                updateState(TimerContract.TimerReduce.UpdateTotalTime(TimerDuration.SIXTY_MINUTES))
+                updateState(TimerContract.TimerReduce.UpdateRemainingTime(TimerDuration.SIXTY_MINUTES))
+
+            }
+
             else -> throw IllegalArgumentException("Invalid time option index")
         }
     }
 
-    //Timer 관련 로직
     private fun startTimer(duration: Long) {
         timerJob?.cancel()
 
@@ -171,8 +183,7 @@ constructor(
         updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Running))
 
         timerJob = viewModelScope.launch {
-            while (currentUiState.remainingTime > 0 && currentUiState.timerStatus == TimerStatus.Running) {
-                // 타이머 로직 구현
+            while (currentUiState.remainingTime > 0) {
                 delay(1000L)
                 setEvent(TimerContract.TimerEvent.OnTimerTick)
             }
@@ -202,5 +213,21 @@ constructor(
         updateState(TimerContract.TimerReduce.UpdateRemainingTime(currentUiState.totalTime))
         updateState(TimerContract.TimerReduce.UpdateResetSheetState(false)) // 완료 BottomSheet 숨김
         updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle)) // 타이머 상태를 Idle로 변경
+    }
+
+
+    private fun updateBreadLevelByRemainingTime(
+    ) {
+        updateState(
+            TimerContract.TimerReduce.UpdateBreadLevel(
+                when (currentUiState.progress) {
+                    in 0f..25f -> 1
+                    in 25f..50f -> 2
+                    in 50f..75f -> 3
+                    in 75f..100f -> 4
+                    else -> 5
+                }
+            )
+        )
     }
 }

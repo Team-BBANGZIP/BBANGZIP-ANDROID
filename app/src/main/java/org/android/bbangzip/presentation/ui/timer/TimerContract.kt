@@ -3,6 +3,7 @@ package org.android.bbangzip.presentation.ui.timer
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import kotlinx.parcelize.Parcelize
+import org.android.bbangzip.R
 import org.android.bbangzip.presentation.model.TimerStatus
 import org.android.bbangzip.presentation.util.base.BaseContract
 import org.android.bbangzip.presentation.util.constant.TimerDuration
@@ -15,7 +16,7 @@ class TimerContract {
         val totalTime: Long = TimerDuration.THIRTY_MINUTES, // 타이머 총 시간
         val pausedTime: Long = 0L, // 일시정지된 시간
         val timerStatus: TimerStatus = TimerStatus.Idle,
-        @DrawableRes val breadImg: Int = 0,  // 빵 이미지 리소스
+        val breadLevel: Int = 1,  // 빵 이미지 리소스
         val todayBreadCount: Int = 0,// 오늘 구운 빵의 개수ㅡ
         val selectedTimeOptionIndex: Int = 0, // 타이머 시간변경 토글 인덱스,
         val isBreadSelectionSheetVisible: Boolean = false,
@@ -25,6 +26,14 @@ class TimerContract {
     ) : BaseContract.State, Parcelable {
         val formattedTime: String get() = remainingTime.formatTime() // 포맷된 타이머 시간
         val progress: Float get() = ((totalTime - remainingTime).toFloat() / totalTime.toFloat()) * 100f // 타이머 진행률
+        val breadImg: Int
+            @DrawableRes get() = when (breadLevel) {
+                1 -> R.drawable.img_baking_bread_level1
+                2 -> R.drawable.img_baking_bread_level2
+                3 -> R.drawable.img_baking_bread_level3
+                4 -> R.drawable.img_baking_bread_level4
+                else -> R.drawable.img_salt_bread
+            }
 
         override fun toParcelable(): Parcelable = this
     }
@@ -64,8 +73,8 @@ class TimerContract {
             val remainingTime: Long,
         ) : TimerReduce
 
-        data class UpdateBreadImg(
-            @DrawableRes val breadImg: Int,
+        data class UpdateBreadLevel(
+            @DrawableRes val breadLevel: Int,
         ) : TimerReduce
 
         data class UpdateTodayBreadCount(
