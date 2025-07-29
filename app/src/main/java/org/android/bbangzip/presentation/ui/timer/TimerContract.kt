@@ -5,16 +5,14 @@ import androidx.annotation.DrawableRes
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.presentation.model.TimerStatus
 import org.android.bbangzip.presentation.util.base.BaseContract
+import org.android.bbangzip.presentation.util.constant.TimerDuration
 import org.android.bbangzip.presentation.util.extension.formatTime
 
 class TimerContract {
     @Parcelize
     data class TimerState(
-        val remainingTime: Long = 0L, // 타이머 시간
-        val totalTime: Long = 30 * 60 * 1000L, // 타이머 총 시간
-        val formattedTime: String = remainingTime.formatTime(), // 포맷된 타이머 시간
-        val progress: Float = 0f, // 타이머 진행률
-        val progressPercentage: Float = ((totalTime - remainingTime).toFloat() / totalTime.toFloat()) * 100f,
+        val remainingTime: Long = TimerDuration.THIRTY_MINUTES, // 타이머 시간
+        val totalTime: Long = TimerDuration.THIRTY_MINUTES, // 타이머 총 시간
         val pausedTime: Long = 0L, // 일시정지된 시간
         val timerStatus: TimerStatus = TimerStatus.Idle,
         @DrawableRes val breadImg: Int = 0,  // 빵 이미지 리소스
@@ -25,6 +23,9 @@ class TimerContract {
         val isResetSheetVisible: Boolean = false,
         val isCompleteSheetVisible: Boolean = false,
     ) : BaseContract.State, Parcelable {
+        val formattedTime: String get() = remainingTime.formatTime() // 포맷된 타이머 시간
+        val progress: Float get() = ((totalTime - remainingTime).toFloat() / totalTime.toFloat()) * 100f // 타이머 진행률
+
         override fun toParcelable(): Parcelable = this
     }
 
@@ -91,7 +92,7 @@ class TimerContract {
             val isCompleteSheetVisible: Boolean
         ) : TimerReduce
 
-        data class  UpdateTotalTime(
+        data class UpdateTotalTime(
             val totalTime: Long
         ) : TimerReduce
     }
