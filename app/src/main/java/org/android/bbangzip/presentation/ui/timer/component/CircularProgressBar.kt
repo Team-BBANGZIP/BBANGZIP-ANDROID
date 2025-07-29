@@ -5,7 +5,9 @@ import androidx.compose.animation.core.tween
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
@@ -27,20 +29,18 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.android.bbangzip.ui.theme.BbangZipTheme
-import org.android.bbangzip.ui.theme.defaultBbangZipColor
 
 @Composable
 fun CircularProgressBar(
-    modifier: Modifier = Modifier,
     progress: Float,
+    modifier: Modifier = Modifier,
     progressMax: Float = 100f,
-    progressBarColor: Color = BbangZipTheme.color.primaryNormal_897869,
+    progressBarColor: Color = BbangZipTheme.color.primaryLight_C8B5A2,
     progressBarWidth: Dp = 11.dp,
     backgroundProgressBarColor: Color = BbangZipTheme.color.secondaryNormal_F6F1EE,
     backgroundProgressBarWidth: Dp = 11.dp,
     roundBorder: Boolean = true,
     startAngle: Float = 270f,
-    size: Dp = 310.dp,
     animationDuration: Int = 1000,
     animationDelay: Int = 0,
     centerContent: @Composable ((Modifier) -> Unit) = { },
@@ -62,7 +62,9 @@ fun CircularProgressBar(
     val backgroundWhiteStrokeWithPx = with(density) { 5.dp.toPx() }
 
     Box(
-        modifier = modifier.size(size),
+        modifier = modifier
+            .fillMaxWidth()
+            .aspectRatio(1f)
     ) {
         centerContent(Modifier.align(Alignment.Center))
 
@@ -74,7 +76,8 @@ fun CircularProgressBar(
 
 
         Canvas(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
         ) {
             val canvasSize = this.size
             val center = Offset(canvasSize.width / 2f, canvasSize.height / 2f)
@@ -153,7 +156,7 @@ private fun DrawScope.drawCircularProgress(
                 cap = if (roundBorder) StrokeCap.Round else StrokeCap.Butt
             )
         )
-    }else{
+    } else {
         drawArc(
             color = color,
             startAngle = startAngle,

@@ -8,7 +8,7 @@ import org.android.bbangzip.ui.theme.defaultBbangZipColor
 
 @Stable
 enum class TimerViewType(
-    @StringRes val titleText: Int? = null,
+    @StringRes val titleText: Int = R.string.timer_idle_title,
     val timerFontColor: Color = defaultBbangZipColor.primaryLight_C8B5A2,
     val timerProgressBarColor: Color = defaultBbangZipColor.primaryLight_C8B5A2
 ) {
@@ -17,7 +17,7 @@ enum class TimerViewType(
         timerFontColor = defaultBbangZipColor.primaryLight_C8B5A2,
     ),
     RUNNING(
-        titleText = null,
+        titleText = R.string.title_empty_title,
         timerFontColor = defaultBbangZipColor.primaryNormal_897869,
     ),
     PAUSED(
