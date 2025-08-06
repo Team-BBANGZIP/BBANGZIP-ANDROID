@@ -5,7 +5,7 @@ import org.android.bbangzip.R
 
 enum class BreadType(val id: Int, @DrawableRes val img: Int) {
     SALT(1, R.drawable.img_salt_bread),
-    DUMMY_2(2, R.drawable.img_salt_bread),
+    DUMMY_2(2, R.drawable.img_baking_bread_level4),
     DUMMY_3(3, R.drawable.img_salt_bread),
     DUMMY_4(4, R.drawable.img_salt_bread),
     DUMMY_5(5, R.drawable.img_salt_bread),

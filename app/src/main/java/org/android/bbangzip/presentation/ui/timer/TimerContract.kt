@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.R
+import org.android.bbangzip.presentation.model.BreadInfo
 import org.android.bbangzip.presentation.model.TimerStatus
 import org.android.bbangzip.presentation.util.base.BaseContract
 import org.android.bbangzip.presentation.util.constant.TimerDuration
@@ -16,9 +17,20 @@ class TimerContract {
         val totalTime: Long = TimerDuration.THIRTY_MINUTES, // 타이머 총 시간
         val pausedTime: Long = 0L, // 일시정지된 시간
         val timerStatus: TimerStatus = TimerStatus.Idle,
-        val breadLevel: Int = 1,  // 빵 이미지 리소스
-        val todayBreadCount: Int = 0,// 오늘 구운 빵의 개수ㅡ
-        val selectedTimeOptionIndex: Int = 0, // 타이머 시간변경 토글 인덱스,
+        val breadLevel: Int = 1,
+        val todayBreadCount: Int = 6,
+        val selectedTimeOptionIndex: Int = 0,
+        val breadList: List<BreadInfo> = listOf(
+            BreadInfo(1, "소금빵", false, 0),
+            BreadInfo(2, "식빵", false, 5),
+            BreadInfo(3, "바게트", true, 10),
+            BreadInfo(4, "크루아상", true, 15),
+            BreadInfo(5, "모닝빵", true, 20),
+            BreadInfo(6, "바게트", true, 10),
+            BreadInfo(7, "크루아상", true, 15),
+            BreadInfo(8, "모닝빵", true, 20),
+            BreadInfo(9, "모닝빵", true, 20)
+        ),
         val isBreadSelectionSheetVisible: Boolean = false,
         val isRestartSheetVisible: Boolean = false,
         val isResetSheetVisible: Boolean = false,
@@ -59,9 +71,7 @@ class TimerContract {
             val selectedTimeOptionIndex: Int
         ) : TimerEvent
 
-        data class OnBreadSelectionSheetClick(
-            val breadId: Int,
-        ) : TimerEvent
+        data object OnBreadSelectionSheetClick : TimerEvent
     }
 
     sealed interface TimerReduce : BaseContract.Reduce {
@@ -74,7 +84,7 @@ class TimerContract {
         ) : TimerReduce
 
         data class UpdateBreadLevel(
-            @DrawableRes val breadLevel: Int,
+            val breadLevel: Int,
         ) : TimerReduce
 
         data class UpdateTodayBreadCount(
@@ -103,6 +113,10 @@ class TimerContract {
 
         data class UpdateTotalTime(
             val totalTime: Long
+        ) : TimerReduce
+
+        data class UpdateBreadList(
+            val breadList: List<BreadInfo>
         ) : TimerReduce
     }
 

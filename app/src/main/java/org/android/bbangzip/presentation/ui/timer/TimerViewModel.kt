@@ -34,13 +34,14 @@ constructor(
         when (event) {
             is TimerContract.TimerEvent.Initialize ->
                 launch {
-                    updateState(TimerContract.TimerReduce.UpdateBreadLevel(0)) // 초기 빵 이미지 리소스 설정
+                    updateState(TimerContract.TimerReduce.UpdateTodayBreadCount(5)) // 초기 빵 이미지 리소스 설정
                 }
 
             //Start
             is TimerContract.TimerEvent.OnStartBtnClick -> {
                 if (currentUiState.timerStatus == TimerStatus.Idle) {
                     startTimer(currentUiState.totalTime)
+                    setSideEffect(TimerContract.TimerSideEffect.HideBottomBar)
                 } else if (currentUiState.timerStatus == TimerStatus.Paused) {
                     resumeTimer()
                 }
@@ -109,7 +110,7 @@ constructor(
             }
 
             is TimerContract.TimerEvent.OnBreadSelectionSheetClick -> {
-                TODO()
+                updateState(TimerContract.TimerReduce.UpdateBreadSelectionSheetState(false))
             }
 
             is TimerContract.TimerEvent.OnBreadSelectionSheetDismissRequest -> {
@@ -126,8 +127,6 @@ constructor(
                     updateState(TimerContract.TimerReduce.UpdateRemainingTime(newRemainingTime))
                     updateBreadLevelByRemainingTime()
                 }
-
-
             }
         }
     }
@@ -156,6 +155,8 @@ constructor(
             )
 
             is TimerContract.TimerReduce.UpdateTotalTime -> state.copy(totalTime = reduce.totalTime)
+
+            is TimerContract.TimerReduce.UpdateBreadList -> state.copy(breadList = reduce.breadList)
         }
     }
 
@@ -213,6 +214,7 @@ constructor(
         updateState(TimerContract.TimerReduce.UpdateRemainingTime(currentUiState.totalTime))
         updateState(TimerContract.TimerReduce.UpdateResetSheetState(false)) // 완료 BottomSheet 숨김
         updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle)) // 타이머 상태를 Idle로 변경
+        setSideEffect(TimerContract.TimerSideEffect.ShowBottomBar)
     }
 
 
@@ -224,7 +226,7 @@ constructor(
                     in 0f..25f -> 1
                     in 25f..50f -> 2
                     in 50f..75f -> 3
-                    in 75f..100f -> 4
+                    in 75f..<100f -> 4
                     else -> 5
                 }
             )
