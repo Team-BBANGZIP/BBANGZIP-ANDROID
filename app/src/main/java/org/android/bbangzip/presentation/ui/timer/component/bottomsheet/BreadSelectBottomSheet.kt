@@ -1,0 +1,151 @@
+package org.android.bbangzip.presentation.ui.timer.component.bottomsheet
+
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.util.fastForEachIndexed
+import org.android.bbangzip.R
+import org.android.bbangzip.presentation.component.bottomsheet.BbangZipBottomSheetSlot
+import org.android.bbangzip.presentation.model.BreadInfo
+import org.android.bbangzip.presentation.type.BreadType
+import org.android.bbangzip.presentation.util.extension.Gap
+import org.android.bbangzip.presentation.util.extension.noRippleClickable
+import org.android.bbangzip.ui.theme.BbangZipTheme
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun BreadSelectBottomSheet(
+    breadList: List<BreadInfo>,
+    isBottomSheetVisible: Boolean,
+    breadCount: Int,
+    onDismissRequest: () -> Unit,
+    onBreadSelect: (Int) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    BbangZipBottomSheetSlot(
+        isBottomSheetVisible = isBottomSheetVisible,
+        onDismissRequest = onDismissRequest,
+        modifier = modifier,
+        contentPadding = contentPadding(top = 40.dp, start = 32.dp, end = 32.dp, bottom = 40.dp),
+        title = {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Text(
+                    text = stringResource(R.string.bread_sheet_title),
+                    color = BbangZipTheme.color.primaryNormal_897869,
+                    style = BbangZipTheme.typography.title1SemiBold,
+                )
+
+                Gap(20)
+
+                Box(
+                    modifier =
+                    Modifier
+                        .background(
+                            color = BbangZipTheme.color.backgroundAlternative_FAF6F3,
+                            shape = RoundedCornerShape(5.dp),
+                        )
+                        .padding(horizontal = 16.dp, vertical = 4.dp),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    Text(
+                        text = stringResource(R.string.bread_sheet_subtitle, breadCount),
+                        color = BbangZipTheme.color.labelAlternative_A29D96,
+                        style = BbangZipTheme.typography.subTitle1Medium,
+                    )
+                }
+
+                Gap(24)
+            }
+        },
+        content = {
+            BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
+                val itemWidth = (maxWidth - 48.dp) / 3
+                FlowRow(
+                    modifier =
+                    Modifier
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.spacedBy(24.dp),
+                    verticalArrangement = Arrangement.spacedBy(24.dp),
+                    maxItemsInEachRow = 3,
+                    maxLines = 3
+                ) {
+                    breadList.forEachIndexed { index, breadInfo ->
+                        Column(
+                            modifier = Modifier.width(itemWidth),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                        ) {
+                            Box(
+                                modifier =
+                                Modifier
+                                    .aspectRatio(1f),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                if (breadInfo.isLocked) {
+                                    Image(
+                                        imageVector = ImageVector.vectorResource(R.drawable.ic_lock_default_40),
+                                        contentDescription = null,
+                                        modifier =
+                                        Modifier
+                                            .fillMaxSize()
+                                    )
+                                } else {
+                                    Image(
+                                        painter = painterResource(BreadType.getImgFromId(breadInfo.id)),
+                                        contentDescription = null,
+                                        modifier =
+                                        Modifier
+                                            .fillMaxSize()
+                                            .clip(CircleShape)
+                                            .background(
+                                                color = BbangZipTheme.color.backgroundAlternative_FAF6F3,
+                                            )
+                                            .noRippleClickable { onBreadSelect(breadInfo.id) }
+                                            .padding(vertical = 18.dp, horizontal = 7.dp)
+                                    )
+                                }
+                            }
+
+                            Gap(8)
+
+                            Text(
+                                text = if (breadInfo.isLocked) "???" else breadList[index].name,
+                                color = BbangZipTheme.color.labelNormal_6B6560,
+                                style = BbangZipTheme.typography.body2Medium,
+                                modifier = Modifier
+                            )
+                        }
+                    }
+                }
+            }
+        }
+    )
+}
