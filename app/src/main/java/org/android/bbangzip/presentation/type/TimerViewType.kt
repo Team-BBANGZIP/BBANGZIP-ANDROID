@@ -22,7 +22,7 @@ enum class TimerViewType(
     ),
     PAUSED(
         titleText = R.string.timer_paused_title,
-        timerFontColor = defaultBbangZipColor.primaryNormal_897869,
+        timerFontColor = defaultBbangZipColor.primaryLight_C8B5A2,
     ),
     COMPLETE(
         titleText = R.string.timer_complete_title,
