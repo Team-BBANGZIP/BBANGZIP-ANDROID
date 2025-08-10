@@ -1,5 +1,15 @@
 package org.android.bbangzip.presentation.ui.timer
 
+import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.EaseInOut
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -11,6 +21,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
@@ -20,6 +31,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -37,9 +49,15 @@ import org.android.bbangzip.presentation.model.getTimerFontColor
 import org.android.bbangzip.presentation.model.getTitleText
 import org.android.bbangzip.presentation.ui.shared.SharedContract
 import org.android.bbangzip.presentation.ui.timer.component.CircularProgressBar
+import org.android.bbangzip.presentation.ui.timer.component.bottomsheet.BreadSelectBottomSheet
+import org.android.bbangzip.presentation.ui.timer.component.bottomsheet.ResetBottomSheet
+import org.android.bbangzip.presentation.ui.timer.component.bottomsheet.RestartBottomSheet
 import org.android.bbangzip.presentation.util.extension.Gap
+import org.android.bbangzip.presentation.util.extension.noRippleClickable
+import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
+@SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
 fun TimerScreen(
     timerState: TimerContract.TimerState,
@@ -54,6 +72,7 @@ fun TimerScreen(
     onStopBtnClick: () -> Unit = {},
     onTimeOptionToggleClick: (timeOption: Int) -> Unit = {},
     onBreadSelectionSheetClick: (breadId: Int) -> Unit = {},
+    onBreadSelectionSheetDismissRequest: () -> Unit = {},
     onCompleteSheetCheckBtnClick: () -> Unit = {},
     onCompleteSheetRetryBtnClick: () -> Unit = {},
     onCompleteSheetDismissRequest: () -> Unit = {},
@@ -61,7 +80,7 @@ fun TimerScreen(
     onResetSheetDismissBtnClick: () -> Unit = {}
 ) {
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .background(BbangZipTheme.brush.backgroundAccentGradient)
             .windowInsetsPadding(WindowInsets.systemBars),
@@ -123,19 +142,47 @@ fun TimerScreen(
                     )
                 }
             },
-            bottomContent = { modifier ->
+            bottomContent = { mod ->
                 val breadImg = if (timerState.timerStatus == TimerStatus.Idle) {
                     sharedState.breadImg
                 } else {
                     timerState.breadImg
                 }
 
+                val isVisible = timerState.timerStatus == TimerStatus.Idle
+                val infiniteTransition = rememberInfiniteTransition(label = "triangle animation")
+                val triangleOffset by infiniteTransition.animateFloat(
+                    initialValue = -3f,
+                    targetValue = 3f,
+                    animationSpec = infiniteRepeatable(
+                        animation = tween(800, easing = EaseInOut),
+                        repeatMode = RepeatMode.Reverse
+                    ),
+                            label = "triangle offset"
+                )
+                AnimatedVisibility(
+                    visible = isVisible,
+                    enter = fadeIn(animationSpec = tween(300)),
+                    exit = fadeOut(animationSpec = tween(300)),
+                    modifier  = mod
+                        .offset(y = (-90 + triangleOffset).dp),
+                ) {
+                    Icon(
+
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_triangle_down_24),
+                        contentDescription = "moving triangle",
+                        tint = BbangZipTheme.color.primaryNormal_897869
+                    )
+                }
+
                 Image(
-                    modifier = modifier.size(120.dp, 100.dp),
+                    modifier = mod
+                        .size(120.dp, 100.dp)
+                        .noRippleClickable(enabled = timerState.timerStatus == TimerStatus.Idle) { onBreadIconClick() },
                     painter = painterResource(breadImg),
                     contentDescription = "Timer Icon",
-                    alignment = Alignment.Center,
                 )
+
             }
         )
 
@@ -165,26 +212,28 @@ fun TimerScreen(
             verticalAlignment = Alignment.CenterVertically
         ) {
             //Reset 버튼
-            Box(
-                modifier = Modifier
-                    .background(
-                        color = Color.Transparent,
-                        shape = CircleShape
+            if (timerState.timerStatus != TimerStatus.Idle) {
+                Box(
+                    modifier = Modifier
+                        .background(
+                            color = Color.Transparent,
+                            shape = CircleShape
+                        )
+                        .size(48.dp)
+                        .border(
+                            width = 1.dp,
+                            color = BbangZipTheme.color.secondaryStrong_F2EAE4,
+                            shape = CircleShape
+                        )
+                        .clickable { onResetBtnClick() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_return_default_24),
+                        contentDescription = "Reset Button",
+                        tint = BbangZipTheme.color.primaryNormal_897869
                     )
-                    .size(48.dp)
-                    .border(
-                        width = 1.dp,
-                        color = BbangZipTheme.color.secondaryStrong_F2EAE4,
-                        shape = CircleShape
-                    )
-                    .clickable { onResetBtnClick() },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_return_default_24),
-                    contentDescription = "Reset Button",
-                    tint = BbangZipTheme.color.primaryNormal_897869
-                )
+                }
             }
 
             Gap(16)
@@ -227,34 +276,67 @@ fun TimerScreen(
 
             Gap(16)
             //Restart 버튼
-            Box(
-                modifier = Modifier
-                    .background(
-                        color = Color.Transparent,
-                        shape = CircleShape
+            if (timerState.timerStatus != TimerStatus.Idle) {
+                Box(
+                    modifier = Modifier
+                        .background(
+                            color = Color.Transparent,
+                            shape = CircleShape
+                        )
+                        .size(48.dp)
+                        .border(
+                            width = 1.dp,
+                            color = BbangZipTheme.color.secondaryStrong_F2EAE4,
+                            shape = CircleShape
+                        )
+                        .clickable { onRestartBtnClick() },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_stop_default_24),
+                        contentDescription = "Restart Button",
+                        tint = BbangZipTheme.color.primaryNormal_897869
                     )
-                    .size(48.dp)
-                    .border(
-                        width = 1.dp,
-                        color = BbangZipTheme.color.secondaryStrong_F2EAE4,
-                        shape = CircleShape
-                    )
-                    .clickable { onRestartBtnClick() },
-                contentAlignment = Alignment.Center
-            ) {
-                Icon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_stop_default_24),
-                    contentDescription = "Restart Button",
-                    tint = BbangZipTheme.color.primaryNormal_897869
-                )
+                }
             }
         }
 
+        BreadSelectBottomSheet(
+            currentBreadId = sharedState.breadId,
+            breadList = timerState.breadList,
+            isBottomSheetVisible = timerState.isBreadSelectionSheetVisible,
+            breadCount = timerState.todayBreadCount,
+            onDismissRequest = { onBreadSelectionSheetDismissRequest() },
+            onBreadSelect = { breadId -> onBreadSelectionSheetClick(breadId) }
+        )
+
+        ResetBottomSheet(
+            iisBottomSheetVisible = timerState.isResetSheetVisible,
+            remainingTime = timerState.remainingTime,
+            onReturnBtnClick = { onResetSheetDismissBtnClick() },
+            onResetBtnClick = { onResetSheetApproveBtnClick() },
+            onDismissRequest = { onResetSheetDismissBtnClick() },
+            timeOptionIndex = timerState.selectedTimeOptionIndex
+        )
+
+        RestartBottomSheet(
+            iisBottomSheetVisible = timerState.isRestartSheetVisible,
+            onReturnBtnClick = { onRestartSheetDismissBtnClick() },
+            onRestartBtnClick = { onRestartSheetApproveBtnClick() },
+            onDismissRequest = { onRestartSheetDismissBtnClick() }
+        )
     }
 }
 
 @Preview
 @Composable
 private fun TimerScreenPreview() {
-
+    BBANGZIPANDROIDTheme {
+        TimerScreen(
+            timerState = TimerContract.TimerState(
+            ),
+            sharedState = SharedContract.SharedState(
+            )
+        )
+    }
 }
