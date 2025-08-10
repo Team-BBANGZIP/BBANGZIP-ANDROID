@@ -2,7 +2,6 @@ package org.android.bbangzip.presentation.ui.timer.component.bottomsheet
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -13,11 +12,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,7 +27,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.util.fastForEachIndexed
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.component.bottomsheet.BbangZipBottomSheetSlot
 import org.android.bbangzip.presentation.model.BreadInfo
@@ -41,6 +38,7 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BreadSelectBottomSheet(
+    currentBreadId: Int,
     breadList: List<BreadInfo>,
     isBottomSheetVisible: Boolean,
     breadCount: Int,
@@ -129,8 +127,30 @@ fun BreadSelectBottomSheet(
                                                 color = BbangZipTheme.color.backgroundAlternative_FAF6F3,
                                             )
                                             .noRippleClickable { onBreadSelect(breadInfo.id) }
-                                            .padding(vertical = 18.dp, horizontal = 7.dp)
+                                            .padding(vertical = 16.dp, horizontal = 7.dp)
                                     )
+
+                                    if (currentBreadId == breadInfo.id) {
+                                        Box(
+                                            modifier =
+                                            Modifier
+                                                .align(Alignment.TopEnd)
+                                                .clip(CircleShape)
+                                                .background(
+                                                    color = BbangZipTheme.color.primaryNormal_897869
+                                                )
+                                        ) {
+                                            Icon(
+                                                imageVector = ImageVector.vectorResource(R.drawable.ic_check_default_24),
+                                                contentDescription = null,
+                                                tint = BbangZipTheme.color.staticWhite_FFFFFF,
+                                                modifier = Modifier
+                                                    .align(Alignment.Center)
+                                            )
+                                        }
+                                    }
+
+
                                 }
                             }
 
