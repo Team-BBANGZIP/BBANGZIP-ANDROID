@@ -42,4 +42,11 @@
     <string name="restart_sheet_sub_title">지금까지 구운 빵이 완성되지 않아요</string>
     <!-- timer - view - reset/restart sheet common string-->
     <string name="re_sheet_left_btn">돌아가기</string>
-  </resources>
+     <!-- timer - view - complete sheet-->
+    <string name="complete_sheet_left_btn_thirty">30분 더</string>
+    <string name="complete_sheet_left_btn_sixty">60분 더</string>
+    <string name="complete_sheet_sub_title_n1">빵 한 개를 휙득했어요</string>
+    <string name="complete_sheet_sub_title_n2">빵 두 개를 휙득했어요</string>
+    <string name="complete_sheet_title">역시 사장님은 제빵왕!</string>
+    <string name="complete_sheet_right_btn">완료한 일 체크</string>
+</resources>

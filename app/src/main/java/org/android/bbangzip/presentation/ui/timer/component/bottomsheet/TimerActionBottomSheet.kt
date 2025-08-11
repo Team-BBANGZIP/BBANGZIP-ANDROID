@@ -39,7 +39,10 @@ fun TimerActionBottomSheet(
     onRightClick: () -> Unit,
     onDismissRequest: () -> Unit,
     modifier: Modifier = Modifier,
+    isEqualWeight: Boolean = true,
 ) {
+    val (leftWeight, rightWeight) = if (isEqualWeight) 1f to 1f else 1f to 1.5f
+
     BbangZipBottomSheetSlot(
         isBottomSheetVisible = isBottomSheetVisible,
         onDismissRequest = onDismissRequest,
@@ -86,7 +89,7 @@ fun TimerActionBottomSheet(
                         .background(color = BbangZipTheme.color.primaryNormal_897869, shape = RoundedCornerShape(size = 32.dp))
                         .noRippleClickable { onLeftClick() }
                         .padding(vertical = 14.dp)
-                        .weight(1f),
+                        .weight(leftWeight),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
@@ -113,7 +116,7 @@ fun TimerActionBottomSheet(
                         .background(color = BbangZipTheme.color.primaryStrong_4B4137, shape = RoundedCornerShape(size = 32.dp))
                         .noRippleClickable { onRightClick() }
                         .padding(vertical = 16.dp)
-                        .weight(1f),
+                        .weight(rightWeight),
                     verticalAlignment = Alignment.CenterVertically,
                     horizontalArrangement = Arrangement.Center
                 ) {
@@ -134,6 +137,8 @@ fun TimerActionBottomSheet(
                     )
                 }
             }
+
+            Gap(12)
         }
     )
 }
