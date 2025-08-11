@@ -40,21 +40,27 @@ constructor(
             //Start
             is TimerContract.TimerEvent.OnStartBtnClick -> {
                 if (currentUiState.timerStatus == TimerStatus.Idle) {
-                    startTimer(currentUiState.totalTime)
+                    updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Running))
+                    startTimer(currentUiState.remainingTime)
                     setSideEffect(TimerContract.TimerSideEffect.HideBottomBar)
                 } else if (currentUiState.timerStatus == TimerStatus.Paused) {
                     resumeTimer()
+                    updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Running))
                 }
             }
 
             //Reset
             is TimerContract.TimerEvent.OnResetBtnClick -> {
                 stopTimer() // 타이머 정지
+                updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Paused))
                 updateState(TimerContract.TimerReduce.UpdateResetSheetState(true))
             }
 
             is TimerContract.TimerEvent.OnResetSheetApproveBtnClick -> {
                 resetTimer() // 타이머 리셋
+                updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle))
+                setSideEffect(TimerContract.TimerSideEffect.ShowBottomBar)
+                updateState(TimerContract.TimerReduce.UpdateResetSheetState(false))
             }
 
             is TimerContract.TimerEvent.OnResetSheetDismissBtnClick -> {
@@ -64,11 +70,16 @@ constructor(
             //Restart
             is TimerContract.TimerEvent.OnRestartBtnClick -> {
                 stopTimer() // 타이머 정지
+                updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Paused))
                 updateState(TimerContract.TimerReduce.UpdateRestartSheetState(true))
             }
 
             is TimerContract.TimerEvent.OnRestartSheetApproveBtnClick -> {
                 resetTimer() // 타이머 리셋
+                updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Running))
+                startTimer(currentUiState.totalTime)
+                updateState(TimerContract.TimerReduce.UpdateRestartSheetState(false)) // 리셋 BottomSheet 숨김
+
             }
 
             is TimerContract.TimerEvent.OnRestartSheetDismissBtnClick -> {
@@ -78,6 +89,7 @@ constructor(
             //Stop
             is TimerContract.TimerEvent.OnStopBtnClick -> {
                 stopTimer()
+                updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Paused))
             }
 
             //Complete
@@ -89,15 +101,24 @@ constructor(
             }
 
             is TimerContract.TimerEvent.OnCompleteSheetCheckBtnClick -> {
-                // navigate TO 완료한일 체크로 가기!
+                resetTimer()
+                updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle))
+                updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(false))
+
+//              TODO : setSideEffect(TimerContract.TimerSideEffect.NavigateToCompleteTask) // Task 스크린 만들기
             }
 
-            is TimerContract.TimerEvent.OnCompleteSheetRetryBtnClick -> {
+            is TimerContract.TimerEvent.OnCompleteSheetRestartBtnClick -> {
                 restartTimer() // 타이머 재시작
+                updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Running))
+                updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(false)) // 완료 BottomSheet 숨김
             }
 
             is TimerContract.TimerEvent.OnCompleteSheetDismissRequest -> {
-                updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(false)) // 완료 BottomSheet 숨김
+                resetTimer()
+                updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle))
+                updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(false))
+                setSideEffect(TimerContract.TimerSideEffect.ShowBottomBar)
             }
 
             is TimerContract.TimerEvent.OnTimeOptionToggleClick -> {
@@ -181,7 +202,6 @@ constructor(
         timerJob?.cancel()
 
         updateState(TimerContract.TimerReduce.UpdateRemainingTime(duration))
-        updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Running))
 
         timerJob = viewModelScope.launch {
             while (currentUiState.remainingTime > 0) {
@@ -193,28 +213,21 @@ constructor(
 
     private fun stopTimer() {
         timerJob?.cancel()
-        updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Paused))
     }
 
     private fun resumeTimer() {
-        if (currentUiState.timerStatus == TimerStatus.Paused) {
-            startTimer(currentUiState.remainingTime)
-        }
+        startTimer(currentUiState.remainingTime)
     }
 
     private fun restartTimer() {
         timerJob?.cancel()
         updateState(TimerContract.TimerReduce.UpdateRemainingTime(currentUiState.totalTime))
-        updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(false)) // 완료 BottomSheet 숨김
         startTimer(currentUiState.remainingTime) // 현재 남은 시간을 그대로 사용하여 타이머 재시작
     }
 
     private fun resetTimer() {
         timerJob?.cancel()
         updateState(TimerContract.TimerReduce.UpdateRemainingTime(currentUiState.totalTime))
-        updateState(TimerContract.TimerReduce.UpdateResetSheetState(false)) // 완료 BottomSheet 숨김
-        updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle)) // 타이머 상태를 Idle로 변경
-        setSideEffect(TimerContract.TimerSideEffect.ShowBottomBar)
     }
 
 
