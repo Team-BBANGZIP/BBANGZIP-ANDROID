@@ -49,25 +49,25 @@ fun BottomNavigationBar(
     ) {
         Box(
             modifier =
-            modifier
-                .fillMaxWidth()
-                .background(color = BbangZipTheme.color.componentIvory_FDFDFD)
-                .drawBehind {
-                    val strokeWidth = 1.dp.toPx()
-                    drawLine(
-                        color = borderColor,
-                        start = Offset(0f, 0f),
-                        end = Offset(size.width, 0f),
-                        strokeWidth = strokeWidth,
-                    )
-                }
-                .padding(top = 10.dp),
+                modifier
+                    .fillMaxWidth()
+                    .background(color = BbangZipTheme.color.componentIvory_FDFDFD)
+                    .drawBehind {
+                        val strokeWidth = 1.dp.toPx()
+                        drawLine(
+                            color = borderColor,
+                            start = Offset(0f, 0f),
+                            end = Offset(size.width, 0f),
+                            strokeWidth = strokeWidth,
+                        )
+                    }
+                    .padding(top = 10.dp),
         ) {
             Row(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(top = 4.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(top = 4.dp, start = 16.dp, end = 16.dp, bottom = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
@@ -97,10 +97,10 @@ private fun BottomNavigationItem(
 ) {
     Column(
         modifier =
-        modifier
-            .noRippleClickable {
-                onBottomNaviBarItemSelected(bottomNaviType)
-            },
+            modifier
+                .noRippleClickable {
+                    onBottomNaviBarItemSelected(bottomNaviType)
+                },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
@@ -111,11 +111,11 @@ private fun BottomNavigationItem(
                 contentDescription = stringResource(bottomNaviTitle),
                 modifier = Modifier.size(20.dp),
                 tint =
-                if (isSelected) {
-                    BbangZipTheme.color.labelStrong_463D34
-                } else {
-                    BbangZipTheme.color.labelAssistive_C9C7C5
-                },
+                    if (isSelected) {
+                        BbangZipTheme.color.labelStrong_463D34
+                    } else {
+                        BbangZipTheme.color.labelAssistive_C9C7C5
+                    },
             )
         }
 
@@ -124,17 +124,17 @@ private fun BottomNavigationItem(
         Text(
             text = stringResource(bottomNaviTitle),
             color =
-            if (isSelected) {
-                BbangZipTheme.color.labelStrong_463D34
-            } else {
-                BbangZipTheme.color.labelAssistive_C9C7C5
-            },
+                if (isSelected) {
+                    BbangZipTheme.color.labelStrong_463D34
+                } else {
+                    BbangZipTheme.color.labelAssistive_C9C7C5
+                },
             style =
-            if (isSelected) {
-                BbangZipTheme.typography.label5SemiBold
-            } else {
-                BbangZipTheme.typography.label6Medium
-            },
+                if (isSelected) {
+                    BbangZipTheme.typography.label5SemiBold
+                } else {
+                    BbangZipTheme.typography.label6Medium
+                },
         )
     }
 }

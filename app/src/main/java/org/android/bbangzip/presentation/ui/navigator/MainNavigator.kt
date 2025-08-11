@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.remember
-import androidx.navigation.NavBackStackEntry
 import androidx.navigation.NavDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
@@ -40,7 +39,6 @@ class MainNavigator(
 
     private val _isBottomBarVisible = MutableStateFlow(true)
     private val isBottomBarVisible: StateFlow<Boolean> = _isBottomBarVisible.asStateFlow()
-
 
     @SuppressLint("RestrictedApi")
     fun navigateBottomNavigation(bottomNavigationType: BottomNavigationType) {
@@ -101,9 +99,10 @@ class MainNavigator(
 
     @Composable
     fun isBottomBarVisible(): Boolean {
-        val isVisibleByRoute = BottomNavigationType.any {
-            currentDestination?.route == it::class.qualifiedName
-        }
+        val isVisibleByRoute =
+            BottomNavigationType.any {
+                currentDestination?.route == it::class.qualifiedName
+            }
         val isVisibleByState = isBottomBarVisible.collectAsState()
 
         return isVisibleByRoute && isVisibleByState.value

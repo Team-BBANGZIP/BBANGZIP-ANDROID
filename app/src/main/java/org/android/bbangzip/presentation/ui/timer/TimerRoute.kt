@@ -20,7 +20,7 @@ fun TimerRoute(
     showBottomBar: () -> Unit = {},
     hideBottomBar: () -> Unit = {},
     navigateToCompleteTask: () -> Unit = {},
-    timerViewmodel: TimerViewModel = hiltViewModel()
+    timerViewmodel: TimerViewModel = hiltViewModel(),
 ) {
     val timerState by timerViewmodel.uiState.collectAsStateWithLifecycle()
     val sharedState by sharedViewModel.uiState.collectAsStateWithLifecycle()
@@ -63,7 +63,7 @@ fun TimerRoute(
                 onCompleteSheetRestartBtnClick = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnCompleteSheetRestartBtnClick) },
                 onCompleteSheetDismissRequest = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnCompleteSheetDismissRequest) },
                 onResetSheetApproveBtnClick = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnResetSheetApproveBtnClick) },
-                onResetSheetDismissBtnClick = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnResetSheetDismissBtnClick) }
+                onResetSheetDismissBtnClick = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnResetSheetDismissBtnClick) },
             )
         }
 
@@ -72,4 +72,3 @@ fun TimerRoute(
         }
     }
 }
-

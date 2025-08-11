@@ -44,16 +44,17 @@ fun CircularProgressBar(
     animationDuration: Int = 1000,
     animationDelay: Int = 0,
     centerContent: @Composable ((Modifier) -> Unit) = { },
-    bottomContent: @Composable ((Modifier) -> Unit) = { }
+    bottomContent: @Composable ((Modifier) -> Unit) = { },
 ) {
     // Animation for progress
     val animateFloat by animateFloatAsState(
         targetValue = progress,
-        animationSpec = tween(
-            durationMillis = animationDuration,
-            delayMillis = animationDelay
-        ),
-        label = "progress_animation"
+        animationSpec =
+            tween(
+                durationMillis = animationDuration,
+                delayMillis = animationDelay,
+            ),
+        label = "progress_animation",
     )
 
     val density = LocalDensity.current
@@ -62,22 +63,23 @@ fun CircularProgressBar(
     val backgroundWhiteStrokeWithPx = with(density) { 5.dp.toPx() }
 
     Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .aspectRatio(1f)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .aspectRatio(1f),
     ) {
         centerContent(Modifier.align(Alignment.Center))
 
         bottomContent(
             Modifier
                 .align(Alignment.BottomCenter)
-                .padding(bottom = 8.dp)
+                .padding(bottom = 8.dp),
         )
 
-
         Canvas(
-            modifier = Modifier
-                .fillMaxSize()
+            modifier =
+                Modifier
+                    .fillMaxSize(),
         ) {
             val canvasSize = this.size
             val center = Offset(canvasSize.width / 2f, canvasSize.height / 2f)
@@ -90,7 +92,7 @@ fun CircularProgressBar(
                 center = center,
                 radius = progressRadius,
                 color = backgroundProgressBarColor,
-                strokeWidth = backgroundStrokeWidthPx
+                strokeWidth = backgroundStrokeWidthPx,
             )
 
             drawCircularProgress(
@@ -101,14 +103,14 @@ fun CircularProgressBar(
                 color = progressBarColor,
                 strokeWidth = strokeWidthPx,
                 startAngle = startAngle,
-                roundBorder = roundBorder
+                roundBorder = roundBorder,
             )
 
             drawCircularProgressBackground(
                 color = Color.White,
                 radius = innerWhiteRadius,
                 center = center,
-                strokeWidth = backgroundWhiteStrokeWithPx
+                strokeWidth = backgroundWhiteStrokeWithPx,
             )
         }
     }
@@ -118,13 +120,13 @@ private fun DrawScope.drawCircularProgressBackground(
     center: Offset,
     radius: Float,
     color: Color,
-    strokeWidth: Float
+    strokeWidth: Float,
 ) {
     drawCircle(
         color = color,
         radius = radius,
         center = center,
-        style = Stroke(width = strokeWidth)
+        style = Stroke(width = strokeWidth),
     )
 }
 
@@ -136,7 +138,7 @@ private fun DrawScope.drawCircularProgress(
     color: Color,
     strokeWidth: Float,
     startAngle: Float,
-    roundBorder: Boolean
+    roundBorder: Boolean,
 ) {
     val sweepAngle = (progress / progressMax) * 360f
 
@@ -146,15 +148,17 @@ private fun DrawScope.drawCircularProgress(
             startAngle = startAngle,
             sweepAngle = sweepAngle,
             useCenter = false,
-            topLeft = Offset(
-                center.x - radius,
-                center.y - radius
-            ),
+            topLeft =
+                Offset(
+                    center.x - radius,
+                    center.y - radius,
+                ),
             size = Size(radius * 2, radius * 2),
-            style = Stroke(
-                width = strokeWidth,
-                cap = if (roundBorder) StrokeCap.Round else StrokeCap.Butt
-            )
+            style =
+                Stroke(
+                    width = strokeWidth,
+                    cap = if (roundBorder) StrokeCap.Round else StrokeCap.Butt,
+                ),
         )
     } else {
         drawArc(
@@ -162,15 +166,17 @@ private fun DrawScope.drawCircularProgress(
             startAngle = startAngle,
             sweepAngle = 0.1f,
             useCenter = false,
-            topLeft = Offset(
-                center.x - radius,
-                center.y - radius
-            ),
+            topLeft =
+                Offset(
+                    center.x - radius,
+                    center.y - radius,
+                ),
             size = Size(radius * 2, radius * 2),
-            style = Stroke(
-                width = strokeWidth,
-                cap = if (roundBorder) StrokeCap.Round else StrokeCap.Butt
-            )
+            style =
+                Stroke(
+                    width = strokeWidth,
+                    cap = if (roundBorder) StrokeCap.Round else StrokeCap.Butt,
+                ),
         )
     }
 }
@@ -187,16 +193,15 @@ private fun CircularProgressBarPreview() {
                 modifier = mod,
                 fontSize = 24.sp,
                 fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground
+                color = MaterialTheme.colorScheme.onBackground,
             )
         },
         bottomContent = { mod ->
             Box(
                 mod
                     .size(120.dp, 100.dp)
-                    .background(color = Color.Blue)
+                    .background(color = Color.Blue),
             )
-        }
+        },
     )
-
 }

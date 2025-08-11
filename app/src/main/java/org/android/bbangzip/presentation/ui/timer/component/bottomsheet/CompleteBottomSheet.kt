@@ -17,19 +17,21 @@ fun CompleteBottomSheet(
     onCheckTodoBtnClick: () -> Unit,
     onDismissRequest: () -> Unit,
     timeOptionIndex: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    val leftBtnText = if (timeOptionIndex == 0) {
-        stringResource(R.string.complete_sheet_left_btn_thirty)
-    } else {
-        stringResource(R.string.complete_sheet_left_btn_sixty)
-    }
+    val leftBtnText =
+        if (timeOptionIndex == 0) {
+            stringResource(R.string.complete_sheet_left_btn_thirty)
+        } else {
+            stringResource(R.string.complete_sheet_left_btn_sixty)
+        }
 
-    val subTitleText = if (timeOptionIndex == 0) {
-        stringResource(R.string.complete_sheet_sub_title_n1)
-    } else {
-        stringResource(R.string.complete_sheet_left_btn_sixty)
-    }
+    val subTitleText =
+        if (timeOptionIndex == 0) {
+            stringResource(R.string.complete_sheet_sub_title_n1)
+        } else {
+            stringResource(R.string.complete_sheet_left_btn_sixty)
+        }
     TimerActionBottomSheet(
         isBottomSheetVisible = iisBottomSheetVisible,
         titleText = stringResource(R.string.complete_sheet_title),
@@ -43,17 +45,19 @@ fun CompleteBottomSheet(
                 Image(
                     painter = painterResource(id = R.drawable.img_shine_bread_n1),
                     contentDescription = null,
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                        .fillMaxWidth()
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 20.dp)
+                            .fillMaxWidth(),
                 )
             } else {
                 Image(
                     painter = painterResource(id = R.drawable.img_shine_bread_n2),
                     contentDescription = null,
-                    modifier = Modifier
-                        .padding(horizontal = 20.dp)
-                        .fillMaxWidth()
+                    modifier =
+                        Modifier
+                            .padding(horizontal = 20.dp)
+                            .fillMaxWidth(),
                 )
             }
         },
@@ -61,6 +65,6 @@ fun CompleteBottomSheet(
         onRightClick = { onCheckTodoBtnClick() },
         onDismissRequest = { onDismissRequest() },
         modifier = modifier,
-        isEqualWeight = false
+        isEqualWeight = false,
     )
 }

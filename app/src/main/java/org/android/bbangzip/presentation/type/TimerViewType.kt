@@ -10,7 +10,7 @@ import org.android.bbangzip.ui.theme.defaultBbangZipColor
 enum class TimerViewType(
     @StringRes val titleText: Int = R.string.timer_idle_title,
     val timerFontColor: Color = defaultBbangZipColor.primaryLight_C8B5A2,
-    val timerProgressBarColor: Color = defaultBbangZipColor.primaryLight_C8B5A2
+    val timerProgressBarColor: Color = defaultBbangZipColor.primaryLight_C8B5A2,
 ) {
     IDLE(
         titleText = R.string.timer_idle_title,
@@ -27,5 +27,5 @@ enum class TimerViewType(
     COMPLETE(
         titleText = R.string.timer_complete_title,
         timerFontColor = defaultBbangZipColor.primaryStrong_4B4137,
-    )
+    ),
 }

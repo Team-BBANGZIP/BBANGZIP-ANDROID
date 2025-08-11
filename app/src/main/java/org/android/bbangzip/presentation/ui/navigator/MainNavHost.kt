@@ -17,7 +17,7 @@ fun MainNavHost(
     navigator: MainNavigator,
     padding: PaddingValues,
 ) {
-    val sharedViewModel : SharedViewModel = hiltViewModel()
+    val sharedViewModel: SharedViewModel = hiltViewModel()
     NavHost(
         navController = navigator.navHostController,
         startDestination = navigator.startDestination,

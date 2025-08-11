@@ -65,12 +65,12 @@ fun BreadSelectBottomSheet(
 
                 Box(
                     modifier =
-                    Modifier
-                        .background(
-                            color = BbangZipTheme.color.backgroundAlternative_FAF6F3,
-                            shape = RoundedCornerShape(5.dp),
-                        )
-                        .padding(horizontal = 16.dp, vertical = 4.dp),
+                        Modifier
+                            .background(
+                                color = BbangZipTheme.color.backgroundAlternative_FAF6F3,
+                                shape = RoundedCornerShape(5.dp),
+                            )
+                            .padding(horizontal = 16.dp, vertical = 4.dp),
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
@@ -88,12 +88,12 @@ fun BreadSelectBottomSheet(
                 val itemWidth = (maxWidth - 48.dp) / 3
                 FlowRow(
                     modifier =
-                    Modifier
-                        .fillMaxWidth(),
+                        Modifier
+                            .fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(24.dp),
                     verticalArrangement = Arrangement.spacedBy(24.dp),
                     maxItemsInEachRow = 3,
-                    maxLines = 3
+                    maxLines = 3,
                 ) {
                     breadList.forEachIndexed { index, breadInfo ->
                         Column(
@@ -103,8 +103,8 @@ fun BreadSelectBottomSheet(
                         ) {
                             Box(
                                 modifier =
-                                Modifier
-                                    .aspectRatio(1f),
+                                    Modifier
+                                        .aspectRatio(1f),
                                 contentAlignment = Alignment.Center,
                             ) {
                                 if (breadInfo.isLocked) {
@@ -112,45 +112,44 @@ fun BreadSelectBottomSheet(
                                         imageVector = ImageVector.vectorResource(R.drawable.ic_lock_default_40),
                                         contentDescription = null,
                                         modifier =
-                                        Modifier
-                                            .fillMaxSize()
+                                            Modifier
+                                                .fillMaxSize(),
                                     )
                                 } else {
                                     Image(
                                         painter = painterResource(BreadType.getImgFromId(breadInfo.id)),
                                         contentDescription = null,
                                         modifier =
-                                        Modifier
-                                            .fillMaxSize()
-                                            .clip(CircleShape)
-                                            .background(
-                                                color = BbangZipTheme.color.backgroundAlternative_FAF6F3,
-                                            )
-                                            .noRippleClickable { onBreadSelect(breadInfo.id) }
-                                            .padding(vertical = 16.dp, horizontal = 7.dp)
+                                            Modifier
+                                                .fillMaxSize()
+                                                .clip(CircleShape)
+                                                .background(
+                                                    color = BbangZipTheme.color.backgroundAlternative_FAF6F3,
+                                                )
+                                                .noRippleClickable { onBreadSelect(breadInfo.id) }
+                                                .padding(vertical = 16.dp, horizontal = 7.dp),
                                     )
 
                                     if (currentBreadId == breadInfo.id) {
                                         Box(
                                             modifier =
-                                            Modifier
-                                                .align(Alignment.TopEnd)
-                                                .clip(CircleShape)
-                                                .background(
-                                                    color = BbangZipTheme.color.primaryNormal_897869
-                                                )
+                                                Modifier
+                                                    .align(Alignment.TopEnd)
+                                                    .clip(CircleShape)
+                                                    .background(
+                                                        color = BbangZipTheme.color.primaryNormal_897869,
+                                                    ),
                                         ) {
                                             Icon(
                                                 imageVector = ImageVector.vectorResource(R.drawable.ic_check_default_24),
                                                 contentDescription = null,
                                                 tint = BbangZipTheme.color.staticWhite_FFFFFF,
-                                                modifier = Modifier
-                                                    .align(Alignment.Center)
+                                                modifier =
+                                                    Modifier
+                                                        .align(Alignment.Center),
                                             )
                                         }
                                     }
-
-
                                 }
                             }
 
@@ -160,12 +159,12 @@ fun BreadSelectBottomSheet(
                                 text = if (breadInfo.isLocked) "???" else breadList[index].name,
                                 color = BbangZipTheme.color.labelNormal_6B6560,
                                 style = BbangZipTheme.typography.body2Medium,
-                                modifier = Modifier
+                                modifier = Modifier,
                             )
                         }
                     }
                 }
             }
-        }
+        },
     )
 }

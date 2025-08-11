@@ -7,68 +7,86 @@ import org.android.bbangzip.R
 import org.android.bbangzip.presentation.model.BreadInfo
 import org.android.bbangzip.presentation.model.TimerStatus
 import org.android.bbangzip.presentation.util.base.BaseContract
-import org.android.bbangzip.presentation.util.constant.TimerDuration
+import org.android.bbangzip.presentation.util.constant.TimerConstants
 import org.android.bbangzip.presentation.util.extension.formatTime
 
 class TimerContract {
     @Parcelize
     data class TimerState(
-        val remainingTime: Long = TimerDuration.THIRTY_MINUTES, // 타이머 시간
-        val totalTime: Long = TimerDuration.THIRTY_MINUTES, // 타이머 총 시간
-        val pausedTime: Long = 0L, // 일시정지된 시간
+        val remainingTime: Long = TimerConstants.THIRTY_MINUTES,
+        val totalTime: Long = TimerConstants.THIRTY_MINUTES,
+        val pausedTime: Long = 0L,
         val timerStatus: TimerStatus = TimerStatus.Idle,
         val breadLevel: Int = 1,
         val todayBreadCount: Int = 6,
         val selectedTimeOptionIndex: Int = 0,
-        val breadList: List<BreadInfo> = listOf(
-            BreadInfo(1, "소금빵", false, 0),
-            BreadInfo(2, "식빵", false, 5),
-            BreadInfo(3, "바게트", true, 10),
-            BreadInfo(4, "크루아상", true, 15),
-            BreadInfo(5, "모닝빵", true, 20),
-            BreadInfo(6, "바게트", true, 10),
-            BreadInfo(7, "크루아상", true, 15),
-            BreadInfo(8, "모닝빵", true, 20),
-            BreadInfo(9, "모닝빵", true, 20)
-        ),
+        val breadList: List<BreadInfo> =
+            listOf(
+                BreadInfo(1, "소금빵", false, 0),
+                BreadInfo(2, "식빵", false, 5),
+                BreadInfo(3, "바게트", true, 10),
+                BreadInfo(4, "크루아상", true, 15),
+                BreadInfo(5, "모닝빵", true, 20),
+                BreadInfo(6, "바게트", true, 10),
+                BreadInfo(7, "크루아상", true, 15),
+                BreadInfo(8, "모닝빵", true, 20),
+                BreadInfo(9, "모닝빵", true, 20),
+            ),
         val isBreadSelectionSheetVisible: Boolean = false,
         val isRestartSheetVisible: Boolean = false,
         val isResetSheetVisible: Boolean = false,
         val isCompleteSheetVisible: Boolean = false,
     ) : BaseContract.State, Parcelable {
-        val formattedTime: String get() = remainingTime.formatTime() // 포맷된 타이머 시간
-        val progress: Float get() = ((totalTime - remainingTime).toFloat() / totalTime.toFloat()) * 100f // 타이머 진행률
+        val formattedTime: String get() = remainingTime.formatTime()
+        val progress: Float get() = ((totalTime - remainingTime).toFloat() / totalTime.toFloat()) * 100f
         val breadImg: Int
-            @DrawableRes get() = when (breadLevel) {
-                1 -> R.drawable.img_baking_bread_level1
-                2 -> R.drawable.img_baking_bread_level2
-                3 -> R.drawable.img_baking_bread_level3
-                4 -> R.drawable.img_baking_bread_level4
-                else -> R.drawable.img_salt_bread
-            }
+            @DrawableRes get() =
+                when (breadLevel) {
+                    1 -> R.drawable.img_baking_bread_level1
+                    2 -> R.drawable.img_baking_bread_level2
+                    3 -> R.drawable.img_baking_bread_level3
+                    4 -> R.drawable.img_baking_bread_level4
+                    else -> R.drawable.img_salt_bread
+                }
 
         override fun toParcelable(): Parcelable = this
     }
 
     sealed interface TimerEvent : BaseContract.Event {
         data object Initialize : TimerEvent
+
         data object OnStartBtnClick : TimerEvent
+
         data object OnStopBtnClick : TimerEvent
+
         data object OnRestartBtnClick : TimerEvent
+
         data object OnRestartSheetDismissBtnClick : TimerEvent
+
         data object OnRestartSheetApproveBtnClick : TimerEvent
+
         data object OnResetBtnClick : TimerEvent
+
         data object OnResetSheetDismissBtnClick : TimerEvent
+
         data object OnResetSheetApproveBtnClick : TimerEvent
+
         data object OnBreadIconClick : TimerEvent
+
         data object OnBreadSelectionSheetDismissRequest : TimerEvent
+
         data object OnTimerCompleted : TimerEvent
+
         data object OnCompleteSheetRestartBtnClick : TimerEvent
+
         data object OnCompleteSheetCheckBtnClick : TimerEvent
+
         data object OnCompleteSheetDismissRequest : TimerEvent
+
         data object OnTimerTick : TimerEvent
+
         data class OnTimeOptionToggleClick(
-            val selectedTimeOptionIndex: Int
+            val selectedTimeOptionIndex: Int,
         ) : TimerEvent
 
         data object OnBreadSelectionSheetClick : TimerEvent
@@ -92,37 +110,39 @@ class TimerContract {
         ) : TimerReduce
 
         data class UpdateSelectedTimeOptionIndex(
-            val selectedTimeOptionIndex: Int
+            val selectedTimeOptionIndex: Int,
         ) : TimerReduce
 
         data class UpdateBreadSelectionSheetState(
-            val isBreadSelectionSheetVisible: Boolean
+            val isBreadSelectionSheetVisible: Boolean,
         ) : TimerReduce
 
         data class UpdateRestartSheetState(
-            val isRestartSheetVisible: Boolean
+            val isRestartSheetVisible: Boolean,
         ) : TimerReduce
 
         data class UpdateResetSheetState(
-            val isResetSheetVisible: Boolean
+            val isResetSheetVisible: Boolean,
         ) : TimerReduce
 
         data class UpdateCompleteSheetState(
-            val isCompleteSheetVisible: Boolean
+            val isCompleteSheetVisible: Boolean,
         ) : TimerReduce
 
         data class UpdateTotalTime(
-            val totalTime: Long
+            val totalTime: Long,
         ) : TimerReduce
 
         data class UpdateBreadList(
-            val breadList: List<BreadInfo>
+            val breadList: List<BreadInfo>,
         ) : TimerReduce
     }
 
     sealed interface TimerSideEffect : BaseContract.SideEffect {
         data object NavigateToCompleteTask : TimerSideEffect
+
         data object ShowBottomBar : TimerSideEffect
+
         data object HideBottomBar : TimerSideEffect
     }
 }

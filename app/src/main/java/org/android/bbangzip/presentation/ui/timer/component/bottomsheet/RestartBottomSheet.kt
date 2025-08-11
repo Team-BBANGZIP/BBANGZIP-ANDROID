@@ -1,9 +1,6 @@
 package org.android.bbangzip.presentation.ui.timer.component.bottomsheet
 
-import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -20,7 +17,7 @@ fun RestartBottomSheet(
     onReturnBtnClick: () -> Unit,
     onRestartBtnClick: () -> Unit,
     onDismissRequest: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     TimerActionBottomSheet(
         isBottomSheetVisible = iisBottomSheetVisible,
@@ -34,15 +31,15 @@ fun RestartBottomSheet(
             Image(
                 painter = painterResource(id = R.drawable.img_shine_bread_n1),
                 contentDescription = null,
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .fillMaxWidth()
+                modifier =
+                    Modifier
+                        .padding(horizontal = 20.dp)
+                        .fillMaxWidth(),
             )
-
         },
         onLeftClick = { onReturnBtnClick() },
         onRightClick = { onRestartBtnClick() },
         onDismissRequest = { onDismissRequest() },
-        modifier = modifier
+        modifier = modifier,
     )
 }

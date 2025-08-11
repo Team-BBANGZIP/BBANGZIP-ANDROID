@@ -77,21 +77,22 @@ fun TimerActionBottomSheet(
 
             Row(
                 modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp),
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 16.dp),
                 verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(color = BbangZipTheme.color.primaryNormal_897869, shape = RoundedCornerShape(size = 32.dp))
-                        .noRippleClickable { onLeftClick() }
-                        .padding(vertical = 14.dp)
-                        .weight(leftWeight),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .background(color = BbangZipTheme.color.primaryNormal_897869, shape = RoundedCornerShape(size = 32.dp))
+                            .noRippleClickable { onLeftClick() }
+                            .padding(vertical = 14.dp)
+                            .weight(leftWeight),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     Text(
                         text = leftBtnText,
@@ -106,19 +107,20 @@ fun TimerActionBottomSheet(
                         imageVector = ImageVector.vectorResource(id = leftBtnIcon),
                         contentDescription = null,
                         tint = BbangZipTheme.color.staticWhite_FFFFFF,
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(16.dp),
                     )
                 }
 
                 Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(color = BbangZipTheme.color.primaryStrong_4B4137, shape = RoundedCornerShape(size = 32.dp))
-                        .noRippleClickable { onRightClick() }
-                        .padding(vertical = 16.dp)
-                        .weight(rightWeight),
+                    modifier =
+                        Modifier
+                            .fillMaxWidth()
+                            .background(color = BbangZipTheme.color.primaryStrong_4B4137, shape = RoundedCornerShape(size = 32.dp))
+                            .noRippleClickable { onRightClick() }
+                            .padding(vertical = 16.dp)
+                            .weight(rightWeight),
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
+                    horizontalArrangement = Arrangement.Center,
                 ) {
                     Text(
                         text = rightBtnText,
@@ -133,12 +135,12 @@ fun TimerActionBottomSheet(
                         imageVector = ImageVector.vectorResource(id = rightBtnIcon),
                         contentDescription = null,
                         tint = BbangZipTheme.color.staticWhite_FFFFFF,
-                        modifier = Modifier.size(16.dp)
+                        modifier = Modifier.size(16.dp),
                     )
                 }
             }
 
             Gap(12)
-        }
+        },
     )
 }

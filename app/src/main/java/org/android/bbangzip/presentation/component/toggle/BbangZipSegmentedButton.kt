@@ -74,20 +74,20 @@ fun BbangZipSegmentedButton(
 
     BoxWithConstraints(
         modifier =
-        modifier
-            .background(
-                color = colors.containerColor,
-                shape = containerShape,
-            )
-            .innerShadow(
-                shape = containerShape,
-                color = Color(0xFF535752).copy(alpha = 0.08f),
-                blur = 4.dp,
-                offsetX = 0.dp,
-                offsetY = 1.dp,
-                spread = 0.dp,
-            )
-            .padding(containerPadding),
+            modifier
+                .background(
+                    color = colors.containerColor,
+                    shape = containerShape,
+                )
+                .innerShadow(
+                    shape = containerShape,
+                    color = Color(0xFF535752).copy(alpha = 0.08f),
+                    blur = 4.dp,
+                    offsetX = 0.dp,
+                    offsetY = 1.dp,
+                    spread = 0.dp,
+                )
+                .padding(containerPadding),
     ) {
         val itemWidth = maxWidth / options.size
 
@@ -110,32 +110,32 @@ fun BbangZipSegmentedButton(
 
         Row(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .onGloballyPositioned { coordinates ->
-                    buttonHeight =
-                        with(localDensity) {
-                            coordinates.size.height.toDp()
-                        }
-                },
+                Modifier
+                    .fillMaxWidth()
+                    .onGloballyPositioned { coordinates ->
+                        buttonHeight =
+                            with(localDensity) {
+                                coordinates.size.height.toDp()
+                            }
+                    },
         ) {
             options.forEachIndexed { index, option ->
                 val isSelected = index == indexOfSelectedOption
 
                 Box(
                     modifier =
-                    Modifier
-                        .weight(1f)
-                        .padding(vertical = indicatorVerticalPadding)
-                        .noRippleClickable(enabled = enabled) { onOptionSelect(index) },
+                        Modifier
+                            .weight(1f)
+                            .padding(vertical = indicatorVerticalPadding)
+                            .noRippleClickable(enabled = enabled) { onOptionSelect(index) },
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = option,
                         color =
-                        animateColorAsState(
-                            targetValue = if (isSelected) colors.selectedOptionColor else colors.unselectedOptionColor,
-                        ).value,
+                            animateColorAsState(
+                                targetValue = if (isSelected) colors.selectedOptionColor else colors.unselectedOptionColor,
+                            ).value,
                         style = BbangZipSegmentedButtonDefaults.optionStyle(),
                     )
                 }
@@ -154,30 +154,30 @@ private fun Indicator(
 ) {
     Box(
         modifier =
-        Modifier
-            .width(itemWidth)
-            .height(height)
-            .offset { IntOffset(indicatorOffset.roundToPx(), 0) }
-            .background(
-                color = indicatorColor,
-                shape = indicatorShape,
-            )
-            .innerShadow(
-                shape = indicatorShape,
-                color = Color(0xFFEDEDED).copy(alpha = 0.3f),
-                blur = 1.dp,
-                offsetX = 0.dp,
-                offsetY = 1.dp,
-                spread = 0.dp,
-            )
-            .dropShadow(
-                shape = indicatorShape,
-                color = Color(0xFF5C636D).copy(alpha = 0.12f),
-                blur = 3.dp,
-                offsetX = 1.dp,
-                offsetY = (-1).dp,
-                spread = 0.dp,
-            ),
+            Modifier
+                .width(itemWidth)
+                .height(height)
+                .offset { IntOffset(indicatorOffset.roundToPx(), 0) }
+                .background(
+                    color = indicatorColor,
+                    shape = indicatorShape,
+                )
+                .innerShadow(
+                    shape = indicatorShape,
+                    color = Color(0xFFEDEDED).copy(alpha = 0.3f),
+                    blur = 1.dp,
+                    offsetX = 0.dp,
+                    offsetY = 1.dp,
+                    spread = 0.dp,
+                )
+                .dropShadow(
+                    shape = indicatorShape,
+                    color = Color(0xFF5C636D).copy(alpha = 0.12f),
+                    blur = 3.dp,
+                    offsetX = 1.dp,
+                    offsetY = (-1).dp,
+                    spread = 0.dp,
+                ),
     )
 }
 
