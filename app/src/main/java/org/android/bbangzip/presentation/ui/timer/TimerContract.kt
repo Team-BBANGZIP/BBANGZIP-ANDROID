@@ -63,7 +63,7 @@ class TimerContract {
         data object OnBreadIconClick : TimerEvent
         data object OnBreadSelectionSheetDismissRequest : TimerEvent
         data object OnTimerCompleted : TimerEvent
-        data object OnCompleteSheetRetryBtnClick : TimerEvent
+        data object OnCompleteSheetRestartBtnClick : TimerEvent
         data object OnCompleteSheetCheckBtnClick : TimerEvent
         data object OnCompleteSheetDismissRequest : TimerEvent
         data object OnTimerTick : TimerEvent

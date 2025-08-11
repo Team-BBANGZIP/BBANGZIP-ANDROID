@@ -50,6 +50,7 @@ import org.android.bbangzip.presentation.model.getTitleText
 import org.android.bbangzip.presentation.ui.shared.SharedContract
 import org.android.bbangzip.presentation.ui.timer.component.CircularProgressBar
 import org.android.bbangzip.presentation.ui.timer.component.bottomsheet.BreadSelectBottomSheet
+import org.android.bbangzip.presentation.ui.timer.component.bottomsheet.CompleteBottomSheet
 import org.android.bbangzip.presentation.ui.timer.component.bottomsheet.ResetBottomSheet
 import org.android.bbangzip.presentation.ui.timer.component.bottomsheet.RestartBottomSheet
 import org.android.bbangzip.presentation.util.extension.Gap
@@ -74,7 +75,7 @@ fun TimerScreen(
     onBreadSelectionSheetClick: (breadId: Int) -> Unit = {},
     onBreadSelectionSheetDismissRequest: () -> Unit = {},
     onCompleteSheetCheckBtnClick: () -> Unit = {},
-    onCompleteSheetRetryBtnClick: () -> Unit = {},
+    onCompleteSheetRestartBtnClick: () -> Unit = {},
     onCompleteSheetDismissRequest: () -> Unit = {},
     onResetSheetApproveBtnClick: () -> Unit = {},
     onResetSheetDismissBtnClick: () -> Unit = {}
@@ -158,13 +159,13 @@ fun TimerScreen(
                         animation = tween(800, easing = EaseInOut),
                         repeatMode = RepeatMode.Reverse
                     ),
-                            label = "triangle offset"
+                    label = "triangle offset"
                 )
                 AnimatedVisibility(
                     visible = isVisible,
                     enter = fadeIn(animationSpec = tween(300)),
                     exit = fadeOut(animationSpec = tween(300)),
-                    modifier  = mod
+                    modifier = mod
                         .offset(y = (-90 + triangleOffset).dp),
                 ) {
                     Icon(
@@ -182,7 +183,6 @@ fun TimerScreen(
                     painter = painterResource(breadImg),
                     contentDescription = "Timer Icon",
                 )
-
             }
         )
 
@@ -324,6 +324,14 @@ fun TimerScreen(
             onReturnBtnClick = { onRestartSheetDismissBtnClick() },
             onRestartBtnClick = { onRestartSheetApproveBtnClick() },
             onDismissRequest = { onRestartSheetDismissBtnClick() }
+        )
+
+        CompleteBottomSheet(
+            iisBottomSheetVisible = timerState.isCompleteSheetVisible,
+            onRestartBtnClick = { onCompleteSheetRestartBtnClick() },
+            onCheckTodoBtnClick = { onCompleteSheetCheckBtnClick() },
+            onDismissRequest = { onCompleteSheetDismissRequest() },
+            timeOptionIndex = timerState.selectedTimeOptionIndex
         )
     }
 }
