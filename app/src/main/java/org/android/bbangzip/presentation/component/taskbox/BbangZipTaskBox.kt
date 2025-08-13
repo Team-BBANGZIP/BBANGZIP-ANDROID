@@ -53,12 +53,12 @@ fun BbangZipTaskBox(
     textStyles: TaskBoxTextStyle = BbangZipTaskBoxDefaults.textStyles(),
     onCheckBoxClick: () -> Unit = {},
     onMenuClick: () -> Unit = {},
-    onDrag: () -> Unit = {},
+    onDrag: () -> Unit = {}, // TODO: 드래그 기능 구현 시 사용
     onDrop: () -> Unit = {},
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
+        verticalAlignment = Alignment.Top,
     ) {
         CheckBox(
             isCompleted = isCompleted,
@@ -140,7 +140,7 @@ private fun TaskText(
     startTime: LocalTime? = null,
 ) {
     Column(
-        modifier = modifier,
+        modifier = modifier.padding(top = 4.dp),
     ) {
         Text(
             text = task,
