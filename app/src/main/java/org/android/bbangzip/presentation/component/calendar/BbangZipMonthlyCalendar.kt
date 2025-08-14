@@ -12,11 +12,11 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -32,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
+import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -41,7 +42,7 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 @Immutable
-data class CalendarDay(
+private data class CalendarDay(
     val date: LocalDate,
     val isCurrentMonth: Boolean,
     val isToday: Boolean
@@ -57,8 +58,10 @@ fun MonthlyCalendar(
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
     val today = LocalDate.now()
 
-    val daysInMonth = remember(currentYearMonth) {
-        getDaysForMonth(currentYearMonth, today)
+    val daysInMonth by remember(currentYearMonth, today) {
+        derivedStateOf {
+            generateMonthDays(currentYearMonth, today)
+        }
     }
 
     LaunchedEffect(selectedDate) {
@@ -103,9 +106,11 @@ private fun CalendarHeader(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-
+        val monthYearFormatter = remember {
+                DateTimeFormatter.ofPattern("yyyy년 MMMM", Locale.getDefault())
+        }
         Text(
-            text = yearMonth.format(DateTimeFormatter.ofPattern("yyyy년 MMMM", Locale.getDefault())),
+            text = yearMonth.format(monthYearFormatter),
             style = BbangZipTheme.typography.subTitle1Medium,
             color = BbangZipTheme.color.labelNeutral_706A63,
         )
@@ -124,7 +129,7 @@ private fun CalendarHeader(
 
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_right_24),
-            contentDescription = "이전 달",
+            contentDescription = "다음 달",
             modifier = Modifier
                 .noRippleClickable(onClick = onNextMonth),
             tint = BbangZipTheme.color.labelAlternative_A29D96
@@ -138,10 +143,9 @@ private fun DayOfWeekHeader() {
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(9.dp)
     ) {
-        val daysOfWeek = DayOfWeek.entries.toTypedArray()
-        val sortedDays = daysOfWeek.drop(DayOfWeek.MONDAY.ordinal) + daysOfWeek.take(DayOfWeek.MONDAY.ordinal)
+        val daysOfWeek = remember { getDaysOfWeekStartingFrom()}
 
-        for (dayOfWeek in sortedDays) {
+        for (dayOfWeek in daysOfWeek) {
             Text(
                 text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
                 textAlign = TextAlign.Center,
@@ -163,9 +167,13 @@ private fun CalendarGrid(
         columns = GridCells.Fixed(count = 7),
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(space = 4.dp),
-        horizontalArrangement = Arrangement.spacedBy(space = 9.dp)
+        horizontalArrangement = Arrangement.spacedBy(space = 9.dp),
+
     ){
-        items(days) { day ->
+        items(
+            items = days,
+            key = { day -> day.date.toEpochDay() }
+        ) { day ->
             CalendarDayCell(
                 day = day,
                 isSelected = day.date == selectedDate,
@@ -212,18 +220,21 @@ private fun CalendarDayCell(
     }
 }
 
-private fun getDaysForMonth(yearMonth: YearMonth, today: LocalDate): List<CalendarDay> {
+private fun generateMonthDays(
+    yearMonth: YearMonth,
+    today: LocalDate,
+    startDayOfWeek: DayOfWeek = DayOfWeek.MONDAY
+): List<CalendarDay> {
     val firstDayOfMonth = yearMonth.atDay(1)
     val lastDayOfMonth = yearMonth.atEndOfMonth()
 
-    // 한 주의 시작이 월요일
-    val startDayOfWeek = firstDayOfMonth.dayOfWeek.value - 1
+    val indexOfStartDayOfWeek = firstDayOfMonth.dayOfWeek.value - startDayOfWeek.value
 
     val days = mutableListOf<CalendarDay>()
 
     // 이전 달의 날짜 추가
-    for (i in 0 until startDayOfWeek) {
-        val date = firstDayOfMonth.minusDays((startDayOfWeek - i).toLong())
+    for (i in 0 until indexOfStartDayOfWeek) {
+        val date = firstDayOfMonth.minusDays((indexOfStartDayOfWeek - i).toLong())
         days.add(CalendarDay(date = date, isCurrentMonth = false, isToday = date.isEqual(today)))
     }
 
@@ -244,14 +255,19 @@ private fun getDaysForMonth(yearMonth: YearMonth, today: LocalDate): List<Calend
     return days
 }
 
+private fun getDaysOfWeekStartingFrom(startDayOfWeek: DayOfWeek = DayOfWeek.MONDAY) =
+    DayOfWeek.entries.run {
+        val daysList = this.toList()
+        val startIndex = startDayOfWeek.ordinal
+        daysList.subList(startIndex, daysList.size) + daysList.subList(0, startIndex)
+    }
 
 @Preview(showBackground = true)
 @Composable
 fun MonthlyCalendarPreview() {
-    MaterialTheme {
+    BBANGZIPANDROIDTheme {
         MonthlyCalendar(onDateSelected = {
             println("Selected date: $it")
-        }
-        )
+        })
     }
 }
