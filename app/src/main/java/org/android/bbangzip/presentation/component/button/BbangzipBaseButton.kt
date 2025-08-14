@@ -124,7 +124,7 @@ private fun BbangzipBaseButtonPreview() {
                     },
                 )
 
-                Gap(width = 8)
+                Gap(width = 8.dp)
 
                 BbangzipBaseButton(
                     modifier = Modifier.weight(187f),
@@ -170,7 +170,7 @@ private fun BbangzipBaseButtonPreview() {
                     },
                 )
 
-                Gap(width = 8)
+                Gap(width = 8.dp)
 
                 BbangzipBaseButton(
                     modifier = Modifier.weight(187f),
@@ -216,7 +216,7 @@ private fun BbangzipBaseButtonPreview() {
                     },
                 )
 
-                Gap(width = 8)
+                Gap(width = 8.dp)
 
                 BbangzipBaseButton(
                     modifier = Modifier.weight(1f),
@@ -262,7 +262,7 @@ private fun BbangzipBaseButtonPreview() {
                     },
                 )
 
-                Gap(width = 8)
+                Gap(width = 8.dp)
 
                 BbangzipBaseButton(
                     modifier = Modifier.weight(1f),
@@ -308,7 +308,7 @@ private fun BbangzipBaseButtonPreview() {
                     },
                 )
 
-                Gap(width = 8)
+                Gap(width = 8.dp)
 
                 BbangzipBaseButton(
                     modifier = Modifier.weight(187f),
@@ -354,7 +354,7 @@ private fun BbangzipBaseButtonPreview() {
                     },
                 )
 
-                Gap(width = 8)
+                Gap(width = 8.dp)
 
                 BbangzipBaseButton(
                     modifier = Modifier.weight(1f),
@@ -466,7 +466,7 @@ private fun BbangzipBaseButtonPreview() {
                     },
                 )
 
-                Gap(width = 8)
+                Gap(width = 8.dp)
 
                 BbangzipBaseButton(
                     modifier = Modifier.weight(1f),
