@@ -77,7 +77,7 @@ fun BbangZipTaskBox(
             taskTextColor = colors.taskTextColor,
             timeContentColor = colors.timeContentColor,
             textStyles = textStyles,
-            modifier = Modifier.weight(1f)
+            modifier = Modifier.weight(1f),
         )
 
         Gap(width = BbangZipTaskBoxDefaults.GAP_CONTENT_TO_MENU)
@@ -85,10 +85,11 @@ fun BbangZipTaskBox(
         Icon(
             painter = painterResource(R.drawable.ic_meatball_menu_default_24),
             contentDescription = stringResource(id = R.string.task_box_menu_description),
-            modifier = Modifier
-                .size(BbangZipTaskBoxDefaults.MENU_ICON_SIZE)
-                .noRippleClickable(onClick = onMenuClick)
-                .align(Alignment.CenterVertically),
+            modifier =
+                Modifier
+                    .size(BbangZipTaskBoxDefaults.MENU_ICON_SIZE)
+                    .noRippleClickable(onClick = onMenuClick)
+                    .align(Alignment.CenterVertically),
             tint = colors.menuIconColor,
         )
     }
@@ -104,10 +105,11 @@ private fun TaskCheckBox(
     modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .size(BbangZipTaskBoxDefaults.CHECK_BOX_SIZE)
-            .noRippleClickable(onClick = onClick),
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .size(BbangZipTaskBoxDefaults.CHECK_BOX_SIZE)
+                .noRippleClickable(onClick = onClick),
+        contentAlignment = Alignment.Center,
     ) {
         Icon(
             painter = painterResource(R.drawable.ic_bread_default_24),
@@ -162,9 +164,10 @@ private fun TaskTimeDisplay(
     textStyle: TextStyle,
     modifier: Modifier = Modifier,
 ) {
-    val displayTime = remember(time) {
-        time.formatTimeWithAmPm()
-    }
+    val displayTime =
+        remember(time) {
+            time.formatTimeWithAmPm()
+        }
 
     Row(
         modifier = modifier,
@@ -192,9 +195,10 @@ private fun TaskTimeDisplay(
 private fun BbangZipTaskBoxPreview() {
     BBANGZIPANDROIDTheme {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(30.dp),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(30.dp),
             verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             BbangZipTaskBox(
