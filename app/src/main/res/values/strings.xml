@@ -22,4 +22,10 @@
 
     <!-- component - textfield -->
     <string name="textfield_character_counter">%s/%s</string>
+
+    <!-- task box -->
+    <string name="task_box_menu_description">메뉴 더보기</string>
+    <string name="task_box_completed_task_description">완료된 작업</string>
+    <string name="task_box_uncompleted_task_description">미완료 작업</string>
+    <string name="task_box_time_description">작업 시작 시간</string>
 </resources>
