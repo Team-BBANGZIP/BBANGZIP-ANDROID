@@ -5,4 +5,10 @@
     <string name="bottom_navi_todo_tab_title">할 일</string>
     <string name="bottom_navi_friend_tab_title">이웃</string>
     <string name="bottom_navi_my_title">마이</string>
+
+    <!-- task box -->
+    <string name="task_box_menu_description">메뉴 더보기</string>
+    <string name="task_box_completed_task_description">완료된 작업</string>
+    <string name="task_box_uncompleted_task_description">미완료 작업</string>
+    <string name="task_box_time_description">작업 시작 시간</string>
 </resources>
