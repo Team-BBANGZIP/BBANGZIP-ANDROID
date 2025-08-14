@@ -44,6 +44,7 @@ import java.time.LocalTime
  * @param textStyles [TaskBoxTextStyle]을 통해 컴포저블의 텍스트 스타일을 정의
  * @param onCheckBoxClick 체크박스 클릭 시 호출될 콜백
  * @param onMenuClick 메뉴 아이콘 클릭 시 호출될 콜백
+ * @param onHeightMeasure 컴포저블의 높이 측정 시 호출될 콜백
  */
 @Composable
 fun BbangZipTaskBox(
@@ -56,6 +57,7 @@ fun BbangZipTaskBox(
     textStyles: TaskBoxTextStyle = BbangZipTaskBoxDefaults.textStyles(),
     onCheckBoxClick: () -> Unit = {},
     onMenuClick: () -> Unit = {},
+    onHeightMeasure: (Int) -> Unit = {},
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
