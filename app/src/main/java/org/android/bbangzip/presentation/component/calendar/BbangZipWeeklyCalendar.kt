@@ -21,12 +21,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
@@ -34,10 +32,10 @@ import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
-import java.time.temporal.WeekFields
 import java.util.Locale
 
 @Stable
@@ -50,26 +48,16 @@ private data class WeeklyCalendarDay(
 fun BbangZipWeeklyCalendar(
     modifier: Modifier = Modifier,
     initialDate: LocalDate = LocalDate.now(),
+    startDayOfWeek: DayOfWeek = DayOfWeek.MONDAY,
     onDateSelected: (LocalDate) -> Unit = {}
 ) {
     val today = remember { LocalDate.now() }
-    val weekFields = remember { WeekFields.of(Locale.getDefault()) }
 
     var currentFirstDayOfWeek by remember {
-        mutableStateOf(initialDate.with(weekFields.firstDayOfWeek))
+        mutableStateOf(initialDate.with(startDayOfWeek))
     }
     var selectedDate by remember(initialDate) {
         mutableStateOf(initialDate)
-    }
-
-    LaunchedEffect(initialDate) {
-        val newFirstDayOfWeek = initialDate.with(weekFields.firstDayOfWeek)
-        if (newFirstDayOfWeek != currentFirstDayOfWeek) {
-            currentFirstDayOfWeek = newFirstDayOfWeek
-        }
-        if (initialDate != selectedDate) {
-            selectedDate = initialDate
-        }
     }
 
     LaunchedEffect(selectedDate) {
@@ -92,7 +80,7 @@ fun BbangZipWeeklyCalendar(
 
         Gap(height = 20.dp)
 
-        IntegratedWeekRow(
+        WeekRow(
             days = weekDays,
             selectedDate = selectedDate,
             onDateClick = { day ->
@@ -140,7 +128,7 @@ private fun WeeklyCalendarHeader(
             tint = BbangZipTheme.color.labelAlternative_A29D96
         )
 
-        Gap() // Spacer to push menu icon to the end
+        Gap()
 
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.ic_hamburger_menu_default_24),
@@ -152,7 +140,7 @@ private fun WeeklyCalendarHeader(
 }
 
 @Composable
-private fun IntegratedWeekRow(
+private fun WeekRow(
     days: List<WeeklyCalendarDay>,
     selectedDate: LocalDate,
     onDateClick: (WeeklyCalendarDay) -> Unit
@@ -162,7 +150,7 @@ private fun IntegratedWeekRow(
         horizontalArrangement = Arrangement.spacedBy(9.dp)
     ) {
         days.forEach { day ->
-            IntegratedDayCell(
+            DayCell(
                 dayData = day,
                 isSelected = day.date == selectedDate,
                 onClick = { onDateClick(day) },
@@ -173,7 +161,7 @@ private fun IntegratedWeekRow(
 }
 
 @Composable
-private fun IntegratedDayCell(
+private fun DayCell(
     dayData: WeeklyCalendarDay,
     isSelected: Boolean,
     onClick: () -> Unit,
@@ -228,11 +216,8 @@ private fun IntegratedDayCell(
 
 
 private fun generateWeekDaysList(startDateOfWeek: LocalDate, today: LocalDate): List<WeeklyCalendarDay> {
-    val weekFields = WeekFields.of(Locale.getDefault())
-    val firstDayOfActualWeek = startDateOfWeek.with(weekFields.firstDayOfWeek)
-
     return List(7) { i ->
-        val date = firstDayOfActualWeek.plusDays(i.toLong())
+        val date = startDateOfWeek.plusDays(i.toLong())
         WeeklyCalendarDay(
             date = date,
             isToday = date.isEqual(today)
