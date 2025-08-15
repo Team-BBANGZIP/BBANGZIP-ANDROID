@@ -182,7 +182,7 @@ private fun DayCell(
     val dateTextStyle =
         when {
             isSelected -> BbangZipTheme.typography.label1SemiBold
-            else -> BbangZipTheme.typography.label4Regular
+            else -> BbangZipTheme.typography.label2Regular
         }
 
     Box(
