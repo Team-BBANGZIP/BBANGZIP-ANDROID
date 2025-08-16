@@ -177,14 +177,14 @@ private fun WeeklyCalendarHeader(
         )
         Gap(width = 20.dp)
         Icon(
-            painter = painterResource(id = R.drawable.ic_arrow_left_24),
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_left_24),
             contentDescription = stringResource(R.string.calendar_previous_week_description),
             modifier = Modifier.noRippleClickable(onClick = onPreviousWeek),
             tint = BbangZipTheme.color.labelAlternative_A29D96,
         )
         Gap(width = 20.dp)
         Icon(
-            painter = painterResource(id = R.drawable.ic_arrow_right_24),
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right_24),
             contentDescription = stringResource(R.string.calendar_next_week_description),
             modifier = Modifier.noRippleClickable(onClick = onNextWeek),
             tint = BbangZipTheme.color.labelAlternative_A29D96,

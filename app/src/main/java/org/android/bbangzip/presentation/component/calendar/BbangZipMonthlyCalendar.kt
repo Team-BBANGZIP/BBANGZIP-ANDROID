@@ -25,8 +25,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -123,7 +125,7 @@ private fun CalendarHeader(
         Gap(width = 20.dp)
 
         Icon(
-            painter = painterResource(id = R.drawable.ic_arrow_left_24),
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_left_24),
             contentDescription = stringResource(R.string.calendar_previous_month_description),
             modifier =
                 Modifier
@@ -134,7 +136,7 @@ private fun CalendarHeader(
         Gap(width = 20.dp)
 
         Icon(
-            painter = painterResource(id = R.drawable.ic_arrow_right_24),
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right_24),
             contentDescription = stringResource(R.string.calendar_next_month_description),
             modifier =
                 Modifier
