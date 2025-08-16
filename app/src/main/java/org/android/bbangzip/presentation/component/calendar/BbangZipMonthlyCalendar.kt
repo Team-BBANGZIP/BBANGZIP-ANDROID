@@ -26,6 +26,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,6 +41,8 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.format.TextStyle
 import java.util.Locale
+
+private const val HEADER_DATE_PATTERN = "yyyy년 MMMM"
 
 @Immutable
 private data class CalendarDay(
@@ -106,9 +109,10 @@ private fun CalendarHeader(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        val monthYearFormatter = remember {
-                DateTimeFormatter.ofPattern("yyyy년 MMMM", Locale.getDefault())
-        }
+        val monthYearFormatter =
+            remember {
+                DateTimeFormatter.ofPattern(HEADER_DATE_PATTERN, Locale.getDefault())
+            }
         Text(
             text = yearMonth.format(monthYearFormatter),
             style = BbangZipTheme.typography.subTitle1Medium,
@@ -119,20 +123,22 @@ private fun CalendarHeader(
 
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_left_24),
-            contentDescription = "이전 달",
-            modifier = Modifier
-                .noRippleClickable(onClick = onPreviousMonth),
-            tint = BbangZipTheme.color.labelAlternative_A29D96
+            contentDescription = stringResource(R.string.calendar_previous_month_description),
+            modifier =
+                Modifier
+                    .noRippleClickable(onClick = onPreviousMonth),
+            tint = BbangZipTheme.color.labelAlternative_A29D96,
         )
 
         Gap(width = 20.dp)
 
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_right_24),
-            contentDescription = "다음 달",
-            modifier = Modifier
-                .noRippleClickable(onClick = onNextMonth),
-            tint = BbangZipTheme.color.labelAlternative_A29D96
+            contentDescription = stringResource(R.string.calendar_next_month_description),
+            modifier =
+                Modifier
+                    .noRippleClickable(onClick = onNextMonth),
+            tint = BbangZipTheme.color.labelAlternative_A29D96,
         )
     }
 }

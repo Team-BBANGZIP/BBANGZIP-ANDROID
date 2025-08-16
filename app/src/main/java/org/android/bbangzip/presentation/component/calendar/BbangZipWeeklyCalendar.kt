@@ -1,6 +1,5 @@
 package org.android.bbangzip.presentation.component.calendar
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -29,6 +28,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,6 +38,7 @@ import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
+import timber.log.Timber
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
@@ -45,6 +46,7 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 private const val PAGER_PAGE_COUNT = Int.MAX_VALUE
+private const val HEADER_DATE_PATTERN = "yyyy년 MMMM"
 
 @Stable
 private data class WeeklyCalendarDay(
@@ -147,9 +149,7 @@ private fun WeeklyCalendarHeader(
     onNextWeek: () -> Unit,
     onClickMenu: () -> Unit,
 ) {
-    val displayFormatter = remember { DateTimeFormatter.ofPattern("yyyy년 MMMM", Locale.getDefault()) }
     val lastDayOfCurrentWeek = currentDisplayWeekViewStartDate.plusDays(6)
-
     val displayDateForMonth =
         if (currentDisplayWeekViewStartDate.month != lastDayOfCurrentWeek.month) {
             if (selectedDate.month != currentDisplayWeekViewStartDate.month &&
@@ -162,6 +162,8 @@ private fun WeeklyCalendarHeader(
         } else {
             currentDisplayWeekViewStartDate
         }
+
+    val displayFormatter = remember { DateTimeFormatter.ofPattern(HEADER_DATE_PATTERN, Locale.getDefault()) }
     val displayText = displayDateForMonth.format(displayFormatter)
 
     Row(
@@ -176,21 +178,21 @@ private fun WeeklyCalendarHeader(
         Gap(width = 20.dp)
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_left_24),
-            contentDescription = "이전 주",
+            contentDescription = stringResource(R.string.calendar_previous_week_description),
             modifier = Modifier.noRippleClickable(onClick = onPreviousWeek),
             tint = BbangZipTheme.color.labelAlternative_A29D96,
         )
         Gap(width = 20.dp)
         Icon(
             painter = painterResource(id = R.drawable.ic_arrow_right_24),
-            contentDescription = "다음 주",
+            contentDescription = stringResource(R.string.calendar_next_week_description),
             modifier = Modifier.noRippleClickable(onClick = onNextWeek),
             tint = BbangZipTheme.color.labelAlternative_A29D96,
         )
         Gap()
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.ic_hamburger_menu_default_24),
-            contentDescription = "메뉴",
+            contentDescription = stringResource(R.string.calendar_menu_description),
             modifier = Modifier.noRippleClickable(onClick = onClickMenu),
             tint = BbangZipTheme.color.labelAlternative_A29D96,
         )
@@ -281,7 +283,7 @@ fun WeeklyCalendarPreview() {
         ) {
             BbangZipWeeklyCalendar(
                 onDateSelected = {
-                    Log.d("BbangZipWeeklyCalendar", "onDateSelected: $it")
+                    Timber.tag("BbangZipWeeklyCalendar").d("onDateSelected: $it")
                 },
             )
         }
