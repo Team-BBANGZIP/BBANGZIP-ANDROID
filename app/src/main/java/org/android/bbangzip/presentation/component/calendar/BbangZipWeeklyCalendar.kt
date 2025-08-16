@@ -1,12 +1,16 @@
 package org.android.bbangzip.presentation.component.calendar
 
+import androidx.activity.result.launch
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -17,6 +21,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,6 +32,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import kotlinx.coroutines.launch
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
@@ -60,45 +66,103 @@ fun BbangZipWeeklyCalendar(
         mutableStateOf(initialDate)
     }
 
+    val firstDayOfInitialPage = remember { initialDate.with(DayOfWeek.MONDAY) }
+
+    val scope = rememberCoroutineScope()
+    val pagerPageCount = remember { Int.MAX_VALUE }
+    val pagerStartPage = remember { pagerPageCount / 2 }
+    val pagerState = rememberPagerState(
+        initialPage = pagerStartPage,
+        pageCount = { pagerPageCount }
+    )
+
     LaunchedEffect(selectedDate) {
         onDateSelected(selectedDate)
     }
 
-    val weekDays by remember(currentFirstDayOfWeek, today) {
-        derivedStateOf {
-            generateWeekDaysList(currentFirstDayOfWeek, today)
+    LaunchedEffect(key1 = pagerState.settledPage, key2 = firstDayOfInitialPage) {
+        val page = pagerState.settledPage
+        val weeksOffset = page - pagerStartPage
+        val newFirstDay = firstDayOfInitialPage.plusWeeks(weeksOffset.toLong())
+        if (newFirstDay != currentFirstDayOfWeek) {
+            currentFirstDayOfWeek = newFirstDay
         }
     }
+
 
     Column(modifier = modifier.fillMaxWidth()) {
         WeeklyCalendarHeader(
             currentWeekViewStartDate = currentFirstDayOfWeek,
-            onPreviousWeek = { currentFirstDayOfWeek = currentFirstDayOfWeek.minusWeeks(1) },
-            onNextWeek = { currentFirstDayOfWeek = currentFirstDayOfWeek.plusWeeks(1) },
+            selectedDate = selectedDate,
             onClickMenu = {},
+            onPreviousWeek = {
+                scope.launch {
+                    if (pagerState.currentPage > 0) {
+                        pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                    }
+                }
+            },
+            onNextWeek = {
+                scope.launch {
+                    if (pagerState.currentPage < pagerPageCount - 1) {
+                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                    }
+                }
+            }
         )
 
         Gap(height = 20.dp)
 
-        WeekRow(
-            days = weekDays,
-            selectedDate = selectedDate,
-            onDateClick = { day ->
-                selectedDate = day.date
-            }
-        )
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxWidth()
+        ) { pageIndex ->
+            val weeksOffset = pageIndex - pagerStartPage
+            val firstDayForThisPage = firstDayOfInitialPage.plusWeeks(weeksOffset.toLong())
+
+            val currentPageWeekDays = remember(firstDayForThisPage, today) {
+                derivedStateOf {
+                    generateWeekDaysList(firstDayForThisPage, today)
+                }
+            }.value
+
+            WeekRow(
+                days = currentPageWeekDays,
+                selectedDate = selectedDate,
+                onDateClick = { day ->
+                    selectedDate = day.date
+                },
+            )
+        }
     }
 }
 
 @Composable
 private fun WeeklyCalendarHeader(
     currentWeekViewStartDate: LocalDate,
+    selectedDate: LocalDate,
     onPreviousWeek: () -> Unit,
     onNextWeek: () -> Unit,
     onClickMenu: () -> Unit,
 ) {
     val displayFormatter = remember { DateTimeFormatter.ofPattern("yyyy년 MMMM", Locale.getDefault()) }
-    val displayText = currentWeekViewStartDate.format(displayFormatter)
+
+    // 현재 표시 중인 주의 마지막 날짜 계산
+    val lastDayOfCurrentWeek = currentWeekViewStartDate.plusDays(6)
+
+    val displayDateForMonth = if (currentWeekViewStartDate.month != lastDayOfCurrentWeek.month) {
+        if (selectedDate.month != currentWeekViewStartDate.month &&
+            selectedDate.month == lastDayOfCurrentWeek.month
+        ) {
+            selectedDate
+        } else {
+            currentWeekViewStartDate
+        }
+    } else {
+        currentWeekViewStartDate
+    }
+
+    val displayText = displayDateForMonth.format(displayFormatter)
 
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -167,23 +231,9 @@ private fun DayCell(
     onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val backgroundColor =
-            when {
-                isSelected -> BbangZipTheme.color.secondaryStrong_F2EAE4
-                else -> Color.Transparent
-            }
-
-    val dateTextColor =
-            when {
-                isSelected -> BbangZipTheme.color.labelNormal_6B6560
-                else -> BbangZipTheme.color.labelAlternative_A29D96
-            }
-
-    val dateTextStyle =
-        when {
-            isSelected -> BbangZipTheme.typography.label1SemiBold
-            else -> BbangZipTheme.typography.label2Regular
-        }
+    val backgroundColor = if (isSelected) BbangZipTheme.color.secondaryStrong_F2EAE4 else Color.Transparent
+    val dateTextColor = if (isSelected) BbangZipTheme.color.labelNormal_6B6560 else BbangZipTheme.color.labelAlternative_A29D96
+    val dateTextStyle = if (isSelected) BbangZipTheme.typography.label1SemiBold else BbangZipTheme.typography.label2Regular
 
     Box(
         modifier = modifier
@@ -229,9 +279,15 @@ private fun generateWeekDaysList(startDateOfWeek: LocalDate, today: LocalDate): 
 @Composable
 fun WeeklyCalendarPreview() {
     BBANGZIPANDROIDTheme {
-        BbangZipWeeklyCalendar(onDateSelected = {
-            println("Weekly Selected date: $it")
-        })
+        Column(
+            modifier = Modifier.fillMaxSize().padding(horizontal = 20.dp, vertical = 20.dp)
+        ){
+            BbangZipWeeklyCalendar(
+                onDateSelected = {
+                    println("Weekly Selected date: $it")
+                }
+            )
+        }
     }
 }
 
