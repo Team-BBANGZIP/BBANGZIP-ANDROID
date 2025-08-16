@@ -45,17 +45,17 @@ import java.util.Locale
 private const val HEADER_DATE_PATTERN = "yyyy년 MMMM"
 
 @Immutable
-private data class CalendarDay(
+private data class MonthlyCalendarDay(
     val date: LocalDate,
     val isCurrentMonth: Boolean,
-    val isToday: Boolean
+    val isToday: Boolean,
 )
 
 @Composable
 fun MonthlyCalendar(
     modifier: Modifier = Modifier,
     initialYearMonth: YearMonth = YearMonth.now(),
-    onDateSelected: (LocalDate) -> Unit = {}
+    onDateSelected: (LocalDate) -> Unit = {},
 ) {
     var currentYearMonth by remember { mutableStateOf(initialYearMonth) }
     var selectedDate by remember { mutableStateOf(LocalDate.now()) }
@@ -72,13 +72,14 @@ fun MonthlyCalendar(
     }
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
+        modifier =
+            modifier
+                .fillMaxWidth(),
     ) {
         CalendarHeader(
             yearMonth = currentYearMonth,
             onPreviousMonth = { currentYearMonth = currentYearMonth.minusMonths(1) },
-            onNextMonth = { currentYearMonth = currentYearMonth.plusMonths(1) }
+            onNextMonth = { currentYearMonth = currentYearMonth.plusMonths(1) },
         )
 
         Gap(height = 20.dp)
@@ -94,7 +95,7 @@ fun MonthlyCalendar(
                 if (day.isCurrentMonth) {
                     selectedDate = day.date
                 }
-            }
+            },
         )
     }
 }
@@ -103,7 +104,7 @@ fun MonthlyCalendar(
 private fun CalendarHeader(
     yearMonth: YearMonth,
     onPreviousMonth: () -> Unit,
-    onNextMonth: () -> Unit
+    onNextMonth: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -147,9 +148,9 @@ private fun CalendarHeader(
 private fun DayOfWeekHeader() {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(9.dp)
+        horizontalArrangement = Arrangement.spacedBy(9.dp),
     ) {
-        val daysOfWeek = remember { getDaysOfWeekStartingFrom()}
+        val daysOfWeek = remember { getDaysOfWeekStartingFrom() }
 
         for (dayOfWeek in daysOfWeek) {
             Text(
@@ -157,7 +158,7 @@ private fun DayOfWeekHeader() {
                 textAlign = TextAlign.Center,
                 modifier = Modifier.weight(1f),
                 style = BbangZipTheme.typography.label4Regular,
-                color = BbangZipTheme.color.labelAssistive_C9C7C5
+                color = BbangZipTheme.color.labelAssistive_C9C7C5,
             )
         }
     }
@@ -165,25 +166,24 @@ private fun DayOfWeekHeader() {
 
 @Composable
 private fun CalendarGrid(
-    days: List<CalendarDay>,
+    days: List<MonthlyCalendarDay>,
     selectedDate: LocalDate,
-    onDateClick: (CalendarDay) -> Unit
+    onDateClick: (MonthlyCalendarDay) -> Unit,
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(count = 7),
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(space = 4.dp),
         horizontalArrangement = Arrangement.spacedBy(space = 9.dp),
-
-    ){
+    ) {
         items(
             items = days,
-            key = { day -> day.date.toEpochDay() }
+            key = { day -> day.date.toEpochDay() },
         ) { day ->
             CalendarDayCell(
                 day = day,
                 isSelected = day.date == selectedDate,
-                onClick = { onDateClick(day) }
+                onClick = { onDateClick(day) },
             )
         }
     }
@@ -191,37 +191,40 @@ private fun CalendarGrid(
 
 @Composable
 private fun CalendarDayCell(
-    day: CalendarDay,
+    day: MonthlyCalendarDay,
     isSelected: Boolean,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) {
-    val backgroundColor = when {
-        isSelected -> BbangZipTheme.color.labelAlternative_A29D96
-        day.isToday -> BbangZipTheme.color.backgroundAlternative_FAF6F3
-        else -> Color.Transparent
-    }
+    val backgroundColor =
+        when {
+            isSelected -> BbangZipTheme.color.labelAlternative_A29D96
+            day.isToday -> BbangZipTheme.color.backgroundAlternative_FAF6F3
+            else -> Color.Transparent
+        }
 
-    val textColor = when {
-        isSelected -> BbangZipTheme.color.staticWhite_FFFFFF
-        !day.isCurrentMonth -> BbangZipTheme.color.labelAssistive_C9C7C5
-        else -> BbangZipTheme.color.labelAlternative_A29D96
-    }
+    val textColor =
+        when {
+            isSelected -> BbangZipTheme.color.staticWhite_FFFFFF
+            !day.isCurrentMonth -> BbangZipTheme.color.labelAssistive_C9C7C5
+            else -> BbangZipTheme.color.labelAlternative_A29D96
+        }
 
     Box(
-        modifier = Modifier
-            .aspectRatio(1f)
-            .clip(CircleShape)
-            .noRippleClickable(
-                enabled = day.isCurrentMonth,
-                onClick = onClick
-            )
-            .background(backgroundColor),
-        contentAlignment = Alignment.Center
+        modifier =
+            Modifier
+                .aspectRatio(1f)
+                .clip(CircleShape)
+                .noRippleClickable(
+                    enabled = day.isCurrentMonth,
+                    onClick = onClick,
+                )
+                .background(backgroundColor),
+        contentAlignment = Alignment.Center,
     ) {
         Text(
             text = day.date.dayOfMonth.toString(),
             color = textColor,
-            style = BbangZipTheme.typography.label4Regular
+            style = BbangZipTheme.typography.label4Regular,
         )
     }
 }
@@ -229,25 +232,25 @@ private fun CalendarDayCell(
 private fun generateMonthDays(
     yearMonth: YearMonth,
     today: LocalDate,
-    startDayOfWeek: DayOfWeek = DayOfWeek.MONDAY
-): List<CalendarDay> {
+    startDayOfWeek: DayOfWeek = DayOfWeek.MONDAY,
+): List<MonthlyCalendarDay> {
     val firstDayOfMonth = yearMonth.atDay(1)
     val lastDayOfMonth = yearMonth.atEndOfMonth()
 
     val indexOfStartDayOfWeek = firstDayOfMonth.dayOfWeek.value - startDayOfWeek.value
 
-    val days = mutableListOf<CalendarDay>()
+    val days = mutableListOf<MonthlyCalendarDay>()
 
     // 이전 달의 날짜 추가
     for (i in 0 until indexOfStartDayOfWeek) {
         val date = firstDayOfMonth.minusDays((indexOfStartDayOfWeek - i).toLong())
-        days.add(CalendarDay(date = date, isCurrentMonth = false, isToday = date.isEqual(today)))
+        days.add(MonthlyCalendarDay(date = date, isCurrentMonth = false, isToday = date.isEqual(today)))
     }
 
     // 현재 달의 날짜 추가
     var currentDate = firstDayOfMonth
     while (!currentDate.isAfter(lastDayOfMonth)) {
-        days.add(CalendarDay(date = currentDate, isCurrentMonth = true, isToday = currentDate.isEqual(today)))
+        days.add(MonthlyCalendarDay(date = currentDate, isCurrentMonth = true, isToday = currentDate.isEqual(today)))
         currentDate = currentDate.plusDays(1)
     }
 
@@ -255,7 +258,7 @@ private fun generateMonthDays(
     val remainingCells = 42 - days.size
     for (i in 1..remainingCells) {
         val date = lastDayOfMonth.plusDays(i.toLong())
-        days.add(CalendarDay(date = date, isCurrentMonth = false, isToday = date.isEqual(today)))
+        days.add(MonthlyCalendarDay(date = date, isCurrentMonth = false, isToday = date.isEqual(today)))
     }
 
     return days
