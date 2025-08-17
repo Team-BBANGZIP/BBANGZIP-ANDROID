@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -25,9 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -37,7 +34,6 @@ import org.android.bbangzip.R
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
-import org.android.bbangzip.ui.theme.BbangZipTheme
 import timber.log.Timber
 import java.time.DayOfWeek
 import java.time.LocalDate
@@ -46,6 +42,8 @@ import java.time.format.TextStyle
 import java.util.Locale
 
 private const val PAGER_PAGE_COUNT = Int.MAX_VALUE
+private const val INITIAL_PAGE_INDEX = Int.MAX_VALUE / 2
+
 private const val HEADER_DATE_PATTERN = "yyyy년 MMMM"
 
 @Stable
@@ -59,15 +57,17 @@ fun BbangZipWeeklyCalendar(
     modifier: Modifier = Modifier,
     initialDate: LocalDate = LocalDate.now(),
     startDayOfWeek: DayOfWeek = DayOfWeek.MONDAY,
+    colors: BbangZipWeeklyCalendarDefaults.Colors = BbangZipWeeklyCalendarDefaults.colors(),
+    typography: BbangZipWeeklyCalendarDefaults.Typography = BbangZipWeeklyCalendarDefaults.typography(),
     onDateSelected: (LocalDate) -> Unit = {},
     onClickMenu: () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
 
     val today = LocalDate.now()
-    var selectedDate by remember(initialDate) { mutableStateOf(initialDate) }
+    var selectedDate by remember(key1 = initialDate) { mutableStateOf(value = initialDate) }
 
-    val initialPagerIndex = remember { PAGER_PAGE_COUNT / 2 }
+    val initialPagerIndex = INITIAL_PAGE_INDEX
     val pagerState =
         rememberPagerState(
             initialPage = initialPagerIndex,
@@ -75,7 +75,7 @@ fun BbangZipWeeklyCalendar(
         )
 
     val firstDayOfInitialPagerWeek =
-        remember(initialDate, startDayOfWeek) {
+        remember(key1 = initialDate, key2 = startDayOfWeek) {
             initialDate.with(startDayOfWeek)
         }
 
@@ -86,7 +86,7 @@ fun BbangZipWeeklyCalendar(
         }
     }
 
-    LaunchedEffect(selectedDate) {
+    LaunchedEffect(key1 = selectedDate) {
         onDateSelected(selectedDate)
     }
 
@@ -98,20 +98,22 @@ fun BbangZipWeeklyCalendar(
             onPreviousWeek = {
                 if (pagerState.currentPage > 0) {
                     scope.launch {
-                        pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                        pagerState.animateScrollToPage(page = pagerState.currentPage - 1)
                     }
                 }
             },
             onNextWeek = {
                 if (pagerState.currentPage < PAGER_PAGE_COUNT - 1) {
                     scope.launch {
-                        pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        pagerState.animateScrollToPage(page = pagerState.currentPage + 1)
                     }
                 }
             },
+            colors = colors,
+            typography = typography,
         )
 
-        Gap(height = 20.dp)
+        Gap(height = BbangZipWeeklyCalendarDefaults.HeaderToWeekRowGap)
 
         HorizontalPager(
             state = pagerState,
@@ -120,13 +122,13 @@ fun BbangZipWeeklyCalendar(
             val weeksOffset = pageIndex - initialPagerIndex
 
             val firstDayForThisPage =
-                remember(firstDayOfInitialPagerWeek, weeksOffset) {
+                remember(key1 = firstDayOfInitialPagerWeek, key2 = weeksOffset) {
                     firstDayOfInitialPagerWeek.plusWeeks(weeksOffset.toLong())
                 }
 
-            val currentPageWeekDays by remember(firstDayForThisPage, today) {
+            val currentPageWeekDays by remember(key1 = firstDayForThisPage, key2 = today) {
                 derivedStateOf {
-                    generateWeekDaysList(firstDayForThisPage, today)
+                    generateWeekDaysList(startDateOfWeek = firstDayForThisPage, today = today)
                 }
             }
 
@@ -136,6 +138,8 @@ fun BbangZipWeeklyCalendar(
                 onDateClick = { day ->
                     selectedDate = day.date
                 },
+                colors = colors,
+                typography = typography
             )
         }
     }
@@ -148,6 +152,8 @@ private fun WeeklyCalendarHeader(
     onPreviousWeek: () -> Unit,
     onNextWeek: () -> Unit,
     onClickMenu: () -> Unit,
+    colors: BbangZipWeeklyCalendarDefaults.Colors,
+    typography: BbangZipWeeklyCalendarDefaults.Typography,
 ) {
     val lastDayOfCurrentWeek = currentDisplayWeekViewStartDate.plusDays(6)
     val displayDateForMonth =
@@ -172,29 +178,35 @@ private fun WeeklyCalendarHeader(
     ) {
         Text(
             text = displayText,
-            style = BbangZipTheme.typography.subTitle1Medium,
-            color = BbangZipTheme.color.labelNeutral_706A63,
+            style = typography.headerDateTextStyle,
+            color = colors.headerDateColor,
         )
-        Gap(width = 20.dp)
+
+        Gap(width = BbangZipWeeklyCalendarDefaults.MonthToNavigationIconGap)
+
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_left_24),
-            contentDescription = stringResource(R.string.calendar_previous_week_description),
+            contentDescription = stringResource(id = R.string.calendar_previous_week_description),
             modifier = Modifier.noRippleClickable(onClick = onPreviousWeek),
-            tint = BbangZipTheme.color.labelAlternative_A29D96,
+            tint = colors.headerNavigationIconColor,
         )
-        Gap(width = 20.dp)
+
+        Gap(width = BbangZipWeeklyCalendarDefaults.NavigationIconGap)
+
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right_24),
-            contentDescription = stringResource(R.string.calendar_next_week_description),
+            contentDescription = stringResource(id = R.string.calendar_next_week_description),
             modifier = Modifier.noRippleClickable(onClick = onNextWeek),
-            tint = BbangZipTheme.color.labelAlternative_A29D96,
+            tint = colors.headerNavigationIconColor,
         )
+
         Gap()
+
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.ic_hamburger_menu_default_24),
             contentDescription = stringResource(R.string.calendar_menu_description),
             modifier = Modifier.noRippleClickable(onClick = onClickMenu),
-            tint = BbangZipTheme.color.labelAlternative_A29D96,
+            tint = colors.headerNavigationIconColor,
         )
     }
 }
@@ -204,17 +216,21 @@ private fun WeekRow(
     days: List<WeeklyCalendarDay>,
     selectedDate: LocalDate,
     onDateClick: (WeeklyCalendarDay) -> Unit,
+    colors: BbangZipWeeklyCalendarDefaults.Colors,
+    typography: BbangZipWeeklyCalendarDefaults.Typography,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(9.dp),
+        horizontalArrangement = Arrangement.spacedBy(space = BbangZipWeeklyCalendarDefaults.DayCellSpacing),
     ) {
         days.forEach { day ->
             DayCell(
                 dayData = day,
                 isSelected = day.date == selectedDate,
                 onClick = { onDateClick(day) },
-                modifier = Modifier.weight(1f),
+                modifier = Modifier.weight(weight = 1f),
+                colors = colors,
+                typography = typography,
             )
         }
     }
@@ -224,23 +240,25 @@ private fun WeekRow(
 private fun DayCell(
     dayData: WeeklyCalendarDay,
     isSelected: Boolean,
-    onClick: () -> Unit,
+    colors: BbangZipWeeklyCalendarDefaults.Colors,
+    typography: BbangZipWeeklyCalendarDefaults.Typography,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit = {},
 ) {
-    val backgroundColor = if (isSelected) BbangZipTheme.color.secondaryStrong_F2EAE4 else Color.Transparent
-    val dateTextColor = if (isSelected) BbangZipTheme.color.labelNormal_6B6560 else BbangZipTheme.color.labelAlternative_A29D96
-    val dateTextStyle = if (isSelected) BbangZipTheme.typography.label1SemiBold else BbangZipTheme.typography.label2Regular
+    val backgroundColor = colors.dayCellBackgroundColor(isSelected = isSelected)
+    val dateTextColor = colors.dayCellDateTextColor(isSelected = isSelected)
+    val dateTextStyle = typography.dayCellDateTextStyle(isSelected = isSelected)
 
     Box(
         modifier =
             modifier
-                .clip(shape = RoundedCornerShape(10.dp))
+                .clip(shape = BbangZipWeeklyCalendarDefaults.DayCellShape)
                 .noRippleClickable(onClick = onClick)
                 .background(backgroundColor),
         contentAlignment = Alignment.Center,
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 8.dp),
+            modifier = Modifier.padding(vertical = BbangZipWeeklyCalendarDefaults.DayCellVerticalPadding),
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
         ) {
@@ -250,7 +268,7 @@ private fun DayCell(
                 style = dateTextStyle,
             )
 
-            Gap(height = 8.dp)
+            Gap(height = BbangZipWeeklyCalendarDefaults.DayOfWeekToDayOfMonthGap)
 
             Text(
                 text = dayData.date.dayOfMonth.toString(),
@@ -285,6 +303,7 @@ fun WeeklyCalendarPreview() {
                 onDateSelected = {
                     Timber.tag("BbangZipWeeklyCalendar").d("onDateSelected: $it")
                 },
+                colors = BbangZipWeeklyCalendarDefaults.colors(),
             )
         }
     }
