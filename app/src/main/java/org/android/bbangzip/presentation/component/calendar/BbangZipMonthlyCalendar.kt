@@ -377,14 +377,15 @@ private fun getDaysOfWeekStartingFrom(startDayOfWeek: DayOfWeek = DayOfWeek.MOND
 fun MonthlyCalendarPreview() {
     BBANGZIPANDROIDTheme {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(20.dp)
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(20.dp),
         ) {
             MonthlyCalendar(
                 onDateSelected = {
                     Timber.tag("BbangZipMonthlyCalendar").d("onDateSelected: $it")
-                }
+                },
             )
         }
     }
