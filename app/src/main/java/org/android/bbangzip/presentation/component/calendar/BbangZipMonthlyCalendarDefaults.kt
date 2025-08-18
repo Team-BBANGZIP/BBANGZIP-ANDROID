@@ -21,9 +21,12 @@ data class MonthlyCalendarColors(
     val defaultDayCellTextColor: Color,
     val dayOfWeekTextColor: Color,
     val headerNavigationIconColor: Color,
-    val headerTextColor: Color
+    val headerTextColor: Color,
 ) {
-    internal fun dayCellBackgroundColor(isSelected: Boolean, isToday: Boolean): Color {
+    internal fun dayCellBackgroundColor(
+        isSelected: Boolean,
+        isToday: Boolean,
+    ): Color {
         return when {
             isSelected -> selectedDayCellBackgroundColor
             isToday -> todayCellBackgroundColor
@@ -31,7 +34,10 @@ data class MonthlyCalendarColors(
         }
     }
 
-    internal fun dayCellTextColor(isSelected: Boolean, isCurrentMonth: Boolean): Color {
+    internal fun dayCellTextColor(
+        isSelected: Boolean,
+        isCurrentMonth: Boolean,
+    ): Color {
         return when {
             isSelected -> selectedDayCellTextColor
             !isCurrentMonth -> notCurrentMonthDayCellTextColor
@@ -44,7 +50,7 @@ data class MonthlyCalendarColors(
 data class MonthlyCalendarTypography(
     val dayCellDateTextStyle: TextStyle,
     val dayOfWeekTextStyle: TextStyle,
-    val headerTextStyle: TextStyle
+    val headerTextStyle: TextStyle,
 )
 
 object BbangZipMonthlyCalendarDefaults {
@@ -57,7 +63,6 @@ object BbangZipMonthlyCalendarDefaults {
     val DayCellVerticalSpacing: Dp = 4.dp
     val DayCellHorizontalSpacing: Dp = 9.dp
 
-
     @Composable
     fun colors(
         selectedDayCellBackgroundColor: Color = BbangZipTheme.color.labelAlternative_A29D96,
@@ -68,7 +73,7 @@ object BbangZipMonthlyCalendarDefaults {
         defaultDayCellTextColor: Color = BbangZipTheme.color.labelAlternative_A29D96,
         dayOfWeekHeaderTextColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
         headerNavigationIconColor: Color = BbangZipTheme.color.labelAlternative_A29D96,
-        headerTextColor: Color = BbangZipTheme.color.labelNeutral_706A63
+        headerTextColor: Color = BbangZipTheme.color.labelNeutral_706A63,
     ): MonthlyCalendarColors {
         return remember(
             selectedDayCellBackgroundColor,
@@ -79,7 +84,7 @@ object BbangZipMonthlyCalendarDefaults {
             defaultDayCellTextColor,
             dayOfWeekHeaderTextColor,
             headerNavigationIconColor,
-            headerTextColor
+            headerTextColor,
         ) {
             MonthlyCalendarColors(
                 selectedDayCellBackgroundColor = selectedDayCellBackgroundColor,
@@ -90,7 +95,7 @@ object BbangZipMonthlyCalendarDefaults {
                 defaultDayCellTextColor = defaultDayCellTextColor,
                 dayOfWeekTextColor = dayOfWeekHeaderTextColor,
                 headerNavigationIconColor = headerNavigationIconColor,
-                headerTextColor = headerTextColor
+                headerTextColor = headerTextColor,
             )
         }
     }
@@ -99,19 +104,18 @@ object BbangZipMonthlyCalendarDefaults {
     fun typography(
         dayCellTextStyle: TextStyle = BbangZipTheme.typography.label4Regular,
         dayOfWeekTextStyle: TextStyle = BbangZipTheme.typography.label4Regular,
-        headerTextStyle: TextStyle = BbangZipTheme.typography.subTitle1Medium
+        headerTextStyle: TextStyle = BbangZipTheme.typography.subTitle1Medium,
     ): MonthlyCalendarTypography {
         return remember(
             dayCellTextStyle,
             dayOfWeekTextStyle,
-            headerTextStyle
+            headerTextStyle,
         ) {
             MonthlyCalendarTypography(
                 dayCellDateTextStyle = dayCellTextStyle,
                 dayOfWeekTextStyle = dayOfWeekTextStyle,
-                headerTextStyle = headerTextStyle
+                headerTextStyle = headerTextStyle,
             )
         }
     }
 }
-

@@ -34,6 +34,7 @@ import org.android.bbangzip.R
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
+import timber.log.Timber
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
@@ -42,8 +43,9 @@ import java.util.Locale
 import java.time.format.TextStyle as TimeTextStyle
 
 private const val HEADER_DATE_PATTERN = "yyyy년 MMMM"
-
-private const val CALENDAR_DAY_CELL_COUNT = 42
+private const val DAYS_IN_WEEK = 7
+private const val MAX_WEEKS_IN_MONTH_DISPLAY = 6
+private const val CALENDAR_GRID_CELL_COUNT = DAYS_IN_WEEK * MAX_WEEKS_IN_MONTH_DISPLAY
 
 @Immutable
 private data class MonthlyCalendarDay(
@@ -62,13 +64,13 @@ fun MonthlyCalendar(
 ) {
     var currentYearMonth by remember { mutableStateOf(value = initialYearMonth) }
     var selectedDate by remember { mutableStateOf(value = LocalDate.now()) }
-    val today = LocalDate.now()
+    val today = remember { LocalDate.now() }
 
     val daysInMonth by remember(key1 = currentYearMonth, key2 = today) {
         derivedStateOf {
             generateMonthDays(
                 yearMonth = currentYearMonth,
-                today = today
+                today = today,
             )
         }
     }
@@ -92,7 +94,7 @@ fun MonthlyCalendar(
 
         DayOfWeekHeader(
             color = colors.dayOfWeekTextColor,
-            typography = typography.dayOfWeekTextStyle
+            typography = typography.dayOfWeekTextStyle,
         )
 
         Gap(height = BbangZipMonthlyCalendarDefaults.DayOfWeekToDayOfMonthGap)
@@ -267,7 +269,7 @@ private fun generateMonthDays(
     }
 
     // 다음 달의 날짜 추가
-    val remainingCells = CALENDAR_DAY_CELL_COUNT - days.size
+    val remainingCells = CALENDAR_GRID_CELL_COUNT - days.size
     for (i in 1..remainingCells) {
         val date = lastDayOfMonth.plusDays(i.toLong())
         days.add(MonthlyCalendarDay(date = date, isCurrentMonth = false, isToday = date.isEqual(today)))
@@ -288,7 +290,7 @@ private fun getDaysOfWeekStartingFrom(startDayOfWeek: DayOfWeek = DayOfWeek.MOND
 fun MonthlyCalendarPreview() {
     BBANGZIPANDROIDTheme {
         MonthlyCalendar(onDateSelected = {
-            println("Selected date: $it")
+            Timber.tag("BbangZipMonthlyCalendar").d("onDateSelected: $it")
         })
     }
 }
