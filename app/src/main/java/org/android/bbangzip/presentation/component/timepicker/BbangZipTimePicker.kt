@@ -57,15 +57,15 @@ fun BbangZipTimePicker(
     itemHeight: Dp = 32.dp,
     pickerStyle: PickerStyle = defaultPickerStyle()
 ) {
-    val amPmItems = remember { listOf("AM", "PM") }
-    val hourItems = remember { (1..12).map { it.toString().padStart(2, '0') } }
+    val amPmItems = remember { listOf("오전", "오후") }
+    val hourItems = remember { (1..12).map { it.toString() } }
     val minuteItems = remember { (0..55 step 5).map { it.toString().padStart(2, '0') } }
 
     var pickerState by remember(initialTime) {
         mutableStateOf(
             BbangZipTimePickerState(
                 selectedAmPmIndex = amPmItems.indexOf(initialTime.amPm).coerceAtLeast(0),
-                selectedHourIndex = hourItems.indexOf(initialTime.hour.toString().padStart(2, '0')).coerceAtLeast(0),
+                selectedHourIndex = hourItems.indexOf(initialTime.hour.toString()).coerceAtLeast(0),
                 selectedMinuteIndex = minuteItems.indexOf(initialTime.minute.toString().padStart(2, '0')).coerceAtLeast(0)
             )
         )
@@ -129,16 +129,14 @@ fun BbangZipTimePickerPreview() {
         var selectedDisplayTime by remember { mutableStateOf<DisplayTime?>(null) }
         Column(modifier = Modifier.padding(16.dp)) {
             BbangZipTimePicker(
-                initialTime = DisplayTime("PM", 2, 30), // 14 for 2 PM
+                initialTime = DisplayTime("오후", 2, 30),
                 onTimeSelected = { time ->
                     selectedDisplayTime = time
                 }
             )
             selectedDisplayTime?.let { time ->
-                val displayHour = if (time.amPm == "PM" && time.hour > 12) time.hour - 12 else if (time.amPm == "AM" && time.hour == 0) 12 else time.hour
-                val formattedHour = displayHour.toString().padStart(2, '0')
                 Text(
-                    text = "선택된 시간: ${time.amPm} $formattedHour : ${time.minute.toString().padStart(2, '0')}",
+                    text = "선택된 시간: ${time.amPm} ${time.hour} : ${time.minute.toString().padStart(2, '0')}",
                     modifier = Modifier.padding(top = 16.dp)
                 )
             }

@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -23,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
@@ -92,16 +94,13 @@ fun WheelPicker(
     items: List<String>,
     initialIndex: Int = 0,
     visibleItemsCount: Int = 7,
-    itemHeight: Dp = 40.dp,
+    itemHeight: Dp = 32.dp,
     pickerStyle: PickerStyle = defaultPickerStyle(),
-    alignment: Alignment.Horizontal, // BbangZipTimePicker에서 사용되므로 유지
+    alignment: Alignment.Horizontal,
     onItemSelected: (index: Int, item: String) -> Unit
 ) {
-    require(visibleItemsCount % 2 != 0) { "visibleItemsCount must be an odd number." }
-
-    if (items.isEmpty()) {
-        Box(modifier = modifier.height(itemHeight * visibleItemsCount))
-        return
+    val visibleItemsCount = remember{
+        if(visibleItemsCount % 2 == 0) visibleItemsCount + 1 else visibleItemsCount
     }
 
     val density = LocalDensity.current
@@ -189,8 +188,9 @@ fun WheelPicker(
     ) {
         Box(
             modifier = Modifier
-                .height(itemHeight)
+                .height(44.dp)
                 .fillMaxWidth()
+                .clip(shape = RoundedCornerShape(size = 10.dp))
                 .align(Alignment.Center)
                 .background(BbangZipTheme.color.componentStrong_F6F6F5)
         )
@@ -211,25 +211,21 @@ fun WheelPicker(
                 val itemText = items.getOrNull(actualIndex) ?: ""
                 val distanceToCenterNormalized = abs(paddedIndex - visuallyCenteredPaddedIndex).toFloat()
 
-                val itemAlpha = remember(distanceToCenterNormalized) { max(0.3f, 1f - distanceToCenterNormalized * 0.4f) }
+                val itemAlpha = remember(distanceToCenterNormalized) { max(0f, 1f - (distanceToCenterNormalized-1) * 0.4f) }
 
                 val isConfirmedSelected = (actualIndex == confirmedSelectedIndex && actualIndex in items.indices)
 
                 Box(
                     modifier = Modifier
-                        .height(itemHeight)
-                        .graphicsLayer {
-                            this.alpha = itemAlpha
-                        },
-                    contentAlignment = Alignment.Center // Box 내부 컨텐츠는 중앙 정렬 (Text의 textAlign이 우선될 수 있음)
+                        .height(itemHeight),
+                    contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = itemText,
-                        style = pickerStyle.textStyle, // textAlign은 pickerStyle에서 제어
-                        color = if (isConfirmedSelected) pickerStyle.selectedTextColor
-                        else pickerStyle.unselectedTextColor.copy(alpha = pickerStyle.unselectedTextColor.alpha * itemAlpha),
-                        // Text에 Modifier.fillMaxWidth()를 직접 적용할 수도 있으나,
-                        // Box의 contentAlignment과 pickerStyle.textStyle.textAlign의 조합으로 처리
+                        style = if(isConfirmedSelected) BbangZipTheme.typography.picker1SemiBold
+                            else BbangZipTheme.typography.picker2SemiBold,
+                        color = if (isConfirmedSelected) BbangZipTheme.color.labelStrong_463D34
+                            else BbangZipTheme.color.labelAssistive_C9C7C5.copy(alpha = itemAlpha),
                     )
                 }
             }
