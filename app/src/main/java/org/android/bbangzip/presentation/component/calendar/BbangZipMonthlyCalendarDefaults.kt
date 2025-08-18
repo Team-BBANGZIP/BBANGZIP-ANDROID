@@ -101,15 +101,19 @@ object BbangZipMonthlyCalendarDefaults {
 
     /** 날짜 그리드에서 날짜 셀들 사이의 수직 간격입니다. */
     val DayCellVerticalSpacing: Dp = 4.dp
+
     /** 날짜 그리드 및 요일 헤더에서 셀들 사이의 수평 간격입니다. */
     val DayCellHorizontalSpacing: Dp = 9.dp
 
     /** 달력 헤더와 요일 헤더 사이의 간격입니다. */
     val HeaderToDayOfWeekGap: Dp = 20.dp
+
     /** 요일 헤더와 날짜 그리드 사이의 간격입니다. */
     val DayOfWeekToDayOfMonthGap: Dp = 6.dp
+
     /** 달력 헤더의 년/월 텍스트와 네비게이션 아이콘 사이의 간격입니다. */
     val MonthToNavigationIconGap: Dp = 20.dp
+
     /** 달력 헤더의 네비게이션 아이콘들 사이의 간격입니다. */
     val NavigationIconGap: Dp = 20.dp
 

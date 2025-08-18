@@ -44,10 +44,13 @@ import java.time.format.TextStyle as TimeTextStyle
 
 /** 캘린더 헤더에 표시될 날짜 형식 패턴 (예: "2025년 8월") */
 private const val HEADER_DATE_PATTERN = "yyyy년 MMMM"
+
 /** 한 주의 일 수 (7일) */
 private const val DAYS_IN_WEEK = 7
+
 /** 달력에 표시할 최대 주의 수 */
 private const val MAX_WEEKS_IN_MONTH_DISPLAY = 6
+
 /** 달력의 그리드에 표시될 셀의 총 수 */
 private const val CALENDAR_GRID_CELL_COUNT = DAYS_IN_WEEK * MAX_WEEKS_IN_MONTH_DISPLAY
 

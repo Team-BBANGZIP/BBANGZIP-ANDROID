@@ -45,10 +45,12 @@ import java.util.Locale
 
 /** 페이저의 "무한 스크롤"을 구현하기 위한 페이지 수 */
 private const val PAGER_PAGE_COUNT = Int.MAX_VALUE
+
 /** 페이저의 초기 페이지 인덱스
  *
  * [PAGER_PAGE_COUNT]의 중앙값으로 설정하여 양방향 스크롤을 가능하게 합니다. */
 private const val INITIAL_PAGE_INDEX = Int.MAX_VALUE / 2
+
 /** 한 주의 일 수 (7일) */
 private const val DAYS_IN_WEEK = 7
 
@@ -180,7 +182,7 @@ fun BbangZipWeeklyCalendar(
  * @param selectedDate 현재 선택된 [LocalDate]입니다. 헤더의 월 표시 결정에 사용됩니다.
  * @param onPreviousWeek 이전 주로 이동하는 액션을 처리하는 콜백입니다.
  * @param onNextWeek 다음 주로 이동하는 액션을 처리하는 콜백입니다.
- * @param onClickMenu 메뉴 아이콘 클릭 시 호출되는 콜백입니다.
+ * @param onMenuClick 메뉴 아이콘 클릭 시 호출되는 콜백입니다.
  * @param colors 헤더의 색상 설정을 담고 있는 [WeeklyCalendarColors] 객체입니다.
  * @param typography 헤더의 텍스트 스타일 설정을 담고 있는 [WeeklyCalendarTypography] 객체입니다.
  */
@@ -276,7 +278,6 @@ private fun WeekRow(
         }
     }
 }
-
 
 /**
  * 주간 캘린더 내의 개별 날짜 셀(요일과 일자 포함)을 표시하는 컴포저블입니다.

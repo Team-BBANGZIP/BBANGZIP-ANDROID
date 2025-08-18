@@ -83,6 +83,7 @@ data class WeeklyCalendarTypography(
 object BbangZipWeeklyCalendarDefaults {
     /** 날짜 셀의 모서리 둥글기 값입니다. */
     val DayCellCornerRadius: Dp = 10.dp
+
     /** 날짜 셀의 기본 모양입니다. [DayCellCornerRadius]를 사용한 둥근 모서리 사각형입니다. */
     val DayCellShape: Shape = RoundedCornerShape(DayCellCornerRadius)
 
@@ -94,10 +95,13 @@ object BbangZipWeeklyCalendarDefaults {
 
     /** 달력 헤더와 주(Week) 행 사이의 간격입니다. */
     val HeaderToWeekRowGap: Dp = 20.dp
+
     /** 달력 헤더의 년/월 텍스트와 네비게이션 아이콘 사이의 간격입니다. */
     val MonthToNavigationIconGap: Dp = 20.dp
+
     /** 달력 헤더의 네비게이션 아이콘들(이전 주, 다음 주) 사이의 간격입니다. */
     val NavigationIconGap: Dp = 20.dp
+
     /** 날짜 셀 내부에서 요일 텍스트와 일자 텍스트 사이의 간격입니다. */
     val DayOfWeekToDayOfMonthGap: Dp = 8.dp
 
