@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -26,25 +25,25 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
-import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
-import java.time.format.TextStyle
 import java.util.Locale
+import java.time.format.TextStyle as TimeTextStyle
 
 private const val HEADER_DATE_PATTERN = "yyyy년 MMMM"
+
+private const val CALENDAR_DAY_CELL_COUNT = 42
 
 @Immutable
 private data class MonthlyCalendarDay(
@@ -58,14 +57,19 @@ fun MonthlyCalendar(
     modifier: Modifier = Modifier,
     initialYearMonth: YearMonth = YearMonth.now(),
     onDateSelected: (LocalDate) -> Unit = {},
+    colors: MonthlyCalendarColors = BbangZipMonthlyCalendarDefaults.colors(),
+    typography: MonthlyCalendarTypography = BbangZipMonthlyCalendarDefaults.typography(),
 ) {
-    var currentYearMonth by remember { mutableStateOf(initialYearMonth) }
-    var selectedDate by remember { mutableStateOf(LocalDate.now()) }
+    var currentYearMonth by remember { mutableStateOf(value = initialYearMonth) }
+    var selectedDate by remember { mutableStateOf(value = LocalDate.now()) }
     val today = LocalDate.now()
 
-    val daysInMonth by remember(currentYearMonth, today) {
+    val daysInMonth by remember(key1 = currentYearMonth, key2 = today) {
         derivedStateOf {
-            generateMonthDays(currentYearMonth, today)
+            generateMonthDays(
+                yearMonth = currentYearMonth,
+                today = today
+            )
         }
     }
 
@@ -84,11 +88,14 @@ fun MonthlyCalendar(
             onNextMonth = { currentYearMonth = currentYearMonth.plusMonths(1) },
         )
 
-        Gap(height = 20.dp)
+        Gap(height = BbangZipMonthlyCalendarDefaults.HeaderToDayOfWeekGap)
 
-        DayOfWeekHeader()
+        DayOfWeekHeader(
+            color = colors.dayOfWeekTextColor,
+            typography = typography.dayOfWeekTextStyle
+        )
 
-        Gap(height = 6.dp)
+        Gap(height = BbangZipMonthlyCalendarDefaults.DayOfWeekToDayOfMonthGap)
 
         CalendarGrid(
             days = daysInMonth,
@@ -107,6 +114,8 @@ private fun CalendarHeader(
     yearMonth: YearMonth,
     onPreviousMonth: () -> Unit,
     onNextMonth: () -> Unit,
+    colors: MonthlyCalendarColors = BbangZipMonthlyCalendarDefaults.colors(),
+    typography: MonthlyCalendarTypography = BbangZipMonthlyCalendarDefaults.typography(),
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -118,11 +127,11 @@ private fun CalendarHeader(
             }
         Text(
             text = yearMonth.format(monthYearFormatter),
-            style = BbangZipTheme.typography.subTitle1Medium,
-            color = BbangZipTheme.color.labelNeutral_706A63,
+            style = typography.headerTextStyle,
+            color = colors.headerTextColor,
         )
 
-        Gap(width = 20.dp)
+        Gap(width = BbangZipMonthlyCalendarDefaults.MonthToNavigationIconGap)
 
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_left_24),
@@ -130,10 +139,10 @@ private fun CalendarHeader(
             modifier =
                 Modifier
                     .noRippleClickable(onClick = onPreviousMonth),
-            tint = BbangZipTheme.color.labelAlternative_A29D96,
+            tint = colors.headerNavigationIconColor,
         )
 
-        Gap(width = 20.dp)
+        Gap(width = BbangZipMonthlyCalendarDefaults.NavigationIconGap)
 
         Icon(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right_24),
@@ -141,26 +150,29 @@ private fun CalendarHeader(
             modifier =
                 Modifier
                     .noRippleClickable(onClick = onNextMonth),
-            tint = BbangZipTheme.color.labelAlternative_A29D96,
+            tint = colors.headerNavigationIconColor,
         )
     }
 }
 
 @Composable
-private fun DayOfWeekHeader() {
+private fun DayOfWeekHeader(
+    color: Color = BbangZipMonthlyCalendarDefaults.colors().dayOfWeekTextColor,
+    typography: TextStyle = BbangZipMonthlyCalendarDefaults.typography().dayOfWeekTextStyle,
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(9.dp),
+        horizontalArrangement = Arrangement.spacedBy(space = BbangZipMonthlyCalendarDefaults.DayCellHorizontalSpacing),
     ) {
         val daysOfWeek = remember { getDaysOfWeekStartingFrom() }
 
         for (dayOfWeek in daysOfWeek) {
             Text(
-                text = dayOfWeek.getDisplayName(TextStyle.SHORT, Locale.getDefault()),
+                text = dayOfWeek.getDisplayName(TimeTextStyle.SHORT, Locale.getDefault()),
                 textAlign = TextAlign.Center,
                 modifier = Modifier.weight(1f),
-                style = BbangZipTheme.typography.label4Regular,
-                color = BbangZipTheme.color.labelAssistive_C9C7C5,
+                style = typography,
+                color = color,
             )
         }
     }
@@ -171,12 +183,14 @@ private fun CalendarGrid(
     days: List<MonthlyCalendarDay>,
     selectedDate: LocalDate,
     onDateClick: (MonthlyCalendarDay) -> Unit,
+    colors: MonthlyCalendarColors = BbangZipMonthlyCalendarDefaults.colors(),
+    typography: MonthlyCalendarTypography = BbangZipMonthlyCalendarDefaults.typography(),
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(count = 7),
         modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(space = 4.dp),
-        horizontalArrangement = Arrangement.spacedBy(space = 9.dp),
+        verticalArrangement = Arrangement.spacedBy(space = BbangZipMonthlyCalendarDefaults.DayCellVerticalSpacing),
+        horizontalArrangement = Arrangement.spacedBy(space = BbangZipMonthlyCalendarDefaults.DayCellHorizontalSpacing),
     ) {
         items(
             items = days,
@@ -186,6 +200,8 @@ private fun CalendarGrid(
                 day = day,
                 isSelected = day.date == selectedDate,
                 onClick = { onDateClick(day) },
+                colors = colors,
+                typography = typography,
             )
         }
     }
@@ -196,26 +212,20 @@ private fun CalendarDayCell(
     day: MonthlyCalendarDay,
     isSelected: Boolean,
     onClick: () -> Unit,
+    colors: MonthlyCalendarColors,
+    typography: MonthlyCalendarTypography,
 ) {
     val backgroundColor =
-        when {
-            isSelected -> BbangZipTheme.color.labelAlternative_A29D96
-            day.isToday -> BbangZipTheme.color.backgroundAlternative_FAF6F3
-            else -> Color.Transparent
-        }
+        colors.dayCellBackgroundColor(isSelected = isSelected, isToday = day.isToday)
 
     val textColor =
-        when {
-            isSelected -> BbangZipTheme.color.staticWhite_FFFFFF
-            !day.isCurrentMonth -> BbangZipTheme.color.labelAssistive_C9C7C5
-            else -> BbangZipTheme.color.labelAlternative_A29D96
-        }
+        colors.dayCellTextColor(isSelected = isSelected, isCurrentMonth = day.isCurrentMonth)
 
     Box(
         modifier =
             Modifier
                 .aspectRatio(1f)
-                .clip(CircleShape)
+                .clip(BbangZipMonthlyCalendarDefaults.DayCellShape)
                 .noRippleClickable(
                     enabled = day.isCurrentMonth,
                     onClick = onClick,
@@ -226,7 +236,7 @@ private fun CalendarDayCell(
         Text(
             text = day.date.dayOfMonth.toString(),
             color = textColor,
-            style = BbangZipTheme.typography.label4Regular,
+            style = typography.dayCellDateTextStyle,
         )
     }
 }
@@ -257,7 +267,7 @@ private fun generateMonthDays(
     }
 
     // 다음 달의 날짜 추가
-    val remainingCells = 42 - days.size
+    val remainingCells = CALENDAR_DAY_CELL_COUNT - days.size
     for (i in 1..remainingCells) {
         val date = lastDayOfMonth.plusDays(i.toLong())
         days.add(MonthlyCalendarDay(date = date, isCurrentMonth = false, isToday = date.isEqual(today)))
