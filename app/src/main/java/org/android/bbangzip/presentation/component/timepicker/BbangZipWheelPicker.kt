@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,10 +24,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -39,21 +35,6 @@ import kotlinx.coroutines.flow.onEach
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import kotlin.math.abs
 import kotlin.math.max
-
-data class PickerStyle(
-    val textStyle: TextStyle,
-    val selectedTextColor: Color,
-    val unselectedTextColor: Color,
-    val selectionIndicatorColor: Color
-)
-
-@Composable
-fun defaultPickerStyle(): PickerStyle = PickerStyle(
-    textStyle = LocalTextStyle.current,
-    selectedTextColor = Color.Black,
-    unselectedTextColor = BbangZipTheme.color.labelAssistive_C9C7C5,
-    selectionIndicatorColor = Color.LightGray.copy(alpha = 0.5f)
-)
 
 internal fun LazyListState.closestItemIndex(paddingItemsCount: Int, itemsSize: Int): Int? {
     if (layoutInfo.visibleItemsInfo.isEmpty() || itemsSize == 0) return null
@@ -80,22 +61,20 @@ internal suspend fun LazyListState.scrollToAndConfirmSettledItem(
  * @param modifier 이 컴포넌트에 적용할 [Modifier].
  * @param items 피커에 표시될 문자열 항목의 목록입니다.
  * @param initialIndex 초기에 선택될 항목의 인덱스입니다. 기본값은 0입니다.
- * @param visibleItemsCount 피커에 한 번에 보여질 항목의 수입니다. 홀수로 지정해야 중앙 항목이 명확해집니다. 기본값은 5입니다.
- * @param itemHeight 각 항목의 높이입니다. 기본값은 40.dp입니다.
- * @param pickerStyle 스타일 관련 속성들을 그룹화한 [PickerStyle] 객체입니다.
+ * @param visibleItemsCount 피커에 한 번에 보여질 항목의 수입니다. 홀수로 지정해야 중앙 항목이 명확해집니다. 기본값은 7입니다.
+ * @param itemHeight 각 항목의 높이입니다. 기본값은 32.dp입니다.
  * @param alignment LazyColumn 내부 아이템들의 수평 정렬입니다.
  * @param onItemSelected 사용자가 스크롤을 멈추고 항목이 최종적으로 선택되었을 때 호출되는 콜백입니다.
  *                     선택된 항목의 인덱스와 문자열 값을 전달합니다.
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun WheelPicker(
+fun BbangZipWheelPicker(
     modifier: Modifier = Modifier,
     items: List<String>,
     initialIndex: Int = 0,
     visibleItemsCount: Int = 7,
     itemHeight: Dp = 32.dp,
-    pickerStyle: PickerStyle = defaultPickerStyle(),
     alignment: Alignment.Horizontal,
     onItemSelected: (index: Int, item: String) -> Unit
 ) {

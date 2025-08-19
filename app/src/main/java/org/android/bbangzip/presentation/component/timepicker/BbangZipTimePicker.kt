@@ -46,7 +46,6 @@ data class DisplayTime(val amPm: String, val hour: Int, val minute: Int)
  *                       선택된 [DisplayTime] 객체를 전달합니다.
  * @param visibleItemsCount 각 WheelPicker에 보여질 항목 수. 기본값은 5.
  * @param itemHeight 각 WheelPicker 항목의 높이. 기본값은 40.dp.
- * @param pickerStyle 각 WheelPicker에 적용될 [PickerStyle].
  */
 @Composable
 fun BbangZipTimePicker(
@@ -55,7 +54,6 @@ fun BbangZipTimePicker(
     onTimeSelected: (DisplayTime) -> Unit,
     visibleItemsCount: Int = 7,
     itemHeight: Dp = 32.dp,
-    pickerStyle: PickerStyle = defaultPickerStyle()
 ) {
     val amPmItems = remember { listOf("오전", "오후") }
     val hourItems = remember { (1..12).map { it.toString() } }
@@ -80,39 +78,36 @@ fun BbangZipTimePicker(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceEvenly
     ) {
-        WheelPicker(
+        BbangZipWheelPicker(
             modifier = Modifier.weight(125f / 335f),
             items = amPmItems,
             initialIndex = pickerState.selectedAmPmIndex,
             visibleItemsCount = visibleItemsCount,
             itemHeight = itemHeight,
-            pickerStyle = pickerStyle,
             onItemSelected = { index, _ ->
                 pickerState = pickerState.copy(selectedAmPmIndex = index)
             },
             alignment = Alignment.End
         )
 
-        WheelPicker(
+        BbangZipWheelPicker(
             modifier = Modifier.weight(95f / 335f),
             items = hourItems,
             initialIndex = pickerState.selectedHourIndex,
             visibleItemsCount = visibleItemsCount,
             itemHeight = itemHeight,
-            pickerStyle = pickerStyle,
             onItemSelected = { index, _ ->
                 pickerState = pickerState.copy(selectedHourIndex = index)
             },
             alignment = Alignment.CenterHorizontally
         )
 
-        WheelPicker(
+        BbangZipWheelPicker(
             modifier = Modifier.weight(115f / 335f),
             items = minuteItems,
             initialIndex = pickerState.selectedMinuteIndex,
             visibleItemsCount = visibleItemsCount,
             itemHeight = itemHeight,
-            pickerStyle = pickerStyle,
             onItemSelected = { index, _ ->
                 pickerState = pickerState.copy(selectedMinuteIndex = index)
             },
