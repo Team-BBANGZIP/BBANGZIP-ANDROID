@@ -1,6 +1,5 @@
 package org.android.bbangzip.presentation.component.timepicker
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -9,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -19,28 +19,46 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 
-data class DisplayTime(val amPm: String, val hour: Int, val minute: Int)
+private const val DEFAULT_PADDING_ITEMS_COUNT = 3
+
+data class DisplayTime(val amPm: AmPm, val hour: Int, val minute: Int)
+
+sealed interface AmPm {
+    val displayText: String
+
+    object AM : AmPm {
+        override val displayText: String = "오전"
+    }
+
+    object PM : AmPm {
+        override val displayText: String = "오후"
+    }
+}
+
+private fun AmPm.toPickerString(): String = this.displayText
+
+private fun String.toAmPm(): AmPm = if (this == AmPm.PM.displayText) AmPm.PM else AmPm.AM
+
+private val amPmItems: List<String> = listOf(AmPm.AM.toPickerString(), AmPm.PM.toPickerString())
+private val hourItems = (1..12).map { it.toString() }
+private val minuteItems = (0..59 step 5).map { it.toString().padStart(2, '0') }
 
 @Composable
 fun BbangZipTimePicker(
     modifier: Modifier = Modifier,
-    initialTime: DisplayTime = DisplayTime("오전", 0, 0),
+    initialTime: DisplayTime = DisplayTime(AmPm.AM, 0, 0),
     onTimeSelected: (DisplayTime) -> Unit,
-    paddingItemsCount: Int = 3,
-    itemHeight: Dp = 32.dp,
+    paddingItemsCount: Int = DEFAULT_PADDING_ITEMS_COUNT,
+    itemHeight: Dp = BbangZipWheelPickerDefaults.DefaultItemHeight,
+    colors: WheelPickerColors = BbangZipWheelPickerDefaults.colors(),
+    typography: WheelPickerTypography = BbangZipWheelPickerDefaults.typography(),
 ) {
-    val amPmItems = remember { listOf("오전", "오후") }
-    val hourItems = remember { (1..12).map { it.toString() } }
-    val minuteItems = remember { (0..55 step 5).map { it.toString().padStart(2, '0') } }
+    var selectedHour by remember { mutableIntStateOf(initialTime.hour) }
+    var selectedMinute by remember { mutableIntStateOf(initialTime.minute) }
+    var selectedAmPm by remember { mutableStateOf(initialTime.amPm) }
 
-    var pickerState by remember(initialTime) {
-        mutableStateOf(
-            initialTime,
-        )
-    }
-
-    LaunchedEffect(pickerState) {
-        onTimeSelected(pickerState)
+    LaunchedEffect(selectedAmPm, selectedHour, selectedMinute) {
+        onTimeSelected(DisplayTime(amPm = selectedAmPm, hour = selectedHour, minute = selectedMinute))
     }
 
     Row(
@@ -48,39 +66,45 @@ fun BbangZipTimePicker(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         BbangZipWheelPicker(
-            modifier = Modifier.weight(125f / 335f),
+            modifier = Modifier.weight(weight = BbangZipWheelPickerDefaults.AM_PM_WEIGHT),
             items = amPmItems,
-            initialIndex = amPmItems.indexOf(pickerState.amPm),
+            initialIndex = amPmItems.indexOf(initialTime.amPm.toPickerString()),
             paddingItemsCount = paddingItemsCount,
             itemHeight = itemHeight,
             onItemSelected = { _, item ->
-                pickerState = pickerState.copy(amPm = item)
+                selectedAmPm = item.toAmPm()
             },
             alignment = Alignment.End,
+            colors = colors,
+            typography = typography,
         )
 
         BbangZipWheelPicker(
-            modifier = Modifier.weight(95f / 335f),
+            modifier = Modifier.weight(weight = BbangZipWheelPickerDefaults.HOUR_WEIGHT),
             items = hourItems,
-            initialIndex = hourItems.indexOf(pickerState.hour.toString().padStart(2, '0')),
+            initialIndex = hourItems.indexOf(initialTime.hour.toString()),
             paddingItemsCount = paddingItemsCount,
             itemHeight = itemHeight,
             onItemSelected = { _, item ->
-                pickerState = pickerState.copy(hour = item.toInt())
+                selectedHour = item.toInt()
             },
             alignment = Alignment.CenterHorizontally,
+            colors = colors,
+            typography = typography,
         )
 
         BbangZipWheelPicker(
-            modifier = Modifier.weight(115f / 335f),
+            modifier = Modifier.weight(weight = BbangZipWheelPickerDefaults.MINUTE_WEIGHT),
             items = minuteItems,
-            initialIndex = minuteItems.indexOf(pickerState.minute.toString().padStart(2, '0')),
+            initialIndex = minuteItems.indexOf(initialTime.minute.toString().padStart(2, '0')),
             paddingItemsCount = paddingItemsCount,
             itemHeight = itemHeight,
             onItemSelected = { _, item ->
-                pickerState = pickerState.copy(minute = item.toInt())
+                selectedMinute = item.toInt()
             },
             alignment = Alignment.Start,
+            colors = colors,
+            typography = typography,
         )
     }
 }
@@ -93,7 +117,7 @@ fun BbangZipTimePickerPreview() {
 
         Column(modifier = Modifier.padding(16.dp)) {
             BbangZipTimePicker(
-                initialTime = DisplayTime("오후", 2, 30),
+                initialTime = DisplayTime(amPm = AmPm.PM, hour = 2, minute = 30),
                 onTimeSelected = { time ->
                     selectedDisplayTime = time
                 },
@@ -101,7 +125,7 @@ fun BbangZipTimePickerPreview() {
 
             selectedDisplayTime?.let { time ->
                 Text(
-                    text = "선택된 시간: ${time.amPm} ${time.hour} : ${time.minute.toString().padStart(2, '0')}",
+                    text = "선택된 시간: $time",
                     modifier = Modifier.padding(top = 16.dp),
                 )
             }

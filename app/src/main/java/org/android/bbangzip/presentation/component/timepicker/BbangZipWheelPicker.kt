@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -19,24 +18,28 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import org.android.bbangzip.ui.theme.BbangZipTheme
 import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.max
 
+private const val DEFAULT_INITIAL_INDEX = 0
+
 @Composable
 fun BbangZipWheelPicker(
-    modifier: Modifier = Modifier,
     items: List<String>,
-    initialIndex: Int = 0,
-    paddingItemsCount: Int = 3,
-    itemHeight: Dp = 32.dp,
-    alignment: Alignment.Horizontal,
     onItemSelected: (index: Int, item: String) -> Unit,
+    paddingItemsCount: Int,
+    colors: WheelPickerColors,
+    typography: WheelPickerTypography,
+    modifier: Modifier = Modifier,
+    initialIndex: Int = DEFAULT_INITIAL_INDEX,
+    itemHeight: Dp = BbangZipWheelPickerDefaults.DefaultItemHeight,
+    alignment: Alignment.Horizontal = Alignment.CenterHorizontally,
 ) {
     val visibleItemsCount =
         remember {
@@ -85,7 +88,7 @@ fun BbangZipWheelPicker(
                 .fillMaxWidth(),
         contentAlignment = Alignment.Center,
     ) {
-        Indicator()
+        Indicator(backgroundColor = colors.indicatorBackgroundColor)
 
         LazyColumn(
             state = listState,
@@ -97,14 +100,14 @@ fun BbangZipWheelPicker(
                 count = paddedItems.size,
                 key = { paddedIndex ->
                     val actualIndex = paddedIndex - paddingItemsCount
-                    items.getOrNull(actualIndex)?.let { "item_${it}_$actualIndex" } ?: "padding_$paddedIndex"
+                    items.getOrNull(actualIndex) ?: "padding_$paddedIndex"
                 },
             ) { paddedIndex ->
                 val actualIndex = paddedIndex - paddingItemsCount
                 val itemText = paddedItems[paddedIndex]
-                val distanceToCenterNormalized = abs(paddedIndex - targetPaddedIndexForInitial).toFloat()
+                val distanceToCenterNormalized = abs(paddedIndex - (selectedIndex + paddingItemsCount)).toFloat()
 
-                val itemAlpha = remember(distanceToCenterNormalized) { max(0f, 1f - (distanceToCenterNormalized - 1) * 0.4f) }
+                val itemAlpha = remember(distanceToCenterNormalized) { max(BbangZipWheelPickerDefaults.UNSELECTED_ITEM_MIN_ALPHA, 1f - (distanceToCenterNormalized - 1) * BbangZipWheelPickerDefaults.UNSELECTED_ITEM_ALPHA_FACTOR) }
 
                 val isSelected = (actualIndex in items.indices && actualIndex == selectedIndex)
 
@@ -116,18 +119,8 @@ fun BbangZipWheelPicker(
                 ) {
                     Text(
                         text = itemText,
-                        style =
-                            if (isSelected) {
-                                BbangZipTheme.typography.picker1SemiBold
-                            } else {
-                                BbangZipTheme.typography.picker2SemiBold
-                            },
-                        color =
-                            if (isSelected) {
-                                BbangZipTheme.color.labelStrong_463D34
-                            } else {
-                                BbangZipTheme.color.labelAssistive_C9C7C5.copy(alpha = itemAlpha)
-                            },
+                        style = typography.itemTypography(isSelected = isSelected),
+                        color = colors.itemTextColor(isSelected = isSelected, alpha = itemAlpha),
                     )
                 }
             }
@@ -137,15 +130,16 @@ fun BbangZipWheelPicker(
 
 @Composable
 private fun Indicator(
+    backgroundColor: Color,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier =
             modifier
-                .height(44.dp)
+                .height(height = BbangZipWheelPickerDefaults.IndicatorHeight)
                 .fillMaxWidth()
-                .clip(shape = RoundedCornerShape(size = 10.dp))
-                .background(BbangZipTheme.color.componentStrong_F6F6F5),
+                .clip(shape = BbangZipWheelPickerDefaults.IndicatorShape)
+                .background(color = backgroundColor),
     )
 }
 
@@ -163,5 +157,7 @@ fun BbangZipWheelPickerPreview() {
         onItemSelected = { index, item ->
             Timber.d("Selected index: $index, item: $item")
         },
+        colors = BbangZipWheelPickerDefaults.colors(),
+        typography = BbangZipWheelPickerDefaults.typography(),
     )
 }
