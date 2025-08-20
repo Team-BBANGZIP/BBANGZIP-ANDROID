@@ -35,24 +35,12 @@ private data class BbangZipTimePickerState(
 
 data class DisplayTime(val amPm: String, val hour: Int, val minute: Int)
 
-/**
- * AM/PM, 시간(0-23), 분(5분 단위)을 선택할 수 있는 시간 선택기 컴포넌트
- *
- * 세 개의 [BbangZipWheelPicker]를 가로로 배열하여 구성됩니다.
- *
- * @param modifier 이 컴포넌트에 적용할 [Modifier].
- * @param initialTime 초기에 선택될 시간 정보를 담은 [DisplayTime] 객체.
- * @param onTimeSelected 시간, 분, AM/PM이 최종적으로 선택되었을 때 호출되는 콜백입니다.
- *                       선택된 [DisplayTime] 객체를 전달합니다.
- * @param visibleItemsCount 각 WheelPicker에 보여질 항목 수. 기본값은 5.
- * @param itemHeight 각 WheelPicker 항목의 높이. 기본값은 40.dp.
- */
 @Composable
 fun BbangZipTimePicker(
     modifier: Modifier = Modifier,
     initialTime: DisplayTime = DisplayTime("AM", 0, 0),
     onTimeSelected: (DisplayTime) -> Unit,
-    visibleItemsCount: Int = 7,
+    paddingItemsCount: Int = 3,
     itemHeight: Dp = 32.dp,
 ) {
     val amPmItems = remember { listOf("오전", "오후") }
@@ -82,7 +70,7 @@ fun BbangZipTimePicker(
             modifier = Modifier.weight(125f / 335f),
             items = amPmItems,
             initialIndex = pickerState.selectedAmPmIndex,
-            visibleItemsCount = visibleItemsCount,
+            paddingItemsCount = paddingItemsCount,
             itemHeight = itemHeight,
             onItemSelected = { index, _ ->
                 pickerState = pickerState.copy(selectedAmPmIndex = index)
@@ -94,7 +82,7 @@ fun BbangZipTimePicker(
             modifier = Modifier.weight(95f / 335f),
             items = hourItems,
             initialIndex = pickerState.selectedHourIndex,
-            visibleItemsCount = visibleItemsCount,
+            paddingItemsCount = paddingItemsCount,
             itemHeight = itemHeight,
             onItemSelected = { index, _ ->
                 pickerState = pickerState.copy(selectedHourIndex = index)
@@ -106,7 +94,7 @@ fun BbangZipTimePicker(
             modifier = Modifier.weight(115f / 335f),
             items = minuteItems,
             initialIndex = pickerState.selectedMinuteIndex,
-            visibleItemsCount = visibleItemsCount,
+            paddingItemsCount = paddingItemsCount,
             itemHeight = itemHeight,
             onItemSelected = { index, _ ->
                 pickerState = pickerState.copy(selectedMinuteIndex = index)
