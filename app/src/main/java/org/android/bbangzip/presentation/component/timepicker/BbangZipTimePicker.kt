@@ -19,30 +19,12 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 
-private data class BbangZipTimePickerState(
-    val selectedAmPmIndex: Int,
-    val selectedHourIndex: Int,
-    val selectedMinuteIndex: Int,
-) {
-    fun toDisplayTime(
-        amPmItems: List<String>,
-        hourItems: List<String>,
-        minuteItems: List<String>,
-    ): DisplayTime {
-        return DisplayTime(
-            amPm = amPmItems[selectedAmPmIndex],
-            hour = hourItems[selectedHourIndex].toInt(),
-            minute = minuteItems[selectedMinuteIndex].toInt(),
-        )
-    }
-}
-
 data class DisplayTime(val amPm: String, val hour: Int, val minute: Int)
 
 @Composable
 fun BbangZipTimePicker(
     modifier: Modifier = Modifier,
-    initialTime: DisplayTime = DisplayTime("AM", 0, 0),
+    initialTime: DisplayTime = DisplayTime("오전", 0, 0),
     onTimeSelected: (DisplayTime) -> Unit,
     paddingItemsCount: Int = 3,
     itemHeight: Dp = 32.dp,
@@ -53,31 +35,26 @@ fun BbangZipTimePicker(
 
     var pickerState by remember(initialTime) {
         mutableStateOf(
-            BbangZipTimePickerState(
-                selectedAmPmIndex = amPmItems.indexOf(initialTime.amPm).coerceAtLeast(0),
-                selectedHourIndex = hourItems.indexOf(initialTime.hour.toString()).coerceAtLeast(0),
-                selectedMinuteIndex = minuteItems.indexOf(initialTime.minute.toString().padStart(2, '0')).coerceAtLeast(0),
-            ),
+            initialTime,
         )
     }
 
     LaunchedEffect(pickerState) {
-        onTimeSelected(pickerState.toDisplayTime(amPmItems, hourItems, minuteItems))
+        onTimeSelected(pickerState)
     }
 
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         BbangZipWheelPicker(
             modifier = Modifier.weight(125f / 335f),
             items = amPmItems,
-            initialIndex = pickerState.selectedAmPmIndex,
+            initialIndex = amPmItems.indexOf(pickerState.amPm),
             paddingItemsCount = paddingItemsCount,
             itemHeight = itemHeight,
-            onItemSelected = { index, _ ->
-                pickerState = pickerState.copy(selectedAmPmIndex = index)
+            onItemSelected = { _, item ->
+                pickerState = pickerState.copy(amPm = item)
             },
             alignment = Alignment.End,
         )
@@ -85,11 +62,11 @@ fun BbangZipTimePicker(
         BbangZipWheelPicker(
             modifier = Modifier.weight(95f / 335f),
             items = hourItems,
-            initialIndex = pickerState.selectedHourIndex,
+            initialIndex = hourItems.indexOf(pickerState.hour.toString().padStart(2, '0')),
             paddingItemsCount = paddingItemsCount,
             itemHeight = itemHeight,
-            onItemSelected = { index, _ ->
-                pickerState = pickerState.copy(selectedHourIndex = index)
+            onItemSelected = { _, item ->
+                pickerState = pickerState.copy(hour = item.toInt())
             },
             alignment = Alignment.CenterHorizontally,
         )
@@ -97,11 +74,11 @@ fun BbangZipTimePicker(
         BbangZipWheelPicker(
             modifier = Modifier.weight(115f / 335f),
             items = minuteItems,
-            initialIndex = pickerState.selectedMinuteIndex,
+            initialIndex = minuteItems.indexOf(pickerState.minute.toString().padStart(2, '0')),
             paddingItemsCount = paddingItemsCount,
             itemHeight = itemHeight,
-            onItemSelected = { index, _ ->
-                pickerState = pickerState.copy(selectedMinuteIndex = index)
+            onItemSelected = { _, item ->
+                pickerState = pickerState.copy(minute = item.toInt())
             },
             alignment = Alignment.Start,
         )
@@ -113,6 +90,7 @@ fun BbangZipTimePicker(
 fun BbangZipTimePickerPreview() {
     BBANGZIPANDROIDTheme {
         var selectedDisplayTime by remember { mutableStateOf<DisplayTime?>(null) }
+
         Column(modifier = Modifier.padding(16.dp)) {
             BbangZipTimePicker(
                 initialTime = DisplayTime("오후", 2, 30),
@@ -120,6 +98,7 @@ fun BbangZipTimePickerPreview() {
                     selectedDisplayTime = time
                 },
             )
+
             selectedDisplayTime?.let { time ->
                 Text(
                     text = "선택된 시간: ${time.amPm} ${time.hour} : ${time.minute.toString().padStart(2, '0')}",
