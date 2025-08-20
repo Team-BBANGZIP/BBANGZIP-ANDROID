@@ -22,13 +22,17 @@ import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 private data class BbangZipTimePickerState(
     val selectedAmPmIndex: Int,
     val selectedHourIndex: Int,
-    val selectedMinuteIndex: Int
+    val selectedMinuteIndex: Int,
 ) {
-    fun toDisplayTime(amPmItems: List<String>, hourItems: List<String>, minuteItems: List<String>): DisplayTime {
+    fun toDisplayTime(
+        amPmItems: List<String>,
+        hourItems: List<String>,
+        minuteItems: List<String>,
+    ): DisplayTime {
         return DisplayTime(
             amPm = amPmItems[selectedAmPmIndex],
             hour = hourItems[selectedHourIndex].toInt(),
-            minute = minuteItems[selectedMinuteIndex].toInt()
+            minute = minuteItems[selectedMinuteIndex].toInt(),
         )
     }
 }
@@ -52,8 +56,8 @@ fun BbangZipTimePicker(
             BbangZipTimePickerState(
                 selectedAmPmIndex = amPmItems.indexOf(initialTime.amPm).coerceAtLeast(0),
                 selectedHourIndex = hourItems.indexOf(initialTime.hour.toString()).coerceAtLeast(0),
-                selectedMinuteIndex = minuteItems.indexOf(initialTime.minute.toString().padStart(2, '0')).coerceAtLeast(0)
-            )
+                selectedMinuteIndex = minuteItems.indexOf(initialTime.minute.toString().padStart(2, '0')).coerceAtLeast(0),
+            ),
         )
     }
 
@@ -64,7 +68,7 @@ fun BbangZipTimePicker(
     Row(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceEvenly
+        horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         BbangZipWheelPicker(
             modifier = Modifier.weight(125f / 335f),
@@ -75,7 +79,7 @@ fun BbangZipTimePicker(
             onItemSelected = { index, _ ->
                 pickerState = pickerState.copy(selectedAmPmIndex = index)
             },
-            alignment = Alignment.End
+            alignment = Alignment.End,
         )
 
         BbangZipWheelPicker(
@@ -87,7 +91,7 @@ fun BbangZipTimePicker(
             onItemSelected = { index, _ ->
                 pickerState = pickerState.copy(selectedHourIndex = index)
             },
-            alignment = Alignment.CenterHorizontally
+            alignment = Alignment.CenterHorizontally,
         )
 
         BbangZipWheelPicker(
@@ -99,11 +103,10 @@ fun BbangZipTimePicker(
             onItemSelected = { index, _ ->
                 pickerState = pickerState.copy(selectedMinuteIndex = index)
             },
-            alignment = Alignment.Start
+            alignment = Alignment.Start,
         )
     }
 }
-
 
 @Preview(showBackground = true)
 @Composable
@@ -115,15 +118,14 @@ fun BbangZipTimePickerPreview() {
                 initialTime = DisplayTime("오후", 2, 30),
                 onTimeSelected = { time ->
                     selectedDisplayTime = time
-                }
+                },
             )
             selectedDisplayTime?.let { time ->
                 Text(
                     text = "선택된 시간: ${time.amPm} ${time.hour} : ${time.minute.toString().padStart(2, '0')}",
-                    modifier = Modifier.padding(top = 16.dp)
+                    modifier = Modifier.padding(top = 16.dp),
                 )
             }
-
         }
     }
 }

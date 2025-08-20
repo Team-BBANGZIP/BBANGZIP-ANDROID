@@ -36,34 +36,40 @@ fun BbangZipWheelPicker(
     paddingItemsCount: Int = 3,
     itemHeight: Dp = 32.dp,
     alignment: Alignment.Horizontal,
-    onItemSelected: (index: Int, item: String) -> Unit
+    onItemSelected: (index: Int, item: String) -> Unit,
 ) {
-    val visibleItemsCount = remember{
-        paddingItemsCount * 2 + 1
-    }
+    val visibleItemsCount =
+        remember {
+            paddingItemsCount * 2 + 1
+        }
 
     val density = LocalDensity.current
     val itemHeightPx = remember(itemHeight) { with(density) { itemHeight.toPx() } }
 
-    val paddedItems = remember(items, paddingItemsCount) {
-        List(paddingItemsCount) { "" } + items + List(paddingItemsCount) { "" }
-    }
+    val paddedItems =
+        remember(items, paddingItemsCount) {
+            List(paddingItemsCount) { "" } + items + List(paddingItemsCount) { "" }
+        }
 
-    val correctedInitialIndex = remember(initialIndex, items.size) {
-        initialIndex.coerceIn(0, items.size)
-    }
+    val correctedInitialIndex =
+        remember(initialIndex, items.size) {
+            initialIndex.coerceIn(0, items.size)
+        }
 
-    val targetPaddedIndexForInitial = remember(correctedInitialIndex, paddingItemsCount) {
-        correctedInitialIndex + paddingItemsCount
-    }
-    val scrollOffsetToCenterItem = remember(itemHeightPx, visibleItemsCount) {
-        ((itemHeightPx * visibleItemsCount) / 2f - itemHeightPx / 2f).toInt()
-    }
+    val targetPaddedIndexForInitial =
+        remember(correctedInitialIndex, paddingItemsCount) {
+            correctedInitialIndex + paddingItemsCount
+        }
+    val scrollOffsetToCenterItem =
+        remember(itemHeightPx, visibleItemsCount) {
+            ((itemHeightPx * visibleItemsCount) / 2f - itemHeightPx / 2f).toInt()
+        }
 
-    val listState = rememberLazyListState(
-        initialFirstVisibleItemIndex = targetPaddedIndexForInitial,
-        initialFirstVisibleItemScrollOffset = -scrollOffsetToCenterItem
-    )
+    val listState =
+        rememberLazyListState(
+            initialFirstVisibleItemIndex = targetPaddedIndexForInitial,
+            initialFirstVisibleItemScrollOffset = -scrollOffsetToCenterItem,
+        )
     val snapBehavior = rememberSnapFlingBehavior(lazyListState = listState)
     var selectedIndex by remember(correctedInitialIndex) { mutableIntStateOf(correctedInitialIndex) }
 
@@ -73,10 +79,11 @@ fun BbangZipWheelPicker(
     }
 
     Box(
-        modifier = modifier
-            .height(itemHeight * visibleItemsCount)
-            .fillMaxWidth(),
-        contentAlignment = Alignment.Center
+        modifier =
+            modifier
+                .height(itemHeight * visibleItemsCount)
+                .fillMaxWidth(),
+        contentAlignment = Alignment.Center,
     ) {
         Indicator()
 
@@ -84,34 +91,43 @@ fun BbangZipWheelPicker(
             state = listState,
             flingBehavior = snapBehavior,
             horizontalAlignment = alignment,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         ) {
             items(
                 count = paddedItems.size,
                 key = { paddedIndex ->
                     val actualIndex = paddedIndex - paddingItemsCount
                     items.getOrNull(actualIndex)?.let { "item_${it}_$actualIndex" } ?: "padding_$paddedIndex"
-                }
+                },
             ) { paddedIndex ->
                 val actualIndex = paddedIndex - paddingItemsCount
                 val itemText = paddedItems[paddedIndex]
                 val distanceToCenterNormalized = abs(paddedIndex - targetPaddedIndexForInitial).toFloat()
 
-                val itemAlpha = remember(distanceToCenterNormalized) { max(0f, 1f - (distanceToCenterNormalized-1) * 0.4f) }
+                val itemAlpha = remember(distanceToCenterNormalized) { max(0f, 1f - (distanceToCenterNormalized - 1) * 0.4f) }
 
                 val isSelected = (actualIndex in items.indices && actualIndex == selectedIndex)
 
                 Box(
-                    modifier = Modifier
-                        .height(itemHeight),
-                    contentAlignment = Alignment.Center
+                    modifier =
+                        Modifier
+                            .height(itemHeight),
+                    contentAlignment = Alignment.Center,
                 ) {
                     Text(
                         text = itemText,
-                        style = if(isSelected) BbangZipTheme.typography.picker1SemiBold
-                            else BbangZipTheme.typography.picker2SemiBold,
-                        color = if (isSelected) BbangZipTheme.color.labelStrong_463D34
-                            else BbangZipTheme.color.labelAssistive_C9C7C5.copy(alpha = itemAlpha),
+                        style =
+                            if (isSelected) {
+                                BbangZipTheme.typography.picker1SemiBold
+                            } else {
+                                BbangZipTheme.typography.picker2SemiBold
+                            },
+                        color =
+                            if (isSelected) {
+                                BbangZipTheme.color.labelStrong_463D34
+                            } else {
+                                BbangZipTheme.color.labelAssistive_C9C7C5.copy(alpha = itemAlpha)
+                            },
                     )
                 }
             }
@@ -121,14 +137,15 @@ fun BbangZipWheelPicker(
 
 @Composable
 private fun Indicator(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .height(44.dp)
-            .fillMaxWidth()
-            .clip(shape = RoundedCornerShape(size = 10.dp))
-            .background(BbangZipTheme.color.componentStrong_F6F6F5)
+        modifier =
+            modifier
+                .height(44.dp)
+                .fillMaxWidth()
+                .clip(shape = RoundedCornerShape(size = 10.dp))
+                .background(BbangZipTheme.color.componentStrong_F6F6F5),
     )
 }
 
@@ -145,6 +162,6 @@ fun BbangZipWheelPickerPreview() {
         alignment = Alignment.CenterHorizontally,
         onItemSelected = { index, item ->
             Timber.d("Selected index: $index, item: $item")
-        }
+        },
     )
 }
