@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -60,13 +61,24 @@ fun BbangZipTimePicker(
     var selectedMinute by remember { mutableIntStateOf(initialTime.minute) }
     var selectedAmPm by remember { mutableStateOf(initialTime.toAmPmText()) }
 
-    LaunchedEffect(selectedAmPm, selectedHour, selectedMinute) {
-        onTimeSelected(
-            LocalTime.of(
-                if (selectedAmPm == AmPm.PM.displayText) selectedHour + 12 else selectedHour,
-                selectedMinute
-            )
-        )
+    val currentHour by remember(selectedAmPm, selectedHour){
+        derivedStateOf{
+            when (selectedAmPm) {
+                AmPm.AM.displayText -> if (selectedHour == 12) 0 else selectedHour
+                AmPm.PM.displayText -> if (selectedHour == 12) 12 else selectedHour + 12
+                else -> selectedHour
+            }
+        }
+
+    }
+    val currentTime by remember(currentHour, selectedMinute) {
+        derivedStateOf {
+            LocalTime.of(currentHour, selectedMinute)
+        }
+    }
+
+    LaunchedEffect(currentTime) {
+        onTimeSelected(currentTime)
     }
 
     Row(
