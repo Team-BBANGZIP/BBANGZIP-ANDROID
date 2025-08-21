@@ -33,6 +33,19 @@ private val amPmItems: List<String> = listOf(AmPm.AM.displayText, AmPm.PM.displa
 private val hourItems = (1..12).map { it.toString() }
 private val minuteItems = (0..59).map { it.toString().padStart(2, '0') }
 
+
+/**
+ * 시간 선택을 위한 [BbangZipWheelPicker]를 사용하는 컴포저블
+ * 오전/오후, 시간, 분을 각각 선택할 수 있습니다.
+ *
+ * @param initialTime 초기에 설정될 시간입니다.
+ * @param onTimeSelected 시간이 선택될 때 호출되는 콜백 함수입니다. 선택된 [LocalTime] 객체를 전달받습니다.
+ * @param modifier 컴포저블에 적용할 [Modifier]입니다.
+ * @param paddingItemsCount 각 휠 피커의 아이템 리스트 위아래에 추가될 빈 아이템의 개수입니다.
+ * @param itemHeight 각 휠 피커의 아이템 높이입니다.
+ * @param colors 각 휠 피커의 색상 설정을 담고 있는 [WheelPickerColors] 객체입니다.
+ * @param typography 각 휠 피커의 텍스트 스타일 설정을 담고 있는 [WheelPickerTypography] 객체입니다.
+ */
 @Composable
 fun BbangZipTimePicker(
     initialTime: LocalTime,
@@ -60,6 +73,7 @@ fun BbangZipTimePicker(
         modifier = modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
+        // Am/Pm 휠 피커
         BbangZipWheelPicker(
             modifier = Modifier.weight(weight = BbangZipWheelPickerDefaults.AM_PM_WEIGHT),
             items = amPmItems,
@@ -74,6 +88,7 @@ fun BbangZipTimePicker(
             typography = typography,
         )
 
+        //시각 선택 휠 피커
         BbangZipWheelPicker(
             modifier = Modifier.weight(weight = BbangZipWheelPickerDefaults.HOUR_WEIGHT),
             items = hourItems,
@@ -88,6 +103,7 @@ fun BbangZipTimePicker(
             typography = typography,
         )
 
+        //분 선택 휠 피커
         BbangZipWheelPicker(
             modifier = Modifier.weight(weight = BbangZipWheelPickerDefaults.MINUTE_WEIGHT),
             items = minuteItems,

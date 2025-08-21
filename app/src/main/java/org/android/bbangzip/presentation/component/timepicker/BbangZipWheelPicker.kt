@@ -29,6 +29,21 @@ import kotlin.math.max
 
 private const val DEFAULT_INITIAL_INDEX = 0
 
+/**
+ * 사용자 정의 가능한 iOS 스타일의 휠 피커(Wheel Picker) 컴포저블
+ *
+ * 아이템 리스트를 스크롤하여 하나의 아이템을 선택할 수 있도록 합니다.
+ *
+ * @param items 표시할 문자열 아이템 리스트입니다.
+ * @param onItemSelected 아이템이 선택되었을 때 호출되는 콜백 함수입니다. 선택된 아이템의 인덱스와 문자열 값을 전달받습니다.
+ * @param paddingItemsCount 아이템 리스트의 위아래에 추가될 빈 아이템의 개수입니다. 이는 스크롤 시 시각적인 패딩 효과를 줍니다.
+ * @param colors 휠 피커의 색상 설정을 담고 있는 [WheelPickerColors] 객체입니다.
+ * @param typography 휠 피커의 텍스트 스타일 설정을 담고 있는 [WheelPickerTypography] 객체입니다.
+ * @param modifier 컴포저블에 적용할 [Modifier]입니다.
+ * @param initialIndex 초기에 선택될 아이템의 인덱스입니다. 기본값은 [DEFAULT_INITIAL_INDEX] (0)입니다.
+ * @param itemHeight 각 아이템의 높이입니다. 기본값은 [BbangZipWheelPickerDefaults.DefaultItemHeight]입니다.
+ * @param alignment 아이템 텍스트의 가로 정렬 방식입니다. 기본값은 [Alignment.CenterHorizontally]입니다.
+ */
 @Composable
 fun BbangZipWheelPicker(
     items: List<String>,
@@ -128,6 +143,12 @@ fun BbangZipWheelPicker(
     }
 }
 
+/**
+ * 휠 피커의 중앙 선택 영역을 나타내는 인디케이터 컴포저블입니다.
+ *
+ * @param backgroundColor 인디케이터의 배경색입니다.
+ * @param modifier 컴포저블에 적용할 [Modifier]입니다.
+ */
 @Composable
 private fun Indicator(
     backgroundColor: Color,
@@ -154,9 +175,7 @@ fun BbangZipWheelPickerPreview() {
         paddingItemsCount = 3,
         itemHeight = 32.dp,
         alignment = Alignment.CenterHorizontally,
-        onItemSelected = { index, item ->
-            Timber.d("Selected index: $index, item: $item")
-        },
+        onItemSelected = { index, item -> },
         colors = BbangZipWheelPickerDefaults.colors(),
         typography = BbangZipWheelPickerDefaults.typography(),
     )
