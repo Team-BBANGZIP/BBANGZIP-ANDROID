@@ -10,5 +10,13 @@ fun LocalTime.formatTimeWithAmPm(): String {
     return format(formatter)
 }
 
-fun LocalTime.to12HourText(): Int = if (this.hour == 0) 12 else if (this.hour > 12) this.hour - 12 else this.hour
+fun LocalTime.to12HourText(): Int =
+    if (this.hour == 0) {
+        12
+    } else if (this.hour > 12) {
+        this.hour - 12
+    } else {
+        this.hour
+    }
+
 fun LocalTime.toAmPmText(): String = if (this.hour < 12) AmPm.AM.displayText else AmPm.PM.displayText

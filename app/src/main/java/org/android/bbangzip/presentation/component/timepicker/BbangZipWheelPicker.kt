@@ -23,7 +23,6 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import timber.log.Timber
 import kotlin.math.abs
 import kotlin.math.max
 
@@ -57,12 +56,12 @@ fun BbangZipWheelPicker(
     alignment: Alignment.Horizontal = Alignment.CenterHorizontally,
 ) {
     val visibleItemsCount =
-        remember {
+        remember(paddingItemsCount) {
             paddingItemsCount * 2 + 1
         }
 
     val density = LocalDensity.current
-    val itemHeightPx = remember(itemHeight) { with(density) { itemHeight.toPx() } }
+    val itemHeightPx = remember(itemHeight, density) { with(density) { itemHeight.toPx() } }
 
     val paddedItems =
         remember(items, paddingItemsCount) {

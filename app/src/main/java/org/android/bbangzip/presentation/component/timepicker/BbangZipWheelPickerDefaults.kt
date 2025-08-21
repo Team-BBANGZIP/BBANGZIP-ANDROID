@@ -55,11 +55,11 @@ data class WheelPickerTypography(
     val unselectedItemTypography: TextStyle,
 ) {
     /**
-    * 아이템의 선택 상태에 따라 적절한 텍스트 스타일을 제공합니다.
-    *
-    * @param isSelected 아이템이 현재 선택되었는지 여부입니다.
-    * @return 아이템의 [TextStyle]입니다.
-    */
+     * 아이템의 선택 상태에 따라 적절한 텍스트 스타일을 제공합니다.
+     *
+     * @param isSelected 아이템이 현재 선택되었는지 여부입니다.
+     * @return 아이템의 [TextStyle]입니다.
+     */
     internal fun itemTypography(isSelected: Boolean): TextStyle {
         return if (isSelected) selectedItemTypography else unselectedItemTypography
     }
@@ -85,10 +85,12 @@ object BbangZipWheelPickerDefaults {
      * Am/Pm 피커의 weight 값
      */
     const val AM_PM_WEIGHT: Float = 125f / 335f
+
     /**
      * Hour 피커의 weight 값
      */
     const val HOUR_WEIGHT: Float = 95f / 335f
+
     /**
      * Minute 피커의 weight 값
      */
@@ -98,13 +100,14 @@ object BbangZipWheelPickerDefaults {
      * [BbangZipWheelPicker]에서 사용되는 아이템 기본 높이
      */
     val DefaultItemHeight: Dp = 32.dp
+
     /**
      * [BbangZipWheelPicker]에서 사용되는 인디케이터 기본 높이
      */
     val IndicatorHeight: Dp = 44.dp
 
-
     val IndicatorCornerRadius: Dp = 10.dp
+
     /**
      * 선택 표시기의 모양
      *

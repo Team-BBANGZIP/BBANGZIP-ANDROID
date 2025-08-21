@@ -27,13 +27,12 @@ private const val DEFAULT_PADDING_ITEMS_COUNT = 3
 
 enum class AmPm(val displayText: String) {
     AM("오전"),
-    PM("오후")
+    PM("오후"),
 }
 
 private val amPmItems: List<String> = listOf(AmPm.AM.displayText, AmPm.PM.displayText)
 private val hourItems = (1..12).map { it.toString() }
 private val minuteItems = (0..59).map { it.toString().padStart(2, '0') }
-
 
 /**
  * 시간 선택을 위한 [BbangZipWheelPicker]를 사용하는 컴포저블
@@ -61,15 +60,14 @@ fun BbangZipTimePicker(
     var selectedMinute by remember { mutableIntStateOf(initialTime.minute) }
     var selectedAmPm by remember { mutableStateOf(initialTime.toAmPmText()) }
 
-    val currentHour by remember(selectedAmPm, selectedHour){
-        derivedStateOf{
+    val currentHour by remember(selectedAmPm, selectedHour) {
+        derivedStateOf {
             when (selectedAmPm) {
                 AmPm.AM.displayText -> if (selectedHour == 12) 0 else selectedHour
                 AmPm.PM.displayText -> if (selectedHour == 12) 12 else selectedHour + 12
                 else -> selectedHour
             }
         }
-
     }
     val currentTime by remember(currentHour, selectedMinute) {
         derivedStateOf {
@@ -100,7 +98,7 @@ fun BbangZipTimePicker(
             typography = typography,
         )
 
-        //시각 선택 휠 피커
+        // 시각 선택 휠 피커
         BbangZipWheelPicker(
             modifier = Modifier.weight(weight = BbangZipWheelPickerDefaults.HOUR_WEIGHT),
             items = hourItems,
@@ -115,7 +113,7 @@ fun BbangZipTimePicker(
             typography = typography,
         )
 
-        //분 선택 휠 피커
+        // 분 선택 휠 피커
         BbangZipWheelPicker(
             modifier = Modifier.weight(weight = BbangZipWheelPickerDefaults.MINUTE_WEIGHT),
             items = minuteItems,
