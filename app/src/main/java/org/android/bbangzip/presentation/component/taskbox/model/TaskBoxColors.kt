@@ -8,4 +8,5 @@ data class TaskBoxColors(
     val menuIconColor: Color,
     val taskTextColor: Color,
     val timeContentColor: Color,
+    val dividerColor: Color
 )

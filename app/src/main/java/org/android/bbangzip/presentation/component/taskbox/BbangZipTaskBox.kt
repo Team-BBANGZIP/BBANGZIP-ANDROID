@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +28,7 @@ import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.formatTimeWithAmPm
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
+import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
 
 /**
@@ -52,6 +54,7 @@ fun BbangZipTaskBox(
     categoryColor: Color,
     modifier: Modifier = Modifier,
     isCompleted: Boolean = false,
+    isLast: Boolean = false,
     startTime: LocalTime? = null,
     colors: TaskBoxColors = BbangZipTaskBoxDefaults.colors(),
     textStyles: TaskBoxTextStyle = BbangZipTaskBoxDefaults.textStyles(),
@@ -59,41 +62,58 @@ fun BbangZipTaskBox(
     onMenuClick: () -> Unit = {},
     onHeightMeasure: (Int) -> Unit = {},
 ) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.Top,
+    Column(
+        modifier = modifier.padding(top = BbangZipTaskBoxDefaults.TASK_CONTENT_TOP_PADDING)
     ) {
-        TaskCheckBox(
-            isCompleted = isCompleted,
-            checkedBoxColor = categoryColor,
-            uncheckedBoxColor = colors.unCheckedBoxColor,
-            checkIconColor = colors.checkIconColor,
-            onClick = onCheckBoxClick,
-        )
+        Row(
+            modifier = modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.Top,
+        ) {
+            TaskCheckBox(
+                isCompleted = isCompleted,
+                checkedBoxColor = categoryColor,
+                uncheckedBoxColor = colors.unCheckedBoxColor,
+                checkIconColor = colors.checkIconColor,
+                onClick = onCheckBoxClick,
+            )
 
-        Gap(width = BbangZipTaskBoxDefaults.GAP_CHECKBOX_TO_CONTENT)
+            Gap(width = BbangZipTaskBoxDefaults.GAP_CHECKBOX_TO_CONTENT)
 
-        TaskContent(
-            task = task,
-            startTime = startTime,
-            taskTextColor = colors.taskTextColor,
-            timeContentColor = colors.timeContentColor,
-            textStyles = textStyles,
-            modifier = Modifier.weight(1f),
-        )
+            Column {
+                Row {
+                    TaskContent(
+                        task = task,
+                        startTime = startTime,
+                        taskTextColor = colors.taskTextColor,
+                        timeContentColor = colors.timeContentColor,
+                        textStyles = textStyles,
+                        modifier = Modifier.weight(1f),
+                    )
 
-        Gap(width = BbangZipTaskBoxDefaults.GAP_CONTENT_TO_MENU)
+                    Gap(width = BbangZipTaskBoxDefaults.GAP_CONTENT_TO_MENU)
 
-        Icon(
-            painter = painterResource(R.drawable.ic_meatball_menu_default_24),
-            contentDescription = stringResource(id = R.string.task_box_menu_description),
-            modifier =
-                Modifier
-                    .size(BbangZipTaskBoxDefaults.MENU_ICON_SIZE)
-                    .noRippleClickable(onClick = onMenuClick)
-                    .align(Alignment.CenterVertically),
-            tint = colors.menuIconColor,
-        )
+                    Icon(
+                        painter = painterResource(R.drawable.ic_meatball_menu_default_24),
+                        contentDescription = stringResource(id = R.string.task_box_menu_description),
+                        modifier =
+                            Modifier
+                                .size(BbangZipTaskBoxDefaults.MENU_ICON_SIZE)
+                                .noRippleClickable(onClick = onMenuClick)
+                                .align(Alignment.CenterVertically),
+                        tint = colors.menuIconColor,
+                    )
+                }
+
+                if (!isLast) {
+                    Gap(height = BbangZipTaskBoxDefaults.GAP_CONTENT_TO_DIVIDER)
+
+                    HorizontalDivider(
+                        color = colors.dividerColor,
+                        thickness = BbangZipTaskBoxDefaults.HORIZONTAL_DIVIDER_THICKNESS
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -139,7 +159,7 @@ private fun TaskContent(
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.padding(top = BbangZipTaskBoxDefaults.TASK_CONTENT_TOP_PADDING),
+        modifier = modifier.padding(top = BbangZipTaskBoxDefaults.TASK_TEXT_TOP_PADDING),
     ) {
         Text(
             text = task,
@@ -201,7 +221,6 @@ private fun BbangZipTaskBoxPreview() {
                 Modifier
                     .fillMaxSize()
                     .padding(30.dp),
-            verticalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             BbangZipTaskBox(
                 task = "두 줄 이상 표시되는 작업 텍스트입니다. 내용이 길어지면 자동으로 줄바꿈됩니다.",
@@ -225,6 +244,7 @@ private fun BbangZipTaskBoxPreview() {
                 task = "시간만 포함된 작업",
                 categoryColor = Color.Magenta,
                 startTime = LocalTime.now(),
+                isLast = true
             )
         }
     }
