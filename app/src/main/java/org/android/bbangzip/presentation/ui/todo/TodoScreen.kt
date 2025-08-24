@@ -3,6 +3,8 @@ package org.android.bbangzip.presentation.ui.todo
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
+import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -128,6 +130,50 @@ val exampleList = listOf(
                 startTime = LocalTime.of(14,0)
             )
         )
+    ),
+    Category(
+        categoryId = 6,
+        categoryName = "새로운 카테고리",
+        categoryColor = "Blue",
+        todos = mutableListOf(
+            Todo(
+                todoId = 1,
+                content = "새로운 할 일 1",
+                isCompleted = false,
+                startTime = LocalTime.of(9,0)
+            ),
+            Todo(
+                todoId = 2,
+                content = "새로운 할 일 2",
+                isCompleted = true,
+                startTime = LocalTime.of(10,30)
+            )
+        )
+    ),
+    Category(
+        categoryId = 7,
+        categoryName = "영화",
+        categoryColor = "Red",
+        todos = mutableListOf(
+            Todo(
+                todoId = 1,
+                content = "귀멸의 칼날",
+                isCompleted = false,
+                startTime = LocalTime.of(9,0)
+            ),
+            Todo(
+                todoId = 2,
+                content = "좀비딸",
+                isCompleted = true,
+                startTime = LocalTime.of(10,30)
+            ),
+            Todo(
+                todoId = 3,
+                content = "F1",
+                isCompleted = true,
+                startTime = LocalTime.of(10,30)
+            )
+        )
     )
 )
 data class Category(
@@ -182,7 +228,7 @@ fun TodoList(
 fun TodoListPreview(){
     BBANGZIPANDROIDTheme {
         Column(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize().systemBarsPadding()
         ){
             TodoList(
                 draggableList = exampleList
