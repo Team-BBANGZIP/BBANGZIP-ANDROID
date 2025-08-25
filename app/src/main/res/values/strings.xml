@@ -28,4 +28,11 @@
     <string name="task_box_completed_task_description">완료된 작업</string>
     <string name="task_box_uncompleted_task_description">미완료 작업</string>
     <string name="task_box_time_description">작업 시작 시간</string>
+
+    <!-- Calendar Components -->
+    <string name="calendar_previous_week_description">이전 주</string>
+    <string name="calendar_next_week_description">다음 주</string>
+    <string name="calendar_menu_description">메뉴</string>
+    <string name="calendar_previous_month_description">이전 달</string>
+    <string name="calendar_next_month_description">다음 달</string>
 </resources>
