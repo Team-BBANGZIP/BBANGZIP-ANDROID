@@ -297,7 +297,107 @@ fun TodoList(
                 .padding(horizontal = 16.dp, vertical = 8.dp)
                 .onGloballyPositioned { coordinates ->
                     columnHeight = coordinates.size.height
-                },
+                }
+        .pointerInput(Unit) {
+            awaitEachGesture {
+                    val down = awaitFirstDown(requireUnconsumed = false)
+                    val longPress = awaitLongPressOrCancellation(down.id)
+
+                    if (longPress != null) {
+                        var dragStarted = false
+                        val pressedIndex = lazyListState.layoutInfo.visibleItemsInfo
+                            .firstOrNull {
+                                val itemTopY = it.offset
+                                val itemBottomY = it.offset + it.size
+                                down.position.y >= itemTopY && down.position.y <= itemBottomY
+                            }
+                            ?.index ?: return@awaitEachGesture
+
+                        val pressedItem = flatList.getOrNull(pressedIndex)
+                        if (pressedItem is ListItem.TodoItem) {
+                            dragStarted = true
+                            draggingItemId = pressedItem.id
+                            targetIndex = pressedIndex
+                            dragOffsetY = 0f
+                        }
+
+                        if (dragStarted) {
+                            drag(longPress.id) { change ->
+                                change.consume()
+                                dragOffsetY += change.position.y - change.previousPosition.y
+
+                                val currentDraggingItemId = draggingItemId!!
+                                val draggingItemBounds = itemBounds[currentDraggingItemId]!!
+                                val draggingItemCenterY = draggingItemBounds.center.y + dragOffsetY
+                                var newTargetIndex = flatList.indexOfFirst { it.id == currentDraggingItemId }
+                                var minDistance = Float.MAX_VALUE
+                                flatList.forEachIndexed { i, listItem ->
+                                    itemBounds[listItem.id]?.let {
+                                        val distance = abs(draggingItemCenterY - it.center.y)
+                                        if (draggingItemCenterY > it.top && draggingItemCenterY < it.bottom) {
+                                            if (distance < minDistance) {
+                                                minDistance = distance
+                                                newTargetIndex = i
+                                            }
+                                        }
+                                    }
+                                }
+                                if (newTargetIndex != targetIndex) {
+                                    targetIndex = newTargetIndex
+                                }
+
+                                val draggingItemHeight = draggingItemBounds.height
+                                val draggingItemCurrentTop = draggingItemBounds.top + dragOffsetY
+                                val draggingItemCurrentBottom = draggingItemCurrentTop + draggingItemHeight
+                                val scrollThreshold = with(localDensity) { 80.dp.toPx() }
+
+                                if (draggingItemCurrentTop < scrollThreshold) {
+                                    if (autoScrollJob?.isActive != true) {
+                                        autoScrollJob?.cancel()
+                                        autoScrollJob = coroutineScope.launch {
+                                            while (isActive) {
+                                                val scrolled = lazyListState.scrollBy(-30f)
+                                                dragOffsetY += scrolled
+                                                delay(16)
+                                            }
+                                        }
+                                    }
+                                } else if (draggingItemCurrentBottom > columnHeight - scrollThreshold) {
+                                    if (autoScrollJob?.isActive != true) {
+                                        autoScrollJob?.cancel()
+                                        autoScrollJob = coroutineScope.launch {
+                                            while (isActive) {
+                                                val scrolled = lazyListState.scrollBy(30f)
+                                                dragOffsetY += scrolled
+                                                delay(16)
+                                            }
+                                        }
+                                    }
+                                } else {
+                                    autoScrollJob?.cancel()
+                                }
+                            }
+
+                            autoScrollJob?.cancel()
+                            val finalDraggingItemId = draggingItemId
+                            val finalTargetIndex = targetIndex
+                            if (finalDraggingItemId != null && finalTargetIndex != null) {
+                                val currentIdx = flatList.indexOfFirst { it.id == finalDraggingItemId }
+                                if (currentIdx != -1 && currentIdx != finalTargetIndex && finalTargetIndex in flatList.indices) {
+                                    val movedItem = flatList.removeAt(currentIdx)
+                                    flatList.add(finalTargetIndex, movedItem)
+                                    synchronizeListState(flatList)
+                                    val newCategories = reconstructCategoriesFromFlatList(flatList)
+                                    onListChanged(newCategories)
+                                }
+                            }
+                            draggingItemId = null
+                            targetIndex = null
+                            dragOffsetY = 0f
+                        }
+                    }
+            }
+        },
         state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
@@ -404,110 +504,6 @@ fun TodoList(
                                     alpha = if (isDragging) 0.95f else 1f
                                 }
                                 .zIndex(if (isDragging) 1f else 0f)
-                                .pointerInput(item.id) {
-                                    detectDragGesturesAfterLongPress(
-                                        onDragStart = {
-                                            val pressedIndex = flatList.indexOfFirst { it.id == item.id }
-                                            if (pressedIndex != -1) {
-                                                draggingItemId = item.id
-                                                targetIndex = pressedIndex
-                                                dragOffsetY = 0f
-                                            }
-                                        },
-                                        onDragEnd = {
-                                            autoScrollJob?.cancel()
-                                            val finalDraggingItemId = draggingItemId
-                                            val finalTargetIndex = targetIndex
-
-                                            if (finalDraggingItemId != null && finalTargetIndex != null) {
-                                                val currentIdx = flatList.indexOfFirst { it.id == finalDraggingItemId }
-                                                if (currentIdx != -1 && currentIdx != finalTargetIndex && finalTargetIndex in flatList.indices) {
-                                                    val movedItem = flatList.removeAt(currentIdx)
-                                                    flatList.add(finalTargetIndex, movedItem)
-
-                                                    synchronizeListState(flatList)
-
-                                                    val newCategories = reconstructCategoriesFromFlatList(flatList)
-                                                    onListChanged(newCategories)
-                                                }
-                                            }
-
-                                            draggingItemId = null
-                                            targetIndex = null
-                                            dragOffsetY = 0f
-                                        },
-                                        onDragCancel = {
-                                            autoScrollJob?.cancel()
-                                            draggingItemId = null
-                                            targetIndex = null
-                                            dragOffsetY = 0f
-                                        },
-                                        onDrag = { change, dragAmount ->
-                                            change.consume()
-                                            dragOffsetY += dragAmount.y
-
-                                            val currentIdx = flatList.indexOfFirst { it.id == draggingItemId }
-                                            if (currentIdx == -1) return@detectDragGesturesAfterLongPress
-
-                                            val draggingItemBounds = itemBounds[draggingItemId] ?: return@detectDragGesturesAfterLongPress
-                                            val draggingItemCenterY = draggingItemBounds.center.y + dragOffsetY
-
-                                            var newTargetIndex = currentIdx
-                                            var minDistance = Float.MAX_VALUE
-
-                                            flatList.forEachIndexed { i, listItem ->
-                                                val otherBounds = itemBounds[listItem.id]
-                                                if (otherBounds != null) {
-                                                    val distance = abs(draggingItemCenterY - otherBounds.center.y)
-                                                    if (draggingItemCenterY > otherBounds.top && draggingItemCenterY < otherBounds.bottom) {
-                                                        if (distance < minDistance) {
-                                                            minDistance = distance
-                                                            newTargetIndex = i
-                                                        }
-                                                    }
-                                                }
-                                            }
-
-                                            if (newTargetIndex != targetIndex) {
-                                                targetIndex = newTargetIndex
-                                            }
-
-                                            // 자동 스크롤 및 '아이템 이탈' 방지 로직
-                                            val draggingItemHeight = draggingItemBounds.height
-                                            val draggingItemCurrentTop = draggingItemBounds.top + dragOffsetY
-                                            val draggingItemCurrentBottom = draggingItemCurrentTop + draggingItemHeight
-                                            val scrollThreshold = with(localDensity) { 80.dp.toPx() }
-
-                                            if (draggingItemCurrentTop < scrollThreshold) {
-                                                if (autoScrollJob?.isActive != true) {
-                                                    autoScrollJob?.cancel()
-                                                    autoScrollJob =
-                                                        coroutineScope.launch {
-                                                            while (isActive) {
-                                                                val scrolled = lazyListState.scrollBy(-30f)
-                                                                dragOffsetY += scrolled
-                                                                delay(16)
-                                                            }
-                                                        }
-                                                }
-                                            } else if (draggingItemCurrentBottom > columnHeight - scrollThreshold) {
-                                                if (autoScrollJob?.isActive != true) {
-                                                    autoScrollJob?.cancel()
-                                                    autoScrollJob =
-                                                        coroutineScope.launch {
-                                                            while (isActive) {
-                                                                val scrolled = lazyListState.scrollBy(30f)
-                                                                dragOffsetY += scrolled
-                                                                delay(16)
-                                                            }
-                                                        }
-                                                }
-                                            } else {
-                                                autoScrollJob?.cancel()
-                                            }
-                                        },
-                                    )
-                                },
                     ) {
                         BbangZipTaskBox(
                             task = item.todo.content,
