@@ -3,7 +3,14 @@ package org.android.bbangzip.presentation.ui.todo
 import androidx.compose.animation.core.EaseInOutCubic
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.awaitLongPressOrCancellation
+import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.gestures.detectDragGesturesAfterLongPress
+import androidx.compose.foundation.gestures.drag
+import androidx.compose.foundation.gestures.forEachGesture
+import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,9 +24,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateMapOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Modifier
@@ -27,12 +36,17 @@ import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import org.android.bbangzip.presentation.component.chip.BbangZipCategoryChip
 import org.android.bbangzip.presentation.component.taskbox.BbangZipTaskBox
 import org.android.bbangzip.presentation.util.extension.Gap
@@ -271,12 +285,19 @@ fun TodoList(
     val itemSpacingPx = with(localDensity) { 4.dp.toPx() }
 
     val lazyListState = rememberLazyListState()
+    val coroutineScope = rememberCoroutineScope()
+    var autoScrollJob by remember { mutableStateOf<Job?>(null) }
+    var columnHeight by remember { mutableIntStateOf(0) }
+
 
     LazyColumn(
         modifier =
             Modifier
                 .fillMaxSize()
-                .padding(horizontal = 16.dp, vertical = 8.dp),
+                .padding(horizontal = 16.dp, vertical = 8.dp)
+                .onGloballyPositioned { coordinates ->
+                    columnHeight = coordinates.size.height
+                },
         state = lazyListState,
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
@@ -394,6 +415,7 @@ fun TodoList(
                                             }
                                         },
                                         onDragEnd = {
+                                            autoScrollJob?.cancel()
                                             val finalDraggingItemId = draggingItemId
                                             val finalTargetIndex = targetIndex
 
@@ -415,6 +437,7 @@ fun TodoList(
                                             dragOffsetY = 0f
                                         },
                                         onDragCancel = {
+                                            autoScrollJob?.cancel()
                                             draggingItemId = null
                                             targetIndex = null
                                             dragOffsetY = 0f
@@ -447,6 +470,40 @@ fun TodoList(
 
                                             if (newTargetIndex != targetIndex) {
                                                 targetIndex = newTargetIndex
+                                            }
+
+                                            // 자동 스크롤 및 '아이템 이탈' 방지 로직
+                                            val draggingItemHeight = draggingItemBounds.height
+                                            val draggingItemCurrentTop = draggingItemBounds.top + dragOffsetY
+                                            val draggingItemCurrentBottom = draggingItemCurrentTop + draggingItemHeight
+                                            val scrollThreshold = with(localDensity) { 80.dp.toPx() }
+
+                                            if (draggingItemCurrentTop < scrollThreshold) {
+                                                if (autoScrollJob?.isActive != true) {
+                                                    autoScrollJob?.cancel()
+                                                    autoScrollJob =
+                                                        coroutineScope.launch {
+                                                            while (isActive) {
+                                                                val scrolled = lazyListState.scrollBy(-30f)
+                                                                dragOffsetY += scrolled
+                                                                delay(16)
+                                                            }
+                                                        }
+                                                }
+                                            } else if (draggingItemCurrentBottom > columnHeight - scrollThreshold) {
+                                                if (autoScrollJob?.isActive != true) {
+                                                    autoScrollJob?.cancel()
+                                                    autoScrollJob =
+                                                        coroutineScope.launch {
+                                                            while (isActive) {
+                                                                val scrolled = lazyListState.scrollBy(30f)
+                                                                dragOffsetY += scrolled
+                                                                delay(16)
+                                                            }
+                                                        }
+                                                }
+                                            } else {
+                                                autoScrollJob?.cancel()
                                             }
                                         },
                                     )
