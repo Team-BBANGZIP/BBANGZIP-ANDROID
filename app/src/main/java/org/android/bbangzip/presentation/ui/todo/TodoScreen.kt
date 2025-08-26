@@ -54,6 +54,7 @@ import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import timber.log.Timber
 import java.time.LocalTime
+import kotlin.math.abs
 
 val colorMapper =
     mapOf(
@@ -691,6 +692,10 @@ private fun updateTargetIndex(
         if (bounds != null && ghostCenterYInContent > bounds.top && ghostCenterYInContent < bounds.bottom) {
             newTargetIndex = visibleItem.index
         }
+    }
+
+    if (newTargetIndex == 0 && flatList.getOrNull(0) is ListItem.CategoryItem) {
+        return if (flatList.size > 1) 1 else 0
     }
     return newTargetIndex
 }
