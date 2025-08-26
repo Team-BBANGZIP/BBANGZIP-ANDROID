@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -53,7 +54,6 @@ import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import timber.log.Timber
 import java.time.LocalTime
-import kotlin.math.abs
 
 val colorMapper =
     mapOf(
@@ -331,32 +331,51 @@ fun TodoList(
                                     change.consume()
                                     ghostOffset += Offset(change.position.x - change.previousPosition.x, change.position.y - change.previousPosition.y)
 
-                                    val ghostCenterY = ghostOffset.y + initialDragTouchPoint.y
-                                    var newTargetIndex = flatList.indexOfFirst { it.id == draggingItemId }
-                                    var minDistance = Float.MAX_VALUE
-                                    flatList.forEachIndexed { i, listItem ->
-                                        itemBounds[listItem.id]?.let {
-                                            val distance = abs(ghostCenterY - it.center.y)
-                                            if (ghostCenterY > it.top && ghostCenterY < it.bottom) {
-                                                if (distance < minDistance) {
-                                                    minDistance = distance
-                                                    newTargetIndex = i
-                                                }
-                                            }
-                                        }
-                                    }
+                                    val newTargetIndex = updateTargetIndex(
+                                        lazyListState = lazyListState,
+                                        itemBounds = itemBounds,
+                                        flatList = flatList,
+                                        ghostOffset = ghostOffset,
+                                        initialDragTouchPoint = initialDragTouchPoint,
+                                        draggingItemId = draggingItemId,
+                                        currentTargetIndex = targetIndex
+                                    )
+
                                     if (newTargetIndex != targetIndex) {
                                         targetIndex = newTargetIndex
                                     }
 
                                     val scrollThreshold = with(localDensity) { 80.dp.toPx() }
+
+                                    // 스크롤 속도 계산을 위한 상수
+                                    val minSpeed = 2f
+                                    val maxSpeed = 20f
+
                                     if (ghostOffset.y < scrollThreshold) {
                                         if (autoScrollJob?.isActive != true) {
                                             autoScrollJob?.cancel()
                                             autoScrollJob = coroutineScope.launch {
                                                 while (isActive) {
-                                                    lazyListState.scrollBy(-30f)
-                                                    delay(16)
+
+                                                    val currentPointerY = ghostOffset.y + initialDragTouchPoint.y
+                                                    val intensity = ((scrollThreshold - currentPointerY) / scrollThreshold).coerceIn(0f, 1f)
+                                                    val speed = -(minSpeed + (maxSpeed - minSpeed) * intensity)
+
+                                                    val newTargetIndexInScroll = updateTargetIndex(
+                                                        lazyListState = lazyListState,
+                                                        itemBounds = itemBounds,
+                                                        flatList = flatList,
+                                                        ghostOffset = ghostOffset,
+                                                        initialDragTouchPoint = initialDragTouchPoint,
+                                                        draggingItemId = draggingItemId,
+                                                        currentTargetIndex = targetIndex
+                                                    )
+                                                    if (newTargetIndexInScroll != targetIndex) {
+                                                        targetIndex = newTargetIndexInScroll
+                                                    }
+
+                                                    lazyListState.scrollBy(speed)
+                                                    delay(4)
                                                 }
                                             }
                                         }
@@ -365,8 +384,25 @@ fun TodoList(
                                             autoScrollJob?.cancel()
                                             autoScrollJob = coroutineScope.launch {
                                                 while (isActive) {
-                                                    lazyListState.scrollBy(10f)
-                                                    delay(16)
+                                                    val currentPointerY = ghostOffset.y + initialDragTouchPoint.y
+                                                    val intensity = ((currentPointerY - (columnHeight - scrollThreshold)) / scrollThreshold).coerceIn(0f, 1f)
+                                                    val speed = minSpeed + (maxSpeed - minSpeed) * intensity
+
+                                                    val newTargetIndexInScroll = updateTargetIndex(
+                                                        lazyListState = lazyListState,
+                                                        itemBounds = itemBounds,
+                                                        flatList = flatList,
+                                                        ghostOffset = ghostOffset,
+                                                        initialDragTouchPoint = initialDragTouchPoint,
+                                                        draggingItemId = draggingItemId,
+                                                        currentTargetIndex = targetIndex
+                                                    )
+                                                    if (newTargetIndexInScroll != targetIndex) {
+                                                        targetIndex = newTargetIndexInScroll
+                                                    }
+
+                                                    lazyListState.scrollBy(speed)
+                                                    delay(4)
                                                 }
                                             }
                                         }
@@ -627,6 +663,36 @@ private fun reconstructCategoriesFromFlatList(flatList: List<ListItem>): List<Ca
     }
 
     return newCategories
+}
+
+private fun updateTargetIndex(
+    lazyListState: LazyListState,
+    itemBounds: Map<String, Rect>,
+    flatList: List<ListItem>,
+    ghostOffset: Offset,
+    initialDragTouchPoint: Offset,
+    draggingItemId: String?,
+    currentTargetIndex: Int?
+): Int {
+    val ghostCenterY = ghostOffset.y + initialDragTouchPoint.y
+    var newTargetIndex = currentTargetIndex ?: flatList.indexOfFirst { it.id == draggingItemId }
+
+    val firstVisibleItem = lazyListState.layoutInfo.visibleItemsInfo.firstOrNull()
+    val scrollOffset = if (firstVisibleItem != null) {
+        val firstVisibleItemBounds = itemBounds[flatList[firstVisibleItem.index].id]
+        (firstVisibleItemBounds?.top ?: 0f) - firstVisibleItem.offset
+    } else {
+        0f
+    }
+    val ghostCenterYInContent = ghostCenterY + scrollOffset
+
+    lazyListState.layoutInfo.visibleItemsInfo.forEach { visibleItem ->
+        val bounds = itemBounds[flatList[visibleItem.index].id]
+        if (bounds != null && ghostCenterYInContent > bounds.top && ghostCenterYInContent < bounds.bottom) {
+            newTargetIndex = visibleItem.index
+        }
+    }
+    return newTargetIndex
 }
 
 @Preview(showBackground = true)
