@@ -49,7 +49,7 @@ object BbangZipTaskBoxDefaults {
         menuIconColor: Color = BbangZipTheme.color.secondaryStrong_F2EAE4,
         taskTextColor: Color = BbangZipTheme.color.labelNormal_6B6560,
         timeContentColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
-        dividerColor: Color = BbangZipTheme.color.secondaryNormal_F6F1EE
+        dividerColor: Color = BbangZipTheme.color.secondaryNormal_F6F1EE,
     ): TaskBoxColors {
         return remember(
             unCheckedBoxColor,
@@ -57,7 +57,7 @@ object BbangZipTaskBoxDefaults {
             menuIconColor,
             taskTextColor,
             timeContentColor,
-            dividerColor
+            dividerColor,
         ) {
             TaskBoxColors(
                 unCheckedBoxColor = unCheckedBoxColor,
@@ -65,7 +65,7 @@ object BbangZipTaskBoxDefaults {
                 menuIconColor = menuIconColor,
                 taskTextColor = taskTextColor,
                 timeContentColor = timeContentColor,
-                dividerColor = dividerColor
+                dividerColor = dividerColor,
             )
         }
     }

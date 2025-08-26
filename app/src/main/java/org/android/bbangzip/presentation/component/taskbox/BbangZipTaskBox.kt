@@ -1,6 +1,5 @@
 package org.android.bbangzip.presentation.component.taskbox
 
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,7 +27,6 @@ import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.formatTimeWithAmPm
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
-import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
 
 /**
@@ -63,7 +61,7 @@ fun BbangZipTaskBox(
     onHeightMeasure: (Int) -> Unit = {},
 ) {
     Column(
-        modifier = modifier.padding(top = BbangZipTaskBoxDefaults.TASK_CONTENT_TOP_PADDING)
+        modifier = modifier.padding(top = BbangZipTaskBoxDefaults.TASK_CONTENT_TOP_PADDING),
     ) {
         Row(
             modifier = modifier.fillMaxWidth(),
@@ -109,7 +107,7 @@ fun BbangZipTaskBox(
 
                     HorizontalDivider(
                         color = colors.dividerColor,
-                        thickness = BbangZipTaskBoxDefaults.HORIZONTAL_DIVIDER_THICKNESS
+                        thickness = BbangZipTaskBoxDefaults.HORIZONTAL_DIVIDER_THICKNESS,
                     )
                 }
             }
@@ -244,7 +242,7 @@ private fun BbangZipTaskBoxPreview() {
                 task = "시간만 포함된 작업",
                 categoryColor = Color.Magenta,
                 startTime = LocalTime.now(),
-                isLast = true
+                isLast = true,
             )
         }
     }
