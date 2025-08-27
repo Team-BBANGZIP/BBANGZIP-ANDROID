@@ -3,6 +3,8 @@ package org.android.bbangzip.presentation.ui.todo
 import androidx.compose.animation.core.EaseInOutCubic
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.awaitLongPressOrCancellation
@@ -11,16 +13,21 @@ import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -31,30 +38,36 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.zIndex
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
+import org.android.bbangzip.R
+import org.android.bbangzip.presentation.component.calendar.BbangZipWeeklyCalendar
 import org.android.bbangzip.presentation.component.chip.BbangZipCategoryChip
 import org.android.bbangzip.presentation.component.taskbox.BbangZipTaskBox
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
+import org.android.bbangzip.ui.theme.BbangZipTheme
 import timber.log.Timber
 import java.time.LocalTime
-import kotlin.math.abs
 
 val colorMapper =
     mapOf(
@@ -258,8 +271,9 @@ sealed interface ListItem {
 }
 
 @Composable
-fun TodoList(
+fun TodoScreen(
     categories: List<Category>,
+    motivationMessage: String,
     onListChanged: (List<Category>) -> Unit = {},
 ) {
     val flatList =
@@ -280,7 +294,6 @@ fun TodoList(
 
     val localDensity = LocalDensity.current
     var draggingItemId by remember { mutableStateOf<String?>(null) }
-    var dragOffsetY by remember { mutableFloatStateOf(0f) }
     var targetIndex by remember { mutableStateOf<Int?>(null) }
     val itemBounds = remember { mutableStateMapOf<String, Rect>() }
     val itemSpacingPx = with(localDensity) { 4.dp.toPx() }
@@ -294,12 +307,21 @@ fun TodoList(
     var ghostOffset by remember { mutableStateOf(Offset.Zero) }
     var initialDragTouchPoint by remember { mutableStateOf(Offset.Zero) }
 
+    val listHeaderCount = 1
+
+    val totalTodoCount = remember(categories) {
+        categories.sumOf { it.todos.size }
+    }
+
+    val completedTodoCount = remember(categories) {
+        categories.flatMap { it.todos }.count { it.isCompleted }
+    }
+
     Box {
         LazyColumn(
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
                     .onGloballyPositioned { coordinates ->
                         columnHeight = coordinates.size.height
                     }
@@ -317,29 +339,55 @@ fun TodoList(
                                     }
                                     ?.index ?: return@awaitEachGesture
 
-                                val pressedItem = flatList.getOrNull(pressedIndex)
+                                if (pressedIndex < listHeaderCount) return@awaitEachGesture
+
+                                val pressedFlatListIndex = pressedIndex - listHeaderCount
+
+                                val pressedItem = flatList.getOrNull(pressedFlatListIndex)
                                 if (pressedItem !is ListItem.TodoItem) return@awaitEachGesture
+
+                                val pressedVisibleItem =
+                                    lazyListState.layoutInfo.visibleItemsInfo.first { it.index == pressedIndex }
+                                val itemRectInViewport = pressedVisibleItem.offset
 
                                 draggingItemId = pressedItem.id
                                 targetIndex = pressedIndex
                                 draggedItem = pressedItem
 
-                                val itemRect = itemBounds[pressedItem.id]!!
-                                initialDragTouchPoint = down.position - Offset(itemRect.left, itemRect.top)
+                                initialDragTouchPoint =
+                                    down.position - Offset(0f, itemRectInViewport.toFloat())
                                 ghostOffset = down.position - initialDragTouchPoint
 
-                                drag(longPress.id) { change ->
+                                val newTargetIndex = updateTargetIndex(
+                                    lazyListState = lazyListState,
+                                    flatList = flatList,
+                                    ghostOffset = ghostOffset,
+                                    initialDragTouchPoint = initialDragTouchPoint,
+                                    draggingItemId = draggingItemId,
+                                    currentTargetIndex = targetIndex,
+                                    listHeaderCount = listHeaderCount
+                                )
+
+                                if (newTargetIndex != targetIndex) {
+                                    targetIndex = newTargetIndex
+                                }
+
+
+                                drag(pointerId = longPress.id) { change ->
                                     change.consume()
-                                    ghostOffset += Offset(change.position.x - change.previousPosition.x, change.position.y - change.previousPosition.y)
+                                    ghostOffset += Offset(
+                                        x = change.position.x - change.previousPosition.x,
+                                        y = change.position.y - change.previousPosition.y
+                                    )
 
                                     val newTargetIndex = updateTargetIndex(
                                         lazyListState = lazyListState,
-                                        itemBounds = itemBounds,
                                         flatList = flatList,
                                         ghostOffset = ghostOffset,
                                         initialDragTouchPoint = initialDragTouchPoint,
                                         draggingItemId = draggingItemId,
-                                        currentTargetIndex = targetIndex
+                                        currentTargetIndex = targetIndex,
+                                        listHeaderCount = listHeaderCount
                                     )
 
                                     if (newTargetIndex != targetIndex) {
@@ -348,7 +396,6 @@ fun TodoList(
 
                                     val scrollThreshold = with(localDensity) { 80.dp.toPx() }
 
-                                    // 스크롤 속도 계산을 위한 상수
                                     val minSpeed = 2f
                                     val maxSpeed = 20f
 
@@ -358,18 +405,24 @@ fun TodoList(
                                             autoScrollJob = coroutineScope.launch {
                                                 while (isActive) {
 
-                                                    val currentPointerY = ghostOffset.y + initialDragTouchPoint.y
-                                                    val intensity = ((scrollThreshold - currentPointerY) / scrollThreshold).coerceIn(0f, 1f)
-                                                    val speed = -(minSpeed + (maxSpeed - minSpeed) * intensity)
+                                                    val currentPointerY =
+                                                        ghostOffset.y + initialDragTouchPoint.y
+                                                    val intensity =
+                                                        ((scrollThreshold - currentPointerY) / scrollThreshold).coerceIn(
+                                                            0f,
+                                                            1f
+                                                        )
+                                                    val speed =
+                                                        -(minSpeed + (maxSpeed - minSpeed) * intensity)
 
                                                     val newTargetIndexInScroll = updateTargetIndex(
                                                         lazyListState = lazyListState,
-                                                        itemBounds = itemBounds,
                                                         flatList = flatList,
                                                         ghostOffset = ghostOffset,
                                                         initialDragTouchPoint = initialDragTouchPoint,
                                                         draggingItemId = draggingItemId,
-                                                        currentTargetIndex = targetIndex
+                                                        currentTargetIndex = targetIndex,
+                                                        listHeaderCount = listHeaderCount
                                                     )
                                                     if (newTargetIndexInScroll != targetIndex) {
                                                         targetIndex = newTargetIndexInScroll
@@ -385,18 +438,24 @@ fun TodoList(
                                             autoScrollJob?.cancel()
                                             autoScrollJob = coroutineScope.launch {
                                                 while (isActive) {
-                                                    val currentPointerY = ghostOffset.y + initialDragTouchPoint.y
-                                                    val intensity = ((currentPointerY - (columnHeight - scrollThreshold)) / scrollThreshold).coerceIn(0f, 1f)
-                                                    val speed = minSpeed + (maxSpeed - minSpeed) * intensity
+                                                    val currentPointerY =
+                                                        ghostOffset.y + initialDragTouchPoint.y
+                                                    val intensity =
+                                                        ((currentPointerY - (columnHeight - scrollThreshold)) / scrollThreshold).coerceIn(
+                                                            0f,
+                                                            1f
+                                                        )
+                                                    val speed =
+                                                        minSpeed + (maxSpeed - minSpeed) * intensity
 
                                                     val newTargetIndexInScroll = updateTargetIndex(
                                                         lazyListState = lazyListState,
-                                                        itemBounds = itemBounds,
                                                         flatList = flatList,
                                                         ghostOffset = ghostOffset,
                                                         initialDragTouchPoint = initialDragTouchPoint,
                                                         draggingItemId = draggingItemId,
-                                                        currentTargetIndex = targetIndex
+                                                        currentTargetIndex = targetIndex,
+                                                        listHeaderCount = listHeaderCount
                                                     )
                                                     if (newTargetIndexInScroll != targetIndex) {
                                                         targetIndex = newTargetIndexInScroll
@@ -415,12 +474,14 @@ fun TodoList(
                                 autoScrollJob?.cancel()
                                 val finalTargetIndex = targetIndex
                                 if (finalTargetIndex != null) {
-                                    val currentIdx = flatList.indexOfFirst { it.id == draggingItemId }
+                                    val currentIdx =
+                                        flatList.indexOfFirst { it.id == draggingItemId }
                                     if (currentIdx != -1 && currentIdx != finalTargetIndex && finalTargetIndex in flatList.indices) {
                                         val movedItem = flatList.removeAt(currentIdx)
                                         flatList.add(finalTargetIndex, movedItem)
                                         synchronizeListState(flatList)
-                                        val newCategories = reconstructCategoriesFromFlatList(flatList)
+                                        val newCategories =
+                                            reconstructCategoriesFromFlatList(flatList)
                                         onListChanged(newCategories)
                                     }
                                 }
@@ -433,6 +494,22 @@ fun TodoList(
             state = lazyListState,
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
+            item{
+                MotivationMessageBox(
+                    motivationMessage = motivationMessage
+                )
+
+                BbangZipWeeklyCalendar(
+                    modifier = Modifier
+                )
+                
+                Gap(height = 20.dp)
+
+                CompleteTodoCounter(
+                    completedTodoCount = completedTodoCount,
+                    totalTodoCount = totalTodoCount
+                )
+            }
             itemsIndexed(
                 items = flatList,
                 key = { _, item -> item.id },
@@ -457,20 +534,17 @@ fun TodoList(
                                 )
                             }
 
-                        val animatedShiftY =
-                            if (draggingItemId == null) {
-                                0f
-                            } else {
-                                animateFloatAsState(
-                                    targetValue = animatedShiftTarget,
-                                    animationSpec = tween(durationMillis = 300, easing = EaseInOutCubic),
-                                    label = "animatedShiftY_${item.id}",
-                                ).value
-                            }
+                        val animatedShiftY = animateFloatAsState(
+                                targetValue = animatedShiftTarget,
+                                animationSpec = tween(durationMillis = 300, easing = EaseInOutCubic),
+                                label = "animatedShiftY_${item.id}",
+                            ).value
+
 
                         Column(
                             modifier =
                                 Modifier
+                                    .padding(horizontal = 20.dp)
                                     .onGloballyPositioned { coordinates ->
                                         val newBound = coordinates.boundsInParent()
                                         if (itemBounds[item.id] != newBound) {
@@ -481,7 +555,10 @@ fun TodoList(
                                         translationY = animatedShiftY
                                     },
                         ) {
-                            Gap(height = 20.dp)
+                            Gap(
+                                height = if(index == 0) 4.dp else 16.dp
+                            )
+
                             BbangZipCategoryChip(
                                 categoryColor = colorMapper.getValue(item.category.categoryColor),
                                 categoryName = item.category.categoryName,
@@ -509,21 +586,17 @@ fun TodoList(
                                 )
                             }
 
-                        val animatedShiftY =
-                            if (draggingItemId == null) {
-                                0f
-                            } else {
-                                animateFloatAsState(
+                        val animatedShiftY = animateFloatAsState(
                                     targetValue = animatedShiftTarget,
                                     animationSpec = tween(durationMillis = 300, easing = EaseInOutCubic),
                                     label = "animatedShiftY_${item.id}",
                                 ).value
-                            }
 
                         Box(
                             modifier =
                                 Modifier
                                     .fillMaxWidth()
+                                    .padding(horizontal = 20.dp)
                                     .onGloballyPositioned { coordinates ->
                                         val newBound = coordinates.boundsInParent()
                                         if (itemBounds[item.id] != newBound) {
@@ -531,11 +604,9 @@ fun TodoList(
                                         }
                                     }
                                     .graphicsLayer {
-                                        translationY = if (isDragging) dragOffsetY else animatedShiftY
-                                        shadowElevation = if (isDragging) 8.dp.toPx() else 0f
+                                        translationY = animatedShiftY
                                         alpha = if (isDragging) 0f else 1f
                                     }
-                                    .zIndex(if (isDragging) 1f else 0f)
                         ) {
                             BbangZipTaskBox(
                                 task = item.todo.content,
@@ -549,19 +620,17 @@ fun TodoList(
                 }
             }
         }
+
         draggedItem?.let { item ->
             val itemRect = itemBounds[item.id]
             Box(
                 modifier = Modifier
                     .offset(
-                        x = with(localDensity) { ghostOffset.x.toDp() },
+                        x = with(localDensity) { ghostOffset.x.toDp() + 20.dp },
                         y = with(localDensity) { ghostOffset.y.toDp() },
                     )
-                    .width(with(localDensity) { itemRect?.width?.toDp() } ?: Dp.Unspecified) // 원래 아이템의 너비 사용
-                    .graphicsLayer {
-                        shadowElevation = 8.dp.toPx()
-                        alpha = 0.95f
-                    }
+                    .width(with(localDensity) { itemRect?.width?.toDp() } ?: Dp.Unspecified)
+                    .background(BbangZipTheme.color.componentStrong_F6F6F5)
             ) {
                 BbangZipTaskBox(
                     task = item.todo.content,
@@ -572,6 +641,41 @@ fun TodoList(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun CompleteTodoCounter(completedTodoCount: Int, totalTodoCount: Int) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp),
+        horizontalArrangement = Arrangement.End,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Box(
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = ImageVector.vectorResource(R.drawable.ic_bread_default_14),
+                contentDescription = null,
+                tint = BbangZipTheme.color.labelAlternative_A29D96,
+            )
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_check_default_24),
+                contentDescription = null,
+                tint = BbangZipTheme.color.componentIvory_FDFDFD,
+                modifier = Modifier.size(14.dp)
+            )
+        }
+
+        Gap(width = 6.dp)
+
+        Text(
+            text = "$completedTodoCount / $totalTodoCount",
+            style = BbangZipTheme.typography.body4Medium,
+            color = BbangZipTheme.color.labelAlternative_A29D96
+        )
     }
 }
 
@@ -668,36 +772,74 @@ private fun reconstructCategoriesFromFlatList(flatList: List<ListItem>): List<Ca
 
 private fun updateTargetIndex(
     lazyListState: LazyListState,
-    itemBounds: Map<String, Rect>,
     flatList: List<ListItem>,
     ghostOffset: Offset,
     initialDragTouchPoint: Offset,
     draggingItemId: String?,
-    currentTargetIndex: Int?
+    currentTargetIndex: Int?,
+    listHeaderCount: Int
 ): Int {
     val ghostCenterY = ghostOffset.y + initialDragTouchPoint.y
     var newTargetIndex = currentTargetIndex ?: flatList.indexOfFirst { it.id == draggingItemId }
 
-    val firstVisibleItem = lazyListState.layoutInfo.visibleItemsInfo.firstOrNull()
-    val scrollOffset = if (firstVisibleItem != null) {
-        val firstVisibleItemBounds = itemBounds[flatList[firstVisibleItem.index].id]
-        (firstVisibleItemBounds?.top ?: 0f) - firstVisibleItem.offset
-    } else {
-        0f
-    }
-    val ghostCenterYInContent = ghostCenterY + scrollOffset
-
-    lazyListState.layoutInfo.visibleItemsInfo.forEach { visibleItem ->
-        val bounds = itemBounds[flatList[visibleItem.index].id]
-        if (bounds != null && ghostCenterYInContent > bounds.top && ghostCenterYInContent < bounds.bottom) {
-            newTargetIndex = visibleItem.index
+    lazyListState.layoutInfo.visibleItemsInfo
+        .firstOrNull { visibleItem ->
+            val itemTopY = visibleItem.offset
+            val itemBottomY = itemTopY + visibleItem.size
+            ghostCenterY >= itemTopY && ghostCenterY <= itemBottomY
         }
+        ?.let {
+            val flatListIndex = it.index - listHeaderCount
+            if (flatListIndex >= 0) {
+                newTargetIndex = flatListIndex
+            }
+        }
+
+    val firstDraggableItemInfo = lazyListState.layoutInfo.visibleItemsInfo.find { it.index > listHeaderCount }
+    if (firstDraggableItemInfo != null && ghostCenterY < firstDraggableItemInfo.offset) {
+        newTargetIndex = 0
     }
 
     if (newTargetIndex == 0 && flatList.getOrNull(0) is ListItem.CategoryItem) {
-        return if (flatList.size > 1) 1 else 0
+        return 1
     }
+
     return newTargetIndex
+}
+
+
+@Composable
+fun MotivationMessageBox(
+    motivationMessage: String,
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(60.dp)
+            .background(BbangZipTheme.color.secondaryStrong_F2EAE4)
+            .clipToBounds()
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp, vertical = 14.dp)
+                .align(Alignment.CenterStart)
+        ) {
+            Text(
+                text = motivationMessage,
+                color = BbangZipTheme.color.labelNormal_6B6560,
+                style = BbangZipTheme.typography.body4Medium,
+            )
+        }
+        Image(
+            painter = painterResource(R.drawable.img_smile_bread),
+            contentDescription = "smile_bread",
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(end = 19.dp)
+                .offset(y = 13.dp)
+        )
+    }
 }
 
 @Preview(showBackground = true)
@@ -711,8 +853,9 @@ fun TodoListPreview() {
                     .fillMaxSize()
                     .systemBarsPadding(),
         ) {
-            TodoList(
+            TodoScreen(
                 categories = todos,
+                "나만의 다짐을 적어보세요\n안녕",
                 onListChanged = { newCategories ->
                     todos = newCategories
                 },
