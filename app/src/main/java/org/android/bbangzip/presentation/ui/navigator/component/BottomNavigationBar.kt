@@ -24,6 +24,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import okhttp3.internal.toImmutableList
 import org.android.bbangzip.presentation.type.BottomNavigationType
@@ -93,7 +94,7 @@ private fun BottomNavigationItem(
     @DrawableRes bottomNaviIcon: Int,
     @StringRes bottomNaviTitle: Int,
     modifier: Modifier = Modifier,
-    spacing: Int = 4,
+    spacing: Dp = 4.dp,
 ) {
     Column(
         modifier =
