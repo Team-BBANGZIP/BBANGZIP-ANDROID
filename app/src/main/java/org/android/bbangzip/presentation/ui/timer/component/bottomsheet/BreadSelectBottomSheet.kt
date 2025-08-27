@@ -61,7 +61,7 @@ fun BreadSelectBottomSheet(
                     style = BbangZipTheme.typography.title1SemiBold,
                 )
 
-                Gap(20)
+                Gap(20.dp)
 
                 Box(
                     modifier =
@@ -80,7 +80,7 @@ fun BreadSelectBottomSheet(
                     )
                 }
 
-                Gap(24)
+                Gap(24.dp)
             }
         },
         content = {
@@ -153,7 +153,7 @@ fun BreadSelectBottomSheet(
                                 }
                             }
 
-                            Gap(8)
+                            Gap(8.dp)
 
                             Text(
                                 text = if (breadInfo.isLocked) "???" else breadList[index].name,

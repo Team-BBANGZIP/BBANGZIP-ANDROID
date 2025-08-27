@@ -88,7 +88,7 @@ fun TimerScreen(
                 .windowInsetsPadding(WindowInsets.systemBars),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Gap(17)
+        Gap(17.dp)
 
         Row(modifier = Modifier.padding(end = 20.dp)) {
             Gap()
@@ -108,7 +108,7 @@ fun TimerScreen(
                     tint = BbangZipTheme.color.primaryLight_C8B5A2,
                 )
 
-                Gap(6)
+                Gap(6.dp)
 
                 Text(
                     modifier = Modifier,
@@ -119,7 +119,7 @@ fun TimerScreen(
             }
         }
 
-        Gap(50)
+        Gap(50.dp)
 
         Text(
             text = stringResource(timerState.timerStatus.getTitleText()),
@@ -127,7 +127,7 @@ fun TimerScreen(
             color = BbangZipTheme.color.labelAlternative_A29D96,
         )
 
-        Gap(24)
+        Gap(24.dp)
 
         CircularProgressBar(
             modifier = Modifier.padding(horizontal = 32.dp),
@@ -191,7 +191,7 @@ fun TimerScreen(
             },
         )
 
-        Gap(24)
+        Gap(24.dp)
 
         BbangZipSegmentedButton(
             options = listOf("30분", "60분"),
@@ -206,7 +206,7 @@ fun TimerScreen(
             enabled = timerState.timerStatus == TimerStatus.Idle,
         )
 
-        Gap(57)
+        Gap(57.dp)
 
         Row(
             modifier =
@@ -242,7 +242,7 @@ fun TimerScreen(
                 }
             }
 
-            Gap(16)
+            Gap(16.dp)
             // Start/Stop 버튼
             if (timerState.timerStatus == TimerStatus.Running) {
                 Box(
@@ -282,7 +282,7 @@ fun TimerScreen(
                 }
             }
 
-            Gap(16)
+            Gap(16.dp)
             // Restart 버튼
             if (timerState.timerStatus != TimerStatus.Idle) {
                 Box(

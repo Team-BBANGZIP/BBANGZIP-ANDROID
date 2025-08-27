@@ -58,7 +58,7 @@ fun TimerActionBottomSheet(
                     style = BbangZipTheme.typography.title1SemiBold,
                 )
 
-                Gap(4)
+                Gap(4.dp)
 
                 Text(
                     text = subTitleText,
@@ -67,13 +67,13 @@ fun TimerActionBottomSheet(
                 )
             }
 
-            Gap(28)
+            Gap(28.dp)
         },
         content = {
             content()
         },
         interactRow = {
-            Gap(42)
+            Gap(42.dp)
 
             Row(
                 modifier =
@@ -101,7 +101,7 @@ fun TimerActionBottomSheet(
                         modifier = Modifier,
                     )
 
-                    Gap(4)
+                    Gap(4.dp)
 
                     Icon(
                         imageVector = ImageVector.vectorResource(id = leftBtnIcon),
@@ -129,7 +129,7 @@ fun TimerActionBottomSheet(
                         modifier = Modifier,
                     )
 
-                    Gap(4)
+                    Gap(4.dp)
 
                     Icon(
                         imageVector = ImageVector.vectorResource(id = rightBtnIcon),
@@ -140,7 +140,7 @@ fun TimerActionBottomSheet(
                 }
             }
 
-            Gap(12)
+            Gap(12.dp)
         },
     )
 }
