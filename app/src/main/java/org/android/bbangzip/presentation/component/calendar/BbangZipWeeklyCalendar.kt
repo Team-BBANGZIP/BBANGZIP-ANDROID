@@ -29,7 +29,6 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.util.extension.Gap
@@ -121,10 +120,11 @@ fun BbangZipWeeklyCalendar(
     }
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .background(colors.calendarBackgroundColor)
-            .padding(paddingValues = BbangZipWeeklyCalendarDefaults.CalendarPadding),
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .background(colors.calendarBackgroundColor)
+                .padding(paddingValues = BbangZipWeeklyCalendarDefaults.CalendarPadding),
     ) {
         WeeklyCalendarHeader(
             currentDisplayWeekViewStartDate = currentDisplayWeekStartDate,
@@ -386,7 +386,7 @@ fun WeeklyCalendarPreview() {
         Column(
             modifier =
                 Modifier
-                    .fillMaxSize()
+                    .fillMaxSize(),
         ) {
             BbangZipWeeklyCalendar(
                 onDateSelected = {
