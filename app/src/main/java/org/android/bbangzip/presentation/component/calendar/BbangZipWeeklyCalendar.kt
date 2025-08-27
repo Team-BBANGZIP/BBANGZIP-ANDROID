@@ -120,7 +120,12 @@ fun BbangZipWeeklyCalendar(
         onDateSelected(selectedDate)
     }
 
-    Column(modifier = modifier.fillMaxWidth()) {
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(colors.calendarBackgroundColor)
+            .padding(paddingValues = BbangZipWeeklyCalendarDefaults.CalendarPadding),
+    ) {
         WeeklyCalendarHeader(
             currentDisplayWeekViewStartDate = currentDisplayWeekStartDate,
             selectedDate = selectedDate,
@@ -382,7 +387,6 @@ fun WeeklyCalendarPreview() {
             modifier =
                 Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 20.dp, vertical = 20.dp),
         ) {
             BbangZipWeeklyCalendar(
                 onDateSelected = {
