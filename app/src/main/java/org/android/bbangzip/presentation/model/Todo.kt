@@ -9,5 +9,5 @@ data class Todo(
     val todoId: Int,
     val content: String,
     val isCompleted: Boolean,
-    val startTime: LocalTime? = null
-): Parcelable
+    val startTime: LocalTime? = null,
+) : Parcelable

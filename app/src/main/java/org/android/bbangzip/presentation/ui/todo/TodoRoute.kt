@@ -23,6 +23,6 @@ fun TodoRoute(
         },
         onTodoCheckedChanged = { todoId, categoryId, isChecked ->
             viewModel.setEvent(TodoEvent.OnTodoCheckedChanged(todoId, categoryId, isChecked))
-        }
+        },
     )
 }

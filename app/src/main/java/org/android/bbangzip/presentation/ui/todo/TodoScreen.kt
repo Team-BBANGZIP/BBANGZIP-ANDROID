@@ -859,19 +859,23 @@ fun TodoListPreview() {
                     todos = newCategories
                 },
                 onTodoCheckedChanged = { todoId, categoryId, isCompleted ->
-                    todos = todos.map { category ->
-                        if (category.categoryId == categoryId) {
-                            category.copy(todos = category.todos.map { todo ->
-                                if (todo.todoId == todoId) {
-                                    todo.copy(isCompleted = isCompleted)
-                                } else {
-                                    todo
-                                }
-                            })
-                        } else {
-                            category
+                    todos =
+                        todos.map { category ->
+                            if (category.categoryId == categoryId) {
+                                category.copy(
+                                    todos =
+                                        category.todos.map { todo ->
+                                            if (todo.todoId == todoId) {
+                                                todo.copy(isCompleted = isCompleted)
+                                            } else {
+                                                todo
+                                            }
+                                        },
+                                )
+                            } else {
+                                category
+                            }
                         }
-                }
                 },
             )
         }

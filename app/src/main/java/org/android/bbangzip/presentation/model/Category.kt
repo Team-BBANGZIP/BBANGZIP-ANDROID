@@ -8,5 +8,5 @@ data class Category(
     val categoryId: Int,
     val categoryName: String,
     val categoryColor: String,
-    val todos: List<Todo>
-): Parcelable
+    val todos: List<Todo>,
+) : Parcelable
