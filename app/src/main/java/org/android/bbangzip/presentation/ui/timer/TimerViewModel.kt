@@ -2,11 +2,9 @@ package org.android.bbangzip.presentation.ui.timer
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 import org.android.bbangzip.presentation.model.TimerStatus
 import org.android.bbangzip.presentation.util.base.BaseViewModel
 import org.android.bbangzip.presentation.util.constant.TimerConstants
@@ -93,6 +91,7 @@ class TimerViewModel
 
                 // Complete
                 is TimerContract.TimerEvent.OnTimerCompleted -> {
+                    stopTimer()
                     updateState(TimerContract.TimerReduce.UpdateRemainingTime(0L))
                     updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Complete)) // 타이머 완료 상태로 변경
                     updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(true)) // 완료 BottomSheet 표시
@@ -108,9 +107,9 @@ class TimerViewModel
                 }
 
                 is TimerContract.TimerEvent.OnCompleteSheetRestartBtnClick -> {
-                    restartTimer() // 타이머 재시작
-                    updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Running))
                     updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(false)) // 완료 BottomSheet 숨김
+                    updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Running))
+                    restartTimer() // 타이머 재시작
                 }
 
                 is TimerContract.TimerEvent.OnCompleteSheetDismissRequest -> {
@@ -209,7 +208,7 @@ class TimerViewModel
             updateState(TimerContract.TimerReduce.UpdateRemainingTime(duration))
 
             timerJob =
-                viewModelScope.launch {
+                launch {
                     while (currentUiState.remainingTime > 0) {
                         delay(1000L)
                         setEvent(TimerContract.TimerEvent.OnTimerTick)
@@ -228,7 +227,10 @@ class TimerViewModel
         private fun restartTimer() {
             timerJob?.cancel()
             updateState(TimerContract.TimerReduce.UpdateRemainingTime(currentUiState.totalTime))
-            startTimer(currentUiState.remainingTime) // 현재 남은 시간을 그대로 사용하여 타이머 재시작
+            launch {
+                delay(1000L)
+                startTimer(currentUiState.totalTime)
+            }
         }
 
         private fun resetTimer() {
