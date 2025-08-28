@@ -353,11 +353,15 @@ fun TodoScreen(
                             }
 
                         val animatedShiftY =
-                            animateFloatAsState(
-                                targetValue = animatedShiftTarget,
-                                animationSpec = tween(durationMillis = 300, easing = EaseInOutCubic),
-                                label = "animatedShiftY_${item.id}",
-                            ).value
+                            if (draggingItemId == null) {
+                                0f
+                            } else {
+                                animateFloatAsState(
+                                    targetValue = animatedShiftTarget,
+                                    animationSpec = tween(durationMillis = 300, easing = EaseInOutCubic),
+                                    label = "animatedShiftY_${item.id}",
+                                ).value
+                            }
 
                         Column(
                             modifier =
@@ -405,11 +409,15 @@ fun TodoScreen(
                             }
 
                         val animatedShiftY =
-                            animateFloatAsState(
-                                targetValue = animatedShiftTarget,
-                                animationSpec = tween(durationMillis = 300, easing = EaseInOutCubic),
-                                label = "animatedShiftY_${item.id}",
-                            ).value
+                            if (draggingItemId == null) {
+                                0f
+                            } else {
+                                animateFloatAsState(
+                                    targetValue = animatedShiftTarget,
+                                    animationSpec = tween(durationMillis = 300, easing = EaseInOutCubic),
+                                    label = "animatedShiftY_${item.id}",
+                                ).value
+                            }
 
                         Box(
                             modifier =
