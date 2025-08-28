@@ -231,12 +231,12 @@ fun TimerScreen(
                                 color = BbangZipTheme.color.secondaryStrong_F2EAE4,
                                 shape = CircleShape,
                             )
-                            .clickable { onResetBtnClick() },
+                            .clickable { onRestartBtnClick() },
                     contentAlignment = Alignment.Center,
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_return_default_24),
-                        contentDescription = "Reset Button",
+                        contentDescription = "Restart Button",
                         tint = BbangZipTheme.color.primaryNormal_897869,
                     )
                 }
@@ -283,7 +283,7 @@ fun TimerScreen(
             }
 
             Gap(16.dp)
-            // Restart 버튼
+            // Reset 버튼
             if (timerState.timerStatus != TimerStatus.Idle) {
                 Box(
                     modifier =
@@ -298,12 +298,12 @@ fun TimerScreen(
                                 color = BbangZipTheme.color.secondaryStrong_F2EAE4,
                                 shape = CircleShape,
                             )
-                            .clickable { onRestartBtnClick() },
+                            .clickable { onResetBtnClick() },
                     contentAlignment = Alignment.Center,
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_stop_default_24),
-                        contentDescription = "Restart Button",
+                        contentDescription = "Reset Button",
                         tint = BbangZipTheme.color.primaryNormal_897869,
                     )
                 }
