@@ -18,6 +18,8 @@ fun TodoRoute(
         modifier = modifier,
         categories = uiState.categories,
         motivationMessage = uiState.motivationMessage,
+        totalTodoCount = uiState.totalTodoCount,
+        completedTodoCount = uiState.completedTodoCount,
         onListChanged = { updatedCategories ->
             viewModel.setEvent(TodoEvent.OnCategoriesChanged(updatedCategories))
         },

@@ -84,6 +84,8 @@ fun TodoScreen(
     modifier: Modifier = Modifier,
     categories: List<Category>,
     motivationMessage: String,
+    totalTodoCount: Int,
+    completedTodoCount: Int,
     onListChanged: (List<Category>) -> Unit = {},
     onTodoCheckedChanged: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit = { _, _, _ -> },
 ) {
@@ -119,16 +121,6 @@ fun TodoScreen(
     var initialDragTouchPoint by remember { mutableStateOf(Offset.Zero) }
 
     val listHeaderCount = 1
-
-    val totalTodoCount =
-        remember(categories) {
-            categories.sumOf { it.todos.size }
-        }
-
-    val completedTodoCount =
-        remember(categories) {
-            categories.flatMap { it.todos }.count { it.isCompleted }
-        }
 
     Box(
         modifier =
@@ -855,6 +847,8 @@ fun TodoListPreview() {
             TodoScreen(
                 categories = todos,
                 motivationMessage = "나만의 다짐을 적어보세요",
+                totalTodoCount = todos.sumOf { it.todos.size },
+                completedTodoCount = todos.flatMap { it.todos }.count { it.isCompleted },
                 onListChanged = { newCategories ->
                     todos = newCategories
                 },
