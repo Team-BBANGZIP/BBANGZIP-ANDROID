@@ -30,7 +30,7 @@ fun CompleteBottomSheet(
         if (timeOptionIndex == 0) {
             stringResource(R.string.complete_sheet_sub_title_n1)
         } else {
-            stringResource(R.string.complete_sheet_left_btn_sixty)
+            stringResource(R.string.complete_sheet_sub_title_n2)
         }
     TimerActionBottomSheet(
         isBottomSheetVisible = iisBottomSheetVisible,
