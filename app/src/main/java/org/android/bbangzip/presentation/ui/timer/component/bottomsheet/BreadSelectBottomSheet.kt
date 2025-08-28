@@ -134,7 +134,7 @@ fun BreadSelectBottomSheet(
                                         Box(
                                             modifier =
                                                 Modifier
-                                                    .align(Alignment.TopEnd)
+                                                    .align(Alignment.TopStart)
                                                     .clip(CircleShape)
                                                     .background(
                                                         color = BbangZipTheme.color.primaryNormal_897869,
