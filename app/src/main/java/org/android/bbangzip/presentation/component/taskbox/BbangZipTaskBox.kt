@@ -56,7 +56,7 @@ fun BbangZipTaskBox(
     startTime: LocalTime? = null,
     colors: TaskBoxColors = BbangZipTaskBoxDefaults.colors(),
     textStyles: TaskBoxTextStyle = BbangZipTaskBoxDefaults.textStyles(),
-    onCheckBoxClick: () -> Unit = {},
+    onCheckBoxClick: (Boolean) -> Unit = {},
     onMenuClick: () -> Unit = {},
     onHeightMeasure: (Int) -> Unit = {},
 ) {
@@ -72,7 +72,7 @@ fun BbangZipTaskBox(
                 checkedBoxColor = categoryColor,
                 uncheckedBoxColor = colors.unCheckedBoxColor,
                 checkIconColor = colors.checkIconColor,
-                onClick = onCheckBoxClick,
+                onClick = { onCheckBoxClick(!isCompleted) },
             )
 
             Gap(width = BbangZipTaskBoxDefaults.GAP_CHECKBOX_TO_CONTENT)

@@ -62,6 +62,9 @@ import org.android.bbangzip.R
 import org.android.bbangzip.presentation.component.calendar.BbangZipWeeklyCalendar
 import org.android.bbangzip.presentation.component.chip.BbangZipCategoryChip
 import org.android.bbangzip.presentation.component.taskbox.BbangZipTaskBox
+import org.android.bbangzip.presentation.model.Category
+import org.android.bbangzip.presentation.model.Todo
+import org.android.bbangzip.presentation.ui.todo.model.ListItem
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
@@ -75,205 +78,14 @@ val colorMapper =
         "Green" to Color.Green,
         "Yellow" to Color.Yellow,
     )
-val exampleList =
-    listOf(
-        Category(
-            categoryId = 1,
-            categoryName = "제과제빵점",
-            categoryColor = "Red",
-            todos =
-                listOf(
-                    Todo(
-                        todoId = 11,
-                        content = "두줄 \n 두줄",
-                        isCompleted = true,
-                        startTime = LocalTime.of(11, 0),
-                    ),
-                    Todo(
-                        todoId = 12,
-                        content = "제과제빵점_한줄_실패",
-                        isCompleted = false,
-                        startTime = null,
-                    ),
-                    Todo(
-                        todoId = 13,
-                        content = "제과제빵점_한줄_완료",
-                        isCompleted = true,
-                        startTime = null,
-                    ),
-                ),
-        ),
-        Category(
-            categoryId = 2,
-            categoryName = "경제학개론",
-            categoryColor = "Blue",
-            todos =
-                listOf(
-                    Todo(
-                        todoId = 21,
-                        content = "경제학개론_한줄_완료",
-                        isCompleted = true,
-                        startTime = null,
-                    ),
-                    Todo(
-                        todoId = 22,
-                        content = "경제학개론 \n 두줄_실패",
-                        isCompleted = false,
-                        startTime = LocalTime.of(11, 0),
-                    ),
-                ),
-        ),
-        Category(
-            categoryId = 3,
-            categoryName = "운동",
-            categoryColor = "Green",
-            todos =
-                listOf(
-                    Todo(
-                        todoId = 31,
-                        content = "헬스장 가기",
-                        isCompleted = false,
-                        startTime = LocalTime.of(18, 0),
-                    ),
-                    Todo(
-                        todoId = 32,
-                        content = "저녁 유산소 30분",
-                        isCompleted = true,
-                        startTime = LocalTime.of(19, 30),
-                    ),
-                ),
-        ),
-        Category(
-            categoryId = 4,
-            categoryName = "스터디",
-            categoryColor = "Yellow",
-            todos =
-                listOf(
-                    Todo(
-                        todoId = 41,
-                        content = "알고리즘 문제 풀이",
-                        isCompleted = true,
-                        startTime = LocalTime.of(20, 0),
-                    ),
-                    Todo(
-                        todoId = 42,
-                        content = "코틀린 스터디 준비",
-                        isCompleted = false,
-                        startTime = null,
-                    ),
-                    Todo(
-                        todoId = 43,
-                        content = "CS 스터디 복습",
-                        isCompleted = true,
-                        startTime = LocalTime.of(10, 0),
-                    ),
-                ),
-        ),
-        Category(
-            categoryId = 5,
-            categoryName = "개인 프로젝트",
-            categoryColor = "Red",
-            todos =
-                listOf(
-                    Todo(
-                        todoId = 51,
-                        content = "UI 디자인 검토",
-                        isCompleted = false,
-                        startTime = null,
-                    ),
-                    Todo(
-                        todoId = 52,
-                        content = "백엔드 API 연동",
-                        isCompleted = false,
-                        startTime = LocalTime.of(14, 0),
-                    ),
-                ),
-        ),
-        Category(
-            categoryId = 6,
-            categoryName = "새로운 카테고리",
-            categoryColor = "Blue",
-            todos =
-                mutableListOf(
-                    Todo(
-                        todoId = 61,
-                        content = "새로운 할 일 1",
-                        isCompleted = false,
-                        startTime = LocalTime.of(9, 0),
-                    ),
-                    Todo(
-                        todoId = 62,
-                        content = "새로운 할 일 2",
-                        isCompleted = true,
-                        startTime = LocalTime.of(10, 30),
-                    ),
-                ),
-        ),
-        Category(
-            categoryId = 7,
-            categoryName = "영화",
-            categoryColor = "Red",
-            todos =
-                mutableListOf(
-                    Todo(
-                        todoId = 71,
-                        content = "귀멸의 칼날",
-                        isCompleted = false,
-                        startTime = LocalTime.of(9, 0),
-                    ),
-                    Todo(
-                        todoId = 72,
-                        content = "좀비딸",
-                        isCompleted = true,
-                        startTime = LocalTime.of(10, 30),
-                    ),
-                    Todo(
-                        todoId = 73,
-                        content = "F1",
-                        isCompleted = true,
-                        startTime = LocalTime.of(10, 30),
-                    ),
-                ),
-        ),
-    )
-
-data class Category(
-    val categoryId: Int,
-    val categoryName: String,
-    val categoryColor: String,
-    val todos: List<Todo>,
-)
-
-data class Todo(
-    val todoId: Int,
-    val content: String,
-    val isCompleted: Boolean,
-    val startTime: LocalTime? = null,
-)
-
-sealed interface ListItem {
-    val id: String
-
-    data class CategoryItem(
-        val category: Category,
-    ) : ListItem {
-        override val id: String = "category_${category.categoryId}"
-    }
-
-    data class TodoItem(
-        val todo: Todo,
-        val category: Category,
-        val isLastInCategory: Boolean,
-    ) : ListItem {
-        override val id: String = "todo_${todo.todoId}"
-    }
-}
 
 @Composable
 fun TodoScreen(
+    modifier: Modifier = Modifier,
     categories: List<Category>,
     motivationMessage: String,
     onListChanged: (List<Category>) -> Unit = {},
+    onTodoCheckedChanged: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit = { _, _, _ -> },
 ) {
     val flatList =
         remember(categories) {
@@ -320,7 +132,7 @@ fun TodoScreen(
 
     Box(
         modifier =
-            Modifier
+            modifier
                 .fillMaxSize()
                 .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
                 .systemBarsPadding(),
@@ -626,6 +438,9 @@ fun TodoScreen(
                             BbangZipTaskBox(
                                 task = item.todo.content,
                                 isCompleted = item.todo.isCompleted,
+                                onCheckBoxClick = { isChecked ->
+                                    onTodoCheckedChanged(item.todo.todoId, item.category.categoryId, isChecked)
+                                },
                                 isLast = item.isLastInCategory,
                                 startTime = item.todo.startTime,
                                 categoryColor = colorMapper.getValue(item.category.categoryColor),
@@ -651,6 +466,7 @@ fun TodoScreen(
                 BbangZipTaskBox(
                     task = item.todo.content,
                     isCompleted = item.todo.isCompleted,
+                    onCheckBoxClick = {},
                     isLast = item.isLastInCategory,
                     startTime = item.todo.startTime,
                     categoryColor = colorMapper.getValue(item.category.categoryColor),
@@ -868,7 +684,168 @@ fun MotivationMessageBox(
 @Composable
 fun TodoListPreview() {
     BBANGZIPANDROIDTheme {
-        var todos by remember { mutableStateOf(exampleList) }
+        val exampleCategories =
+            listOf(
+                Category(
+                    categoryId = 1,
+                    categoryName = "제과제빵점",
+                    categoryColor = "Red",
+                    todos =
+                        listOf(
+                            Todo(
+                                todoId = 11,
+                                content = "두줄 \n 두줄",
+                                isCompleted = true,
+                                startTime = LocalTime.of(11, 0),
+                            ),
+                            Todo(
+                                todoId = 12,
+                                content = "제과제빵점_한줄_실패",
+                                isCompleted = false,
+                                startTime = null,
+                            ),
+                            Todo(
+                                todoId = 13,
+                                content = "제과제빵점_한줄_완료",
+                                isCompleted = true,
+                                startTime = null,
+                            ),
+                        ),
+                ),
+                Category(
+                    categoryId = 2,
+                    categoryName = "경제학개론",
+                    categoryColor = "Blue",
+                    todos =
+                        listOf(
+                            Todo(
+                                todoId = 21,
+                                content = "경제학개론_한줄_완료",
+                                isCompleted = true,
+                                startTime = null,
+                            ),
+                            Todo(
+                                todoId = 22,
+                                content = "경제학개론 \n 두줄_실패",
+                                isCompleted = false,
+                                startTime = LocalTime.of(11, 0),
+                            ),
+                        ),
+                ),
+                Category(
+                    categoryId = 3,
+                    categoryName = "운동",
+                    categoryColor = "Green",
+                    todos =
+                        listOf(
+                            Todo(
+                                todoId = 31,
+                                content = "헬스장 가기",
+                                isCompleted = false,
+                                startTime = LocalTime.of(18, 0),
+                            ),
+                            Todo(
+                                todoId = 32,
+                                content = "저녁 유산소 30분",
+                                isCompleted = true,
+                                startTime = LocalTime.of(19, 30),
+                            ),
+                        ),
+                ),
+                Category(
+                    categoryId = 4,
+                    categoryName = "스터디",
+                    categoryColor = "Yellow",
+                    todos =
+                        listOf(
+                            Todo(
+                                todoId = 41,
+                                content = "알고리즘 문제 풀이",
+                                isCompleted = true,
+                                startTime = LocalTime.of(20, 0),
+                            ),
+                            Todo(
+                                todoId = 42,
+                                content = "코틀린 스터디 준비",
+                                isCompleted = false,
+                                startTime = null,
+                            ),
+                            Todo(
+                                todoId = 43,
+                                content = "CS 스터디 복습",
+                                isCompleted = true,
+                                startTime = LocalTime.of(10, 0),
+                            ),
+                        ),
+                ),
+                Category(
+                    categoryId = 5,
+                    categoryName = "개인 프로젝트",
+                    categoryColor = "Red",
+                    todos =
+                        listOf(
+                            Todo(
+                                todoId = 51,
+                                content = "UI 디자인 검토",
+                                isCompleted = false,
+                                startTime = null,
+                            ),
+                            Todo(
+                                todoId = 52,
+                                content = "백엔드 API 연동",
+                                isCompleted = false,
+                                startTime = LocalTime.of(14, 0),
+                            ),
+                        ),
+                ),
+                Category(
+                    categoryId = 6,
+                    categoryName = "새로운 카테고리",
+                    categoryColor = "Blue",
+                    todos =
+                        listOf(
+                            Todo(
+                                todoId = 61,
+                                content = "새로운 할 일 1",
+                                isCompleted = false,
+                                startTime = LocalTime.of(9, 0),
+                            ),
+                            Todo(
+                                todoId = 62,
+                                content = "새로운 할 일 2",
+                                isCompleted = true,
+                                startTime = LocalTime.of(10, 30),
+                            ),
+                        ),
+                ),
+                Category(
+                    categoryId = 7,
+                    categoryName = "영화",
+                    categoryColor = "Red",
+                    todos =
+                        listOf(
+                            Todo(
+                                todoId = 71,
+                                content = "귀멸의 칼날",
+                                isCompleted = false,
+                                startTime = LocalTime.of(9, 0),
+                            ),
+                            Todo(
+                                todoId = 72,
+                                content = "좀비딸",
+                                isCompleted = true,
+                                startTime = LocalTime.of(10, 30),
+                            ),
+                            Todo(
+                                todoId = 73,
+                                content = "F1",
+                                isCompleted = true,
+                                startTime = LocalTime.of(10, 30),
+                            ),
+                        ),
+                ),
+            )
+        var todos by remember { mutableStateOf(exampleCategories) }
         Column(
             modifier =
                 Modifier
@@ -877,9 +854,24 @@ fun TodoListPreview() {
         ) {
             TodoScreen(
                 categories = todos,
-                "나만의 다짐을 적어보세요\n안녕",
+                motivationMessage = "나만의 다짐을 적어보세요",
                 onListChanged = { newCategories ->
                     todos = newCategories
+                },
+                onTodoCheckedChanged = { todoId, categoryId, isCompleted ->
+                    todos = todos.map { category ->
+                        if (category.categoryId == categoryId) {
+                            category.copy(todos = category.todos.map { todo ->
+                                if (todo.todoId == todoId) {
+                                    todo.copy(isCompleted = isCompleted)
+                                } else {
+                                    todo
+                                }
+                            })
+                        } else {
+                            category
+                        }
+                }
                 },
             )
         }
