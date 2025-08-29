@@ -23,8 +23,8 @@ fun TodoRoute(
         onListChanged = { updatedCategories ->
             viewModel.setEvent(TodoEvent.OnCategoriesChanged(updatedCategories))
         },
-        onTodoCheckedChanged = { todoId, categoryId, isChecked ->
-            viewModel.setEvent(TodoEvent.OnTodoCheckedChanged(todoId, categoryId, isChecked))
+        onTodoCheckBoxClick = { todoId, categoryId, isChecked ->
+            viewModel.setEvent(TodoEvent.OnTodoCheckBoxClick(todoId, categoryId, isChecked))
         },
     )
 }

@@ -93,7 +93,7 @@ fun TodoScreen(
     totalTodoCount: Int,
     completedTodoCount: Int,
     onListChanged: (List<Category>) -> Unit = {},
-    onTodoCheckedChanged: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit = { _, _, _ -> },
+    onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit = { _, _, _ -> },
 ) {
     val flatList =
         remember(categories) {
@@ -446,7 +446,7 @@ fun TodoScreen(
                                 task = item.todo.content,
                                 isCompleted = item.todo.isCompleted,
                                 onCheckBoxClick = { isChecked ->
-                                    onTodoCheckedChanged(item.todo.todoId, item.category.categoryId, isChecked)
+                                    onTodoCheckBoxClick(item.todo.todoId, item.category.categoryId, isChecked)
                                 },
                                 isLast = item.isLastInCategory,
                                 startTime = item.todo.startTime,
@@ -867,7 +867,7 @@ fun TodoListPreview() {
                 onListChanged = { newCategories ->
                     todos = newCategories
                 },
-                onTodoCheckedChanged = { todoId, categoryId, isCompleted ->
+                onTodoCheckBoxClick = { todoId, categoryId, isCompleted ->
                     todos =
                         todos.map { category ->
                             if (category.categoryId == categoryId) {

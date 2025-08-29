@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import org.android.bbangzip.presentation.model.Category
 import org.android.bbangzip.presentation.model.Todo
 import org.android.bbangzip.presentation.ui.todo.TodoContract.*
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.*
 import org.android.bbangzip.presentation.util.base.BaseViewModel
 import timber.log.Timber
 import java.time.LocalTime
@@ -30,19 +31,19 @@ class TodoViewModel
         override fun handleEvent(event: TodoEvent) {
             when (event) {
                 is TodoEvent.Initialize -> {
-                    updateState(TodoReduce.UpdateLoading(isLoading = true))
+                    updateState(UpdateLoading(isLoading = true))
                     viewModelScope.launch {
                         val exampleCategories = getExampleList()
-                        updateState(TodoReduce.UpdateCategories(exampleCategories))
-                        updateState(TodoReduce.UpdateLoading(isLoading = false))
+                        updateState(UpdateCategories(exampleCategories))
+                        updateState(UpdateLoading(isLoading = false))
                     }
                 }
 
                 is TodoEvent.OnCategoriesChanged -> {
-                    updateState(TodoReduce.UpdateCategories(event.updatedCategories))
+                    updateState(UpdateCategories(event.updatedCategories))
                 }
 
-                is TodoEvent.OnTodoCheckedChanged -> {
+                is TodoEvent.OnTodoCheckBoxClick -> {
                     val updatedCategories =
                         currentUiState.categories.map { category ->
                             if (category.categoryId == event.categoryId) {
@@ -60,9 +61,17 @@ class TodoViewModel
                                 category
                             }
                         }
-                    updateState(TodoReduce.UpdateCategories(updatedCategories))
+                    updateState(UpdateCategories(updatedCategories))
                     Timber.d("updatedCategories: $updatedCategories")
                 }
+
+                TodoEvent.OnAddCategoryClick -> TODO()
+                TodoEvent.OnCategoryChipClick -> TODO()
+                TodoEvent.OnCommitmentAreaClick -> TODO()
+                TodoEvent.OnDateChanged -> TODO()
+                TodoEvent.OnManageCategoryClick -> TODO()
+                TodoEvent.OnMenuClick -> TODO()
+                is TodoEvent.OnTodoCheckBoxClick -> TODO()
             }
         }
 
@@ -79,6 +88,8 @@ class TodoViewModel
                 is TodoReduce.UpdateCategories -> state.copy(categories = reduce.categories)
                 is TodoReduce.UpdateError -> state.copy(error = reduce.error)
                 is TodoReduce.UpdateState -> reduce.newState
+                is TodoReduce.UpdateIsMenuOpen -> TODO()
+                is TodoReduce.UpdateSelectedDate -> TODO()
             }
         }
 

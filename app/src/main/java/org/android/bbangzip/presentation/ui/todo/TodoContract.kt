@@ -4,6 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.presentation.model.Category
 import org.android.bbangzip.presentation.util.base.BaseContract
+import java.time.LocalDate
 
 class TodoContract {
     @Parcelize
@@ -12,6 +13,11 @@ class TodoContract {
         val error: String? = null,
         val categories: List<Category> = emptyList(),
         val motivationMessage: String = "나만의 다짐을 적어보세요.",
+        val selectedDate: LocalDate = LocalDate.now(),
+        val isMenuOpen: Boolean = false,
+        val isCommitmentBottomSheetVisible: Boolean = false,
+        val isAddTodoBottomSheetVisible: Boolean = false,
+        val isTimePickerBottomSheetVisible: Boolean = false,
     ) : BaseContract.State, Parcelable {
         override fun toParcelable(): Parcelable = this
 
@@ -25,9 +31,21 @@ class TodoContract {
     sealed interface TodoEvent : BaseContract.Event {
         data object Initialize : TodoEvent
 
-        data class OnCategoriesChanged(val updatedCategories: List<Category>) : TodoEvent
+        data object OnCommitmentAreaClick: TodoEvent
 
-        data class OnTodoCheckedChanged(val todoId: Int, val categoryId: Int, val isChecked: Boolean) : TodoEvent
+        data object OnMenuClick : TodoEvent
+
+        data object OnCategoryChipClick : TodoEvent
+
+        data class OnTodoCheckBoxClick(val todoId: Int, val categoryId: Int, val isChecked: Boolean) : TodoEvent
+
+        data object OnDateChanged : TodoEvent
+
+        data object OnAddCategoryClick : TodoEvent
+
+        data object OnManageCategoryClick : TodoEvent
+
+        data class OnCategoriesChanged(val updatedCategories: List<Category>) : TodoEvent
     }
 
     sealed interface TodoReduce : BaseContract.Reduce {
@@ -39,10 +57,12 @@ class TodoContract {
 
         data class UpdateError(val error: String?) : TodoReduce
 
+        data class UpdateSelectedDate(val selectedDate: LocalDate) : TodoReduce
+
+        data class UpdateIsMenuOpen(val isMenuOpen: Boolean) : TodoReduce
+
         data class UpdateState(val newState: TodoState) : TodoReduce
     }
 
-    sealed interface TodoSideEffect : BaseContract.SideEffect {
-        data class ShowSnackBar(val message: String) : TodoSideEffect
-    }
+    sealed interface TodoSideEffect : BaseContract.SideEffect
 }
