@@ -57,6 +57,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupProperties
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -712,75 +713,76 @@ private fun MenuPopup(
     Popup(
         alignment = Alignment.BottomEnd,
         onDismissRequest = onDismissRequest,
-    ) {
-        Box(
-            modifier = modifier
-                .width(125.dp)
-                .dropShadow(
-                    shape = RoundedCornerShape(12.dp),
-                    color = BbangZipTheme.color.staticBlack_121212.copy(0.15f),
-                    blur = 4.dp,
-                    offsetY = 2.dp,
-                )
+        properties = PopupProperties(focusable = true)
         ) {
             Box(
-                modifier = Modifier
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
-                    .padding(horizontal = 8.dp, vertical = 4.dp)
+                modifier = modifier
+                    .width(125.dp)
+                    .dropShadow(
+                        shape = RoundedCornerShape(12.dp),
+                        color = BbangZipTheme.color.staticBlack_121212.copy(0.15f),
+                        blur = 4.dp,
+                        offsetY = 2.dp,
+                    )
             ) {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally
+                Box(
+                    modifier = Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .padding(top = 7.dp, bottom = 13.dp),
-                        verticalAlignment = Alignment.CenterVertically
+                    Column(
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_plus_bold_24),
-                            contentDescription = null,
-                            tint = BbangZipTheme.color.labelNormal_6B6560,
-                            modifier = Modifier.size(16.dp)
-                        )
+                        Row(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .padding(top = 7.dp, bottom = 13.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_plus_bold_24),
+                                contentDescription = null,
+                                tint = BbangZipTheme.color.labelNormal_6B6560,
+                                modifier = Modifier.size(16.dp)
+                            )
 
-                        Gap(width = 8.dp)
+                            Gap(width = 8.dp)
 
-                        Text(
-                            text = "카테고리 추가",
-                            color = BbangZipTheme.color.labelNormal_6B6560,
-                            style = BbangZipTheme.typography.body3Medium,
-                        )
-                    }
+                            Text(
+                                text = "카테고리 추가",
+                                color = BbangZipTheme.color.labelNormal_6B6560,
+                                style = BbangZipTheme.typography.body3Medium,
+                            )
+                        }
 
-                    HorizontalDivider()
+                        HorizontalDivider()
 
-                    Row(
-                        modifier = Modifier
-                            .padding(horizontal = 8.dp)
-                            .padding(top = 13.dp, bottom = 7.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Icon(
-                            imageVector = ImageVector.vectorResource(R.drawable.ic_pencil_default_24),
-                            contentDescription = null,
-                            tint = BbangZipTheme.color.labelNormal_6B6560,
-                            modifier = Modifier.size(16.dp)
-                        )
+                        Row(
+                            modifier = Modifier
+                                .padding(horizontal = 8.dp)
+                                .padding(top = 13.dp, bottom = 7.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            Icon(
+                                imageVector = ImageVector.vectorResource(R.drawable.ic_pencil_default_24),
+                                contentDescription = null,
+                                tint = BbangZipTheme.color.labelNormal_6B6560,
+                                modifier = Modifier.size(16.dp)
+                            )
 
-                        Gap(width = 8.dp)
+                            Gap(width = 8.dp)
 
-                        Text(
-                            text = "카테고리 관리",
-                            color = BbangZipTheme.color.labelNormal_6B6560,
-                            style = BbangZipTheme.typography.body3Medium,
-                        )
+                            Text(
+                                text = "카테고리 관리",
+                                color = BbangZipTheme.color.labelNormal_6B6560,
+                                style = BbangZipTheme.typography.body3Medium,
+                            )
+                        }
                     }
                 }
             }
         }
-    }
 }
 
 @Preview(showBackground = true)
