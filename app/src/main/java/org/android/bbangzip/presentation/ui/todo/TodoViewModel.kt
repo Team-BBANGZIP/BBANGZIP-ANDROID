@@ -85,7 +85,7 @@ class TodoViewModel
                 Category(
                     categoryId = 1,
                     categoryName = "제과제빵점",
-                    categoryColor = "Red",
+                    categoryColor = "BbangZipTheme.color.todoRed1_EA7152",
                     todos =
                         listOf(
                             Todo(
@@ -111,7 +111,7 @@ class TodoViewModel
                 Category(
                     categoryId = 2,
                     categoryName = "경제학개론",
-                    categoryColor = "Blue",
+                    categoryColor = "BbangZipTheme.color.todoYellow1_FED45C",
                     todos =
                         listOf(
                             Todo(
@@ -131,7 +131,7 @@ class TodoViewModel
                 Category(
                     categoryId = 3,
                     categoryName = "운동",
-                    categoryColor = "Green",
+                    categoryColor = "BbangZipTheme.color.todoGreen1_7A946D",
                     todos =
                         listOf(
                             Todo(
@@ -151,7 +151,7 @@ class TodoViewModel
                 Category(
                     categoryId = 4,
                     categoryName = "스터디",
-                    categoryColor = "Yellow",
+                    categoryColor = "BbangZipTheme.color.todoBlue1_5C62AC",
                     todos =
                         listOf(
                             Todo(
@@ -177,7 +177,7 @@ class TodoViewModel
                 Category(
                     categoryId = 5,
                     categoryName = "개인 프로젝트",
-                    categoryColor = "Red",
+                    categoryColor = "BbangZipTheme.color.todoPurple1_8F63E9",
                     todos =
                         listOf(
                             Todo(
@@ -197,7 +197,7 @@ class TodoViewModel
                 Category(
                     categoryId = 6,
                     categoryName = "새로운 카테고리",
-                    categoryColor = "Blue",
+                    categoryColor = "BbangZipTheme.color.todoRed2_F09C86",
                     todos =
                         listOf(
                             Todo(
@@ -217,7 +217,7 @@ class TodoViewModel
                 Category(
                     categoryId = 7,
                     categoryName = "영화",
-                    categoryColor = "Red",
+                    categoryColor = "BbangZipTheme.color.todoYellow2_F6DDAF",
                     todos =
                         listOf(
                             Todo(

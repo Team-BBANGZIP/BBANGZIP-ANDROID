@@ -71,14 +71,21 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
 import timber.log.Timber
 import java.time.LocalTime
 
-val colorMapper =
-    mapOf(
-        "Red" to Color.Red,
-        "Blue" to Color.Blue,
-        "Green" to Color.Green,
-        "Yellow" to Color.Yellow,
-    )
-
+@Composable
+fun colorMapper(color: String) = when(color) {
+    "BbangZipTheme.color.todoRed1_EA7152" -> BbangZipTheme.color.todoRed1_EA7152
+    "BbangZipTheme.color.todoRed2_F09C86" -> BbangZipTheme.color.todoRed2_F09C86
+    "BbangZipTheme.color.todoYellow1_FED45C" -> BbangZipTheme.color.todoYellow1_FED45C
+    "BbangZipTheme.color.todoYellow2_F6DDAF" -> BbangZipTheme.color.todoYellow2_F6DDAF
+    "BbangZipTheme.color.todoGreen1_7A946D" -> BbangZipTheme.color.todoGreen1_7A946D
+    "BbangZipTheme.color.todoGreen2_A2B499" -> BbangZipTheme.color.todoGreen2_A2B499
+    "BbangZipTheme.color.todoBlue1_5C62AC" -> BbangZipTheme.color.todoBlue1_5C62AC
+    "BbangZipTheme.color.todoBlue2_8D91C5" -> BbangZipTheme.color.todoBlue2_8D91C5
+    "BbangZipTheme.color.todoPurple1_8F63E9" -> BbangZipTheme.color.todoPurple1_8F63E9
+    "BbangZipTheme.color.todoPurple2_B79FE8" -> BbangZipTheme.color.todoPurple2_B79FE8
+    else -> BbangZipTheme.color.todoRed1_EA7152
+}
+private const val LIST_HEADER_COUNT = 1
 @Composable
 fun TodoScreen(
     modifier: Modifier = Modifier,
