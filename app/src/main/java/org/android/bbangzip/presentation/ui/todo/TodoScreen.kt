@@ -42,7 +42,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
@@ -389,7 +388,7 @@ fun TodoScreen(
                             )
 
                             BbangZipCategoryChip(
-                                categoryColor = colorMapper.getValue(item.category.categoryColor),
+                                categoryColor = colorMapper(item.category.categoryColor),
                                 categoryName = item.category.categoryName,
                             )
                         }
@@ -450,7 +449,7 @@ fun TodoScreen(
                                 },
                                 isLast = item.isLastInCategory,
                                 startTime = item.todo.startTime,
-                                categoryColor = colorMapper.getValue(item.category.categoryColor),
+                                categoryColor = colorMapper(item.category.categoryColor),
                             )
                         }
                     }
@@ -476,7 +475,7 @@ fun TodoScreen(
                     onCheckBoxClick = {},
                     isLast = item.isLastInCategory,
                     startTime = item.todo.startTime,
-                    categoryColor = colorMapper.getValue(item.category.categoryColor),
+                    categoryColor = colorMapper(item.category.categoryColor),
                 )
             }
         }
