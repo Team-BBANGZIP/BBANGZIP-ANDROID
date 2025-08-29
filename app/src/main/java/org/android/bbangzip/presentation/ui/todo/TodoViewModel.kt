@@ -9,6 +9,7 @@ import org.android.bbangzip.presentation.model.Category
 import org.android.bbangzip.presentation.model.Todo
 import org.android.bbangzip.presentation.ui.todo.TodoContract.*
 import org.android.bbangzip.presentation.util.base.BaseViewModel
+import timber.log.Timber
 import java.time.LocalTime
 import javax.inject.Inject
 
@@ -60,6 +61,7 @@ class TodoViewModel
                             }
                         }
                     updateState(TodoReduce.UpdateCategories(updatedCategories))
+                    Timber.d("updatedCategories: $updatedCategories")
                 }
             }
         }

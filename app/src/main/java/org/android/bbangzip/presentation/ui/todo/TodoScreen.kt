@@ -142,7 +142,7 @@ fun TodoScreen(
                     .onGloballyPositioned { coordinates ->
                         columnHeight = coordinates.size.height
                     }
-                    .pointerInput(Unit) {
+                    .pointerInput(categories) {
                         awaitEachGesture {
                             val down = awaitFirstDown(requireUnconsumed = false)
                             val longPress = awaitLongPressOrCancellation(down.id)
@@ -307,6 +307,7 @@ fun TodoScreen(
                                         val newCategories =
                                             reconstructCategoriesFromFlatList(flatList)
                                         onListChanged(newCategories)
+                                        Timber.d("TodoScreen $newCategories")
                                     }
                                 }
                                 draggingItemId = null
