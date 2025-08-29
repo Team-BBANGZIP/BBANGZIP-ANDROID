@@ -70,8 +70,7 @@ class TodoViewModel
                 TodoEvent.OnCommitmentAreaClick -> TODO()
                 TodoEvent.OnDateChanged -> TODO()
                 TodoEvent.OnManageCategoryClick -> TODO()
-                TodoEvent.OnMenuClick -> TODO()
-                is TodoEvent.OnTodoCheckBoxClick -> TODO()
+                TodoEvent.OnMenuClick -> {updateState(UpdateIsMenuOpen(isMenuOpen = !currentUiState.isMenuOpen))}
             }
         }
 
@@ -80,16 +79,16 @@ class TodoViewModel
             reduce: TodoReduce,
         ): TodoState {
             return when (reduce) {
-                is TodoReduce.UpdateLoading -> state.copy(isLoading = reduce.isLoading)
-                is TodoReduce.UpdateMotivationMessage ->
+                is UpdateLoading -> state.copy(isLoading = reduce.isLoading)
+                is UpdateMotivationMessage ->
                     state.copy(
                         motivationMessage = reduce.message,
                     )
-                is TodoReduce.UpdateCategories -> state.copy(categories = reduce.categories)
-                is TodoReduce.UpdateError -> state.copy(error = reduce.error)
-                is TodoReduce.UpdateState -> reduce.newState
-                is TodoReduce.UpdateIsMenuOpen -> TODO()
-                is TodoReduce.UpdateSelectedDate -> TODO()
+                is UpdateCategories -> state.copy(categories = reduce.categories)
+                is UpdateError -> state.copy(error = reduce.error)
+                is UpdateState -> reduce.newState
+                is UpdateIsMenuOpen -> state.copy(isMenuOpen = reduce.isMenuOpen)
+                is UpdateSelectedDate -> state.copy(selectedDate = reduce.selectedDate)
             }
         }
 

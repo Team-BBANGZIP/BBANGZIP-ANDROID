@@ -26,6 +26,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Rect
@@ -53,6 +56,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -65,6 +69,7 @@ import org.android.bbangzip.presentation.model.Category
 import org.android.bbangzip.presentation.model.Todo
 import org.android.bbangzip.presentation.ui.todo.model.ListItem
 import org.android.bbangzip.presentation.util.extension.Gap
+import org.android.bbangzip.presentation.util.extension.dropShadow
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import timber.log.Timber
@@ -92,6 +97,8 @@ fun TodoScreen(
     motivationMessage: String,
     totalTodoCount: Int,
     completedTodoCount: Int,
+    isMenuOpen: Boolean ,
+    onMenuClick: () -> Unit = {},
     onListChanged: (List<Category>) -> Unit = {},
     onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit = { _, _, _ -> },
 ) {
@@ -324,9 +331,19 @@ fun TodoScreen(
                     motivationMessage = motivationMessage,
                 )
 
-                BbangZipWeeklyCalendar(
-                    modifier = Modifier,
-                )
+                Box(modifier = Modifier.fillMaxWidth()) {
+                    BbangZipWeeklyCalendar(
+                        onMenuClick = onMenuClick
+                    )
+
+                    if (isMenuOpen) {
+                        MenuPopup(
+                            modifier = Modifier
+                                .offset(x = (-20).dp, y = 9.dp),
+                            onDismissRequest = onMenuClick
+                        )
+                    }
+                }
 
                 Gap(height = 20.dp)
 
@@ -687,6 +704,85 @@ fun MotivationMessageBox(
     }
 }
 
+@Composable
+private fun MenuPopup(
+    modifier: Modifier = Modifier,
+    onDismissRequest: () -> Unit = {},
+) {
+    Popup(
+        alignment = Alignment.BottomEnd,
+        onDismissRequest = onDismissRequest,
+    ) {
+        Box(
+            modifier = modifier
+                .width(125.dp)
+                .dropShadow(
+                    shape = RoundedCornerShape(12.dp),
+                    color = BbangZipTheme.color.staticBlack_121212.copy(0.15f),
+                    blur = 4.dp,
+                    offsetY = 2.dp,
+                )
+        ) {
+            Box(
+                modifier = Modifier
+                    .clip(RoundedCornerShape(12.dp))
+                    .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
+                    .padding(horizontal = 8.dp, vertical = 4.dp)
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .padding(top = 7.dp, bottom = 13.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_plus_bold_24),
+                            contentDescription = null,
+                            tint = BbangZipTheme.color.labelNormal_6B6560,
+                            modifier = Modifier.size(16.dp)
+                        )
+
+                        Gap(width = 8.dp)
+
+                        Text(
+                            text = "카테고리 추가",
+                            color = BbangZipTheme.color.labelNormal_6B6560,
+                            style = BbangZipTheme.typography.body3Medium,
+                        )
+                    }
+
+                    HorizontalDivider()
+
+                    Row(
+                        modifier = Modifier
+                            .padding(horizontal = 8.dp)
+                            .padding(top = 13.dp, bottom = 7.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_pencil_default_24),
+                            contentDescription = null,
+                            tint = BbangZipTheme.color.labelNormal_6B6560,
+                            modifier = Modifier.size(16.dp)
+                        )
+
+                        Gap(width = 8.dp)
+
+                        Text(
+                            text = "카테고리 관리",
+                            color = BbangZipTheme.color.labelNormal_6B6560,
+                            style = BbangZipTheme.typography.body3Medium,
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
 @Preview(showBackground = true)
 @Composable
 fun TodoListPreview() {
@@ -853,6 +949,7 @@ fun TodoListPreview() {
                 ),
             )
         var todos by remember { mutableStateOf(exampleCategories) }
+        val isMenuOpen by remember { mutableStateOf(false) }
         Column(
             modifier =
                 Modifier
@@ -864,6 +961,7 @@ fun TodoListPreview() {
                 motivationMessage = "나만의 다짐을 적어보세요",
                 totalTodoCount = todos.sumOf { it.todos.size },
                 completedTodoCount = todos.flatMap { it.todos }.count { it.isCompleted },
+                isMenuOpen = isMenuOpen,
                 onListChanged = { newCategories ->
                     todos = newCategories
                 },
@@ -886,6 +984,7 @@ fun TodoListPreview() {
                             }
                         }
                 },
+                onMenuClick = {!isMenuOpen}
             )
         }
         Timber.d("TodoListPreview $todos")

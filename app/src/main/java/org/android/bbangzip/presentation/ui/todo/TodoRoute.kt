@@ -20,11 +20,15 @@ fun TodoRoute(
         motivationMessage = uiState.motivationMessage,
         totalTodoCount = uiState.totalTodoCount,
         completedTodoCount = uiState.completedTodoCount,
+        isMenuOpen = uiState.isMenuOpen,
         onListChanged = { updatedCategories ->
             viewModel.setEvent(TodoEvent.OnCategoriesChanged(updatedCategories))
         },
         onTodoCheckBoxClick = { todoId, categoryId, isChecked ->
             viewModel.setEvent(TodoEvent.OnTodoCheckBoxClick(todoId, categoryId, isChecked))
         },
+        onMenuClick = {
+            viewModel.setEvent(TodoEvent.OnMenuClick)
+        }
     )
 }
