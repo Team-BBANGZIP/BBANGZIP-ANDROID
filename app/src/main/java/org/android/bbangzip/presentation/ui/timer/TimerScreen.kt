@@ -266,7 +266,7 @@ fun BreadCounter(
                 shape = RoundedCornerShape(14.dp)
             )
             .padding(horizontal = 10.dp, vertical = 5.dp)
-            .clickable { onClick() },
+            .noRippleClickable { onClick() },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
@@ -286,58 +286,6 @@ fun BreadCounter(
     }
 }
 
-@SuppressLint("UseOfNonLambdaOffsetOverload")
-@Composable
-fun AnimatedTriangleIndicator(
-    isVisible: Boolean,
-    modifier: Modifier = Modifier,
-    animationDuration: Int = 800,
-    offsetRange: Float = 3f,
-    yOffset: Float = -90f,
-    tint: Color = BbangZipTheme.color.primaryNormal_897869
-) {
-    val infiniteTransition = rememberInfiniteTransition(label = "triangle animation")
-    val triangleOffset by infiniteTransition.animateFloat(
-        initialValue = -offsetRange,
-        targetValue = offsetRange,
-        animationSpec = infiniteRepeatable(
-            animation = tween(animationDuration, easing = EaseInOut),
-            repeatMode = RepeatMode.Reverse,
-        ),
-        label = "triangle offset",
-    )
-
-    AnimatedVisibility(
-        visible = isVisible,
-        enter = fadeIn(animationSpec = tween(300)),
-        exit = fadeOut(animationSpec = tween(300)),
-        modifier = modifier.offset(y = (yOffset + triangleOffset).dp),
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_triangle_down_24),
-            contentDescription = "moving triangle",
-            tint = tint,
-        )
-    }
-}
-
-@Composable
-fun InteractiveBreadImage(
-    breadImageRes: Int,
-    isClickable: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    width: Dp = 120.dp,
-    height: Dp = 100.dp
-) {
-    Image(
-        modifier = modifier
-            .size(width, height)
-            .noRippleClickable(enabled = isClickable) { onClick() },
-        painter = painterResource(breadImageRes),
-        contentDescription = "Timer Icon",
-    )
-}
 
 @SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
