@@ -105,110 +105,117 @@ fun TodoScreen(
     var initialDragTouchPoint by remember { mutableStateOf(Offset.Zero) }
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
-            .systemBarsPadding(),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
+                .systemBarsPadding(),
     ) {
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .onGloballyPositioned { coordinates ->
-                    columnHeight = coordinates.size.height
-                }
-                .pointerInput(flatList) {
-                    awaitEachGesture {
-                        val down = awaitFirstDown(requireUnconsumed = false)
-                        val longPress = awaitLongPressOrCancellation(down.id)
-
-                        if (longPress != null) {
-                            val pressedIndex = lazyListState.layoutInfo.visibleItemsInfo
-                                .firstOrNull {
-                                    val itemTopY = it.offset
-                                    val itemBottomY = it.offset + it.size
-                                    down.position.y >= itemTopY && down.position.y <= itemBottomY
-                                }
-                                ?.index ?: return@awaitEachGesture
-
-                            if (pressedIndex < LIST_HEADER_COUNT) return@awaitEachGesture
-
-                            val pressedFlatListIndex = pressedIndex - LIST_HEADER_COUNT
-                            val pressedItem = flatList.getOrNull(pressedFlatListIndex)
-                            if (pressedItem !is ListItem.TodoItem) return@awaitEachGesture
-
-                            val pressedVisibleItem = lazyListState.layoutInfo.visibleItemsInfo.first { it.index == pressedIndex }
-
-                            draggingItemId = pressedItem.id
-                            targetIndex = pressedFlatListIndex
-                            draggedItem = pressedItem
-
-                            initialDragTouchPoint = down.position - Offset(0f, pressedVisibleItem.offset.toFloat())
-                            ghostOffset = down.position - initialDragTouchPoint
-
-                            drag(pointerId = longPress.id) { change ->
-                                change.consume()
-                                ghostOffset += Offset(
-                                    x = change.position.x - change.previousPosition.x,
-                                    y = change.position.y - change.previousPosition.y,
-                                )
-
-                                targetIndex = updateTargetIndex(
-                                    lazyListState = lazyListState,
-                                    flatList = flatList,
-                                    ghostOffset = ghostOffset,
-                                    initialDragTouchPoint = initialDragTouchPoint,
-                                    currentTargetIndex = targetIndex
-                                )
-
-                                val scrollThreshold = with(localDensity) { 50.dp.toPx() }
-                                val minSpeed = 5f
-                                val maxSpeed = 30f
-
-                                if (ghostOffset.y < scrollThreshold) {
-                                    if (autoScrollJob?.isActive != true) {
-                                        autoScrollJob?.cancel()
-                                        autoScrollJob = coroutineScope.launch {
-                                            while (isActive) {
-                                                val intensity = ((scrollThreshold - ghostOffset.y) / scrollThreshold).coerceIn(0f, 1f)
-                                                val speed = -(minSpeed + (maxSpeed - minSpeed) * intensity)
-                                                lazyListState.scrollBy(speed)
-                                                targetIndex = updateTargetIndex(lazyListState, flatList, ghostOffset, initialDragTouchPoint, targetIndex)
-                                                delay(8)
-                                            }
-                                        }
-                                    }
-                                } else if (ghostOffset.y + initialDragTouchPoint.y > columnHeight - scrollThreshold) {
-                                    if (autoScrollJob?.isActive != true) {
-                                        autoScrollJob?.cancel()
-                                        autoScrollJob = coroutineScope.launch {
-                                            while (isActive) {
-                                                val intensity = ((ghostOffset.y + initialDragTouchPoint.y - (columnHeight - scrollThreshold)) / scrollThreshold).coerceIn(0f, 1f)
-                                                val speed = minSpeed + (maxSpeed - minSpeed) * intensity
-                                                lazyListState.scrollBy(speed)
-                                                targetIndex = updateTargetIndex(lazyListState, flatList, ghostOffset, initialDragTouchPoint, targetIndex)
-                                                delay(8)
-                                            }
-                                        }
-                                    }
-                                } else {
-                                    autoScrollJob?.cancel()
-                                }
-                            }
-
-                            autoScrollJob?.cancel()
-                            val currentIdx = flatList.indexOfFirst { it.id == draggingItemId }
-                            targetIndex?.let { finalTargetIndex ->
-                                if (currentIdx != -1 && currentIdx != finalTargetIndex && finalTargetIndex in flatList.indices) {
-                                    onListItemMove(currentIdx, finalTargetIndex)
-                                }
-                            }
-
-                            draggingItemId = null
-                            targetIndex = null
-                            draggedItem = null
-                        }
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .onGloballyPositioned { coordinates ->
+                        columnHeight = coordinates.size.height
                     }
-                },
+                    .pointerInput(flatList) {
+                        awaitEachGesture {
+                            val down = awaitFirstDown(requireUnconsumed = false)
+                            val longPress = awaitLongPressOrCancellation(down.id)
+
+                            if (longPress != null) {
+                                val pressedIndex =
+                                    lazyListState.layoutInfo.visibleItemsInfo
+                                        .firstOrNull {
+                                            val itemTopY = it.offset
+                                            val itemBottomY = it.offset + it.size
+                                            down.position.y >= itemTopY && down.position.y <= itemBottomY
+                                        }
+                                        ?.index ?: return@awaitEachGesture
+
+                                if (pressedIndex < LIST_HEADER_COUNT) return@awaitEachGesture
+
+                                val pressedFlatListIndex = pressedIndex - LIST_HEADER_COUNT
+                                val pressedItem = flatList.getOrNull(pressedFlatListIndex)
+                                if (pressedItem !is ListItem.TodoItem) return@awaitEachGesture
+
+                                val pressedVisibleItem = lazyListState.layoutInfo.visibleItemsInfo.first { it.index == pressedIndex }
+
+                                draggingItemId = pressedItem.id
+                                targetIndex = pressedFlatListIndex
+                                draggedItem = pressedItem
+
+                                initialDragTouchPoint = down.position - Offset(0f, pressedVisibleItem.offset.toFloat())
+                                ghostOffset = down.position - initialDragTouchPoint
+
+                                drag(pointerId = longPress.id) { change ->
+                                    change.consume()
+                                    ghostOffset +=
+                                        Offset(
+                                            x = change.position.x - change.previousPosition.x,
+                                            y = change.position.y - change.previousPosition.y,
+                                        )
+
+                                    targetIndex =
+                                        updateTargetIndex(
+                                            lazyListState = lazyListState,
+                                            flatList = flatList,
+                                            ghostOffset = ghostOffset,
+                                            initialDragTouchPoint = initialDragTouchPoint,
+                                            currentTargetIndex = targetIndex,
+                                        )
+
+                                    val scrollThreshold = with(localDensity) { 50.dp.toPx() }
+                                    val minSpeed = 5f
+                                    val maxSpeed = 30f
+
+                                    if (ghostOffset.y < scrollThreshold) {
+                                        if (autoScrollJob?.isActive != true) {
+                                            autoScrollJob?.cancel()
+                                            autoScrollJob =
+                                                coroutineScope.launch {
+                                                    while (isActive) {
+                                                        val intensity = ((scrollThreshold - ghostOffset.y) / scrollThreshold).coerceIn(0f, 1f)
+                                                        val speed = -(minSpeed + (maxSpeed - minSpeed) * intensity)
+                                                        lazyListState.scrollBy(speed)
+                                                        targetIndex = updateTargetIndex(lazyListState, flatList, ghostOffset, initialDragTouchPoint, targetIndex)
+                                                        delay(8)
+                                                    }
+                                                }
+                                        }
+                                    } else if (ghostOffset.y + initialDragTouchPoint.y > columnHeight - scrollThreshold) {
+                                        if (autoScrollJob?.isActive != true) {
+                                            autoScrollJob?.cancel()
+                                            autoScrollJob =
+                                                coroutineScope.launch {
+                                                    while (isActive) {
+                                                        val intensity = ((ghostOffset.y + initialDragTouchPoint.y - (columnHeight - scrollThreshold)) / scrollThreshold).coerceIn(0f, 1f)
+                                                        val speed = minSpeed + (maxSpeed - minSpeed) * intensity
+                                                        lazyListState.scrollBy(speed)
+                                                        targetIndex = updateTargetIndex(lazyListState, flatList, ghostOffset, initialDragTouchPoint, targetIndex)
+                                                        delay(8)
+                                                    }
+                                                }
+                                        }
+                                    } else {
+                                        autoScrollJob?.cancel()
+                                    }
+                                }
+
+                                autoScrollJob?.cancel()
+                                val currentIdx = flatList.indexOfFirst { it.id == draggingItemId }
+                                targetIndex?.let { finalTargetIndex ->
+                                    if (currentIdx != -1 && currentIdx != finalTargetIndex && finalTargetIndex in flatList.indices) {
+                                        onListItemMove(currentIdx, finalTargetIndex)
+                                    }
+                                }
+
+                                draggingItemId = null
+                                targetIndex = null
+                                draggedItem = null
+                            }
+                        }
+                    },
             state = lazyListState,
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
@@ -218,7 +225,7 @@ fun TodoScreen(
                     isMenuOpen = isMenuOpen,
                     onMenuClick = onMenuClick,
                     completedTodoCount = completedTodoCount,
-                    totalTodoCount = totalTodoCount
+                    totalTodoCount = totalTodoCount,
                 )
             }
             itemsIndexed(
@@ -234,9 +241,10 @@ fun TodoScreen(
                     itemBounds = itemBounds,
                     itemSpacingPx = itemSpacingPx,
                     onTodoCheckBoxClick = onTodoCheckBoxClick,
-                    modifier = Modifier.onGloballyPositioned { coordinates ->
-                        itemBounds[item.id] = coordinates.boundsInParent()
-                    }
+                    modifier =
+                        Modifier.onGloballyPositioned { coordinates ->
+                            itemBounds[item.id] = coordinates.boundsInParent()
+                        },
                 )
             }
         }
@@ -244,13 +252,14 @@ fun TodoScreen(
         draggedItem?.let { item ->
             val itemRect = itemBounds[item.id]
             Box(
-                modifier = Modifier
-                    .offset(
-                        x = with(localDensity) { ghostOffset.x.toDp() + 20.dp },
-                        y = with(localDensity) { ghostOffset.y.toDp() },
-                    )
-                    .width(with(localDensity) { itemRect?.width?.toDp() } ?: Dp.Unspecified)
-                    .background(BbangZipTheme.color.componentStrong_F6F6F5),
+                modifier =
+                    Modifier
+                        .offset(
+                            x = with(localDensity) { ghostOffset.x.toDp() + 20.dp },
+                            y = with(localDensity) { ghostOffset.y.toDp() },
+                        )
+                        .width(with(localDensity) { itemRect?.width?.toDp() } ?: Dp.Unspecified)
+                        .background(BbangZipTheme.color.componentStrong_F6F6F5),
             ) {
                 BbangZipTaskBox(
                     task = item.todo.content,
@@ -300,7 +309,6 @@ private fun updateTargetIndex(
     return newTargetIndex
 }
 
-
 private fun calculateAnimatedShift(
     draggingItemId: String?,
     currentDraggingItemIndex: Int?,
@@ -338,37 +346,45 @@ private fun DraggableListItem(
     targetIndex: Int?,
     itemBounds: Map<String, Rect>,
     itemSpacingPx: Float,
-    onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit
+    onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit,
 ) {
-    val currentDraggingItemIndex = remember(draggingItemId, flatList) {
-        draggingItemId?.let { id -> flatList.indexOfFirst { it.id == id } }
-    }
+    val currentDraggingItemIndex =
+        remember(draggingItemId, flatList) {
+            draggingItemId?.let { id -> flatList.indexOfFirst { it.id == id } }
+        }
 
-    val animatedShiftTarget = remember(draggingItemId, targetIndex, item.id, flatList) {
-        calculateAnimatedShift(
-            draggingItemId = draggingItemId,
-            currentDraggingItemIndex = currentDraggingItemIndex,
-            targetIndex = targetIndex,
-            currentItemId = item.id,
-            taskList = flatList.map { it.id },
-            itemBounds = itemBounds,
-            itemSpacing = itemSpacingPx,
-        )
-    }
+    val animatedShiftTarget =
+        remember(draggingItemId, targetIndex, item.id, flatList) {
+            calculateAnimatedShift(
+                draggingItemId = draggingItemId,
+                currentDraggingItemIndex = currentDraggingItemIndex,
+                targetIndex = targetIndex,
+                currentItemId = item.id,
+                taskList = flatList.map { it.id },
+                itemBounds = itemBounds,
+                itemSpacing = itemSpacingPx,
+            )
+        }
 
-    val animatedShiftY = if (draggingItemId == null) 0f else animateFloatAsState(
-        targetValue = animatedShiftTarget,
-        animationSpec = tween(durationMillis = 300, easing = EaseInOutCubic),
-        label = "animatedShiftY_${item.id}",
-    ).value
+    val animatedShiftY =
+        if (draggingItemId == null) {
+            0f
+        } else {
+            animateFloatAsState(
+                targetValue = animatedShiftTarget,
+                animationSpec = tween(durationMillis = 300, easing = EaseInOutCubic),
+                label = "animatedShiftY_${item.id}",
+            ).value
+        }
 
     Box(
-        modifier = modifier
-            .padding(horizontal = 20.dp)
-            .graphicsLayer {
-                translationY = animatedShiftY
-                alpha = if (isDragging) 0f else 1f
-            }
+        modifier =
+            modifier
+                .padding(horizontal = 20.dp)
+                .graphicsLayer {
+                    translationY = animatedShiftY
+                    alpha = if (isDragging) 0f else 1f
+                },
     ) {
         when (item) {
             is ListItem.CategoryItem -> {
@@ -402,7 +418,7 @@ private fun ListHeader(
     isMenuOpen: Boolean,
     onMenuClick: () -> Unit,
     completedTodoCount: Int,
-    totalTodoCount: Int
+    totalTodoCount: Int,
 ) {
     Column {
         MotivationMessageBox(motivationMessage = motivationMessage)
@@ -421,11 +437,10 @@ private fun ListHeader(
 
         CompleteTodoCounter(
             completedTodoCount = completedTodoCount,
-            totalTodoCount = totalTodoCount
+            totalTodoCount = totalTodoCount,
         )
     }
 }
-
 
 @Composable
 fun MotivationMessageBox(
@@ -587,7 +602,6 @@ private fun MenuPopup(
     }
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun TodoScreenPreview() {
@@ -630,18 +644,19 @@ fun TodoScreenPreview() {
                 ),
             )
 
-        val flatList = exampleCategories.flatMap { category ->
-            val categoryItem = ListItem.CategoryItem(category)
-            val todoItems =
-                category.todos.mapIndexed { index, todo ->
-                    ListItem.TodoItem(
-                        todo = todo,
-                        category = category,
-                        isLastInCategory = index == category.todos.size - 1,
-                    )
-                }
-            listOf(categoryItem) + todoItems
-        }
+        val flatList =
+            exampleCategories.flatMap { category ->
+                val categoryItem = ListItem.CategoryItem(category)
+                val todoItems =
+                    category.todos.mapIndexed { index, todo ->
+                        ListItem.TodoItem(
+                            todo = todo,
+                            category = category,
+                            isLastInCategory = index == category.todos.size - 1,
+                        )
+                    }
+                listOf(categoryItem) + todoItems
+            }
 
         TodoScreen(
             flatList = flatList,
@@ -651,7 +666,7 @@ fun TodoScreenPreview() {
             isMenuOpen = false,
             onMenuClick = { },
             onListItemMove = { _, _ -> },
-            onTodoCheckBoxClick = { _, _, _ -> }
+            onTodoCheckBoxClick = { _, _, _ -> },
         )
     }
 }

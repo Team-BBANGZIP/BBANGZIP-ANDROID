@@ -13,7 +13,7 @@ class TodoContract {
         val isLoading: Boolean = false,
         val error: String? = null,
         val categories: List<Category> = emptyList(),
-        val flatList: List<ListItem> = emptyList(), // UI에서 사용할 리스트
+        val flatList: List<ListItem> = emptyList(),
         val motivationMessage: String = "나만의 다짐을 적어보세요.",
         val selectedDate: LocalDate = LocalDate.now(),
         val isMenuOpen: Boolean = false,
@@ -32,24 +32,39 @@ class TodoContract {
 
     sealed interface TodoEvent : BaseContract.Event {
         data object Initialize : TodoEvent
+
         data object OnCommitmentAreaClick : TodoEvent
+
         data object OnMenuClick : TodoEvent
+
         data object OnCategoryChipClick : TodoEvent
+
         data class OnTodoCheckBoxClick(val todoId: Int, val categoryId: Int, val isChecked: Boolean) : TodoEvent
+
         data object OnDateChanged : TodoEvent
+
         data object OnAddCategoryClick : TodoEvent
+
         data object OnManageCategoryClick : TodoEvent
+
         data class OnListItemMove(val from: Int, val to: Int) : TodoEvent
     }
 
     sealed interface TodoReduce : BaseContract.Reduce {
         data class UpdateLoading(val isLoading: Boolean) : TodoReduce
+
         data class UpdateMotivationMessage(val message: String) : TodoReduce
+
         data class UpdateCategories(val categories: List<Category>) : TodoReduce
-        data class UpdateFlatList(val flatList: List<ListItem>) : TodoReduce // UI 리스트 업데이트
+
+        data class UpdateFlatList(val flatList: List<ListItem>) : TodoReduce
+
         data class UpdateError(val error: String?) : TodoReduce
+
         data class UpdateSelectedDate(val selectedDate: LocalDate) : TodoReduce
+
         data class UpdateIsMenuOpen(val isMenuOpen: Boolean) : TodoReduce
+
         data class UpdateState(val newState: TodoState) : TodoReduce
     }
 
