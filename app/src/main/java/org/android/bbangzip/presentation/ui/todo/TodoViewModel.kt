@@ -70,7 +70,9 @@ class TodoViewModel
                 TodoEvent.OnCommitmentAreaClick -> TODO()
                 TodoEvent.OnDateChanged -> TODO()
                 TodoEvent.OnManageCategoryClick -> TODO()
-                TodoEvent.OnMenuClick -> {updateState(UpdateIsMenuOpen(isMenuOpen = !currentUiState.isMenuOpen))}
+                TodoEvent.OnMenuClick -> {
+                    updateState(UpdateIsMenuOpen(isMenuOpen = !currentUiState.isMenuOpen))
+                }
             }
         }
 

@@ -31,7 +31,7 @@ class TodoContract {
     sealed interface TodoEvent : BaseContract.Event {
         data object Initialize : TodoEvent
 
-        data object OnCommitmentAreaClick: TodoEvent
+        data object OnCommitmentAreaClick : TodoEvent
 
         data object OnMenuClick : TodoEvent
 

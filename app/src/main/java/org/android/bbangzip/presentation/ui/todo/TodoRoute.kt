@@ -29,6 +29,6 @@ fun TodoRoute(
         },
         onMenuClick = {
             viewModel.setEvent(TodoEvent.OnMenuClick)
-        }
+        },
     )
 }

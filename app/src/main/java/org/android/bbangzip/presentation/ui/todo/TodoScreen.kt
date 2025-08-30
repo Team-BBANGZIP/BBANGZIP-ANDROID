@@ -77,20 +77,23 @@ import timber.log.Timber
 import java.time.LocalTime
 
 @Composable
-fun colorMapper(color: String) = when(color) {
-    "BbangZipTheme.color.todoRed1_EA7152" -> BbangZipTheme.color.todoRed1_EA7152
-    "BbangZipTheme.color.todoRed2_F09C86" -> BbangZipTheme.color.todoRed2_F09C86
-    "BbangZipTheme.color.todoYellow1_FED45C" -> BbangZipTheme.color.todoYellow1_FED45C
-    "BbangZipTheme.color.todoYellow2_F6DDAF" -> BbangZipTheme.color.todoYellow2_F6DDAF
-    "BbangZipTheme.color.todoGreen1_7A946D" -> BbangZipTheme.color.todoGreen1_7A946D
-    "BbangZipTheme.color.todoGreen2_A2B499" -> BbangZipTheme.color.todoGreen2_A2B499
-    "BbangZipTheme.color.todoBlue1_5C62AC" -> BbangZipTheme.color.todoBlue1_5C62AC
-    "BbangZipTheme.color.todoBlue2_8D91C5" -> BbangZipTheme.color.todoBlue2_8D91C5
-    "BbangZipTheme.color.todoPurple1_8F63E9" -> BbangZipTheme.color.todoPurple1_8F63E9
-    "BbangZipTheme.color.todoPurple2_B79FE8" -> BbangZipTheme.color.todoPurple2_B79FE8
-    else -> BbangZipTheme.color.todoRed1_EA7152
-}
+fun colorMapper(color: String) =
+    when (color) {
+        "BbangZipTheme.color.todoRed1_EA7152" -> BbangZipTheme.color.todoRed1_EA7152
+        "BbangZipTheme.color.todoRed2_F09C86" -> BbangZipTheme.color.todoRed2_F09C86
+        "BbangZipTheme.color.todoYellow1_FED45C" -> BbangZipTheme.color.todoYellow1_FED45C
+        "BbangZipTheme.color.todoYellow2_F6DDAF" -> BbangZipTheme.color.todoYellow2_F6DDAF
+        "BbangZipTheme.color.todoGreen1_7A946D" -> BbangZipTheme.color.todoGreen1_7A946D
+        "BbangZipTheme.color.todoGreen2_A2B499" -> BbangZipTheme.color.todoGreen2_A2B499
+        "BbangZipTheme.color.todoBlue1_5C62AC" -> BbangZipTheme.color.todoBlue1_5C62AC
+        "BbangZipTheme.color.todoBlue2_8D91C5" -> BbangZipTheme.color.todoBlue2_8D91C5
+        "BbangZipTheme.color.todoPurple1_8F63E9" -> BbangZipTheme.color.todoPurple1_8F63E9
+        "BbangZipTheme.color.todoPurple2_B79FE8" -> BbangZipTheme.color.todoPurple2_B79FE8
+        else -> BbangZipTheme.color.todoRed1_EA7152
+    }
+
 private const val LIST_HEADER_COUNT = 1
+
 @Composable
 fun TodoScreen(
     modifier: Modifier = Modifier,
@@ -98,7 +101,7 @@ fun TodoScreen(
     motivationMessage: String,
     totalTodoCount: Int,
     completedTodoCount: Int,
-    isMenuOpen: Boolean ,
+    isMenuOpen: Boolean,
     onMenuClick: () -> Unit = {},
     onListChanged: (List<Category>) -> Unit = {},
     onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit = { _, _, _ -> },
@@ -334,14 +337,15 @@ fun TodoScreen(
 
                 Box(modifier = Modifier.fillMaxWidth()) {
                     BbangZipWeeklyCalendar(
-                        onMenuClick = onMenuClick
+                        onMenuClick = onMenuClick,
                     )
 
                     if (isMenuOpen) {
                         MenuPopup(
-                            modifier = Modifier
-                                .offset(x = (-20).dp, y = 9.dp),
-                            onDismissRequest = onMenuClick
+                            modifier =
+                                Modifier
+                                    .offset(x = (-20).dp, y = 9.dp),
+                            onDismissRequest = onMenuClick,
                         )
                     }
                 }
@@ -713,76 +717,80 @@ private fun MenuPopup(
     Popup(
         alignment = Alignment.BottomEnd,
         onDismissRequest = onDismissRequest,
-        properties = PopupProperties(focusable = true)
-        ) {
-            Box(
-                modifier = modifier
+        properties = PopupProperties(focusable = true),
+    ) {
+        Box(
+            modifier =
+                modifier
                     .width(125.dp)
                     .dropShadow(
                         shape = RoundedCornerShape(12.dp),
                         color = BbangZipTheme.color.staticBlack_121212.copy(0.15f),
                         blur = 4.dp,
                         offsetY = 2.dp,
-                    )
-            ) {
-                Box(
-                    modifier = Modifier
+                    ),
+        ) {
+            Box(
+                modifier =
+                    Modifier
                         .clip(RoundedCornerShape(12.dp))
                         .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
+            ) {
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
-                    Column(
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Row(
-                            modifier = Modifier
+                    Row(
+                        modifier =
+                            Modifier
                                 .padding(horizontal = 8.dp)
                                 .padding(top = 7.dp, bottom = 13.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(R.drawable.ic_plus_bold_24),
-                                contentDescription = null,
-                                tint = BbangZipTheme.color.labelNormal_6B6560,
-                                modifier = Modifier.size(16.dp)
-                            )
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_plus_bold_24),
+                            contentDescription = null,
+                            tint = BbangZipTheme.color.labelNormal_6B6560,
+                            modifier = Modifier.size(16.dp),
+                        )
 
-                            Gap(width = 8.dp)
+                        Gap(width = 8.dp)
 
-                            Text(
-                                text = "카테고리 추가",
-                                color = BbangZipTheme.color.labelNormal_6B6560,
-                                style = BbangZipTheme.typography.body3Medium,
-                            )
-                        }
+                        Text(
+                            text = "카테고리 추가",
+                            color = BbangZipTheme.color.labelNormal_6B6560,
+                            style = BbangZipTheme.typography.body3Medium,
+                        )
+                    }
 
-                        HorizontalDivider()
+                    HorizontalDivider()
 
-                        Row(
-                            modifier = Modifier
+                    Row(
+                        modifier =
+                            Modifier
                                 .padding(horizontal = 8.dp)
                                 .padding(top = 13.dp, bottom = 7.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            Icon(
-                                imageVector = ImageVector.vectorResource(R.drawable.ic_pencil_default_24),
-                                contentDescription = null,
-                                tint = BbangZipTheme.color.labelNormal_6B6560,
-                                modifier = Modifier.size(16.dp)
-                            )
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(R.drawable.ic_pencil_default_24),
+                            contentDescription = null,
+                            tint = BbangZipTheme.color.labelNormal_6B6560,
+                            modifier = Modifier.size(16.dp),
+                        )
 
-                            Gap(width = 8.dp)
+                        Gap(width = 8.dp)
 
-                            Text(
-                                text = "카테고리 관리",
-                                color = BbangZipTheme.color.labelNormal_6B6560,
-                                style = BbangZipTheme.typography.body3Medium,
-                            )
-                        }
+                        Text(
+                            text = "카테고리 관리",
+                            color = BbangZipTheme.color.labelNormal_6B6560,
+                            style = BbangZipTheme.typography.body3Medium,
+                        )
                     }
                 }
             }
         }
+    }
 }
 
 @Preview(showBackground = true)
@@ -986,7 +994,7 @@ fun TodoListPreview() {
                             }
                         }
                 },
-                onMenuClick = {!isMenuOpen}
+                onMenuClick = { !isMenuOpen },
             )
         }
         Timber.d("TodoListPreview $todos")
