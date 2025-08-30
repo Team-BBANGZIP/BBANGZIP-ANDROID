@@ -13,7 +13,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -41,6 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.component.toggle.BbangZipSegmentedButton
@@ -82,10 +82,10 @@ fun TimerScreen(
 ) {
     Column(
         modifier =
-            modifier
-                .fillMaxSize()
-                .background(BbangZipTheme.brush.backgroundAccentGradient)
-                .windowInsetsPadding(WindowInsets.systemBars),
+        modifier
+            .fillMaxSize()
+            .background(BbangZipTheme.brush.backgroundAccentGradient)
+            .windowInsetsPadding(WindowInsets.systemBars),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Gap(17.dp)
@@ -95,9 +95,9 @@ fun TimerScreen(
 
             Row(
                 modifier =
-                    Modifier
-                        .border(width = 1.dp, color = BbangZipTheme.color.primaryLight_C8B5A2, shape = RoundedCornerShape(14.dp))
-                        .padding(horizontal = 10.dp, vertical = 5.dp),
+                Modifier
+                    .border(width = 1.dp, color = BbangZipTheme.color.primaryLight_C8B5A2, shape = RoundedCornerShape(14.dp))
+                    .padding(horizontal = 10.dp, vertical = 5.dp),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
             ) {
@@ -159,10 +159,10 @@ fun TimerScreen(
                     initialValue = -3f,
                     targetValue = 3f,
                     animationSpec =
-                        infiniteRepeatable(
-                            animation = tween(800, easing = EaseInOut),
-                            repeatMode = RepeatMode.Reverse,
-                        ),
+                    infiniteRepeatable(
+                        animation = tween(800, easing = EaseInOut),
+                        repeatMode = RepeatMode.Reverse,
+                    ),
                     label = "triangle offset",
                 )
                 AnimatedVisibility(
@@ -170,8 +170,8 @@ fun TimerScreen(
                     enter = fadeIn(animationSpec = tween(300)),
                     exit = fadeOut(animationSpec = tween(300)),
                     modifier =
-                        mod
-                            .offset(y = (-90 + triangleOffset).dp),
+                    mod
+                        .offset(y = (-90 + triangleOffset).dp),
                 ) {
                     Icon(
                         imageVector = ImageVector.vectorResource(id = R.drawable.ic_triangle_down_24),
@@ -182,9 +182,9 @@ fun TimerScreen(
 
                 Image(
                     modifier =
-                        mod
-                            .size(120.dp, 100.dp)
-                            .noRippleClickable(enabled = timerState.timerStatus == TimerStatus.Idle) { onBreadIconClick() },
+                    mod
+                        .size(120.dp, 100.dp)
+                        .noRippleClickable(enabled = timerState.timerStatus == TimerStatus.Idle) { onBreadIconClick() },
                     painter = painterResource(breadImg),
                     contentDescription = "Timer Icon",
                 )
@@ -198,11 +198,11 @@ fun TimerScreen(
             indexOfSelectedOption = timerState.selectedTimeOptionIndex,
             onOptionSelect = { index -> onTimeOptionToggleClick(index) },
             modifier =
-                Modifier
-                    .fillMaxWidth(0.25f)
-                    .alpha(
-                        if (timerState.timerStatus != TimerStatus.Idle) 0f else 1f,
-                    ),
+            Modifier
+                .fillMaxWidth(0.25f)
+                .alpha(
+                    if (timerState.timerStatus != TimerStatus.Idle) 0f else 1f,
+                ),
             enabled = timerState.timerStatus == TimerStatus.Idle,
         )
 
@@ -210,103 +210,39 @@ fun TimerScreen(
 
         Row(
             modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 84.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 84.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
             // Reset 버튼
             if (timerState.timerStatus != TimerStatus.Idle) {
-                Box(
-                    modifier =
-                        Modifier
-                            .background(
-                                color = Color.Transparent,
-                                shape = CircleShape,
-                            )
-                            .size(48.dp)
-                            .border(
-                                width = 1.dp,
-                                color = BbangZipTheme.color.secondaryStrong_F2EAE4,
-                                shape = CircleShape,
-                            )
-                            .clickable { onRestartBtnClick() },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_return_default_24),
-                        contentDescription = "Restart Button",
-                        tint = BbangZipTheme.color.primaryNormal_897869,
-                    )
-                }
+                SubTimerButton(
+                    icon = R.drawable.ic_return_default_24,
+                    contentDescription = "Restart Button",
+                    onClick = onRestartBtnClick,
+                    enabled = timerState.timerStatus != TimerStatus.Idle,
+                )
             }
 
             Gap(16.dp)
             // Start/Stop 버튼
-            if (timerState.timerStatus == TimerStatus.Running) {
-                Box(
-                    modifier =
-                        Modifier
-                            .background(
-                                color = BbangZipTheme.color.secondaryStrong_F2EAE4,
-                                shape = CircleShape,
-                            )
-                            .size(80.dp)
-                            .clickable { onStopBtnClick() },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_pause_default_80),
-                        contentDescription = "Stop Button",
-                        tint = BbangZipTheme.color.primaryNormal_897869,
-                    )
-                }
-            } else {
-                Box(
-                    modifier =
-                        Modifier
-                            .background(
-                                color = BbangZipTheme.color.primaryStrong_4B4137,
-                                shape = CircleShape,
-                            )
-                            .size(80.dp)
-                            .clickable { onStartBtnClick() },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_start_default_80),
-                        contentDescription = "Start Button",
-                        tint = BbangZipTheme.color.staticWhite_FFFFFF,
-                    )
-                }
-            }
+            MainTimerButton(
+                isRunning = timerState.timerStatus == TimerStatus.Running,
+                onStartClick = onStartBtnClick,
+                onStopClick = onStopBtnClick,
+            )
 
             Gap(16.dp)
             // Reset 버튼
             if (timerState.timerStatus != TimerStatus.Idle) {
-                Box(
-                    modifier =
-                        Modifier
-                            .background(
-                                color = Color.Transparent,
-                                shape = CircleShape,
-                            )
-                            .size(48.dp)
-                            .border(
-                                width = 1.dp,
-                                color = BbangZipTheme.color.secondaryStrong_F2EAE4,
-                                shape = CircleShape,
-                            )
-                            .clickable { onResetBtnClick() },
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_stop_default_24),
-                        contentDescription = "Reset Button",
-                        tint = BbangZipTheme.color.primaryNormal_897869,
-                    )
-                }
+                SubTimerButton(
+                    icon = R.drawable.ic_stop_default_24,
+                    contentDescription = "Reset Button",
+                    onClick = onResetBtnClick,
+                    enabled = timerState.timerStatus != TimerStatus.Idle,
+                )
             }
         }
 
@@ -345,15 +281,118 @@ fun TimerScreen(
     }
 }
 
+data class TimerButtonStyle(
+    val size: Dp,
+    val backgroundColor: Color,
+    val borderColor: Color = Color.Transparent,
+    val borderWidth: Int = 0,
+    val iconTint: Color
+)
+
+@Composable
+fun TimerButton(
+    icon: Int,
+    style: TimerButtonStyle,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    contentDescription: String = "",
+    enabled: Boolean = true
+) {
+    Box(
+        modifier = modifier
+            .background(
+                color = style.backgroundColor,
+                shape = CircleShape,
+            )
+            .size(style.size)
+            .run {
+                if (style.borderWidth > 0) {
+                    border(
+                        width = style.borderWidth.dp,
+                        color = style.borderColor,
+                        shape = CircleShape,
+                    )
+                } else this
+            }
+            .noRippleClickable(enabled = enabled) { onClick() },
+        contentAlignment = Alignment.Center,
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = icon),
+            contentDescription = contentDescription,
+            tint = if (enabled) style.iconTint else style.iconTint.copy(alpha = 0.5f),
+        )
+    }
+}
+
+@Composable
+fun MainTimerButton(
+    isRunning: Boolean,
+    onStartClick: () -> Unit,
+    onStopClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    if (isRunning) {
+        TimerButton(
+            icon = R.drawable.ic_pause_default_80,
+            contentDescription = "Stop Button",
+            style = TimerButtonStyle(
+                size = 80.dp,
+                backgroundColor = BbangZipTheme.color.secondaryStrong_F2EAE4,
+                iconTint = BbangZipTheme.color.primaryNormal_897869
+            ),
+            onClick = onStopClick,
+            modifier = modifier
+        )
+    } else {
+        TimerButton(
+            icon = R.drawable.ic_start_default_80,
+            contentDescription = "Start Button",
+            style = TimerButtonStyle(
+                size = 80.dp,
+                backgroundColor = BbangZipTheme.color.primaryStrong_4B4137,
+                iconTint = BbangZipTheme.color.staticWhite_FFFFFF
+            ),
+            onClick = onStartClick,
+            modifier = modifier
+        )
+    }
+}
+
+@Composable
+fun SubTimerButton(
+    icon: Int,
+    contentDescription: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true
+) {
+    TimerButton(
+        icon = icon,
+        contentDescription = contentDescription,
+        style = TimerButtonStyle(
+            size = 48.dp,
+            backgroundColor = Color.Transparent,
+            borderColor = BbangZipTheme.color.secondaryStrong_F2EAE4,
+            borderWidth = 1,
+            iconTint = BbangZipTheme.color.primaryNormal_897869
+        ),
+        onClick = onClick,
+        modifier = modifier,
+        enabled = enabled
+    )
+}
+
+
 @Preview
 @Composable
 private fun TimerScreenPreview() {
     BBANGZIPANDROIDTheme {
         TimerScreen(
             timerState =
-                TimerContract.TimerState(),
+            TimerContract.TimerState(),
             sharedState =
-                SharedContract.SharedState(),
+            SharedContract.SharedState(),
         )
     }
 }
