@@ -5,8 +5,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
-
 
     <application
         android:name=".BbangZipApp"
@@ -29,10 +27,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <service
-            android:name=".presentation.ui.timer.service.TimerService"
-            android:foregroundServiceType="specialUse" />
 
         <receiver android:name=".presentation.observer.ScreenStateReceiver" />
     </application>
