@@ -3,17 +3,22 @@ package org.android.bbangzip.presentation.observer
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 
-class AppLifecycleObserver: DefaultLifecycleObserver {
+class AppLifecycleObserver : DefaultLifecycleObserver {
     interface AppLifecycleListener {
         fun onAppForeground()
         fun onAppBackground()
     }
 
-    private var listener : AppLifecycleListener? = null
+    private var listener: AppLifecycleListener? = null
     private var backgroundStartTime = 0L
+    private var isScreenOn = true
 
     fun setListener(listener: AppLifecycleListener) {
         this.listener = listener
+    }
+
+    fun updateScreenState(isScreenOn: Boolean) {
+        this.isScreenOn = isScreenOn
     }
 
     override fun onStart(owner: LifecycleOwner) {
@@ -23,8 +28,10 @@ class AppLifecycleObserver: DefaultLifecycleObserver {
 
     override fun onStop(owner: LifecycleOwner) {
         super.onStop(owner)
-        backgroundStartTime = System.currentTimeMillis()
-        listener?.onAppBackground()
+        if (isScreenOn) {
+            backgroundStartTime = System.currentTimeMillis()
+            listener?.onAppBackground()
+        }
     }
 
     fun getBackgroundDuration(): Long {

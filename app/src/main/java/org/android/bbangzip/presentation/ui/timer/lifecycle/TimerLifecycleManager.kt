@@ -27,11 +27,13 @@ class TimerLifecycleManager(
     private fun setupScreenStateReceiver() {
         screenStateReceiver.setListener(object : ScreenStateReceiver.ScreenStateListener {
             override fun onScreenOn() {
+                lifecycleObserver.updateScreenState(true)
                 onEvent(TimerContract.TimerEvent.OnScreenTurnedOn)
             }
 
             override fun onScreenOff() {
                 val timeSinceLastInteraction = System.currentTimeMillis() - lastUserInteractionTime
+                lifecycleObserver.updateScreenState(isScreenOn = false)
 
                 if (timeSinceLastInteraction <= 2000) {
                     onEvent(TimerContract.TimerEvent.OnLockButtonPressed)
