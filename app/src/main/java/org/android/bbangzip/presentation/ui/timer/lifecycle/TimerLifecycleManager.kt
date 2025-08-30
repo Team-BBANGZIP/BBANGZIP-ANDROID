@@ -1,5 +1,6 @@
 package org.android.bbangzip.presentation.ui.timer.lifecycle
 
+import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
@@ -15,26 +16,35 @@ class TimerLifecycleManager(
 ) {
     private val screenStateReceiver = ScreenStateReceiver()
     private val lifecycleObserver = AppLifecycleObserver()
+    private var lastUserInteractionTime = System.currentTimeMillis()
 
     init {
         setupScreenStateReceiver()
         setupLifecycleObserver()
+        startUserInteractionTracking()
     }
 
     private fun setupScreenStateReceiver() {
         screenStateReceiver.setListener(object : ScreenStateReceiver.ScreenStateListener {
             override fun onScreenOn() {
-                onEvent(TimerContract.TimerEvent.OnScreenUnlocked)
+                onEvent(TimerContract.TimerEvent.OnScreenTurnedOn)
             }
 
             override fun onScreenOff() {
-                onEvent(TimerContract.TimerEvent.OnScreenLocked)
+                val timeSinceLastInteraction = System.currentTimeMillis() - lastUserInteractionTime
+
+                if (timeSinceLastInteraction <= 2000) {
+                    onEvent(TimerContract.TimerEvent.OnLockButtonPressed)
+                } else {
+                    onEvent(TimerContract.TimerEvent.OnScreenTimeOut)
+                }
             }
         })
 
         val filter = IntentFilter().apply {
             addAction(Intent.ACTION_SCREEN_OFF)
             addAction(Intent.ACTION_SCREEN_ON)
+            addAction(Intent.ACTION_USER_PRESENT)
         }
         context.registerReceiver(screenStateReceiver, filter)
     }
@@ -53,6 +63,25 @@ class TimerLifecycleManager(
         })
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(lifecycleObserver)
+    }
+
+    private fun startUserInteractionTracking() {
+        val userInteractionFilter = IntentFilter().apply {
+            addAction(Intent.ACTION_USER_PRESENT)
+            addAction(Intent.ACTION_SCREEN_ON)
+        }
+
+        val userInteractionReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                when (intent?.action) {
+                    Intent.ACTION_USER_PRESENT, Intent.ACTION_SCREEN_ON -> {
+                        lastUserInteractionTime = System.currentTimeMillis()
+                    }
+                }
+            }
+        }
+
+        context.registerReceiver(userInteractionReceiver, userInteractionFilter)
     }
 
     fun cleanup() {
