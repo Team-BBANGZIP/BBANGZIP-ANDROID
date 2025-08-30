@@ -13,6 +13,7 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -90,34 +91,9 @@ fun TimerScreen(
     ) {
         Gap(17.dp)
 
-        Row(modifier = Modifier.padding(end = 20.dp)) {
-            Gap()
-
-            Row(
-                modifier =
-                Modifier
-                    .border(width = 1.dp, color = BbangZipTheme.color.primaryLight_C8B5A2, shape = RoundedCornerShape(14.dp))
-                    .padding(horizontal = 10.dp, vertical = 5.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                Icon(
-                    modifier = Modifier,
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_bread_default_24),
-                    contentDescription = "Bread Icon",
-                    tint = BbangZipTheme.color.primaryLight_C8B5A2,
-                )
-
-                Gap(6.dp)
-
-                Text(
-                    modifier = Modifier,
-                    text = timerState.todayBreadCount.toString(),
-                    style = BbangZipTheme.typography.label1SemiBold,
-                    color = BbangZipTheme.color.primaryNormal_897869,
-                )
-            }
-        }
+        TimerTopBar(
+            breadCount = timerState.todayBreadCount,
+        )
 
         Gap(50.dp)
 
@@ -281,13 +257,64 @@ fun TimerScreen(
     }
 }
 
-data class TimerButtonStyle(
-    val size: Dp,
-    val backgroundColor: Color,
-    val borderColor: Color = Color.Transparent,
-    val borderWidth: Int = 0,
-    val iconTint: Color
-)
+@Composable
+fun TimerTopBar(
+    breadCount: Int,
+    modifier: Modifier = Modifier,
+    onBreadCountClick: (() -> Unit) = { },
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(end = 20.dp)
+    ) {
+        Gap()
+
+        BreadCounter(
+            count = breadCount,
+            onClick = onBreadCountClick
+        )
+    }
+}
+
+@Composable
+fun BreadCounter(
+    count: Int,
+    modifier: Modifier = Modifier,
+    onClick: (() -> Unit) = { }
+) {
+    Row(
+        modifier = modifier
+            .border(
+                width = 1.dp,
+                color = BbangZipTheme.color.primaryLight_C8B5A2,
+                shape = RoundedCornerShape(14.dp)
+            )
+            .padding(horizontal = 10.dp, vertical = 5.dp)
+            .run {
+                if (onClick != null) {
+                    clickable { onClick() }
+                } else this
+            },
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center,
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_bread_default_24),
+            contentDescription = "Bread Icon",
+            tint = BbangZipTheme.color.primaryLight_C8B5A2,
+        )
+
+        Gap(6.dp)
+
+        Text(
+            text = count.toString(),
+            style = BbangZipTheme.typography.label1SemiBold,
+            color = BbangZipTheme.color.primaryNormal_897869,
+        )
+    }
+}
+
 
 @Composable
 fun TimerButton(
@@ -383,6 +410,13 @@ fun SubTimerButton(
     )
 }
 
+data class TimerButtonStyle(
+    val size: Dp,
+    val backgroundColor: Color,
+    val borderColor: Color = Color.Transparent,
+    val borderWidth: Int = 0,
+    val iconTint: Color
+)
 
 @Preview
 @Composable
