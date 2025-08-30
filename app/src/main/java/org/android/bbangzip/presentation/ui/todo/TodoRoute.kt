@@ -16,13 +16,13 @@ fun TodoRoute(
 
     TodoScreen(
         modifier = modifier,
-        categories = uiState.categories,
+        flatList = uiState.flatList,
         motivationMessage = uiState.motivationMessage,
         totalTodoCount = uiState.totalTodoCount,
         completedTodoCount = uiState.completedTodoCount,
         isMenuOpen = uiState.isMenuOpen,
-        onListChanged = { updatedCategories ->
-            viewModel.setEvent(TodoEvent.OnCategoriesChanged(updatedCategories))
+        onListItemMove = { fromIndex, toIndex ->
+            viewModel.setEvent(TodoEvent.OnListItemMove(fromIndex, toIndex))
         },
         onTodoCheckBoxClick = { todoId, categoryId, isChecked ->
             viewModel.setEvent(TodoEvent.OnTodoCheckBoxClick(todoId, categoryId, isChecked))
