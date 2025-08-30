@@ -37,8 +37,8 @@ class TimerContract {
         val isResetSheetVisible: Boolean = false,
         val isCompleteSheetVisible: Boolean = false,
         // Lifecycle State
-        val isScreenLocked: Boolean = false,
-        val isAppInBackground: Boolean = false,
+        val isScreenOn: Boolean = true,
+        val isAppActive: Boolean = true,
         val backgroundStartTime: Long = 0L,
     ) : BaseContract.State, Parcelable {
         val formattedTime: String get() = remainingTime.formatTime()
@@ -96,12 +96,11 @@ class TimerContract {
         data object OnBreadSelectionSheetClick : TimerEvent
 
         // Lifecycle events
-        data object OnScreenLocked : TimerEvent
-        data object OnScreenUnlocked : TimerEvent
+        data object OnScreenTimeOut : TimerEvent
+        data object OnLockButtonPressed : TimerEvent
+        data object OnScreenTurnedOn : TimerEvent
         data object OnAppBackground : TimerEvent
-        data class OnAppForeground(val backgroundDuration: Long) : TimerEvent
-        data object OnDozeMode : TimerEvent
-        data object OnDozeExit : TimerEvent
+        data class OnAppForeground(val exitDuration: Long) : TimerEvent
     }
 
     sealed interface TimerReduce : BaseContract.Reduce {
@@ -149,12 +148,12 @@ class TimerContract {
             val breadList: List<BreadInfo>,
         ) : TimerReduce
 
-        data class UpdateIsScreenLocked(
-            val isLocked: Boolean
+        data class UpdateIsScreenOn(
+            val isScreenOn: Boolean
         ) : TimerReduce
 
-        data class UpdateIsAppInBackground(
-            val isBackground: Boolean
+        data class UpdateIsAppActive(
+            val isActive: Boolean
         ) : TimerReduce
 
         data class UpdateBackgroundStartTime(
