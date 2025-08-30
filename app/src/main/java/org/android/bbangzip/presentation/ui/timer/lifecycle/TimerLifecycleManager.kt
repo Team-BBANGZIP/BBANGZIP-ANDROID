@@ -98,7 +98,7 @@ class TimerLifecycleManager(
                 context.contentResolver,
                 Settings.System.SCREEN_OFF_TIMEOUT
             )
-            timeout.toLong()
+            return timeout
         } catch (e: Settings.SettingNotFoundException) {
             15000L
         }
