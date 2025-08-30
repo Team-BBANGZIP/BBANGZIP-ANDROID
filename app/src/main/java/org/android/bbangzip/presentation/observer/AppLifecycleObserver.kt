@@ -6,6 +6,7 @@ import androidx.lifecycle.LifecycleOwner
 class AppLifecycleObserver : DefaultLifecycleObserver {
     interface AppLifecycleListener {
         fun onAppForeground()
+
         fun onAppBackground()
     }
 
@@ -37,6 +38,8 @@ class AppLifecycleObserver : DefaultLifecycleObserver {
     fun getBackgroundDuration(): Long {
         return if (backgroundStartTime > 0) {
             System.currentTimeMillis() - backgroundStartTime
-        } else 0L
+        } else {
+            0L
+        }
     }
 }

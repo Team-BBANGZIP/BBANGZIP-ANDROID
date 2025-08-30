@@ -97,9 +97,13 @@ class TimerContract {
 
         // Lifecycle events
         data object OnScreenTimeOut : TimerEvent
+
         data object OnLockButtonPressed : TimerEvent
+
         data object OnScreenTurnedOn : TimerEvent
+
         data object OnAppBackground : TimerEvent
+
         data class OnAppForeground(val exitDuration: Long) : TimerEvent
     }
 
@@ -149,17 +153,16 @@ class TimerContract {
         ) : TimerReduce
 
         data class UpdateIsScreenOn(
-            val isScreenOn: Boolean
+            val isScreenOn: Boolean,
         ) : TimerReduce
 
         data class UpdateIsAppActive(
-            val isActive: Boolean
+            val isActive: Boolean,
         ) : TimerReduce
 
         data class UpdateBackgroundStartTime(
-            val time: Long
+            val time: Long,
         ) : TimerReduce
-
     }
 
     sealed interface TimerSideEffect : BaseContract.SideEffect {

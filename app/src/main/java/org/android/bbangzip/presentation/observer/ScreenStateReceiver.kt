@@ -7,15 +7,20 @@ import android.content.Intent
 class ScreenStateReceiver : BroadcastReceiver() {
     interface ScreenStateListener {
         fun onScreenOn()
+
         fun onScreenOff()
     }
-    private var listener : ScreenStateListener? = null
+
+    private var listener: ScreenStateListener? = null
 
     fun setListener(listener: ScreenStateListener) {
-         this.listener = listener
+        this.listener = listener
     }
 
-    override fun onReceive(context: Context, intent: Intent) {
+    override fun onReceive(
+        context: Context,
+        intent: Intent,
+    ) {
         when (intent.action) {
             Intent.ACTION_SCREEN_OFF -> listener?.onScreenOff()
             Intent.ACTION_SCREEN_ON -> listener?.onScreenOn()

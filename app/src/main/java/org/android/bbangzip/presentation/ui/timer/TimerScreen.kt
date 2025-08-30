@@ -13,7 +13,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -45,8 +44,6 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
-import org.android.bbangzip.presentation.component.button.BbangZipButtonDefaults
-import org.android.bbangzip.presentation.component.button.BbangzipBaseButton
 import org.android.bbangzip.presentation.component.toggle.BbangZipSegmentedButton
 import org.android.bbangzip.presentation.model.TimerStatus
 import org.android.bbangzip.presentation.model.getTimerFontColor
@@ -86,10 +83,10 @@ fun TimerScreen(
 ) {
     Column(
         modifier =
-        modifier
-            .fillMaxSize()
-            .background(BbangZipTheme.brush.backgroundAccentGradient)
-            .windowInsetsPadding(WindowInsets.systemBars),
+            modifier
+                .fillMaxSize()
+                .background(BbangZipTheme.brush.backgroundAccentGradient)
+                .windowInsetsPadding(WindowInsets.systemBars),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Gap(17.dp)
@@ -137,7 +134,7 @@ fun TimerScreen(
                     breadImageRes = breadImg,
                     showTriangle = timerState.timerStatus == TimerStatus.Idle,
                     isClickable = timerState.timerStatus == TimerStatus.Idle,
-                    onClick = onBreadIconClick
+                    onClick = onBreadIconClick,
                 )
             },
         )
@@ -149,11 +146,11 @@ fun TimerScreen(
             indexOfSelectedOption = timerState.selectedTimeOptionIndex,
             onOptionSelect = { index -> onTimeOptionToggleClick(index) },
             modifier =
-            Modifier
-                .fillMaxWidth(0.25f)
-                .alpha(
-                    if (timerState.timerStatus != TimerStatus.Idle) 0f else 1f,
-                ),
+                Modifier
+                    .fillMaxWidth(0.25f)
+                    .alpha(
+                        if (timerState.timerStatus != TimerStatus.Idle) 0f else 1f,
+                    ),
             enabled = timerState.timerStatus == TimerStatus.Idle,
         )
 
@@ -161,9 +158,9 @@ fun TimerScreen(
 
         Row(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 84.dp),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 84.dp),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
@@ -239,15 +236,16 @@ fun TimerTopBar(
     onBreadCountClick: (() -> Unit) = { },
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(end = 20.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(end = 20.dp),
     ) {
         Gap()
 
         BreadCounter(
             count = breadCount,
-            onClick = onBreadCountClick
+            onClick = onBreadCountClick,
         )
     }
 }
@@ -256,17 +254,18 @@ fun TimerTopBar(
 fun BreadCounter(
     count: Int,
     modifier: Modifier = Modifier,
-    onClick: (() -> Unit) = { }
+    onClick: (() -> Unit) = { },
 ) {
     Row(
-        modifier = modifier
-            .border(
-                width = 1.dp,
-                color = BbangZipTheme.color.primaryLight_C8B5A2,
-                shape = RoundedCornerShape(14.dp)
-            )
-            .padding(horizontal = 10.dp, vertical = 5.dp)
-            .noRippleClickable { onClick() },
+        modifier =
+            modifier
+                .border(
+                    width = 1.dp,
+                    color = BbangZipTheme.color.primaryLight_C8B5A2,
+                    shape = RoundedCornerShape(14.dp),
+                )
+                .padding(horizontal = 10.dp, vertical = 5.dp)
+                .noRippleClickable { onClick() },
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
@@ -286,7 +285,6 @@ fun BreadCounter(
     }
 }
 
-
 @SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
 fun BreadWithTriangleIndicator(
@@ -296,16 +294,16 @@ fun BreadWithTriangleIndicator(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     breadSize: DpSize = DpSize(120.dp, 100.dp),
-
-    ) {
+) {
     val infiniteTransition = rememberInfiniteTransition(label = "triangle animation")
     val triangleOffset by infiniteTransition.animateFloat(
         initialValue = -3f,
         targetValue = 3f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(800, easing = EaseInOut),
-            repeatMode = RepeatMode.Reverse,
-        ),
+        animationSpec =
+            infiniteRepeatable(
+                animation = tween(800, easing = EaseInOut),
+                repeatMode = RepeatMode.Reverse,
+            ),
         label = "triangle offset",
     )
 
@@ -322,14 +320,14 @@ fun BreadWithTriangleIndicator(
         )
     }
     Image(
-        modifier = modifier
-            .size(breadSize.width, breadSize.height)
-            .noRippleClickable(enabled = isClickable) { onClick() },
+        modifier =
+            modifier
+                .size(breadSize.width, breadSize.height)
+                .noRippleClickable(enabled = isClickable) { onClick() },
         painter = painterResource(breadImageRes),
         contentDescription = "Timer Icon",
     )
 }
-
 
 @Composable
 fun TimerButton(
@@ -338,25 +336,28 @@ fun TimerButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     contentDescription: String = "",
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
     Box(
-        modifier = modifier
-            .background(
-                color = style.backgroundColor,
-                shape = CircleShape,
-            )
-            .size(style.size)
-            .run {
-                if (style.borderWidth > 0) {
-                    border(
-                        width = style.borderWidth.dp,
-                        color = style.borderColor,
-                        shape = CircleShape,
-                    )
-                } else this
-            }
-            .noRippleClickable(enabled = enabled) { onClick() },
+        modifier =
+            modifier
+                .background(
+                    color = style.backgroundColor,
+                    shape = CircleShape,
+                )
+                .size(style.size)
+                .run {
+                    if (style.borderWidth > 0) {
+                        border(
+                            width = style.borderWidth.dp,
+                            color = style.borderColor,
+                            shape = CircleShape,
+                        )
+                    } else {
+                        this
+                    }
+                }
+                .noRippleClickable(enabled = enabled) { onClick() },
         contentAlignment = Alignment.Center,
     ) {
         Icon(
@@ -372,31 +373,33 @@ fun MainTimerButton(
     isRunning: Boolean,
     onStartClick: () -> Unit,
     onStopClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     if (isRunning) {
         TimerButton(
             icon = R.drawable.ic_pause_default_80,
             contentDescription = "Stop Button",
-            style = TimerButtonStyle(
-                size = 80.dp,
-                backgroundColor = BbangZipTheme.color.secondaryStrong_F2EAE4,
-                iconTint = BbangZipTheme.color.primaryNormal_897869
-            ),
+            style =
+                TimerButtonStyle(
+                    size = 80.dp,
+                    backgroundColor = BbangZipTheme.color.secondaryStrong_F2EAE4,
+                    iconTint = BbangZipTheme.color.primaryNormal_897869,
+                ),
             onClick = onStopClick,
-            modifier = modifier
+            modifier = modifier,
         )
     } else {
         TimerButton(
             icon = R.drawable.ic_start_default_80,
             contentDescription = "Start Button",
-            style = TimerButtonStyle(
-                size = 80.dp,
-                backgroundColor = BbangZipTheme.color.primaryStrong_4B4137,
-                iconTint = BbangZipTheme.color.staticWhite_FFFFFF
-            ),
+            style =
+                TimerButtonStyle(
+                    size = 80.dp,
+                    backgroundColor = BbangZipTheme.color.primaryStrong_4B4137,
+                    iconTint = BbangZipTheme.color.staticWhite_FFFFFF,
+                ),
             onClick = onStartClick,
-            modifier = modifier
+            modifier = modifier,
         )
     }
 }
@@ -407,21 +410,22 @@ fun SubTimerButton(
     contentDescription: String,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
-    enabled: Boolean = true
+    enabled: Boolean = true,
 ) {
     TimerButton(
         icon = icon,
         contentDescription = contentDescription,
-        style = TimerButtonStyle(
-            size = 48.dp,
-            backgroundColor = Color.Transparent,
-            borderColor = BbangZipTheme.color.secondaryStrong_F2EAE4,
-            borderWidth = 1,
-            iconTint = BbangZipTheme.color.primaryNormal_897869
-        ),
+        style =
+            TimerButtonStyle(
+                size = 48.dp,
+                backgroundColor = Color.Transparent,
+                borderColor = BbangZipTheme.color.secondaryStrong_F2EAE4,
+                borderWidth = 1,
+                iconTint = BbangZipTheme.color.primaryNormal_897869,
+            ),
         onClick = onClick,
         modifier = modifier,
-        enabled = enabled
+        enabled = enabled,
     )
 }
 
@@ -430,7 +434,7 @@ data class TimerButtonStyle(
     val backgroundColor: Color,
     val borderColor: Color = Color.Transparent,
     val borderWidth: Int = 0,
-    val iconTint: Color
+    val iconTint: Color,
 )
 
 @Preview
@@ -439,9 +443,9 @@ private fun TimerScreenPreview() {
     BBANGZIPANDROIDTheme {
         TimerScreen(
             timerState =
-            TimerContract.TimerState(),
+                TimerContract.TimerState(),
             sharedState =
-            SharedContract.SharedState(),
+                SharedContract.SharedState(),
         )
     }
 }

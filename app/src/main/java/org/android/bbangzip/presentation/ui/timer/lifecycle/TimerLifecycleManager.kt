@@ -13,7 +13,7 @@ import timber.log.Timber
 
 class TimerLifecycleManager(
     private val context: Context,
-    private val onEvent: (TimerContract.TimerEvent) -> Unit
+    private val onEvent: (TimerContract.TimerEvent) -> Unit,
 ) {
     private val screenStateReceiver = ScreenStateReceiver()
     private val lifecycleObserver = AppLifecycleObserver()
@@ -28,76 +28,86 @@ class TimerLifecycleManager(
     }
 
     private fun setupScreenStateReceiver() {
-        screenStateReceiver.setListener(object : ScreenStateReceiver.ScreenStateListener {
-            override fun onScreenOn() {
-                lifecycleObserver.updateScreenState(true)
-                lastUserInteractionTime = System.currentTimeMillis()
-                onEvent(TimerContract.TimerEvent.OnScreenTurnedOn)
-            }
-
-            override fun onScreenOff() {
-                lifecycleObserver.updateScreenState(isScreenOn = false)
-
-                val timeSinceLastInteraction = System.currentTimeMillis() - lastUserInteractionTime
-                val threshold = screenTimeoutMs - 1000
-
-                if (timeSinceLastInteraction < threshold) {
-                    onEvent(TimerContract.TimerEvent.OnLockButtonPressed)
-                } else {
-                    onEvent(TimerContract.TimerEvent.OnScreenTimeOut)
+        screenStateReceiver.setListener(
+            object : ScreenStateReceiver.ScreenStateListener {
+                override fun onScreenOn() {
+                    lifecycleObserver.updateScreenState(true)
+                    lastUserInteractionTime = System.currentTimeMillis()
+                    onEvent(TimerContract.TimerEvent.OnScreenTurnedOn)
                 }
-            }
-        })
 
-        val filter = IntentFilter().apply {
-            addAction(Intent.ACTION_SCREEN_OFF)
-            addAction(Intent.ACTION_SCREEN_ON)
-            addAction(Intent.ACTION_USER_PRESENT)
-        }
+                override fun onScreenOff() {
+                    lifecycleObserver.updateScreenState(isScreenOn = false)
+
+                    val timeSinceLastInteraction = System.currentTimeMillis() - lastUserInteractionTime
+                    val threshold = screenTimeoutMs - 1000
+
+                    if (timeSinceLastInteraction < threshold) {
+                        onEvent(TimerContract.TimerEvent.OnLockButtonPressed)
+                    } else {
+                        onEvent(TimerContract.TimerEvent.OnScreenTimeOut)
+                    }
+                }
+            },
+        )
+
+        val filter =
+            IntentFilter().apply {
+                addAction(Intent.ACTION_SCREEN_OFF)
+                addAction(Intent.ACTION_SCREEN_ON)
+                addAction(Intent.ACTION_USER_PRESENT)
+            }
         context.registerReceiver(screenStateReceiver, filter)
     }
 
-
     private fun setupLifecycleObserver() {
-        lifecycleObserver.setListener(object : AppLifecycleObserver.AppLifecycleListener {
-            override fun onAppForeground() {
-                val backgroundDuration = lifecycleObserver.getBackgroundDuration()
-                onEvent(TimerContract.TimerEvent.OnAppForeground(backgroundDuration))
-            }
+        lifecycleObserver.setListener(
+            object : AppLifecycleObserver.AppLifecycleListener {
+                override fun onAppForeground() {
+                    val backgroundDuration = lifecycleObserver.getBackgroundDuration()
+                    onEvent(TimerContract.TimerEvent.OnAppForeground(backgroundDuration))
+                }
 
-            override fun onAppBackground() {
-                onEvent(TimerContract.TimerEvent.OnAppBackground)
-            }
-        })
+                override fun onAppBackground() {
+                    onEvent(TimerContract.TimerEvent.OnAppBackground)
+                }
+            },
+        )
 
         ProcessLifecycleOwner.get().lifecycle.addObserver(lifecycleObserver)
     }
 
     private fun startUserInteractionTracking() {
-        val userInteractionFilter = IntentFilter().apply {
-            addAction(Intent.ACTION_USER_PRESENT)
-            addAction(Intent.ACTION_SCREEN_ON)
-        }
+        val userInteractionFilter =
+            IntentFilter().apply {
+                addAction(Intent.ACTION_USER_PRESENT)
+                addAction(Intent.ACTION_SCREEN_ON)
+            }
 
-        val userInteractionReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                when (intent?.action) {
-                    Intent.ACTION_USER_PRESENT, Intent.ACTION_SCREEN_ON -> {
-                        lastUserInteractionTime = System.currentTimeMillis()
+        val userInteractionReceiver =
+            object : BroadcastReceiver() {
+                override fun onReceive(
+                    context: Context?,
+                    intent: Intent?,
+                ) {
+                    when (intent?.action) {
+                        Intent.ACTION_USER_PRESENT, Intent.ACTION_SCREEN_ON -> {
+                            lastUserInteractionTime = System.currentTimeMillis()
+                        }
                     }
                 }
             }
-        }
 
         context.registerReceiver(userInteractionReceiver, userInteractionFilter)
     }
 
     private fun getScreenTimeout(): Long {
         return try {
-            val timeout = Settings.System.getLong(
-                context.contentResolver,
-                Settings.System.SCREEN_OFF_TIMEOUT
-            )
+            val timeout =
+                Settings.System.getLong(
+                    context.contentResolver,
+                    Settings.System.SCREEN_OFF_TIMEOUT,
+                )
             return timeout
         } catch (e: Settings.SettingNotFoundException) {
             15000L

@@ -13,7 +13,7 @@ import org.android.bbangzip.R
 private data class ResetBottomSheetState(
     val breadCount: Int,
     val breadImg: Int,
-    val minuteStringRes: Int
+    val minuteStringRes: Int,
 )
 
 @Composable
@@ -31,12 +31,12 @@ fun ResetBottomSheet(
 
     val sheetState = getBottomSheetState(timeOptionIndex, minutes)
 
-    val remainingTimeText = if (totalSeconds >= 60) {
-        stringResource(sheetState.minuteStringRes, minutes)
-    } else {
-        stringResource(R.string.reset_sheet_sub_title_second, totalSeconds)
-    }
-
+    val remainingTimeText =
+        if (totalSeconds >= 60) {
+            stringResource(sheetState.minuteStringRes, minutes)
+        } else {
+            stringResource(R.string.reset_sheet_sub_title_second, totalSeconds)
+        }
 
     TimerActionBottomSheet(
         isBottomSheetVisible = iisBottomSheetVisible,
@@ -50,9 +50,10 @@ fun ResetBottomSheet(
             Image(
                 painter = painterResource(id = sheetState.breadImg),
                 contentDescription = null,
-                modifier = Modifier
-                    .padding(horizontal = 20.dp)
-                    .fillMaxWidth(),
+                modifier =
+                    Modifier
+                        .padding(horizontal = 20.dp)
+                        .fillMaxWidth(),
             )
         },
         onLeftClick = { onReturnBtnClick() },
@@ -62,12 +63,15 @@ fun ResetBottomSheet(
     )
 }
 
-private fun getBottomSheetState(timeOptionIndex: Int, minutes: Long): ResetBottomSheetState {
+private fun getBottomSheetState(
+    timeOptionIndex: Int,
+    minutes: Long,
+): ResetBottomSheetState {
     val breadCount = if (timeOptionIndex == 0 || minutes <= 30) 1 else 2
 
     return ResetBottomSheetState(
         breadCount = breadCount,
         breadImg = if (breadCount == 1) R.drawable.img_shine_bread_n1 else R.drawable.img_shine_bread_n2,
-        minuteStringRes = if (breadCount == 1) R.string.reset_sheet_sub_title_minute_n1 else R.string.reset_sheet_sub_title_minute_n2
+        minuteStringRes = if (breadCount == 1) R.string.reset_sheet_sub_title_minute_n1 else R.string.reset_sheet_sub_title_minute_n2,
     )
 }
