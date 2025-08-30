@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.provider.Settings
 import androidx.lifecycle.ProcessLifecycleOwner
 import org.android.bbangzip.presentation.observer.AppLifecycleObserver
 import org.android.bbangzip.presentation.observer.ScreenStateReceiver
@@ -18,6 +19,8 @@ class TimerLifecycleManager(
     private val lifecycleObserver = AppLifecycleObserver()
     private var lastUserInteractionTime = System.currentTimeMillis()
 
+    private val screenTimeoutMs = getScreenTimeout()
+
     init {
         setupScreenStateReceiver()
         setupLifecycleObserver()
@@ -28,14 +31,17 @@ class TimerLifecycleManager(
         screenStateReceiver.setListener(object : ScreenStateReceiver.ScreenStateListener {
             override fun onScreenOn() {
                 lifecycleObserver.updateScreenState(true)
+                lastUserInteractionTime = System.currentTimeMillis()
                 onEvent(TimerContract.TimerEvent.OnScreenTurnedOn)
             }
 
             override fun onScreenOff() {
-                val timeSinceLastInteraction = System.currentTimeMillis() - lastUserInteractionTime
                 lifecycleObserver.updateScreenState(isScreenOn = false)
 
-                if (timeSinceLastInteraction <= 2000) {
+                val timeSinceLastInteraction = System.currentTimeMillis() - lastUserInteractionTime
+                val threshold = screenTimeoutMs - 1000
+
+                if (timeSinceLastInteraction < threshold) {
                     onEvent(TimerContract.TimerEvent.OnLockButtonPressed)
                 } else {
                     onEvent(TimerContract.TimerEvent.OnScreenTimeOut)
@@ -84,6 +90,18 @@ class TimerLifecycleManager(
         }
 
         context.registerReceiver(userInteractionReceiver, userInteractionFilter)
+    }
+
+    private fun getScreenTimeout(): Long {
+        return try {
+            val timeout = Settings.System.getLong(
+                context.contentResolver,
+                Settings.System.SCREEN_OFF_TIMEOUT
+            )
+            timeout.toLong()
+        } catch (e: Settings.SettingNotFoundException) {
+            15000L
+        }
     }
 
     fun cleanup() {
