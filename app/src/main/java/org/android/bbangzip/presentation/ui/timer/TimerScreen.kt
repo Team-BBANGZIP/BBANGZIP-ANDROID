@@ -42,6 +42,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.component.toggle.BbangZipSegmentedButton
@@ -129,40 +130,12 @@ fun TimerScreen(
                         timerState.breadImg
                     }
 
-                val isVisible = timerState.timerStatus == TimerStatus.Idle
-                val infiniteTransition = rememberInfiniteTransition(label = "triangle animation")
-                val triangleOffset by infiniteTransition.animateFloat(
-                    initialValue = -3f,
-                    targetValue = 3f,
-                    animationSpec =
-                    infiniteRepeatable(
-                        animation = tween(800, easing = EaseInOut),
-                        repeatMode = RepeatMode.Reverse,
-                    ),
-                    label = "triangle offset",
-                )
-                AnimatedVisibility(
-                    visible = isVisible,
-                    enter = fadeIn(animationSpec = tween(300)),
-                    exit = fadeOut(animationSpec = tween(300)),
-                    modifier =
-                    mod
-                        .offset(y = (-90 + triangleOffset).dp),
-                ) {
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_triangle_down_24),
-                        contentDescription = "moving triangle",
-                        tint = BbangZipTheme.color.primaryNormal_897869,
-                    )
-                }
-
-                Image(
-                    modifier =
-                    mod
-                        .size(120.dp, 100.dp)
-                        .noRippleClickable(enabled = timerState.timerStatus == TimerStatus.Idle) { onBreadIconClick() },
-                    painter = painterResource(breadImg),
-                    contentDescription = "Timer Icon",
+                BreadWithTriangleIndicator(
+                    modifier = mod,
+                    breadImageRes = breadImg,
+                    showTriangle = timerState.timerStatus == TimerStatus.Idle,
+                    isClickable = timerState.timerStatus == TimerStatus.Idle,
+                    onClick = onBreadIconClick
                 )
             },
         )
@@ -315,6 +288,72 @@ fun BreadCounter(
     }
 }
 
+@Composable
+fun AnimatedTriangleIndicator(
+    isVisible: Boolean,
+    modifier: Modifier = Modifier,
+    animationDuration: Int = 800,
+    offsetRange: Float = 3f,
+    yOffset: Float = -90f,
+    tint: Color = BbangZipTheme.color.primaryNormal_897869
+) {
+    val infiniteTransition = rememberInfiniteTransition(label = "triangle animation")
+    val triangleOffset by infiniteTransition.animateFloat(
+        initialValue = -offsetRange,
+        targetValue = offsetRange,
+        animationSpec = infiniteRepeatable(
+            animation = tween(animationDuration, easing = EaseInOut),
+            repeatMode = RepeatMode.Reverse,
+        ),
+        label = "triangle offset",
+    )
+
+    AnimatedVisibility(
+        visible = isVisible,
+        enter = fadeIn(animationSpec = tween(300)),
+        exit = fadeOut(animationSpec = tween(300)),
+        modifier = modifier.offset(y = (yOffset + triangleOffset).dp),
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_triangle_down_24),
+            contentDescription = "moving triangle",
+            tint = tint,
+        )
+    }
+}
+
+@Composable
+fun BreadWithTriangleIndicator(
+    breadImageRes: Int,
+    showTriangle: Boolean,
+    isClickable: Boolean,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    breadSize: DpSize = DpSize(120.dp, 100.dp),
+    triangleAnimationDuration: Int = 800,
+    triangleOffsetRange: Float = 3f,
+    triangleYOffset: Float = -90f
+) {
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.Center
+    ) {
+        AnimatedTriangleIndicator(
+            isVisible = showTriangle,
+            animationDuration = triangleAnimationDuration,
+            offsetRange = triangleOffsetRange,
+            yOffset = triangleYOffset
+        )
+
+        Image(
+            modifier = modifier
+                .size(breadSize.width, breadSize.height)
+                .noRippleClickable(enabled = isClickable) { onClick() },
+            painter = painterResource(breadImageRes),
+            contentDescription = "Timer Icon",
+        )
+    }
+}
 
 @Composable
 fun TimerButton(
