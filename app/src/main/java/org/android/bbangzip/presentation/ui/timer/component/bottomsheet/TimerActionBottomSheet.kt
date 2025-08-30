@@ -1,14 +1,12 @@
 package org.android.bbangzip.presentation.ui.timer.component.bottomsheet
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
@@ -20,8 +18,9 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.presentation.component.bottomsheet.BbangZipBottomSheetSlot
+import org.android.bbangzip.presentation.component.button.BbangZipButtonDefaults
+import org.android.bbangzip.presentation.component.button.BbangzipBaseButton
 import org.android.bbangzip.presentation.util.extension.Gap
-import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,61 +82,51 @@ fun TimerActionBottomSheet(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                Row(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .background(color = BbangZipTheme.color.primaryNormal_897869, shape = RoundedCornerShape(size = 32.dp))
-                            .noRippleClickable { onLeftClick() }
-                            .padding(vertical = 14.dp)
-                            .weight(leftWeight),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                ) {
-                    Text(
-                        text = leftBtnText,
-                        color = BbangZipTheme.color.staticWhite_FFFFFF,
-                        style = BbangZipTheme.typography.body2Medium,
-                        modifier = Modifier,
-                    )
+                BbangzipBaseButton(
+                    onClick = onLeftClick,
+                    modifier = Modifier.weight(leftWeight),
+                    colors =
+                        BbangZipButtonDefaults.colors(
+                            enabledContainerColor = BbangZipTheme.color.primaryNormal_897869,
+                            enabledContentColor = BbangZipTheme.color.staticWhite_FFFFFF,
+                        ),
+                    trailingIcon = {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = leftBtnIcon),
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp),
+                        )
+                    },
+                    content = {
+                        Text(
+                            text = leftBtnText,
+                            style = BbangZipTheme.typography.body2Medium,
+                        )
+                    },
+                )
 
-                    Gap(4.dp)
-
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = leftBtnIcon),
-                        contentDescription = null,
-                        tint = BbangZipTheme.color.staticWhite_FFFFFF,
-                        modifier = Modifier.size(16.dp),
-                    )
-                }
-
-                Row(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth()
-                            .background(color = BbangZipTheme.color.primaryStrong_4B4137, shape = RoundedCornerShape(size = 32.dp))
-                            .noRippleClickable { onRightClick() }
-                            .padding(vertical = 16.dp)
-                            .weight(rightWeight),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center,
-                ) {
-                    Text(
-                        text = rightBtnText,
-                        color = BbangZipTheme.color.staticWhite_FFFFFF,
-                        style = BbangZipTheme.typography.body2Medium,
-                        modifier = Modifier,
-                    )
-
-                    Gap(4.dp)
-
-                    Icon(
-                        imageVector = ImageVector.vectorResource(id = rightBtnIcon),
-                        contentDescription = null,
-                        tint = BbangZipTheme.color.staticWhite_FFFFFF,
-                        modifier = Modifier.size(16.dp),
-                    )
-                }
+                BbangzipBaseButton(
+                    onClick = onRightClick,
+                    modifier = Modifier.weight(rightWeight),
+                    colors =
+                        BbangZipButtonDefaults.colors(
+                            enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
+                            enabledContentColor = BbangZipTheme.color.staticWhite_FFFFFF,
+                        ),
+                    trailingIcon = {
+                        Icon(
+                            imageVector = ImageVector.vectorResource(id = rightBtnIcon),
+                            contentDescription = null,
+                            modifier = Modifier.size(16.dp),
+                        )
+                    },
+                    content = {
+                        Text(
+                            text = rightBtnText,
+                            style = BbangZipTheme.typography.body2Medium,
+                        )
+                    },
+                )
             }
 
             Gap(12.dp)
