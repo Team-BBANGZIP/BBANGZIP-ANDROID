@@ -13,7 +13,8 @@ enum class CategoryColor(val color: Color) {
     BLUE1(defaultBbangZipColor.todoBlue1_5C62AC),
     BLUE2(defaultBbangZipColor.todoBlue2_8D91C5),
     PURPLE1(defaultBbangZipColor.todoPurple1_8F63E9),
-    PURPLE2(defaultBbangZipColor.todoPurple2_B79FE8);
+    PURPLE2(defaultBbangZipColor.todoPurple2_B79FE8),
+    ;
 
     companion object {
         private val colorMap: Map<String, CategoryColor> = CategoryColor.entries.associateBy { it.color.toString() }
