@@ -1,9 +1,7 @@
-package org.android.bbangzip.presentation.ui.todo.model
+package org.android.bbangzip.presentation.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import org.android.bbangzip.presentation.model.Category
-import org.android.bbangzip.presentation.model.Todo
 
 @Parcelize
 sealed interface ListItem : Parcelable {

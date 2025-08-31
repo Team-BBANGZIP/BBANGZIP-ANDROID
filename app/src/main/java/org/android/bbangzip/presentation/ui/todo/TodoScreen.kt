@@ -69,7 +69,7 @@ import org.android.bbangzip.presentation.component.taskbox.BbangZipTaskBox
 import org.android.bbangzip.presentation.mapper.colorMapper
 import org.android.bbangzip.presentation.model.Category
 import org.android.bbangzip.presentation.model.Todo
-import org.android.bbangzip.presentation.ui.todo.model.ListItem
+import org.android.bbangzip.presentation.model.ListItem
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.dropShadow
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme

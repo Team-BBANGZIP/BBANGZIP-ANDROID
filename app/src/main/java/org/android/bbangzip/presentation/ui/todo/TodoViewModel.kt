@@ -15,7 +15,7 @@ import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateM
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateSelectedDate
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoSideEffect
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoState
-import org.android.bbangzip.presentation.ui.todo.model.ListItem
+import org.android.bbangzip.presentation.model.ListItem
 import org.android.bbangzip.presentation.util.base.BaseViewModel
 import java.time.LocalTime
 import javax.inject.Inject

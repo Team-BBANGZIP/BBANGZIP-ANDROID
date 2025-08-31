@@ -3,7 +3,7 @@ package org.android.bbangzip.presentation.ui.todo
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.presentation.model.Category
-import org.android.bbangzip.presentation.ui.todo.model.ListItem
+import org.android.bbangzip.presentation.model.ListItem
 import org.android.bbangzip.presentation.util.base.BaseContract
 import java.time.LocalDate
 
