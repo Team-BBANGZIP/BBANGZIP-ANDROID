@@ -2,13 +2,19 @@ package org.android.bbangzip.presentation.ui.todo
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
-import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
 import org.android.bbangzip.presentation.model.Category
 import org.android.bbangzip.presentation.model.Todo
-import org.android.bbangzip.presentation.ui.todo.TodoContract.*
-import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.*
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoEvent
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategories
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateFlatList
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateIsMenuOpen
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateLoading
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateMotivationMessage
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateSelectedDate
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoSideEffect
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoState
 import org.android.bbangzip.presentation.ui.todo.model.ListItem
 import org.android.bbangzip.presentation.util.base.BaseViewModel
 import java.time.LocalTime
@@ -32,7 +38,7 @@ class TodoViewModel
             when (event) {
                 is TodoEvent.Initialize -> {
                     updateState(UpdateLoading(isLoading = true))
-                    viewModelScope.launch {
+                    launch {
                         val exampleCategories = getExampleList()
                         updateCategoriesAndFlatList(exampleCategories)
                         updateState(UpdateLoading(isLoading = false))
@@ -98,8 +104,6 @@ class TodoViewModel
                 is UpdateMotivationMessage -> state.copy(motivationMessage = reduce.message)
                 is UpdateCategories -> state.copy(categories = reduce.categories)
                 is UpdateFlatList -> state.copy(flatList = reduce.flatList)
-                is UpdateError -> state.copy(error = reduce.error)
-                is UpdateState -> reduce.newState
                 is UpdateIsMenuOpen -> state.copy(isMenuOpen = reduce.isMenuOpen)
                 is UpdateSelectedDate -> state.copy(selectedDate = reduce.selectedDate)
             }

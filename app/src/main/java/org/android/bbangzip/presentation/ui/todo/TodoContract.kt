@@ -11,7 +11,6 @@ class TodoContract {
     @Parcelize
     data class TodoState(
         val isLoading: Boolean = false,
-        val error: String? = null,
         val categories: List<Category> = emptyList(),
         val flatList: List<ListItem> = emptyList(),
         val motivationMessage: String = "나만의 다짐을 적어보세요.",
@@ -59,13 +58,9 @@ class TodoContract {
 
         data class UpdateFlatList(val flatList: List<ListItem>) : TodoReduce
 
-        data class UpdateError(val error: String?) : TodoReduce
-
         data class UpdateSelectedDate(val selectedDate: LocalDate) : TodoReduce
 
         data class UpdateIsMenuOpen(val isMenuOpen: Boolean) : TodoReduce
-
-        data class UpdateState(val newState: TodoState) : TodoReduce
     }
 
     sealed interface TodoSideEffect : BaseContract.SideEffect
