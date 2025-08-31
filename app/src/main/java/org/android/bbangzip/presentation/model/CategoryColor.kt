@@ -17,7 +17,7 @@ enum class CategoryColor(val color: Color) {
     ;
 
     companion object {
-        private val colorMap: Map<String, CategoryColor> = CategoryColor.entries.associateBy { it.color.toString() }
+        private val colorMap: Map<String, CategoryColor> = CategoryColor.entries.associateBy { it.name }
 
         fun fromString(colorString: String): CategoryColor {
             return colorMap[colorString] ?: RED1
