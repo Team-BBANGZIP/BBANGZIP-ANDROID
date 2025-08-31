@@ -68,8 +68,8 @@ import org.android.bbangzip.presentation.component.chip.BbangZipCategoryChip
 import org.android.bbangzip.presentation.component.taskbox.BbangZipTaskBox
 import org.android.bbangzip.presentation.mapper.colorMapper
 import org.android.bbangzip.presentation.model.Category
-import org.android.bbangzip.presentation.model.Todo
 import org.android.bbangzip.presentation.model.ListItem
+import org.android.bbangzip.presentation.model.Todo
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.dropShadow
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
@@ -82,7 +82,9 @@ private const val MAX_SCROLL_VALUE = 30f
 
 // 스크롤 방향을 명확한 상태로 정의
 private enum class AutoScrollDirection {
-    UP, DOWN, NONE
+    UP,
+    DOWN,
+    NONE,
 }
 
 @Composable
@@ -112,7 +114,6 @@ fun TodoScreen(
     var fakeOffset by remember { mutableStateOf(Offset.Zero) }
     var touchPointInItem by remember { mutableStateOf(Offset.Zero) }
     var touchPointY by remember { mutableFloatStateOf(0f) }
-
 
     Box(
         modifier =
@@ -150,7 +151,7 @@ fun TodoScreen(
                                 targetIndex = pressedFlatListIndex
                                 draggingItem = pressedFlatListItem
 
-                                //아이템 자체에서 클릭한 포인트
+                                // 아이템 자체에서 클릭한 포인트
                                 fakeOffset = Offset(0f, pressedLazyColumnItem.offset.toFloat())
                                 touchPointInItem = down.position - fakeOffset
 
@@ -172,32 +173,36 @@ fun TodoScreen(
 
                                     touchPointY = fakeOffset.y + touchPointInItem.y
 
-                                    val scrollDirection = when {
-                                        fakeOffset.y < scrollThreshold -> AutoScrollDirection.UP
-                                        touchPointY > columnHeight - scrollThreshold -> AutoScrollDirection.DOWN
-                                        else -> AutoScrollDirection.NONE
-                                    }
+                                    val scrollDirection =
+                                        when {
+                                            fakeOffset.y < scrollThreshold -> AutoScrollDirection.UP
+                                            touchPointY > columnHeight - scrollThreshold -> AutoScrollDirection.DOWN
+                                            else -> AutoScrollDirection.NONE
+                                        }
 
                                     if (scrollDirection != AutoScrollDirection.NONE) {
                                         if (autoScrollJob?.isActive != true) {
-                                            autoScrollJob = coroutineScope.launch {
-                                                while (isActive) {
-                                                    val speed = calculateScrollSpeed(
-                                                        direction = scrollDirection,
-                                                        touchPointY = touchPointY,
-                                                        columnHeight = columnHeight,
-                                                        scrollThreshold = scrollThreshold
-                                                    )
-                                                    lazyListState.scrollBy(speed)
-                                                    targetIndex = updateTargetIndex(
-                                                        lazyListState = lazyListState,
-                                                        flatList = flatList,
-                                                        touchPointY = touchPointY,
-                                                        currentTargetIndex = targetIndex
-                                                    )
-                                                    delay(8)
+                                            autoScrollJob =
+                                                coroutineScope.launch {
+                                                    while (isActive) {
+                                                        val speed =
+                                                            calculateScrollSpeed(
+                                                                direction = scrollDirection,
+                                                                touchPointY = touchPointY,
+                                                                columnHeight = columnHeight,
+                                                                scrollThreshold = scrollThreshold,
+                                                            )
+                                                        lazyListState.scrollBy(speed)
+                                                        targetIndex =
+                                                            updateTargetIndex(
+                                                                lazyListState = lazyListState,
+                                                                flatList = flatList,
+                                                                touchPointY = touchPointY,
+                                                                currentTargetIndex = targetIndex,
+                                                            )
+                                                        delay(8)
+                                                    }
                                                 }
-                                            }
                                         }
                                     } else {
                                         autoScrollJob?.cancel()
@@ -278,14 +283,14 @@ private fun calculateScrollSpeed(
     direction: AutoScrollDirection,
     touchPointY: Float,
     columnHeight: Int,
-    scrollThreshold: Float
+    scrollThreshold: Float,
 ): Float {
-
-    val intensity = when (direction) {
-        AutoScrollDirection.UP -> (scrollThreshold - touchPointY) / scrollThreshold
-        AutoScrollDirection.DOWN -> (touchPointY - (columnHeight - scrollThreshold)) / scrollThreshold
-        AutoScrollDirection.NONE -> 0f
-    }.coerceIn(0f, 1f)
+    val intensity =
+        when (direction) {
+            AutoScrollDirection.UP -> (scrollThreshold - touchPointY) / scrollThreshold
+            AutoScrollDirection.DOWN -> (touchPointY - (columnHeight - scrollThreshold)) / scrollThreshold
+            AutoScrollDirection.NONE -> 0f
+        }.coerceIn(0f, 1f)
 
     val speed = MIN_SCROLL_VALUE + (MAX_SCROLL_VALUE - MIN_SCROLL_VALUE) * intensity
 
