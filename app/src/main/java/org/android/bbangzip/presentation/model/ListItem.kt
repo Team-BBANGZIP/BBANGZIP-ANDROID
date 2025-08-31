@@ -7,12 +7,14 @@ import kotlinx.parcelize.Parcelize
 sealed interface ListItem : Parcelable {
     val id: String
 
+    @Parcelize
     data class CategoryItem(
         val category: Category,
     ) : ListItem {
         override val id: String = "category_${category.categoryId}"
     }
 
+    @Parcelize
     data class TodoItem(
         val todo: Todo,
         val category: Category,
