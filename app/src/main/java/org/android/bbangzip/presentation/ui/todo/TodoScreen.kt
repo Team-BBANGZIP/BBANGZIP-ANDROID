@@ -66,8 +66,8 @@ import org.android.bbangzip.R
 import org.android.bbangzip.presentation.component.calendar.BbangZipWeeklyCalendar
 import org.android.bbangzip.presentation.component.chip.BbangZipCategoryChip
 import org.android.bbangzip.presentation.component.taskbox.BbangZipTaskBox
-import org.android.bbangzip.presentation.mapper.colorMapper
 import org.android.bbangzip.presentation.model.Category
+import org.android.bbangzip.presentation.model.CategoryColor
 import org.android.bbangzip.presentation.model.ListItem
 import org.android.bbangzip.presentation.model.Todo
 import org.android.bbangzip.presentation.util.extension.Gap
@@ -272,7 +272,7 @@ fun TodoScreen(
                     onCheckBoxClick = {},
                     isLast = item.isLastInCategory,
                     startTime = item.todo.startTime,
-                    categoryColor = colorMapper(item.category.categoryColor),
+                    categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
                 )
             }
         }
@@ -412,7 +412,7 @@ private fun DraggableListItem(
                 Column {
                     Gap(height = if (flatList.indexOf(item) == 0) 4.dp else 16.dp)
                     BbangZipCategoryChip(
-                        categoryColor = colorMapper(item.category.categoryColor),
+                        categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
                         categoryName = item.category.categoryName,
                     )
                 }
@@ -426,7 +426,7 @@ private fun DraggableListItem(
                     },
                     isLast = item.isLastInCategory,
                     startTime = item.todo.startTime,
-                    categoryColor = colorMapper(item.category.categoryColor),
+                    categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
                 )
             }
         }
