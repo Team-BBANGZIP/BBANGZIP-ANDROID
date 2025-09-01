@@ -1,4 +1,4 @@
-package org.android.bbangzip.presentation.model
+package org.android.bbangzip.presentation.type
 
 import androidx.compose.ui.graphics.Color
 import org.android.bbangzip.ui.theme.defaultBbangZipColor
@@ -20,7 +20,7 @@ enum class CategoryColor(val color: Color) {
         private val colorMap: Map<String, CategoryColor> = CategoryColor.entries.associateBy { it.name }
 
         fun fromString(colorString: String): CategoryColor {
-            return colorMap[colorString] ?: RED1
+            return colorMap[colorString] ?: throw IllegalArgumentException("Invalid color string: $colorString")
         }
     }
 }

@@ -67,7 +67,7 @@ import org.android.bbangzip.presentation.component.calendar.BbangZipWeeklyCalend
 import org.android.bbangzip.presentation.component.chip.BbangZipCategoryChip
 import org.android.bbangzip.presentation.component.taskbox.BbangZipTaskBox
 import org.android.bbangzip.presentation.model.Category
-import org.android.bbangzip.presentation.model.CategoryColor
+import org.android.bbangzip.presentation.type.CategoryColor
 import org.android.bbangzip.presentation.model.ListItem
 import org.android.bbangzip.presentation.model.Todo
 import org.android.bbangzip.presentation.util.extension.Gap
