@@ -155,69 +155,71 @@ fun TodoScreen(
                                 fakeOffset = Offset(0f, pressedLazyColumnItem.offset.toFloat())
                                 touchPointInItem = down.position - fakeOffset
 
-                                drag(pointerId = longPress.id) { change ->
-                                    change.consume()
-                                    fakeOffset +=
-                                        Offset(
-                                            x = change.position.x - change.previousPosition.x,
-                                            y = change.position.y - change.previousPosition.y,
-                                        )
+                                try {
+                                    drag(pointerId = longPress.id) { change ->
+                                        change.consume()
+                                        fakeOffset +=
+                                            Offset(
+                                                x = change.position.x - change.previousPosition.x,
+                                                y = change.position.y - change.previousPosition.y,
+                                            )
 
-                                    targetIndex =
-                                        updateTargetIndex(
-                                            lazyListState = lazyListState,
-                                            flatList = flatList,
-                                            touchPointY = touchPointY,
-                                            currentTargetIndex = targetIndex,
-                                        )
+                                        targetIndex =
+                                            updateTargetIndex(
+                                                lazyListState = lazyListState,
+                                                flatList = flatList,
+                                                touchPointY = touchPointY,
+                                                currentTargetIndex = targetIndex,
+                                            )
 
-                                    touchPointY = fakeOffset.y + touchPointInItem.y
+                                        touchPointY = fakeOffset.y + touchPointInItem.y
 
-                                    val scrollDirection =
-                                        when {
-                                            fakeOffset.y < scrollThreshold -> AutoScrollDirection.UP
-                                            touchPointY > columnHeight - scrollThreshold -> AutoScrollDirection.DOWN
-                                            else -> AutoScrollDirection.NONE
-                                        }
+                                        val scrollDirection =
+                                            when {
+                                                fakeOffset.y < scrollThreshold -> AutoScrollDirection.UP
+                                                touchPointY > columnHeight - scrollThreshold -> AutoScrollDirection.DOWN
+                                                else -> AutoScrollDirection.NONE
+                                            }
 
-                                    if (scrollDirection != AutoScrollDirection.NONE) {
-                                        if (autoScrollJob?.isActive != true) {
-                                            autoScrollJob =
-                                                coroutineScope.launch {
-                                                    while (isActive) {
-                                                        val speed =
-                                                            calculateScrollSpeed(
-                                                                direction = scrollDirection,
-                                                                touchPointY = touchPointY,
-                                                                columnHeight = columnHeight,
-                                                                scrollThreshold = scrollThreshold,
-                                                            )
-                                                        lazyListState.scrollBy(speed)
-                                                        targetIndex =
-                                                            updateTargetIndex(
-                                                                lazyListState = lazyListState,
-                                                                flatList = flatList,
-                                                                touchPointY = touchPointY,
-                                                                currentTargetIndex = targetIndex,
-                                                            )
-                                                        delay(8)
+                                        if (scrollDirection != AutoScrollDirection.NONE) {
+                                            if (autoScrollJob?.isActive != true) {
+                                                autoScrollJob =
+                                                    coroutineScope.launch {
+                                                        while (isActive) {
+                                                            val speed =
+                                                                calculateScrollSpeed(
+                                                                    direction = scrollDirection,
+                                                                    touchPointY = touchPointY,
+                                                                    columnHeight = columnHeight,
+                                                                    scrollThreshold = scrollThreshold,
+                                                                )
+                                                            lazyListState.scrollBy(speed)
+                                                            targetIndex =
+                                                                updateTargetIndex(
+                                                                    lazyListState = lazyListState,
+                                                                    flatList = flatList,
+                                                                    touchPointY = touchPointY,
+                                                                    currentTargetIndex = targetIndex,
+                                                                )
+                                                            delay(8)
+                                                        }
                                                     }
-                                                }
+                                            }
+                                        } else {
+                                            autoScrollJob?.cancel()
                                         }
-                                    } else {
-                                        autoScrollJob?.cancel()
                                     }
-                                }
-                                autoScrollJob?.cancel()
-
-                                targetIndex?.let {
-                                    if (pressedFlatListIndex != -1 && pressedFlatListIndex != it && it in flatList.indices) {
-                                        onListItemMove(pressedFlatListIndex, it)
+                                }finally {
+                                    autoScrollJob?.cancel()
+                                    targetIndex?.let {
+                                        if (pressedFlatListIndex != -1 && pressedFlatListIndex != it && it in flatList.indices) {
+                                            onListItemMove(pressedFlatListIndex, it)
+                                        }
                                     }
-                                }
 
-                                draggingItem = null
-                                targetIndex = null
+                                    draggingItem = null
+                                    targetIndex = null
+                                }
                             }
                         }
                     },
@@ -236,9 +238,10 @@ fun TodoScreen(
             itemsIndexed(
                 items = flatList,
                 key = { _, item -> item.id },
-            ) { _, item ->
+            ) { index, item ->
                 DraggableListItem(
                     item = item,
+                    itemIndex = index,
                     isDragging = item.id == draggingItem?.id,
                     draggingItemId = draggingItem?.id,
                     flatList = flatList,
@@ -361,6 +364,7 @@ private fun calculateAnimatedShift(
 private fun DraggableListItem(
     modifier: Modifier = Modifier,
     item: ListItem,
+    itemIndex: Int,
     isDragging: Boolean,
     draggingItemId: String?,
     flatList: List<ListItem>,
@@ -410,7 +414,7 @@ private fun DraggableListItem(
         when (item) {
             is ListItem.CategoryItem -> {
                 Column {
-                    Gap(height = if (flatList.indexOf(item) == 0) 4.dp else 16.dp)
+                    Gap(height = if (itemIndex == 0) 4.dp else 16.dp)
                     BbangZipCategoryChip(
                         categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
                         categoryName = item.category.categoryName,
