@@ -11,7 +11,7 @@ class SharedContract {
     data class SharedState(
         val breadId: Int = 1,
     ) : BaseContract.State, Parcelable {
-        val breadImg: Int get() = BreadType.getImgFromId(breadId) ?: R.drawable.img_salt_bread // 빵 이미지 리소스
+        val breadImg: Int get() = BreadType.getImgFromId(breadId)
 
         override fun toParcelable(): Parcelable = this
     }
