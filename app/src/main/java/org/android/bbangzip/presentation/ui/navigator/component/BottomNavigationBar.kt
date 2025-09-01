@@ -46,7 +46,6 @@ fun BottomNavigationBar(
     AnimatedVisibility(
         visible = isVisible,
         enter = slideInVertically(),
-        exit = slideOutVertically(),
     ) {
         Box(
             modifier =
