@@ -11,7 +11,6 @@ import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategories
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateFlatList
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateIsMenuOpen
-import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateLoading
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateMotivationMessage
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateSelectedDate
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoSideEffect
@@ -37,11 +36,9 @@ class TodoViewModel
         override fun handleEvent(event: TodoEvent) {
             when (event) {
                 is TodoEvent.Initialize -> {
-                    updateState(UpdateLoading(isLoading = true))
                     launch {
                         val exampleCategories = getExampleList()
                         updateCategoriesAndFlatList(exampleCategories)
-                        updateState(UpdateLoading(isLoading = false))
                     }
                 }
 
@@ -100,7 +97,6 @@ class TodoViewModel
             reduce: TodoReduce,
         ): TodoState {
             return when (reduce) {
-                is UpdateLoading -> state.copy(isLoading = reduce.isLoading)
                 is UpdateMotivationMessage -> state.copy(motivationMessage = reduce.message)
                 is UpdateCategories -> state.copy(categories = reduce.categories)
                 is UpdateFlatList -> state.copy(flatList = reduce.flatList)

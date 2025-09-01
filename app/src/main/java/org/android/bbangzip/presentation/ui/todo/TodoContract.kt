@@ -10,7 +10,6 @@ import java.time.LocalDate
 class TodoContract {
     @Parcelize
     data class TodoState(
-        val isLoading: Boolean = false,
         val categories: List<Category> = emptyList(),
         val flatList: List<ListItem> = emptyList(),
         val motivationMessage: String = "나만의 다짐을 적어보세요.",
@@ -50,8 +49,6 @@ class TodoContract {
     }
 
     sealed interface TodoReduce : BaseContract.Reduce {
-        data class UpdateLoading(val isLoading: Boolean) : TodoReduce
-
         data class UpdateMotivationMessage(val message: String) : TodoReduce
 
         data class UpdateCategories(val categories: List<Category>) : TodoReduce
