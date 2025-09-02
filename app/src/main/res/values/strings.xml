@@ -29,6 +29,10 @@
     <string name="task_box_uncompleted_task_description">미완료 작업</string>
     <string name="task_box_time_description">작업 시작 시간</string>
 
+    <!-- time picker -->
+    <string name="time_picker_am">오전</string>
+    <string name="time_picker_pm">오후</string>
+
     <!-- Calendar Components -->
     <string name="calendar_previous_week_description">이전 주</string>
     <string name="calendar_next_week_description">다음 주</string>
