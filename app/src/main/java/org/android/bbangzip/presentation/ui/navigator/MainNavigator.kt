@@ -32,7 +32,6 @@ class MainNavigator(
                 currentDestination?.route == mainBottomNavigationRoute::class.qualifiedName
             }
 
-
     @SuppressLint("RestrictedApi")
     fun navigateBottomNavigation(bottomNavigationType: BottomNavigationType) {
         Timber.d("[navigation] currentDestination -> ${navHostController.currentDestination}")

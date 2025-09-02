@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.component.bottomsheet.BbangZipBottomSheetSlot
@@ -68,15 +69,16 @@ fun BreadSelectBottomSheet(
 @Composable
 private fun BreadCountBadge(
     breadCount: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .background(
-                color = BbangZipTheme.color.backgroundAlternative_FAF6F3,
-                shape = RoundedCornerShape(5.dp),
-            )
-            .padding(horizontal = 16.dp, vertical = 4.dp),
+        modifier =
+            modifier
+                .background(
+                    color = BbangZipTheme.color.backgroundAlternative_FAF6F3,
+                    shape = RoundedCornerShape(5.dp),
+                )
+                .padding(horizontal = 16.dp, vertical = 4.dp),
         contentAlignment = Alignment.Center,
     ) {
         Text(
@@ -90,11 +92,11 @@ private fun BreadCountBadge(
 @Composable
 private fun BreadSelectHeader(
     breadCount: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier
+        modifier = modifier,
     ) {
         Text(
             text = stringResource(R.string.bread_sheet_title),
@@ -115,7 +117,7 @@ private fun BreadSelectionGrid(
     currentBreadId: Int,
     breadList: List<BreadInfo>,
     onBreadSelect: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
         val itemWidth = (maxWidth - 48.dp) / 3
@@ -132,20 +134,19 @@ private fun BreadSelectionGrid(
                     breadInfo = breadInfo,
                     isSelected = currentBreadId == breadInfo.id,
                     onBreadSelect = onBreadSelect,
-                    modifier = Modifier.width(itemWidth)
+                    modifier = Modifier.width(itemWidth),
                 )
             }
         }
     }
 }
 
-
 @Composable
 private fun BreadItem(
     breadInfo: BreadInfo,
     isSelected: Boolean,
     onBreadSelect: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
@@ -155,13 +156,13 @@ private fun BreadItem(
         BreadItemImage(
             breadInfo = breadInfo,
             isSelected = isSelected,
-            onBreadSelect = onBreadSelect
+            onBreadSelect = onBreadSelect,
         )
 
         Gap(8.dp)
 
         BreadItemLabel(
-            breadInfo = breadInfo
+            breadInfo = breadInfo,
         )
     }
 }
@@ -171,7 +172,7 @@ private fun BreadItemImage(
     breadInfo: BreadInfo,
     isSelected: Boolean,
     onBreadSelect: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier.aspectRatio(1f),
@@ -182,7 +183,7 @@ private fun BreadItemImage(
         } else {
             UnlockedBreadImage(
                 breadInfo = breadInfo,
-                onBreadSelect = onBreadSelect
+                onBreadSelect = onBreadSelect,
             )
 
             if (isSelected) {
@@ -194,7 +195,7 @@ private fun BreadItemImage(
 
 @Composable
 private fun LockedBreadImage(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Image(
         imageVector = ImageVector.vectorResource(R.drawable.ic_lock_default_40),
@@ -207,23 +208,25 @@ private fun LockedBreadImage(
 private fun UnlockedBreadImage(
     breadInfo: BreadInfo,
     onBreadSelect: (Int) -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Image(
         painter = painterResource(BreadType.getImgFromId(breadInfo.id)),
         contentDescription = null,
-        modifier = modifier
-            .fillMaxSize()
-            .clip(CircleShape)
-            .background(color = BbangZipTheme.color.backgroundAlternative_FAF6F3)
-            .noRippleClickable { onBreadSelect(breadInfo.id) }
-            .padding(vertical = 16.dp, horizontal = 7.dp),
+        modifier =
+            modifier
+                .fillMaxSize()
+                .clip(CircleShape)
+                .background(color = BbangZipTheme.color.backgroundAlternative_FAF6F3)
+                .noRippleClickable { onBreadSelect(breadInfo.id) }
+                .padding(vertical = 16.dp, horizontal = 7.dp),
     )
 }
+
 @Composable
 private fun BreadItemLabel(
     breadInfo: BreadInfo,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Text(
         text = if (breadInfo.isLocked) "???" else breadInfo.name,
@@ -237,19 +240,19 @@ private fun BreadItemLabel(
 fun CheckBox(modifier: Modifier = Modifier) {
     Box(
         modifier =
-        modifier
-            .clip(CircleShape)
-            .background(
-                color = BbangZipTheme.color.primaryNormal_897869,
-            ),
+            modifier
+                .clip(CircleShape)
+                .background(
+                    color = BbangZipTheme.color.primaryNormal_897869,
+                ),
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.ic_check_default_24),
             contentDescription = null,
             tint = BbangZipTheme.color.staticWhite_FFFFFF,
             modifier =
-            Modifier
-                .align(Alignment.Center),
+                Modifier
+                    .align(Alignment.Center),
         )
     }
 }

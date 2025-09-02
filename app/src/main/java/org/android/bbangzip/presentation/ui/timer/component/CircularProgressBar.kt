@@ -50,10 +50,10 @@ fun CircularProgressBar(
     val animateFloat by animateFloatAsState(
         targetValue = progress,
         animationSpec =
-        tween(
-            durationMillis = animationDuration,
-            delayMillis = animationDelay,
-        ),
+            tween(
+                durationMillis = animationDuration,
+                delayMillis = animationDelay,
+            ),
         label = "progress_animation",
     )
 
@@ -64,9 +64,9 @@ fun CircularProgressBar(
 
     Box(
         modifier =
-        modifier
-            .fillMaxWidth()
-            .aspectRatio(1f),
+            modifier
+                .fillMaxWidth()
+                .aspectRatio(1f),
     ) {
         centerContent(Modifier.align(Alignment.Center))
 
@@ -78,8 +78,8 @@ fun CircularProgressBar(
 
         Canvas(
             modifier =
-            Modifier
-                .fillMaxSize(),
+                Modifier
+                    .fillMaxSize(),
         ) {
             val canvasSize = this.size
             val center = Offset(canvasSize.width / 2f, canvasSize.height / 2f)
@@ -145,19 +145,19 @@ private fun DrawScope.drawCircularProgress(
     drawArc(
         color = color,
         startAngle = startAngle,
-        sweepAngle = if(sweepAngle>0) sweepAngle else 0.1f,
+        sweepAngle = if (sweepAngle > 0) sweepAngle else 0.1f,
         useCenter = false,
         topLeft =
-        Offset(
-            center.x - radius,
-            center.y - radius,
-        ),
+            Offset(
+                center.x - radius,
+                center.y - radius,
+            ),
         size = Size(radius * 2, radius * 2),
         style =
-        Stroke(
-            width = strokeWidth,
-            cap = if (roundBorder) StrokeCap.Round else StrokeCap.Butt,
-        ),
+            Stroke(
+                width = strokeWidth,
+                cap = if (roundBorder) StrokeCap.Round else StrokeCap.Butt,
+            ),
     )
 }
 

@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
             BBANGZIPANDROIDTheme {
                 MainScreen(
                     navigator = navigator,
-                    sharedViewModel = sharedViewModel
+                    sharedViewModel = sharedViewModel,
                 )
             }
         }

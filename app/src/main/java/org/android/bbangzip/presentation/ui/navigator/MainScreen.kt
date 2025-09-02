@@ -18,10 +18,13 @@ import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 
 @Composable
-fun MainScreen(navigator: MainNavigator, sharedViewModel: SharedViewModel) {
+fun MainScreen(
+    navigator: MainNavigator,
+    sharedViewModel: SharedViewModel,
+) {
     MainScreenContent(
         navigator = navigator,
-        sharedViewModel = sharedViewModel
+        sharedViewModel = sharedViewModel,
     )
 }
 
@@ -29,13 +32,13 @@ fun MainScreen(navigator: MainNavigator, sharedViewModel: SharedViewModel) {
 private fun MainScreenContent(
     modifier: Modifier = Modifier,
     navigator: MainNavigator,
-    sharedViewModel: SharedViewModel
+    sharedViewModel: SharedViewModel,
 ) {
     val sharedState by sharedViewModel.uiState.collectAsStateWithLifecycle()
     Scaffold(
         modifier =
-        modifier
-            .padding(WindowInsets.navigationBars.asPaddingValues()),
+            modifier
+                .padding(WindowInsets.navigationBars.asPaddingValues()),
         content = { padding ->
             MainNavHost(
                 navigator = navigator,
