@@ -52,7 +52,7 @@ class TimerViewModel
                 is TimerContract.TimerEvent.OnStartBtnClick -> {
                     if (currentUiState.timerStatus == TimerStatus.Idle) {
                         updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Running))
-                        startTimer(currentUiState.remainingTime)
+                        startTimer(currentUiState.totalTime)
                         setSideEffect(TimerContract.TimerSideEffect.HideBottomBar)
                     } else if (currentUiState.timerStatus == TimerStatus.Paused) {
                         resumeTimer()
@@ -286,7 +286,7 @@ class TimerViewModel
             stopTimer()
 
             launch {
-                delay(500L)
+                delay(1000L)
                 startTimer(currentUiState.totalTime)
             }
         }
