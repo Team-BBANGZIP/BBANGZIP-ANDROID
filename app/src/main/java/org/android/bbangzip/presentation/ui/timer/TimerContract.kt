@@ -13,7 +13,7 @@ import org.android.bbangzip.presentation.util.extension.formatTime
 class TimerContract {
     @Parcelize
     data class TimerState(
-        val remainingTime: Long =1000L,
+        val remainingTime: Long = TimerConstants.THIRTY_MINUTES,
         val totalTime: Long = TimerConstants.THIRTY_MINUTES,
         val pausedTime: Long = 0L,
         val timerStatus: TimerStatus = TimerStatus.Idle,
