@@ -4,15 +4,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -76,12 +73,12 @@ private fun BreadCountBadge(
 ) {
     Box(
         modifier =
-        modifier
-            .background(
-                color = BbangZipTheme.color.backgroundAlternative_FAF6F3,
-                shape = RoundedCornerShape(5.dp),
-            )
-            .padding(horizontal = 16.dp, vertical = 4.dp),
+            modifier
+                .background(
+                    color = BbangZipTheme.color.backgroundAlternative_FAF6F3,
+                    shape = RoundedCornerShape(5.dp),
+                )
+                .padding(horizontal = 16.dp, vertical = 4.dp),
         contentAlignment = Alignment.Center,
     ) {
         Text(
@@ -127,21 +124,20 @@ private fun BreadSelectionGrid(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(24.dp),
         verticalArrangement = Arrangement.spacedBy(24.dp),
-        contentPadding = PaddingValues(0.dp)
+        contentPadding = PaddingValues(0.dp),
     ) {
         items(
             items = breadList,
-            key = { breadInfo -> breadInfo.id }
+            key = { breadInfo -> breadInfo.id },
         ) { breadInfo ->
             BreadItem(
                 breadInfo = breadInfo,
                 isSelected = currentBreadId == breadInfo.id,
-                onBreadSelect = onBreadSelect
+                onBreadSelect = onBreadSelect,
             )
         }
     }
 }
-
 
 @Composable
 private fun BreadItem(
@@ -216,12 +212,12 @@ private fun UnlockedBreadImage(
         painter = painterResource(BreadType.getImgFromId(breadInfo.id)),
         contentDescription = null,
         modifier =
-        modifier
-            .fillMaxSize()
-            .clip(CircleShape)
-            .background(color = BbangZipTheme.color.backgroundAlternative_FAF6F3)
-            .noRippleClickable { onBreadSelect(breadInfo.id) }
-            .padding(vertical = 16.dp, horizontal = 7.dp),
+            modifier
+                .fillMaxSize()
+                .clip(CircleShape)
+                .background(color = BbangZipTheme.color.backgroundAlternative_FAF6F3)
+                .noRippleClickable { onBreadSelect(breadInfo.id) }
+                .padding(vertical = 16.dp, horizontal = 7.dp),
     )
 }
 
@@ -242,19 +238,19 @@ private fun BreadItemLabel(
 fun CheckBox(modifier: Modifier = Modifier) {
     Box(
         modifier =
-        modifier
-            .clip(CircleShape)
-            .background(
-                color = BbangZipTheme.color.primaryNormal_897869,
-            ),
+            modifier
+                .clip(CircleShape)
+                .background(
+                    color = BbangZipTheme.color.primaryNormal_897869,
+                ),
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.ic_check_default_24),
             contentDescription = null,
             tint = BbangZipTheme.color.staticWhite_FFFFFF,
             modifier =
-            Modifier
-                .align(Alignment.Center),
+                Modifier
+                    .align(Alignment.Center),
         )
     }
 }
