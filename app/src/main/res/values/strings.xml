@@ -32,4 +32,39 @@
     <!-- time picker -->
     <string name="time_picker_am">오전</string>
     <string name="time_picker_pm">오후</string>
+
+    <!-- Calendar Components -->
+    <string name="calendar_previous_week_description">이전 주</string>
+    <string name="calendar_next_week_description">다음 주</string>
+    <string name="calendar_menu_description">메뉴</string>
+    <string name="calendar_previous_month_description">이전 달</string>
+    <string name="calendar_next_month_description">다음 달</string>
+
+    <!-- timer - view -->
+    <string name="timer_idle_title">오늘의 빵을 구워보세요!</string>
+    <string name="timer_paused_title">잠시 쉬는 중...</string>
+    <string name="timer_complete_title">빵이 완성됐어요!</string>
+    <string name="title_empty_title">""</string>
+    <!-- timer - view - bread - sheet-->
+    <string name="bread_sheet_subtitle">오늘까지 총 %1$s 개의 빵을 모았어요!</string>
+    <string name="bread_sheet_title">어떤 빵을 구울까요?</string>
+    <!-- timer - view - reset sheet-->
+    <string name="reset_sheet_right_btn">종료하기</string>
+    <string name="reset_sheet_sub_title_minute_n1">%1$d분만 더 하면 빵 한 개를 얻을 수 있어요.</string>
+    <string name="reset_sheet_sub_title_minute_n2">%1$d분만 더 하면 빵 두 개를 얻을 수 있어요.</string>
+    <string name="reset_sheet_sub_title_second">%1$d초만 더 하면 빵 한 개를 얻을 수 있어요.</string>
+    <string name="reset_sheet_title">정말 종료하시겠어요?</string>
+    <!-- timer - view - restart sheet-->
+    <string name="restart_sheet_right_btn">초기화하기</string>
+    <string name="restart_sheet_title">정말 초기화 하시겠어요?</string>
+    <string name="restart_sheet_sub_title">지금까지 구운 빵이 완성되지 않아요</string>
+    <!-- timer - view - reset/restart sheet common string-->
+    <string name="re_sheet_left_btn">돌아가기</string>
+     <!-- timer - view - complete sheet-->
+    <string name="complete_sheet_left_btn_thirty">30분 더</string>
+    <string name="complete_sheet_left_btn_sixty">60분 더</string>
+    <string name="complete_sheet_sub_title_n1">빵 한 개를 휙득했어요</string>
+    <string name="complete_sheet_sub_title_n2">빵 두 개를 휙득했어요</string>
+    <string name="complete_sheet_title">역시 사장님은 제빵왕!</string>
+    <string name="complete_sheet_right_btn">완료한 일 체크</string>
 </resources>

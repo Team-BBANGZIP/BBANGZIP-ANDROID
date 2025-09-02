@@ -4,7 +4,6 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,7 +45,6 @@ fun BottomNavigationBar(
     AnimatedVisibility(
         visible = isVisible,
         enter = slideInVertically(),
-        exit = slideOutVertically(),
     ) {
         Box(
             modifier =
@@ -61,7 +59,8 @@ fun BottomNavigationBar(
                             end = Offset(size.width, 0f),
                             strokeWidth = strokeWidth,
                         )
-                    },
+                    }
+                    .padding(top = 10.dp),
         ) {
             Row(
                 modifier =

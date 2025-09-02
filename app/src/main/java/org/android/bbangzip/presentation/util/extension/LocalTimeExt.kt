@@ -1,6 +1,8 @@
 package org.android.bbangzip.presentation.util.extension
 
 import org.android.bbangzip.presentation.component.timepicker.AmPm
+import java.time.DayOfWeek
+import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
 import java.util.Locale
@@ -20,3 +22,7 @@ fun LocalTime.to12HourText(): Int =
     }
 
 fun LocalTime.toAmPmText(): String = if (this.hour < 12) AmPm.AM.displayText else AmPm.PM.displayText
+
+fun LocalDate.startOfWeek(startDayOfWeek: DayOfWeek): LocalDate {
+    return this.with(startDayOfWeek)
+}
