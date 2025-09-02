@@ -17,6 +17,7 @@ class TimerLifecycleManager(
 ) {
     private val screenStateReceiver = ScreenStateReceiver()
     private val lifecycleObserver = AppLifecycleObserver()
+    private var userInteractionReceiver: BroadcastReceiver? = null
     private var lastUserInteractionTime = System.currentTimeMillis()
 
     private val screenTimeoutMs = getScreenTimeout()
@@ -81,17 +82,16 @@ class TimerLifecycleManager(
         val userInteractionFilter =
             IntentFilter().apply {
                 addAction(Intent.ACTION_USER_PRESENT)
-                addAction(Intent.ACTION_SCREEN_ON)
             }
 
-        val userInteractionReceiver =
+        userInteractionReceiver =
             object : BroadcastReceiver() {
                 override fun onReceive(
                     context: Context?,
                     intent: Intent?,
                 ) {
                     when (intent?.action) {
-                        Intent.ACTION_USER_PRESENT, Intent.ACTION_SCREEN_ON -> {
+                        Intent.ACTION_USER_PRESENT -> {
                             lastUserInteractionTime = System.currentTimeMillis()
                         }
                     }
@@ -120,6 +120,16 @@ class TimerLifecycleManager(
         } catch (e: IllegalArgumentException) {
             Timber.d("ScreenStateReceiver not registered: ${e.message}")
         }
+
+        try {
+            userInteractionReceiver?.let {
+                context.unregisterReceiver(it)
+                userInteractionReceiver = null
+            }
+        } catch (e: IllegalArgumentException) {
+            Timber.d("UserInteractionReceiver not registered: ${e.message}")
+        }
+
         ProcessLifecycleOwner.get().lifecycle.removeObserver(lifecycleObserver)
     }
 }
