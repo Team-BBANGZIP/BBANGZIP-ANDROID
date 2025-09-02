@@ -59,6 +59,7 @@ fun BbangZipSegmentedButton(
     indexOfSelectedOption: Int,
     onOptionSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
     colors: SegmentedButtonColors = BbangZipSegmentedButtonDefaults.colors(),
     containerPadding: Dp = BbangZipSegmentedButtonDefaults.CONTAINER_PADDING,
     indicatorVerticalPadding: Dp = BbangZipSegmentedButtonDefaults.INDICATOR_VERTICAL_PADDING,
@@ -126,7 +127,7 @@ fun BbangZipSegmentedButton(
                         Modifier
                             .weight(1f)
                             .padding(vertical = indicatorVerticalPadding)
-                            .noRippleClickable { onOptionSelect(index) },
+                            .noRippleClickable(enabled = enabled) { onOptionSelect(index) },
                     contentAlignment = Alignment.Center,
                 ) {
                     Text(
