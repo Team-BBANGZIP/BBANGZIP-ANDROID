@@ -12,7 +12,6 @@ import androidx.navigation.navOptions
 import org.android.bbangzip.presentation.model.BottomNavigationRoute
 import org.android.bbangzip.presentation.model.Route
 import org.android.bbangzip.presentation.type.BottomNavigationType
-import org.android.bbangzip.presentation.ui.dummy.navigation.navigateDummy
 import org.android.bbangzip.presentation.ui.friend.navigation.navigateToFriend
 import org.android.bbangzip.presentation.ui.my.navigation.navigateToMy
 import org.android.bbangzip.presentation.ui.timer.navigation.navigateToTimer
@@ -51,13 +50,8 @@ class MainNavigator(
                 BottomNavigationType.TODO -> navigateToTodo(navOptions)
                 BottomNavigationType.FRIEND -> navigateToFriend(navOptions)
                 BottomNavigationType.MY -> navigateToMy(navOptions)
-                else -> Unit
             }
         }
-    }
-
-    private fun navigateToDummy(navOptions: NavOptions) {
-        navHostController.navigateDummy(navOptions)
     }
 
     private fun navigateToFriend(navOptions: NavOptions) {
