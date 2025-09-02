@@ -1,0 +1,146 @@
+package org.android.bbangzip.presentation.ui.timer.lifecycle
+
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.provider.Settings
+import androidx.lifecycle.ProcessLifecycleOwner
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.qualifiers.ApplicationContext
+import org.android.bbangzip.presentation.observer.AppLifecycleObserver
+import org.android.bbangzip.presentation.observer.ScreenStateReceiver
+import org.android.bbangzip.presentation.ui.timer.TimerContract
+import timber.log.Timber
+
+class TimerLifecycleManager
+    @AssistedInject
+    constructor(
+        @ApplicationContext private val context: Context,
+        @Assisted private val onEvent: (TimerContract.TimerEvent) -> Unit,
+    ) {
+        private val screenStateReceiver = ScreenStateReceiver()
+        private val lifecycleObserver = AppLifecycleObserver()
+        private var userInteractionReceiver: BroadcastReceiver? = null
+        private var lastUserInteractionTime = System.currentTimeMillis()
+
+        private val screenTimeoutMs = getScreenTimeout()
+
+        init {
+            setupScreenStateReceiver()
+            setupLifecycleObserver()
+            startUserInteractionTracking()
+        }
+
+        private fun setupScreenStateReceiver() {
+            screenStateReceiver.setListener(
+                object : ScreenStateReceiver.ScreenStateListener {
+                    override fun onScreenOn() {
+                        lifecycleObserver.updateScreenState(true)
+                        lastUserInteractionTime = System.currentTimeMillis()
+                        onEvent(TimerContract.TimerEvent.OnScreenTurnedOn)
+                    }
+
+                    override fun onScreenOff() {
+                        lifecycleObserver.updateScreenState(isScreenOn = false)
+
+                        val timeSinceLastInteraction = System.currentTimeMillis() - lastUserInteractionTime
+                        val threshold = screenTimeoutMs - 1000
+
+                        if (timeSinceLastInteraction < threshold) {
+                            onEvent(TimerContract.TimerEvent.OnLockButtonPressed)
+                        } else {
+                            onEvent(TimerContract.TimerEvent.OnScreenTimeOut)
+                        }
+                    }
+                },
+            )
+
+            val filter =
+                IntentFilter().apply {
+                    addAction(Intent.ACTION_SCREEN_OFF)
+                    addAction(Intent.ACTION_SCREEN_ON)
+                    addAction(Intent.ACTION_USER_PRESENT)
+                }
+            context.registerReceiver(screenStateReceiver, filter)
+        }
+
+        private fun setupLifecycleObserver() {
+            lifecycleObserver.setListener(
+                object : AppLifecycleObserver.AppLifecycleListener {
+                    override fun onAppForeground() {
+                        val backgroundDuration = lifecycleObserver.getBackgroundDuration()
+                        onEvent(TimerContract.TimerEvent.OnAppForeground(backgroundDuration))
+                    }
+
+                    override fun onAppBackground() {
+                        onEvent(TimerContract.TimerEvent.OnAppBackground)
+                    }
+                },
+            )
+
+            ProcessLifecycleOwner.get().lifecycle.addObserver(lifecycleObserver)
+        }
+
+        private fun startUserInteractionTracking() {
+            val userInteractionFilter =
+                IntentFilter().apply {
+                    addAction(Intent.ACTION_USER_PRESENT)
+                }
+
+            userInteractionReceiver =
+                object : BroadcastReceiver() {
+                    override fun onReceive(
+                        context: Context?,
+                        intent: Intent?,
+                    ) {
+                        when (intent?.action) {
+                            Intent.ACTION_USER_PRESENT -> {
+                                lastUserInteractionTime = System.currentTimeMillis()
+                            }
+                        }
+                    }
+                }
+
+            context.registerReceiver(userInteractionReceiver, userInteractionFilter)
+        }
+
+        private fun getScreenTimeout(): Long {
+            return try {
+                val timeout =
+                    Settings.System.getLong(
+                        context.contentResolver,
+                        Settings.System.SCREEN_OFF_TIMEOUT,
+                    )
+                return timeout
+            } catch (e: Settings.SettingNotFoundException) {
+                15000L
+            }
+        }
+
+        fun cleanup() {
+            try {
+                context.unregisterReceiver(screenStateReceiver)
+            } catch (e: IllegalArgumentException) {
+                Timber.d("ScreenStateReceiver not registered: ${e.message}")
+            }
+
+            try {
+                userInteractionReceiver?.let {
+                    context.unregisterReceiver(it)
+                    userInteractionReceiver = null
+                }
+            } catch (e: IllegalArgumentException) {
+                Timber.d("UserInteractionReceiver not registered: ${e.message}")
+            }
+
+            ProcessLifecycleOwner.get().lifecycle.removeObserver(lifecycleObserver)
+        }
+
+        @AssistedFactory
+        interface Factory {
+            fun create(onEvent: (TimerContract.TimerEvent) -> Unit): TimerLifecycleManager
+        }
+    }
