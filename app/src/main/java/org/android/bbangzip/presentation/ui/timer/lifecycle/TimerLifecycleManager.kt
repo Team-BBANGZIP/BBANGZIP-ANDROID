@@ -6,14 +6,18 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.provider.Settings
 import androidx.lifecycle.ProcessLifecycleOwner
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
+import dagger.hilt.android.qualifiers.ApplicationContext
 import org.android.bbangzip.presentation.observer.AppLifecycleObserver
 import org.android.bbangzip.presentation.observer.ScreenStateReceiver
 import org.android.bbangzip.presentation.ui.timer.TimerContract
 import timber.log.Timber
 
-class TimerLifecycleManager(
-    private val context: Context,
-    private val onEvent: (TimerContract.TimerEvent) -> Unit,
+class TimerLifecycleManager @AssistedInject constructor(
+    @ApplicationContext private val context: Context,
+    @Assisted private val onEvent: (TimerContract.TimerEvent) -> Unit,
 ) {
     private val screenStateReceiver = ScreenStateReceiver()
     private val lifecycleObserver = AppLifecycleObserver()
@@ -131,5 +135,10 @@ class TimerLifecycleManager(
         }
 
         ProcessLifecycleOwner.get().lifecycle.removeObserver(lifecycleObserver)
+    }
+
+    @AssistedFactory
+    interface Factory {
+        fun create(onEvent: (TimerContract.TimerEvent) -> Unit): TimerLifecycleManager
     }
 }

@@ -59,7 +59,6 @@ import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
-@SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
 fun TimerScreen(
     timerState: TimerContract.TimerState,

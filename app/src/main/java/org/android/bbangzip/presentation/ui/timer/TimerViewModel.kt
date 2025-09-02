@@ -1,10 +1,8 @@
 package org.android.bbangzip.presentation.ui.timer
 
-import android.content.Context
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import org.android.bbangzip.presentation.model.TimerStatus
@@ -19,7 +17,7 @@ class TimerViewModel
 @Inject
 constructor(
     savedStateHandle: SavedStateHandle,
-    @ApplicationContext private val context: Context,
+    private val lifecycleManagerFactory: TimerLifecycleManager.Factory,
 ) : BaseViewModel<TimerContract.TimerEvent, TimerContract.TimerState, TimerContract.TimerReduce, TimerContract.TimerSideEffect>(
     savedStateHandle = savedStateHandle,
 ) {
@@ -37,10 +35,9 @@ constructor(
     }
 
     private fun setupLifecycleManager() {
-        lifecycleManager =
-            TimerLifecycleManager(context) { event ->
-                setEvent(event)
-            }
+        lifecycleManager = lifecycleManagerFactory.create { event ->
+            setEvent(event)
+        }
     }
 
     override fun handleEvent(event: TimerContract.TimerEvent) {
