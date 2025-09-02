@@ -55,6 +55,11 @@ class TodoContract {
 
         data class UpdateFlatList(val flatList: List<ListItem>) : TodoReduce
 
+        data class UpdateCategoriesAndFlatList(
+            val categories: List<Category>,
+            val flatList: List<ListItem>,
+        ) : TodoReduce
+
         data class UpdateSelectedDate(val selectedDate: LocalDate) : TodoReduce
 
         data class UpdateIsMenuOpen(val isMenuOpen: Boolean) : TodoReduce

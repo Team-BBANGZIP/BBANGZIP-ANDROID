@@ -13,6 +13,7 @@ import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateF
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateIsMenuOpen
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateMotivationMessage
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateSelectedDate
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategoriesAndFlatList
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoSideEffect
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoState
 import org.android.bbangzip.presentation.util.base.BaseViewModel
@@ -76,8 +77,7 @@ class TodoViewModel
                     synchronizeListState(currentFlatList)
                     val newCategories = reconstructCategoriesFromFlatList(currentFlatList)
 
-                    updateState(UpdateCategories(newCategories))
-                    updateState(UpdateFlatList(currentFlatList.toList()))
+                    updateState(UpdateCategoriesAndFlatList(newCategories, currentFlatList.toList()))
                 }
 
                 is TodoEvent.OnMenuClick -> {
@@ -100,15 +100,15 @@ class TodoViewModel
                 is UpdateMotivationMessage -> state.copy(motivationMessage = reduce.message)
                 is UpdateCategories -> state.copy(categories = reduce.categories)
                 is UpdateFlatList -> state.copy(flatList = reduce.flatList)
+                is UpdateCategoriesAndFlatList -> state.copy(categories = reduce.categories, flatList = reduce.flatList)
                 is UpdateIsMenuOpen -> state.copy(isMenuOpen = reduce.isMenuOpen)
                 is UpdateSelectedDate -> state.copy(selectedDate = reduce.selectedDate)
             }
         }
 
         private fun updateCategoriesAndFlatList(categories: List<Category>) {
-            updateState(UpdateCategories(categories))
             val flatList = categories.toFlatList()
-            updateState(UpdateFlatList(flatList))
+            updateState(UpdateCategoriesAndFlatList(categories, flatList))
         }
 
         private fun List<Category>.toFlatList(): List<ListItem> {
