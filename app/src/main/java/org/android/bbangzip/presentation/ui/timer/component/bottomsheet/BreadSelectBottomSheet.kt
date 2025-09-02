@@ -52,119 +52,204 @@ fun BreadSelectBottomSheet(
         modifier = modifier,
         contentPadding = contentPadding(top = 40.dp, start = 32.dp, end = 32.dp, bottom = 40.dp),
         title = {
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-            ) {
-                Text(
-                    text = stringResource(R.string.bread_sheet_title),
-                    color = BbangZipTheme.color.primaryNormal_897869,
-                    style = BbangZipTheme.typography.title1SemiBold,
-                )
-
-                Gap(20.dp)
-
-                Box(
-                    modifier =
-                        Modifier
-                            .background(
-                                color = BbangZipTheme.color.backgroundAlternative_FAF6F3,
-                                shape = RoundedCornerShape(5.dp),
-                            )
-                            .padding(horizontal = 16.dp, vertical = 4.dp),
-                    contentAlignment = Alignment.Center,
-                ) {
-                    Text(
-                        text = stringResource(R.string.bread_sheet_subtitle, breadCount),
-                        color = BbangZipTheme.color.labelAlternative_A29D96,
-                        style = BbangZipTheme.typography.subTitle1Medium,
-                    )
-                }
-
-                Gap(24.dp)
-            }
+            BreadSelectHeader(breadCount = breadCount)
         },
         content = {
-            BoxWithConstraints(modifier = Modifier.fillMaxWidth()) {
-                val itemWidth = (maxWidth - 48.dp) / 3
-                FlowRow(
-                    modifier =
-                        Modifier
-                            .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(24.dp),
-                    verticalArrangement = Arrangement.spacedBy(24.dp),
-                    maxItemsInEachRow = 3,
-                    maxLines = 3,
-                ) {
-                    breadList.forEachIndexed { index, breadInfo ->
-                        Column(
-                            modifier = Modifier.width(itemWidth),
-                            horizontalAlignment = Alignment.CenterHorizontally,
-                            verticalArrangement = Arrangement.Center,
-                        ) {
-                            Box(
-                                modifier =
-                                    Modifier
-                                        .aspectRatio(1f),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                if (breadInfo.isLocked) {
-                                    Image(
-                                        imageVector = ImageVector.vectorResource(R.drawable.ic_lock_default_40),
-                                        contentDescription = null,
-                                        modifier =
-                                            Modifier
-                                                .fillMaxSize(),
-                                    )
-                                } else {
-                                    Image(
-                                        painter = painterResource(BreadType.getImgFromId(breadInfo.id)),
-                                        contentDescription = null,
-                                        modifier =
-                                            Modifier
-                                                .fillMaxSize()
-                                                .clip(CircleShape)
-                                                .background(
-                                                    color = BbangZipTheme.color.backgroundAlternative_FAF6F3,
-                                                )
-                                                .noRippleClickable { onBreadSelect(breadInfo.id) }
-                                                .padding(vertical = 16.dp, horizontal = 7.dp),
-                                    )
-
-                                    if (currentBreadId == breadInfo.id) {
-                                        Box(
-                                            modifier =
-                                                Modifier
-                                                    .align(Alignment.TopStart)
-                                                    .clip(CircleShape)
-                                                    .background(
-                                                        color = BbangZipTheme.color.primaryNormal_897869,
-                                                    ),
-                                        ) {
-                                            Icon(
-                                                imageVector = ImageVector.vectorResource(R.drawable.ic_check_default_24),
-                                                contentDescription = null,
-                                                tint = BbangZipTheme.color.staticWhite_FFFFFF,
-                                                modifier =
-                                                    Modifier
-                                                        .align(Alignment.Center),
-                                            )
-                                        }
-                                    }
-                                }
-                            }
-
-                            Gap(8.dp)
-
-                            Text(
-                                text = if (breadInfo.isLocked) "???" else breadList[index].name,
-                                color = BbangZipTheme.color.labelNormal_6B6560,
-                                style = BbangZipTheme.typography.body2Medium,
-                                modifier = Modifier,
-                            )
-                        }
-                    }
-                }
-            }
+            BreadSelectionGrid(
+                currentBreadId = currentBreadId,
+                breadList = breadList,
+                onBreadSelect = onBreadSelect,
+                modifier = Modifier,
+            )
         },
     )
+}
+
+@Composable
+private fun BreadCountBadge(
+    breadCount: Int,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .background(
+                color = BbangZipTheme.color.backgroundAlternative_FAF6F3,
+                shape = RoundedCornerShape(5.dp),
+            )
+            .padding(horizontal = 16.dp, vertical = 4.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = stringResource(R.string.bread_sheet_subtitle, breadCount),
+            color = BbangZipTheme.color.labelAlternative_A29D96,
+            style = BbangZipTheme.typography.subTitle1Medium,
+        )
+    }
+}
+
+@Composable
+private fun BreadSelectHeader(
+    breadCount: Int,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+        modifier = modifier
+    ) {
+        Text(
+            text = stringResource(R.string.bread_sheet_title),
+            color = BbangZipTheme.color.primaryNormal_897869,
+            style = BbangZipTheme.typography.title1SemiBold,
+        )
+
+        Gap(20.dp)
+
+        BreadCountBadge(breadCount = breadCount)
+
+        Gap(24.dp)
+    }
+}
+
+@Composable
+private fun BreadSelectionGrid(
+    currentBreadId: Int,
+    breadList: List<BreadInfo>,
+    onBreadSelect: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    BoxWithConstraints(modifier = modifier.fillMaxWidth()) {
+        val itemWidth = (maxWidth - 48.dp) / 3
+
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(24.dp),
+            verticalArrangement = Arrangement.spacedBy(24.dp),
+            maxItemsInEachRow = 3,
+            maxLines = 3,
+        ) {
+            breadList.forEach { breadInfo ->
+                BreadItem(
+                    breadInfo = breadInfo,
+                    isSelected = currentBreadId == breadInfo.id,
+                    onBreadSelect = onBreadSelect,
+                    modifier = Modifier.width(itemWidth)
+                )
+            }
+        }
+    }
+}
+
+
+@Composable
+private fun BreadItem(
+    breadInfo: BreadInfo,
+    isSelected: Boolean,
+    onBreadSelect: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        BreadItemImage(
+            breadInfo = breadInfo,
+            isSelected = isSelected,
+            onBreadSelect = onBreadSelect
+        )
+
+        Gap(8.dp)
+
+        BreadItemLabel(
+            breadInfo = breadInfo
+        )
+    }
+}
+
+@Composable
+private fun BreadItemImage(
+    breadInfo: BreadInfo,
+    isSelected: Boolean,
+    onBreadSelect: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier.aspectRatio(1f),
+        contentAlignment = Alignment.Center,
+    ) {
+        if (breadInfo.isLocked) {
+            LockedBreadImage()
+        } else {
+            UnlockedBreadImage(
+                breadInfo = breadInfo,
+                onBreadSelect = onBreadSelect
+            )
+
+            if (isSelected) {
+                CheckBox(modifier = Modifier.align(Alignment.TopStart))
+            }
+        }
+    }
+}
+
+@Composable
+private fun LockedBreadImage(
+    modifier: Modifier = Modifier
+) {
+    Image(
+        imageVector = ImageVector.vectorResource(R.drawable.ic_lock_default_40),
+        contentDescription = null,
+        modifier = modifier.fillMaxSize(),
+    )
+}
+
+@Composable
+private fun UnlockedBreadImage(
+    breadInfo: BreadInfo,
+    onBreadSelect: (Int) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Image(
+        painter = painterResource(BreadType.getImgFromId(breadInfo.id)),
+        contentDescription = null,
+        modifier = modifier
+            .fillMaxSize()
+            .clip(CircleShape)
+            .background(color = BbangZipTheme.color.backgroundAlternative_FAF6F3)
+            .noRippleClickable { onBreadSelect(breadInfo.id) }
+            .padding(vertical = 16.dp, horizontal = 7.dp),
+    )
+}
+@Composable
+private fun BreadItemLabel(
+    breadInfo: BreadInfo,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = if (breadInfo.isLocked) "???" else breadInfo.name,
+        color = BbangZipTheme.color.labelNormal_6B6560,
+        style = BbangZipTheme.typography.body2Medium,
+        modifier = modifier,
+    )
+}
+
+@Composable
+fun CheckBox(modifier: Modifier = Modifier) {
+    Box(
+        modifier =
+        modifier
+            .clip(CircleShape)
+            .background(
+                color = BbangZipTheme.color.primaryNormal_897869,
+            ),
+    ) {
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.ic_check_default_24),
+            contentDescription = null,
+            tint = BbangZipTheme.color.staticWhite_FFFFFF,
+            modifier =
+            Modifier
+                .align(Alignment.Center),
+        )
+    }
 }
