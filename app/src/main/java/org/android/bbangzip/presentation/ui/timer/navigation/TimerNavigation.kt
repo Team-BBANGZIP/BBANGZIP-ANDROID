@@ -17,15 +17,11 @@ fun NavController.navigateToTimer(navOptions: NavOptions) {
 
 fun NavGraphBuilder.timerNavGraph(
     sharedViewModel: SharedViewModel,
-    showBottomBar: () -> Unit = {},
-    hideBottomBar: () -> Unit = {},
     navigateToCompleteTask: () -> Unit = {},
 ) {
     composable<BottomNavigationRoute.Timer> {
         TimerRoute(
             sharedViewModel = sharedViewModel,
-            showBottomBar = showBottomBar,
-            hideBottomBar = hideBottomBar,
             navigateToCompleteTask = navigateToCompleteTask,
         )
     }

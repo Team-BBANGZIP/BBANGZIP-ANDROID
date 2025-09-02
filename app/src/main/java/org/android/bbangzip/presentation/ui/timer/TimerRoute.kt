@@ -17,8 +17,6 @@ import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 fun TimerRoute(
     sharedViewModel: SharedViewModel,
     modifier: Modifier = Modifier,
-    showBottomBar: () -> Unit = {},
-    hideBottomBar: () -> Unit = {},
     navigateToCompleteTask: () -> Unit = {},
     timerViewmodel: TimerViewModel = hiltViewModel(),
 ) {
@@ -30,8 +28,8 @@ fun TimerRoute(
         timerViewmodel.uiSideEffect.collectLatest { effect ->
             when (effect) {
                 TimerContract.TimerSideEffect.NavigateToCompleteTask -> navigateToCompleteTask()
-                TimerContract.TimerSideEffect.ShowBottomBar -> showBottomBar()
-                TimerContract.TimerSideEffect.HideBottomBar -> hideBottomBar()
+                TimerContract.TimerSideEffect.ShowBottomBar -> sharedViewModel.setEvent(SharedContract.SharedEvent.OnShowBottomBar)
+                TimerContract.TimerSideEffect.HideBottomBar -> sharedViewModel.setEvent(SharedContract.SharedEvent.OnHideBottomBar)
             }
         }
     }
