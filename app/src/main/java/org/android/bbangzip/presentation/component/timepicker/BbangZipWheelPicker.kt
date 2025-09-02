@@ -79,7 +79,7 @@ fun BbangZipWheelPicker(
         }
     val scrollOffsetToCenterItem =
         remember(itemHeightPx, visibleItemsCount) {
-            ((itemHeightPx * visibleItemsCount) / 2f - itemHeightPx / 2f).toInt()
+            calculateCenterOffset(itemHeightPx, visibleItemsCount)
         }
 
     val listState =
@@ -141,6 +141,8 @@ fun BbangZipWheelPicker(
         }
     }
 }
+
+private fun calculateCenterOffset(itemHeightPx: Float, visibleItemsCount: Int): Int = ((itemHeightPx * visibleItemsCount) / 2f - itemHeightPx / 2f).toInt()
 
 /**
  * 휠 피커의 중앙 선택 영역을 나타내는 인디케이터 컴포저블입니다.
