@@ -142,7 +142,10 @@ fun BbangZipWheelPicker(
     }
 }
 
-private fun calculateCenterOffset(itemHeightPx: Float, visibleItemsCount: Int): Int = ((itemHeightPx * visibleItemsCount) / 2f - itemHeightPx / 2f).toInt()
+private fun calculateCenterOffset(
+    itemHeightPx: Float,
+    visibleItemsCount: Int,
+): Int = ((itemHeightPx * visibleItemsCount) / 2f - itemHeightPx / 2f).toInt()
 
 /**
  * 휠 피커의 중앙 선택 영역을 나타내는 인디케이터 컴포저블입니다.
