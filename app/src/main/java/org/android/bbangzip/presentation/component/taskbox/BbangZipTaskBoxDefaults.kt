@@ -19,15 +19,18 @@ object BbangZipTaskBoxDefaults {
     val CHECK_ICON_SIZE: Dp = 18.dp
     val MENU_ICON_SIZE: Dp = 20.dp
     val CLOCK_ICON_SIZE: Dp = 12.dp
+    val HORIZONTAL_DIVIDER_THICKNESS: Dp = 1.dp
 
     // Layout Gaps
     val GAP_CHECKBOX_TO_CONTENT: Dp = 8.dp
     val GAP_CONTENT_TO_MENU: Dp = 12.dp
     val GAP_TASK_TO_TIME = 4.dp
     val GAP_TIME_ICON_TO_TEXT: Dp = 3.dp
+    val GAP_CONTENT_TO_DIVIDER: Dp = 10.dp
 
     // PADDING
-    val TASK_CONTENT_TOP_PADDING = 4.dp
+    val TASK_TEXT_TOP_PADDING: Dp = 4.dp
+    val TASK_CONTENT_TOP_PADDING: Dp = 10.dp
 
     /**
      * [BbangZipTaskBox]에 사용될 기본 [TaskBoxColors]를 생성
@@ -46,6 +49,7 @@ object BbangZipTaskBoxDefaults {
         menuIconColor: Color = BbangZipTheme.color.secondaryStrong_F2EAE4,
         taskTextColor: Color = BbangZipTheme.color.labelNormal_6B6560,
         timeContentColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
+        dividerColor: Color = BbangZipTheme.color.secondaryNormal_F6F1EE,
     ): TaskBoxColors {
         return remember(
             unCheckedBoxColor,
@@ -53,6 +57,7 @@ object BbangZipTaskBoxDefaults {
             menuIconColor,
             taskTextColor,
             timeContentColor,
+            dividerColor,
         ) {
             TaskBoxColors(
                 unCheckedBoxColor = unCheckedBoxColor,
@@ -60,6 +65,7 @@ object BbangZipTaskBoxDefaults {
                 menuIconColor = menuIconColor,
                 taskTextColor = taskTextColor,
                 timeContentColor = timeContentColor,
+                dividerColor = dividerColor,
             )
         }
     }

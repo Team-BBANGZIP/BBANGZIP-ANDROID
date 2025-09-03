@@ -1,5 +1,6 @@
 package org.android.bbangzip.presentation.component.calendar
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -26,6 +27,7 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
  */
 @Immutable
 data class WeeklyCalendarColors(
+    val calendarBackgroundColor: Color,
     val selectedDayCellBackgroundColor: Color,
     val defaultDayCellBackgroundColor: Color,
     val selectedDayCellDateTextColor: Color,
@@ -90,6 +92,9 @@ object BbangZipWeeklyCalendarDefaults {
     /** 날짜 셀 내부의 상하 여백(padding)입니다. */
     val DayCellVerticalPadding: Dp = 8.dp
 
+    /** 달력 내부의 여백 */
+    val CalendarPadding: PaddingValues = PaddingValues(horizontal = 20.dp, vertical = 12.dp)
+
     /** 주(Week) 내에서 날짜 셀들 사이의 간격입니다. */
     val DayCellSpacing: Dp = 9.dp
 
@@ -120,6 +125,7 @@ object BbangZipWeeklyCalendarDefaults {
      */
     @Composable
     fun colors(
+        calendarBackgroundColor: Color = BbangZipTheme.color.secondaryLight_FAF6F3,
         selectedDayCellBackgroundColor: Color = BbangZipTheme.color.secondaryStrong_F2EAE4,
         defaultDayCellBackgroundColor: Color = Color.Transparent,
         defaultDayCellDateTextColor: Color = BbangZipTheme.color.labelAlternative_A29D96,
@@ -129,6 +135,7 @@ object BbangZipWeeklyCalendarDefaults {
     ): WeeklyCalendarColors {
         // 동일한 색상 입력에 대해 WeeklyCalendarColors 인스턴스를 캐싱하여 불필요한 재생성을 방지합니다.
         return remember(
+            calendarBackgroundColor,
             selectedDayCellBackgroundColor,
             defaultDayCellBackgroundColor,
             defaultDayCellDateTextColor,
@@ -137,6 +144,7 @@ object BbangZipWeeklyCalendarDefaults {
             headerDateColor,
         ) {
             WeeklyCalendarColors(
+                calendarBackgroundColor = calendarBackgroundColor,
                 selectedDayCellBackgroundColor = selectedDayCellBackgroundColor,
                 defaultDayCellBackgroundColor = defaultDayCellBackgroundColor,
                 selectedDayCellDateTextColor = selectedDayCellDateTextColor,
