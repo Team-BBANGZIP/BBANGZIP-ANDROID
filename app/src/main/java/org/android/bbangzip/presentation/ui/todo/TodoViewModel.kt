@@ -9,11 +9,11 @@ import org.android.bbangzip.presentation.model.Todo
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoEvent
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategories
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategoriesAndFlatList
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateFlatList
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateIsMenuOpen
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateMotivationMessage
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateSelectedDate
-import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategoriesAndFlatList
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoSideEffect
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoState
 import org.android.bbangzip.presentation.util.base.BaseViewModel

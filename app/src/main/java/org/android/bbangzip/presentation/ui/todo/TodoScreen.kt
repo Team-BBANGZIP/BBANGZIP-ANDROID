@@ -121,97 +121,97 @@ fun TodoScreen(
 
     Box(
         modifier =
-        modifier
-            .fillMaxSize()
-            .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
-            .systemBarsPadding(),
+            modifier
+                .fillMaxSize()
+                .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
+                .systemBarsPadding(),
     ) {
         LazyColumn(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .onGloballyPositioned { coordinates ->
-                    columnHeight = coordinates.size.height
-                }
-                .pointerInput(flatList) {
-                    awaitEachGesture {
-                        val down = awaitFirstDown(requireUnconsumed = false)
-                        val longPress = awaitLongPressOrCancellation(down.id)
+                Modifier
+                    .fillMaxSize()
+                    .onGloballyPositioned { coordinates ->
+                        columnHeight = coordinates.size.height
+                    }
+                    .pointerInput(flatList) {
+                        awaitEachGesture {
+                            val down = awaitFirstDown(requireUnconsumed = false)
+                            val longPress = awaitLongPressOrCancellation(down.id)
 
-                        if (longPress != null) {
-                            val pressedLazyColumnItem =
-                                lazyListState.layoutInfo.visibleItemsInfo
-                                    .firstOrNull {
-                                        val itemTopY = it.offset
-                                        val itemBottomY = it.offset + it.size
-                                        down.position.y >= itemTopY && down.position.y <= itemBottomY
-                                    } ?: return@awaitEachGesture
-                            val pressedLazyColumnIndex = pressedLazyColumnItem.index
-                            val pressedFlatListIndex = pressedLazyColumnIndex - LIST_HEADER_COUNT
-                            val pressedFlatListItem = flatList.getOrNull(pressedFlatListIndex)
+                            if (longPress != null) {
+                                val pressedLazyColumnItem =
+                                    lazyListState.layoutInfo.visibleItemsInfo
+                                        .firstOrNull {
+                                            val itemTopY = it.offset
+                                            val itemBottomY = it.offset + it.size
+                                            down.position.y >= itemTopY && down.position.y <= itemBottomY
+                                        } ?: return@awaitEachGesture
+                                val pressedLazyColumnIndex = pressedLazyColumnItem.index
+                                val pressedFlatListIndex = pressedLazyColumnIndex - LIST_HEADER_COUNT
+                                val pressedFlatListItem = flatList.getOrNull(pressedFlatListIndex)
 
-                            if (pressedLazyColumnIndex < LIST_HEADER_COUNT || pressedFlatListItem !is ListItem.TodoItem) return@awaitEachGesture
+                                if (pressedLazyColumnIndex < LIST_HEADER_COUNT || pressedFlatListItem !is ListItem.TodoItem) return@awaitEachGesture
 
-                            targetIndex = pressedFlatListIndex
-                            draggingItem = pressedFlatListItem
+                                targetIndex = pressedFlatListIndex
+                                draggingItem = pressedFlatListItem
 
-                            // 아이템 자체에서 클릭한 포인트
-                            fakeOffset = Offset(0f, pressedLazyColumnItem.offset.toFloat())
-                            touchPointInItem = down.position - fakeOffset
+                                // 아이템 자체에서 클릭한 포인트
+                                fakeOffset = Offset(0f, pressedLazyColumnItem.offset.toFloat())
+                                touchPointInItem = down.position - fakeOffset
 
-                            try {
-                                drag(pointerId = longPress.id) { change ->
-                                    change.consume()
-                                    fakeOffset +=
-                                        Offset(
-                                            x = change.position.x - change.previousPosition.x,
-                                            y = change.position.y - change.previousPosition.y,
-                                        )
+                                try {
+                                    drag(pointerId = longPress.id) { change ->
+                                        change.consume()
+                                        fakeOffset +=
+                                            Offset(
+                                                x = change.position.x - change.previousPosition.x,
+                                                y = change.position.y - change.previousPosition.y,
+                                            )
 
-                                    targetIndex =
-                                        updateTargetIndex(
-                                            lazyListState = lazyListState,
-                                            flatList = flatList,
-                                            touchPointY = touchPointY,
-                                            currentTargetIndex = targetIndex,
-                                        )
+                                        targetIndex =
+                                            updateTargetIndex(
+                                                lazyListState = lazyListState,
+                                                flatList = flatList,
+                                                touchPointY = touchPointY,
+                                                currentTargetIndex = targetIndex,
+                                            )
 
-                                    touchPointY = fakeOffset.y + touchPointInItem.y
+                                        touchPointY = fakeOffset.y + touchPointInItem.y
 
-                                    val scrollDirection =
-                                        when {
-                                            fakeOffset.y < scrollThreshold -> AutoScrollDirection.UP
-                                            touchPointY > columnHeight - scrollThreshold -> AutoScrollDirection.DOWN
-                                            else -> AutoScrollDirection.NONE
-                                        }
+                                        val scrollDirection =
+                                            when {
+                                                fakeOffset.y < scrollThreshold -> AutoScrollDirection.UP
+                                                touchPointY > columnHeight - scrollThreshold -> AutoScrollDirection.DOWN
+                                                else -> AutoScrollDirection.NONE
+                                            }
 
-                                    if (scrollDirection != AutoScrollDirection.NONE) {
-                                        if (autoScrollJob?.isActive != true) {
-                                            autoScrollJob =
-                                                coroutineScope.launch {
-                                                    while (isActive) {
-                                                        val speed =
-                                                            calculateScrollSpeed(
-                                                                direction = scrollDirection,
-                                                                touchPointY = touchPointY,
-                                                                columnHeight = columnHeight,
-                                                                scrollThreshold = scrollThreshold,
-                                                            )
-                                                        lazyListState.scrollBy(speed)
-                                                        targetIndex =
-                                                            updateTargetIndex(
-                                                                lazyListState = lazyListState,
-                                                                flatList = flatList,
-                                                                touchPointY = touchPointY,
-                                                                currentTargetIndex = targetIndex,
-                                                            )
-                                                        delay(AUTO_SCROLL_DELAY)
+                                        if (scrollDirection != AutoScrollDirection.NONE) {
+                                            if (autoScrollJob?.isActive != true) {
+                                                autoScrollJob =
+                                                    coroutineScope.launch {
+                                                        while (isActive) {
+                                                            val speed =
+                                                                calculateScrollSpeed(
+                                                                    direction = scrollDirection,
+                                                                    touchPointY = touchPointY,
+                                                                    columnHeight = columnHeight,
+                                                                    scrollThreshold = scrollThreshold,
+                                                                )
+                                                            lazyListState.scrollBy(speed)
+                                                            targetIndex =
+                                                                updateTargetIndex(
+                                                                    lazyListState = lazyListState,
+                                                                    flatList = flatList,
+                                                                    touchPointY = touchPointY,
+                                                                    currentTargetIndex = targetIndex,
+                                                                )
+                                                            delay(AUTO_SCROLL_DELAY)
+                                                        }
                                                     }
-                                                }
+                                            }
+                                        } else {
+                                            autoScrollJob?.cancel()
                                         }
-                                    } else {
-                                        autoScrollJob?.cancel()
-                                    }
                                     }
                                 } finally {
                                     autoScrollJob?.cancel()
@@ -254,9 +254,9 @@ fun TodoScreen(
                     itemSpacingPx = itemSpacingPx,
                     onTodoCheckBoxClick = onTodoCheckBoxClick,
                     modifier =
-                    Modifier.onGloballyPositioned { coordinates ->
-                        itemBounds[item.id] = coordinates.boundsInParent()
-                    },
+                        Modifier.onGloballyPositioned { coordinates ->
+                            itemBounds[item.id] = coordinates.boundsInParent()
+                        },
                 )
             }
         }
@@ -265,13 +265,13 @@ fun TodoScreen(
             val itemRect = itemBounds[item.id]
             Box(
                 modifier =
-                Modifier
-                    .offset(
-                        x = with(localDensity) { fakeOffset.x.toDp() + 20.dp },
-                        y = with(localDensity) { fakeOffset.y.toDp() },
-                    )
-                    .width(with(localDensity) { itemRect?.width?.toDp() } ?: Dp.Unspecified)
-                    .background(BbangZipTheme.color.componentStrong_F6F6F5),
+                    Modifier
+                        .offset(
+                            x = with(localDensity) { fakeOffset.x.toDp() + 20.dp },
+                            y = with(localDensity) { fakeOffset.y.toDp() },
+                        )
+                        .width(with(localDensity) { itemRect?.width?.toDp() } ?: Dp.Unspecified)
+                        .background(BbangZipTheme.color.componentStrong_F6F6F5),
             ) {
                 BbangZipTaskBox(
                     task = item.todo.content,
@@ -408,12 +408,12 @@ private fun DraggableListItem(
 
     Box(
         modifier =
-        modifier
-            .padding(horizontal = 20.dp)
-            .graphicsLayer {
-                translationY = animatedShiftY
-                alpha = if (isDragging) 0f else 1f
-            },
+            modifier
+                .padding(horizontal = 20.dp)
+                .graphicsLayer {
+                    translationY = animatedShiftY
+                    alpha = if (isDragging) 0f else 1f
+                },
     ) {
         when (item) {
             is ListItem.CategoryItem -> {
@@ -457,7 +457,7 @@ private fun ListHeader(
             BbangZipWeeklyCalendar(onMenuClick = onMenuClick)
             if (isMenuOpen) {
                 MenuPopup(
-                    modifier = Modifier.offset(x = (-20).dp, y = 9.dp).fillMaxWidth(1/3f),
+                    modifier = Modifier.offset(x = (-20).dp, y = 9.dp).fillMaxWidth(1 / 3f),
                     onDismissRequest = onMenuClick,
                 )
             }
@@ -478,18 +478,18 @@ fun MotivationMessageBox(
 ) {
     Box(
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .height(60.dp)
-            .background(BbangZipTheme.color.secondaryStrong_F2EAE4)
-            .clipToBounds(),
+            Modifier
+                .fillMaxWidth()
+                .height(60.dp)
+                .background(BbangZipTheme.color.secondaryStrong_F2EAE4)
+                .clipToBounds(),
     ) {
         Box(
             modifier =
-            Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp, vertical = 14.dp)
-                .align(Alignment.CenterStart),
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 14.dp)
+                    .align(Alignment.CenterStart),
         ) {
             Text(
                 text = motivationMessage,
@@ -501,10 +501,10 @@ fun MotivationMessageBox(
             painter = painterResource(R.drawable.img_smile_bread),
             contentDescription = stringResource(R.string.todo_smile_bread_description),
             modifier =
-            Modifier
-                .align(Alignment.BottomEnd)
-                .padding(end = 19.dp)
-                .offset(y = 13.dp),
+                Modifier
+                    .align(Alignment.BottomEnd)
+                    .padding(end = 19.dp)
+                    .offset(y = 13.dp),
         )
     }
 }
@@ -516,9 +516,9 @@ private fun CompleteTodoCounter(
 ) {
     Row(
         modifier =
-        Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp),
+            Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
         horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically,
     ) {
@@ -560,29 +560,29 @@ private fun MenuPopup(
     ) {
         Box(
             modifier =
-            modifier
-                .dropShadow(
-                    shape = RoundedCornerShape(12.dp),
-                    color = BbangZipTheme.color.staticBlack_121212.copy(0.15f),
-                    blur = 4.dp,
-                    offsetX = 2.dp,
-                ),
+                modifier
+                    .dropShadow(
+                        shape = RoundedCornerShape(12.dp),
+                        color = BbangZipTheme.color.staticBlack_121212.copy(0.15f),
+                        blur = 4.dp,
+                        offsetX = 2.dp,
+                    ),
         ) {
             Box(
                 modifier =
-                Modifier
-                    .clip(RoundedCornerShape(12.dp))
-                    .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
-                    .padding(horizontal = 8.dp, vertical = 4.dp),
+                    Modifier
+                        .clip(RoundedCornerShape(12.dp))
+                        .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
+                        .padding(horizontal = 8.dp, vertical = 4.dp),
             ) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Row(
                         modifier =
-                        Modifier
-                            .padding(horizontal = 8.dp)
-                            .padding(top = 7.dp, bottom = 13.dp),
+                            Modifier
+                                .padding(horizontal = 8.dp)
+                                .padding(top = 7.dp, bottom = 13.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
@@ -605,9 +605,9 @@ private fun MenuPopup(
 
                     Row(
                         modifier =
-                        Modifier
-                            .padding(horizontal = 8.dp)
-                            .padding(top = 13.dp, bottom = 7.dp),
+                            Modifier
+                                .padding(horizontal = 8.dp)
+                                .padding(top = 13.dp, bottom = 7.dp),
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
                         Icon(
@@ -642,34 +642,34 @@ fun TodoScreenPreview() {
                     categoryName = "제과제빵점",
                     categoryColor = "BbangZipTheme.color.todoRed1_EA7152",
                     todos =
-                    listOf(
-                        Todo(
-                            todoId = 11,
-                            content = "두줄 \n 두줄",
-                            isCompleted = true,
-                            startTime = LocalTime.of(11, 0),
+                        listOf(
+                            Todo(
+                                todoId = 11,
+                                content = "두줄 \n 두줄",
+                                isCompleted = true,
+                                startTime = LocalTime.of(11, 0),
+                            ),
+                            Todo(
+                                todoId = 12,
+                                content = "제과제빵점_한줄_실패",
+                                isCompleted = false,
+                                startTime = null,
+                            ),
                         ),
-                        Todo(
-                            todoId = 12,
-                            content = "제과제빵점_한줄_실패",
-                            isCompleted = false,
-                            startTime = null,
-                        ),
-                    ),
                 ),
                 Category(
                     categoryId = 2,
                     categoryName = "경제학개론",
                     categoryColor = "BbangZipTheme.color.todoBlue1_5C62AC",
                     todos =
-                    listOf(
-                        Todo(
-                            todoId = 21,
-                            content = "경제학개론_한줄_완료",
-                            isCompleted = true,
-                            startTime = null,
+                        listOf(
+                            Todo(
+                                todoId = 21,
+                                content = "경제학개론_한줄_완료",
+                                isCompleted = true,
+                                startTime = null,
+                            ),
                         ),
-                    ),
                 ),
             )
 
