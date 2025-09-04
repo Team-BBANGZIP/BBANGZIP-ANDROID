@@ -84,7 +84,7 @@ fun AddTodoBottomSheet(
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
                     Icon(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_timer_default_24),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.ic_clock_default_24),
                         contentDescription = stringResource(id = R.string.add_todo_timer_icon_description),
                         tint = BbangZipTheme.color.labelAlternative_A29D96,
                     )
