@@ -103,10 +103,23 @@ fun TodoScreen(
     totalTodoCount: Int,
     completedTodoCount: Int,
     isMenuOpen: Boolean,
+    isTimePickerBottomSheetVisible: Boolean,
+    isAddTodoBottomSheetVisible: Boolean,
+    isCommitmentBottomSheetVisible: Boolean,
+    todoText: String,
+    selectedCategory: Category?,
+    selectedStartTime: LocalTime?,
     onMenuClick: () -> Unit,
     onListItemMove: (from: Int, to: Int) -> Unit,
     onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit,
-    onTodoAdd: (categoryId: Int, todoContent: String, startTime: LocalTime?) -> Unit,
+    onTodoAdd: (category: Category?, todoContent: String, startTime: LocalTime?) -> Unit,
+    onTimeConfirmButtonClick: (startTime: LocalTime) -> Unit,
+    onTimePickerBottomSheetDismissRequest: () -> Unit,
+    onAddTodoBottomSheetDismissRequest: () -> Unit,
+    onAddTodoBottomSheetShowRequest: () -> Unit,
+    onTimePickerBottomSheetShowRequest: () -> Unit,
+    onCategorySelect: (category: Category) -> Unit,
+    onTodoTextChange: (String) -> Unit,
 ) {
     val localDensity = LocalDensity.current
     val itemSpacingPx = with(localDensity) { ITEM_SPACING.toPx() }
@@ -124,12 +137,7 @@ fun TodoScreen(
     var touchPointInItem by remember { mutableStateOf(Offset.Zero) }
     var touchPointY by remember { mutableFloatStateOf(0f) }
 
-    var isAddTodoBottomSheetVisible by remember { mutableStateOf(false) }
-    var isTimePickerBottomSheetVisible by remember { mutableStateOf(false) }
     val focusManager = LocalFocusManager.current
-    var todoText by remember { mutableStateOf("") }
-    var selectedCategory by remember { mutableStateOf<Category?>(null) }
-    var selectedStartTime by remember { mutableStateOf<LocalTime?>(null) }
 
     Box(
         modifier =
@@ -266,8 +274,8 @@ fun TodoScreen(
                     itemSpacingPx = itemSpacingPx,
                     onTodoCheckBoxClick = onTodoCheckBoxClick,
                     onCategoryClick = { category ->
-                        selectedCategory = category
-                        isAddTodoBottomSheetVisible = true
+                        onCategorySelect(category)
+                        onAddTodoBottomSheetShowRequest()
                     },
                     modifier =
                     Modifier.onGloballyPositioned { coordinates ->
@@ -301,32 +309,24 @@ fun TodoScreen(
         }
         AddTodoBottomSheet(
             isBottomSheetVisible = isAddTodoBottomSheetVisible,
-            onDismissRequest = {
-                isAddTodoBottomSheetVisible = false
-                todoText = ""
-                selectedStartTime = null
-            },
+            onDismissRequest = onAddTodoBottomSheetDismissRequest,
             focusManager = focusManager,
             todo = todoText,
-            onTodoChange = { todoText = it },
-            onSettingTimeClick = { isTimePickerBottomSheetVisible = true },
+            onTodoChange = onTodoTextChange,
+            onSettingTimeClick = onTimePickerBottomSheetShowRequest,
             startTime = selectedStartTime,
             onDoneAction = {
-                if (todoText.isNotBlank() && selectedCategory != null) {
-                    onTodoAdd(selectedCategory!!.categoryId, todoText, selectedStartTime)
-                    isAddTodoBottomSheetVisible = false
-                    todoText = ""
-                    selectedStartTime = null
-                }
+                onTodoAdd(selectedCategory, todoText, selectedStartTime)
+                onAddTodoBottomSheetDismissRequest()
             },
         )
         TimePickerBottomSheet(
             isBottomSheetVisible = isTimePickerBottomSheetVisible,
-            onDismissRequest = { isTimePickerBottomSheetVisible = false },
-            onCancleButtonClick = { isTimePickerBottomSheetVisible = false },
+            onDismissRequest = onTimePickerBottomSheetDismissRequest,
+            onCancleButtonClick = onTimePickerBottomSheetDismissRequest,
             onConfirmButtonClick = { time ->
-                selectedStartTime = time
-                isTimePickerBottomSheetVisible = false
+                onTimeConfirmButtonClick(time)
+                onTimePickerBottomSheetDismissRequest()
             },
             initialTime = selectedStartTime ?:  LocalTime.of(12, 0)
         )
@@ -750,7 +750,21 @@ fun TodoScreenPreview() {
             onTodoCheckBoxClick = { _, _, _ -> },
             onTodoAdd = { categoryId, todoContent, startTime ->
                 Timber.d("Todo Added: CategoryId=$categoryId, Content='$todoContent', StartTime=$startTime")
-            }
+            },
+            modifier = TODO(),
+            isTimePickerBottomSheetVisible = TODO(),
+            isAddTodoBottomSheetVisible = TODO(),
+            isCommitmentBottomSheetVisible = TODO(),
+            todoText = TODO(),
+            selectedCategory = TODO(),
+            selectedStartTime = TODO(),
+            onTimeConfirmButtonClick = TODO(),
+            onTimePickerBottomSheetDismissRequest = TODO(),
+            onAddTodoBottomSheetDismissRequest = TODO(),
+            onAddTodoBottomSheetShowRequest = TODO(),
+            onTimePickerBottomSheetShowRequest = TODO(),
+            onCategorySelect = TODO(),
+            onTodoTextChange = TODO(),
         )
     }
 }

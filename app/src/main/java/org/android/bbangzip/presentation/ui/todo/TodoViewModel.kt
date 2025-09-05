@@ -85,11 +85,40 @@ class TodoViewModel
                 }
 
                 is TodoEvent.OnTodoAdd -> {
-                    onAddTodo(event.categoryId, event.todoContent, event.startTime)
+                    if (event.todoContent.isNotBlank() && event.category != null){
+                        onTodoAdd(event.category.categoryId, event.todoContent, event.startTime)
+                        updateState(TodoReduce.ClearAddTodoState)
+                    }
                 }
 
+                is TodoEvent.OnTimeConfirmButtonClick -> {
+                   updateState(TodoReduce.UpdateSelectedStartTime(event.startTime))
+                }
+
+                TodoEvent.OnTimePickerBottomSheetDismissRequest -> {
+                    updateState(TodoReduce.UpdateIsTimePickerBottomSheetVisible(false))
+                }
+                TodoEvent.OnAddTodoBottomSheetDismissRequest -> {
+                    updateState(TodoReduce.ClearAddTodoState)
+                    updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(false))
+                }
+
+                is TodoEvent.OnCategorySelect -> {
+                    updateState(TodoReduce.UpdateSelectedCategory(event.category))
+                }
+
+                TodoEvent.OnTimePickerBottomSheetShowRequest -> {
+                    updateState(TodoReduce.UpdateIsTimePickerBottomSheetVisible(true))
+                }
+
+                TodoEvent.OnAddTodoBottomSheetShowRequest -> {
+                    updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(true))
+                }
+
+                is TodoEvent.OnTodoTextChange -> {
+                   updateState(TodoReduce.UpdateTodoText(event.todoText))
+                }
                 TodoEvent.OnAddCategoryClick -> TODO()
-                TodoEvent.OnCategoryChipClick -> TODO()
                 TodoEvent.OnCommitmentAreaClick -> TODO()
                 TodoEvent.OnDateChanged -> TODO()
                 TodoEvent.OnManageCategoryClick -> TODO()
@@ -101,12 +130,49 @@ class TodoViewModel
             reduce: TodoReduce,
         ): TodoState {
             return when (reduce) {
-                is UpdateMotivationMessage -> state.copy(motivationMessage = reduce.message)
-                is UpdateCategories -> state.copy(categories = reduce.categories)
-                is UpdateFlatList -> state.copy(flatList = reduce.flatList)
-                is UpdateCategoriesAndFlatList -> state.copy(categories = reduce.categories, flatList = reduce.flatList)
-                is UpdateIsMenuOpen -> state.copy(isMenuOpen = reduce.isMenuOpen)
-                is UpdateSelectedDate -> state.copy(selectedDate = reduce.selectedDate)
+                is UpdateMotivationMessage -> {
+                    state.copy(motivationMessage = reduce.message)
+                }
+                is UpdateCategories -> {
+                    state.copy(categories = reduce.categories)
+                }
+                is UpdateFlatList -> {
+                    state.copy(flatList = reduce.flatList)
+                }
+                is UpdateCategoriesAndFlatList -> {
+                    state.copy(categories = reduce.categories, flatList = reduce.flatList)
+                }
+                is UpdateIsMenuOpen -> {
+                    state.copy(isMenuOpen = reduce.isMenuOpen)
+                }
+                is UpdateSelectedDate -> {
+                    state.copy(selectedDate = reduce.selectedDate)
+                }
+                is TodoReduce.UpdateIsAddTodoBottomSheetVisible -> {
+                    state.copy(isAddTodoBottomSheetVisible = reduce.isVisible)
+                }
+                is TodoReduce.UpdateIsCommitmentBottomSheetVisible -> {
+                    state.copy(isCommitmentBottomSheetVisible = reduce.isVisible)
+                }
+                is TodoReduce.UpdateIsTimePickerBottomSheetVisible -> {
+                    state.copy(isTimePickerBottomSheetVisible = reduce.isVisible)
+                }
+                is TodoReduce.UpdateSelectedCategory -> {
+                    state.copy(selectedCategory = reduce.category)
+                }
+                is TodoReduce.UpdateSelectedStartTime -> {
+                    state.copy(selectedStartTime = reduce.startTime)
+                }
+                is TodoReduce.UpdateTodoText -> {
+                    state.copy(todoText = reduce.todoText)
+                }
+                TodoReduce.ClearAddTodoState -> {
+                    state.copy(
+                        todoText = "",
+                        selectedCategory = null,
+                        selectedStartTime = null,
+                    )
+                }
             }
         }
 
@@ -356,7 +422,7 @@ class TodoViewModel
             )
                 }
 
-        fun onAddTodo(categoryId: Int, todoContent: String, startTime: LocalTime?) {
+        fun onTodoAdd(categoryId: Int, todoContent: String, startTime: LocalTime?) {
             val newTodoId = (currentUiState.categories.flatMap { it.todos }.maxOfOrNull { it.todoId } ?: 0) + 1
             val newTodo = Todo(
                 todoId = newTodoId,

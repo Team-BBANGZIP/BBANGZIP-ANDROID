@@ -21,6 +21,12 @@ fun TodoRoute(
         totalTodoCount = uiState.totalTodoCount,
         completedTodoCount = uiState.completedTodoCount,
         isMenuOpen = uiState.isMenuOpen,
+        isAddTodoBottomSheetVisible = uiState.isAddTodoBottomSheetVisible,
+        isCommitmentBottomSheetVisible = uiState.isCommitmentBottomSheetVisible,
+        isTimePickerBottomSheetVisible = uiState.isTimePickerBottomSheetVisible,
+        todoText = uiState.todoText,
+        selectedCategory = uiState.selectedCategory,
+        selectedStartTime = uiState.selectedStartTime,
         onListItemMove = { fromIndex, toIndex ->
             viewModel.setEvent(TodoEvent.OnListItemMove(fromIndex, toIndex))
         },
@@ -30,8 +36,29 @@ fun TodoRoute(
         onMenuClick = {
             viewModel.setEvent(TodoEvent.OnMenuClick)
         },
-        onTodoAdd = { categoryId, todo, todoDate ->
-            viewModel.setEvent(TodoEvent.OnTodoAdd(categoryId, todo, todoDate))
-        }
+        onTodoAdd = { category, todo, todoDate ->
+            viewModel.setEvent(TodoEvent.OnTodoAdd(category, todo, todoDate))
+        },
+        onTimeConfirmButtonClick = { startTime ->
+            viewModel.setEvent(TodoEvent.OnTimeConfirmButtonClick(startTime))
+        },
+        onTimePickerBottomSheetDismissRequest = {
+            viewModel.setEvent(TodoEvent.OnTimePickerBottomSheetDismissRequest)
+        },
+        onAddTodoBottomSheetDismissRequest = {
+            viewModel.setEvent(TodoEvent.OnAddTodoBottomSheetDismissRequest)
+        },
+        onAddTodoBottomSheetShowRequest = {
+            viewModel.setEvent(TodoEvent.OnAddTodoBottomSheetShowRequest)
+        },
+        onTimePickerBottomSheetShowRequest = {
+            viewModel.setEvent(TodoEvent.OnTimePickerBottomSheetShowRequest)
+        },
+        onCategorySelect = { category ->
+            viewModel.setEvent(TodoEvent.OnCategorySelect(category))
+        },
+        onTodoTextChange = { todoText ->
+            viewModel.setEvent(TodoEvent.OnTodoTextChange(todoText))
+        },
     )
 }
