@@ -15,7 +15,6 @@ import org.android.bbangzip.presentation.type.BottomNavigationType
 import org.android.bbangzip.presentation.ui.friend.navigation.navigateToFriend
 import org.android.bbangzip.presentation.ui.my.navigation.navigateToMy
 import org.android.bbangzip.presentation.ui.timer.navigation.navigateToTimer
-import org.android.bbangzip.presentation.ui.timer.todo.navigation.TimerTodo
 import org.android.bbangzip.presentation.ui.timer.todo.navigation.navigateTimerTodo
 import org.android.bbangzip.presentation.ui.todo.navigation.navigateToTodo
 import timber.log.Timber
@@ -55,26 +54,40 @@ class MainNavigator(
         }
     }
 
-     fun navigateToFriend(navOptions: NavOptions) {
+    private fun navigateToFriend(navOptions: NavOptions) {
         navHostController.navigateToFriend(navOptions)
     }
 
-     fun navigateToMy(navOptions: NavOptions) {
+    private fun navigateToMy(navOptions: NavOptions) {
         navHostController.navigateToMy(navOptions)
     }
 
-     fun navigateToTimer(navOptions: NavOptions) {
+    private fun navigateToTimer(navOptions: NavOptions) {
         navHostController.navigateToTimer(navOptions)
     }
 
-     fun navigateToTodo(navOptions: NavOptions) {
+    private fun navigateToTodo(navOptions: NavOptions) {
         navHostController.navigateToTodo(navOptions)
     }
 
-    fun navigateToTimerTodo(navOptions: NavOptions) {
-        navHostController.navigateTimerTodo(navOptions)
+    fun navigateToTimerWithRestart() {
+        navHostController.navigateToTimer(
+            navOptions = navOptions {
+                popUpTo(BottomNavigationRoute.Timer) {
+                    saveState = false
+                    inclusive = true
+                }
+                launchSingleTop = true
+                restoreState = false
+            },
+        )
     }
-     fun popBackStack() {
+
+    fun navigateToTimerTodo() {
+        navHostController.navigateTimerTodo()
+    }
+
+    fun popBackStack() {
         navHostController.popBackStack()
     }
 
