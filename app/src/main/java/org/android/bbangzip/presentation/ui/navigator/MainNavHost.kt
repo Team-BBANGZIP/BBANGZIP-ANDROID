@@ -25,7 +25,9 @@ fun MainNavHost(
             sharedViewModel = sharedViewModel,
         )
 
-        todoNavGraph()
+        todoNavGraph(
+            padding = padding
+        )
 
         myNavGraph()
 

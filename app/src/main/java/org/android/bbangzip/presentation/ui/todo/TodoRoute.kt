@@ -1,5 +1,7 @@
 package org.android.bbangzip.presentation.ui.todo
 
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -9,13 +11,14 @@ import org.android.bbangzip.presentation.ui.todo.TodoContract.*
 
 @Composable
 fun TodoRoute(
+    padding: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: TodoViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     TodoScreen(
-        modifier = modifier,
+        modifier = modifier.padding(bottom = padding.calculateBottomPadding()),
         flatList = uiState.flatList,
         motivationMessage = uiState.motivationMessage,
         totalTodoCount = uiState.totalTodoCount,
