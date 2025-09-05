@@ -22,7 +22,7 @@ class TimerTodoContract {
     sealed interface TimerTodoEvent : BaseContract.Event {
         data object Initialize : TimerTodoEvent
 
-        data object OnMenuClick : TimerTodoEvent
+        data object OnAddTodoIconClick : TimerTodoEvent
 
         data class OnTodoCheckBoxClick(val todoId: Int, val categoryId: Int, val isChecked: Boolean) : TimerTodoEvent
 
@@ -35,7 +35,9 @@ class TimerTodoContract {
 
     sealed interface TimerTodoReduce : BaseContract.Reduce {
         data class UpdateFlatList(val flatList: List<ListItem>) : TimerTodoReduce
-        data class UpdateCategories(val categories: List<Category>, val flatList: List<ListItem>) : TimerTodoReduce
+        data class UpdateCategoriesAndFlatList(val categories: List<Category>, val flatList: List<ListItem>) : TimerTodoReduce
+        data class UpdateAddTodoBottomSheetState(val isAddTodoBottomSheetVisible: Boolean) : TimerTodoReduce
+        data class UpdateTimePickerBottomSheetState(val isTimePickerBottomSheetVisible: Boolean) : TimerTodoReduce
     }
 
     sealed interface TimerTodoSideEffect : BaseContract.SideEffect {
