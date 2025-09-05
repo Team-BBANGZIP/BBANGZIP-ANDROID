@@ -37,11 +37,12 @@ import java.time.LocalTime
 fun TimePickerBottomSheet(
     isBottomSheetVisible: Boolean,
     onDismissRequest: () -> Unit,
-    onTimeSelected: (LocalTime) -> Unit,
     onCancleButtonClick: () -> Unit,
-    onConfirmButtonClick: () -> Unit,
-    initialTime: LocalTime = LocalTime.of(12,0),
-){
+    onConfirmButtonClick: (LocalTime) -> Unit,
+    initialTime: LocalTime,
+) {
+    var selectedTime by remember(initialTime) { mutableStateOf(initialTime) }
+
     BbangZipBottomSheetSlot(
         isBottomSheetVisible = isBottomSheetVisible,
         onDismissRequest = onDismissRequest,
@@ -57,7 +58,9 @@ fun TimePickerBottomSheet(
 
             BbangZipTimePicker(
                 initialTime = initialTime,
-                onTimeSelected = onTimeSelected,
+                onTimeSelected = { time ->
+                    selectedTime = time
+                },
             )
 
             Gap(height = 48.dp)
@@ -88,7 +91,7 @@ fun TimePickerBottomSheet(
 
                 BbangzipBaseButton(
                     modifier = Modifier.weight(1f),
-                    onClick = onConfirmButtonClick,
+                    onClick = { onConfirmButtonClick(selectedTime) },
                     trailingIcon = {
                         Icon(
                             painter = painterResource(R.drawable.ic_check_default_24),
@@ -97,9 +100,9 @@ fun TimePickerBottomSheet(
                         )
                     },
                     colors =
-                        BbangZipButtonDefaults.colors(
-                            enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
-                        ),
+                    BbangZipButtonDefaults.colors(
+                        enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
+                    ),
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_setting),
@@ -108,26 +111,28 @@ fun TimePickerBottomSheet(
                     },
                 )
             }
-        }
+        },
     )
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun TimePickerBottomSheetPreview(){
+fun TimePickerBottomSheetPreview() {
     var isBottomSheetVisible by remember { mutableStateOf(false) }
 
     BBANGZIPANDROIDTheme {
         Column(
-            modifier = Modifier.fillMaxSize().systemBarsPadding()
+            modifier = Modifier
+                .fillMaxSize()
+                .systemBarsPadding(),
         ) {
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 colors =
-                    ButtonDefaults.buttonColors(
-                        containerColor = Color.Black,
-                        contentColor = Color.Blue,
-                    ),
+                ButtonDefaults.buttonColors(
+                    containerColor = Color.Black,
+                    contentColor = Color.Blue,
+                ),
                 onClick = { isBottomSheetVisible = !isBottomSheetVisible },
             ) {
                 Text("바텀시트 띄우기")
@@ -136,9 +141,9 @@ fun TimePickerBottomSheetPreview(){
             TimePickerBottomSheet(
                 isBottomSheetVisible = isBottomSheetVisible,
                 onDismissRequest = { isBottomSheetVisible = !isBottomSheetVisible },
-                onTimeSelected = {},
                 onCancleButtonClick = {},
                 onConfirmButtonClick = {},
+                initialTime = LocalTime.now(),
             )
         }
     }

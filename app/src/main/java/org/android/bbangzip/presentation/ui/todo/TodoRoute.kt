@@ -30,5 +30,8 @@ fun TodoRoute(
         onMenuClick = {
             viewModel.setEvent(TodoEvent.OnMenuClick)
         },
+        onTodoAdd = { categoryId, todo, todoDate ->
+            viewModel.setEvent(TodoEvent.OnTodoAdd(categoryId, todo, todoDate))
+        }
     )
 }

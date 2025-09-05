@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -25,6 +27,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
@@ -35,6 +38,7 @@ import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
+import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,6 +49,7 @@ fun AddTodoBottomSheet(
     todo: String,
     onTodoChange: (String) -> Unit,
     onSettingTimeClick: () -> Unit,
+    onDoneAction: () -> Unit,
     modifier: Modifier = Modifier,
     startTime: LocalTime? = null,
 ) {
@@ -70,6 +75,7 @@ fun AddTodoBottomSheet(
                     onValueChange = onTodoChange,
                     focusManager = focusManager,
                     placeholder = R.string.add_todo_placeholder,
+                    onEnterClick = onDoneAction
                 )
 
                 Gap(16.dp)
@@ -99,7 +105,10 @@ fun AddTodoBottomSheet(
 
                     Gap()
 
-                    TimeSettingButton(onSettingTimeClick)
+                    TimeSettingButton(
+                        onSettingTimeClick = onSettingTimeClick,
+                        startTime = startTime
+                    )
                 }
             }
         },
@@ -107,13 +116,20 @@ fun AddTodoBottomSheet(
 }
 
 @Composable
-private fun TimeSettingButton(onSettingTimeClick: () -> Unit) {
+private fun TimeSettingButton(
+    onSettingTimeClick: () -> Unit,
+    startTime: LocalTime?,
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier.noRippleClickable(onClick = onSettingTimeClick),
     ) {
         Text(
-            text = stringResource(id = R.string.add_todo_start_time_not_set),
+            text = if (startTime != null) {
+                startTime.format(DateTimeFormatter.ofPattern("a hh:mm"))
+            } else {
+                stringResource(id = R.string.add_todo_start_time_not_set)
+            },
             color = BbangZipTheme.color.labelAlternative_A29D96,
             style = BbangZipTheme.typography.body1Medium,
         )
@@ -141,17 +157,17 @@ fun AddTodoBottomSheetPreview() {
     BBANGZIPANDROIDTheme {
         Column(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .systemBarsPadding(),
+            Modifier
+                .fillMaxSize()
+                .systemBarsPadding(),
         ) {
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 colors =
-                    ButtonDefaults.buttonColors(
-                        containerColor = Color.Black,
-                        contentColor = Color.Blue,
-                    ),
+                ButtonDefaults.buttonColors(
+                    containerColor = Color.Black,
+                    contentColor = Color.Blue,
+                ),
                 onClick = { isBottomSheetVisible = !isBottomSheetVisible },
             ) {
                 Text("바텀시트 띄우기")
@@ -164,6 +180,7 @@ fun AddTodoBottomSheetPreview() {
             todo = text,
             onTodoChange = { text = it },
             onSettingTimeClick = { isBottomSheetVisible = !isBottomSheetVisible },
+            onDoneAction = {},
         )
     }
 }

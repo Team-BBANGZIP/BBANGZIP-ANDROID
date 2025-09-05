@@ -84,6 +84,10 @@ class TodoViewModel
                     updateState(UpdateIsMenuOpen(isMenuOpen = !currentUiState.isMenuOpen))
                 }
 
+                is TodoEvent.OnTodoAdd -> {
+                    onAddTodo(event.categoryId, event.todoContent, event.startTime)
+                }
+
                 TodoEvent.OnAddCategoryClick -> TODO()
                 TodoEvent.OnCategoryChipClick -> TODO()
                 TodoEvent.OnCommitmentAreaClick -> TODO()
@@ -350,5 +354,24 @@ class TodoViewModel
                         ),
                 ),
             )
+                }
+
+        fun onAddTodo(categoryId: Int, todoContent: String, startTime: LocalTime?) {
+            val newTodoId = (currentUiState.categories.flatMap { it.todos }.maxOfOrNull { it.todoId } ?: 0) + 1
+            val newTodo = Todo(
+                todoId = newTodoId,
+                content = todoContent,
+                isCompleted = false,
+                startTime = startTime
+            )
+
+            val updatedCategories = currentUiState.categories.map { category ->
+                if (category.categoryId == categoryId) {
+                    category.copy(todos = category.todos + newTodo)
+                } else {
+                    category
+                }
+            }
+            updateCategoriesAndFlatList(updatedCategories)
         }
     }

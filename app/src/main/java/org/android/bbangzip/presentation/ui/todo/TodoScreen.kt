@@ -51,6 +51,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -71,10 +72,13 @@ import org.android.bbangzip.presentation.model.Category
 import org.android.bbangzip.presentation.model.ListItem
 import org.android.bbangzip.presentation.model.Todo
 import org.android.bbangzip.presentation.type.CategoryColor
+import org.android.bbangzip.presentation.ui.todo.bottomsheet.AddTodoBottomSheet
+import org.android.bbangzip.presentation.ui.todo.bottomsheet.TimePickerBottomSheet
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.dropShadow
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
+import timber.log.Timber
 import java.time.LocalTime
 
 private const val LIST_HEADER_COUNT = 1
@@ -102,6 +106,7 @@ fun TodoScreen(
     onMenuClick: () -> Unit,
     onListItemMove: (from: Int, to: Int) -> Unit,
     onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit,
+    onTodoAdd: (categoryId: Int, todoContent: String, startTime: LocalTime?) -> Unit,
 ) {
     val localDensity = LocalDensity.current
     val itemSpacingPx = with(localDensity) { ITEM_SPACING.toPx() }
@@ -119,114 +124,121 @@ fun TodoScreen(
     var touchPointInItem by remember { mutableStateOf(Offset.Zero) }
     var touchPointY by remember { mutableFloatStateOf(0f) }
 
+    var isAddTodoBottomSheetVisible by remember { mutableStateOf(false) }
+    var isTimePickerBottomSheetVisible by remember { mutableStateOf(false) }
+    val focusManager = LocalFocusManager.current
+    var todoText by remember { mutableStateOf("") }
+    var selectedCategory by remember { mutableStateOf<Category?>(null) }
+    var selectedStartTime by remember { mutableStateOf<LocalTime?>(null) }
+
     Box(
         modifier =
-            modifier
-                .fillMaxSize()
-                .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
-                .systemBarsPadding(),
+        modifier
+            .fillMaxSize()
+            .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
+            .systemBarsPadding(),
     ) {
         LazyColumn(
             modifier =
-                Modifier
-                    .fillMaxSize()
-                    .onGloballyPositioned { coordinates ->
-                        columnHeight = coordinates.size.height
-                    }
-                    .pointerInput(flatList) {
-                        awaitEachGesture {
-                            val down = awaitFirstDown(requireUnconsumed = false)
-                            val longPress = awaitLongPressOrCancellation(down.id)
+            Modifier
+                .fillMaxSize()
+                .onGloballyPositioned { coordinates ->
+                    columnHeight = coordinates.size.height
+                }
+                .pointerInput(flatList) {
+                    awaitEachGesture {
+                        val down = awaitFirstDown(requireUnconsumed = false)
+                        val longPress = awaitLongPressOrCancellation(down.id)
 
-                            if (longPress != null) {
-                                val pressedLazyColumnItem =
-                                    lazyListState.layoutInfo.visibleItemsInfo
-                                        .firstOrNull {
-                                            val itemTopY = it.offset
-                                            val itemBottomY = it.offset + it.size
-                                            down.position.y >= itemTopY && down.position.y <= itemBottomY
-                                        } ?: return@awaitEachGesture
-                                val pressedLazyColumnIndex = pressedLazyColumnItem.index
-                                val pressedFlatListIndex = pressedLazyColumnIndex - LIST_HEADER_COUNT
-                                val pressedFlatListItem = flatList.getOrNull(pressedFlatListIndex)
+                        if (longPress != null) {
+                            val pressedLazyColumnItem =
+                                lazyListState.layoutInfo.visibleItemsInfo
+                                    .firstOrNull {
+                                        val itemTopY = it.offset
+                                        val itemBottomY = it.offset + it.size
+                                        down.position.y >= itemTopY && down.position.y <= itemBottomY
+                                    } ?: return@awaitEachGesture
+                            val pressedLazyColumnIndex = pressedLazyColumnItem.index
+                            val pressedFlatListIndex = pressedLazyColumnIndex - LIST_HEADER_COUNT
+                            val pressedFlatListItem = flatList.getOrNull(pressedFlatListIndex)
 
-                                if (pressedLazyColumnIndex < LIST_HEADER_COUNT || pressedFlatListItem !is ListItem.TodoItem) return@awaitEachGesture
+                            if (pressedLazyColumnIndex < LIST_HEADER_COUNT || pressedFlatListItem !is ListItem.TodoItem) return@awaitEachGesture
 
-                                targetIndex = pressedFlatListIndex
-                                draggingItem = pressedFlatListItem
+                            targetIndex = pressedFlatListIndex
+                            draggingItem = pressedFlatListItem
 
-                                // 아이템 자체에서 클릭한 포인트
-                                fakeOffset = Offset(0f, pressedLazyColumnItem.offset.toFloat())
-                                touchPointInItem = down.position - fakeOffset
+                            // 아이템 자체에서 클릭한 포인트
+                            fakeOffset = Offset(0f, pressedLazyColumnItem.offset.toFloat())
+                            touchPointInItem = down.position - fakeOffset
 
-                                try {
-                                    drag(pointerId = longPress.id) { change ->
-                                        change.consume()
-                                        fakeOffset +=
-                                            Offset(
-                                                x = change.position.x - change.previousPosition.x,
-                                                y = change.position.y - change.previousPosition.y,
-                                            )
+                            try {
+                                drag(pointerId = longPress.id) { change ->
+                                    change.consume()
+                                    fakeOffset +=
+                                        Offset(
+                                            x = change.position.x - change.previousPosition.x,
+                                            y = change.position.y - change.previousPosition.y,
+                                        )
 
-                                        targetIndex =
-                                            updateTargetIndex(
-                                                lazyListState = lazyListState,
-                                                flatList = flatList,
-                                                touchPointY = touchPointY,
-                                                currentTargetIndex = targetIndex,
-                                            )
+                                    targetIndex =
+                                        updateTargetIndex(
+                                            lazyListState = lazyListState,
+                                            flatList = flatList,
+                                            touchPointY = touchPointY,
+                                            currentTargetIndex = targetIndex,
+                                        )
 
-                                        touchPointY = fakeOffset.y + touchPointInItem.y
+                                    touchPointY = fakeOffset.y + touchPointInItem.y
 
-                                        val scrollDirection =
-                                            when {
-                                                fakeOffset.y < scrollThreshold -> AutoScrollDirection.UP
-                                                touchPointY > columnHeight - scrollThreshold -> AutoScrollDirection.DOWN
-                                                else -> AutoScrollDirection.NONE
-                                            }
+                                    val scrollDirection =
+                                        when {
+                                            fakeOffset.y < scrollThreshold -> AutoScrollDirection.UP
+                                            touchPointY > columnHeight - scrollThreshold -> AutoScrollDirection.DOWN
+                                            else -> AutoScrollDirection.NONE
+                                        }
 
-                                        if (scrollDirection != AutoScrollDirection.NONE) {
-                                            if (autoScrollJob?.isActive != true) {
-                                                autoScrollJob =
-                                                    coroutineScope.launch {
-                                                        while (isActive) {
-                                                            val speed =
-                                                                calculateScrollSpeed(
-                                                                    direction = scrollDirection,
-                                                                    touchPointY = touchPointY,
-                                                                    columnHeight = columnHeight,
-                                                                    scrollThreshold = scrollThreshold,
-                                                                )
-                                                            lazyListState.scrollBy(speed)
-                                                            targetIndex =
-                                                                updateTargetIndex(
-                                                                    lazyListState = lazyListState,
-                                                                    flatList = flatList,
-                                                                    touchPointY = touchPointY,
-                                                                    currentTargetIndex = targetIndex,
-                                                                )
-                                                            delay(AUTO_SCROLL_DELAY)
-                                                        }
+                                    if (scrollDirection != AutoScrollDirection.NONE) {
+                                        if (autoScrollJob?.isActive != true) {
+                                            autoScrollJob =
+                                                coroutineScope.launch {
+                                                    while (isActive) {
+                                                        val speed =
+                                                            calculateScrollSpeed(
+                                                                direction = scrollDirection,
+                                                                touchPointY = touchPointY,
+                                                                columnHeight = columnHeight,
+                                                                scrollThreshold = scrollThreshold,
+                                                            )
+                                                        lazyListState.scrollBy(speed)
+                                                        targetIndex =
+                                                            updateTargetIndex(
+                                                                lazyListState = lazyListState,
+                                                                flatList = flatList,
+                                                                touchPointY = touchPointY,
+                                                                currentTargetIndex = targetIndex,
+                                                            )
+                                                        delay(AUTO_SCROLL_DELAY)
                                                     }
-                                            }
-                                        } else {
-                                            autoScrollJob?.cancel()
+                                                }
                                         }
+                                    } else {
+                                        autoScrollJob?.cancel()
                                     }
-                                } finally {
-                                    autoScrollJob?.cancel()
-                                    targetIndex?.let {
-                                        if (pressedFlatListIndex != -1 && pressedFlatListIndex != it && it in flatList.indices) {
-                                            onListItemMove(pressedFlatListIndex, it)
-                                        }
-                                    }
-
-                                    draggingItem = null
-                                    targetIndex = null
                                 }
+                            } finally {
+                                autoScrollJob?.cancel()
+                                targetIndex?.let {
+                                    if (pressedFlatListIndex != -1 && pressedFlatListIndex != it && it in flatList.indices) {
+                                        onListItemMove(pressedFlatListIndex, it)
+                                    }
+                                }
+
+                                draggingItem = null
+                                targetIndex = null
                             }
                         }
-                    },
+                    }
+                },
             state = lazyListState,
             verticalArrangement = Arrangement.spacedBy(ITEM_SPACING),
         ) {
@@ -253,10 +265,14 @@ fun TodoScreen(
                     itemBounds = itemBounds,
                     itemSpacingPx = itemSpacingPx,
                     onTodoCheckBoxClick = onTodoCheckBoxClick,
+                    onCategoryClick = { category ->
+                        selectedCategory = category
+                        isAddTodoBottomSheetVisible = true
+                    },
                     modifier =
-                        Modifier.onGloballyPositioned { coordinates ->
-                            itemBounds[item.id] = coordinates.boundsInParent()
-                        },
+                    Modifier.onGloballyPositioned { coordinates ->
+                        itemBounds[item.id] = coordinates.boundsInParent()
+                    },
                 )
             }
         }
@@ -265,13 +281,13 @@ fun TodoScreen(
             val itemRect = itemBounds[item.id]
             Box(
                 modifier =
-                    Modifier
-                        .offset(
-                            x = with(localDensity) { fakeOffset.x.toDp() + 20.dp },
-                            y = with(localDensity) { fakeOffset.y.toDp() },
-                        )
-                        .width(with(localDensity) { itemRect?.width?.toDp() } ?: Dp.Unspecified)
-                        .background(BbangZipTheme.color.componentStrong_F6F6F5),
+                Modifier
+                    .offset(
+                        x = with(localDensity) { fakeOffset.x.toDp() + 20.dp },
+                        y = with(localDensity) { fakeOffset.y.toDp() },
+                    )
+                    .width(with(localDensity) { itemRect?.width?.toDp() } ?: Dp.Unspecified)
+                    .background(BbangZipTheme.color.componentStrong_F6F6F5),
             ) {
                 BbangZipTaskBox(
                     task = item.todo.content,
@@ -283,6 +299,37 @@ fun TodoScreen(
                 )
             }
         }
+        AddTodoBottomSheet(
+            isBottomSheetVisible = isAddTodoBottomSheetVisible,
+            onDismissRequest = {
+                isAddTodoBottomSheetVisible = false
+                todoText = ""
+                selectedStartTime = null
+            },
+            focusManager = focusManager,
+            todo = todoText,
+            onTodoChange = { todoText = it },
+            onSettingTimeClick = { isTimePickerBottomSheetVisible = true },
+            startTime = selectedStartTime,
+            onDoneAction = {
+                if (todoText.isNotBlank() && selectedCategory != null) {
+                    onTodoAdd(selectedCategory!!.categoryId, todoText, selectedStartTime)
+                    isAddTodoBottomSheetVisible = false
+                    todoText = ""
+                    selectedStartTime = null
+                }
+            },
+        )
+        TimePickerBottomSheet(
+            isBottomSheetVisible = isTimePickerBottomSheetVisible,
+            onDismissRequest = { isTimePickerBottomSheetVisible = false },
+            onCancleButtonClick = { isTimePickerBottomSheetVisible = false },
+            onConfirmButtonClick = { time ->
+                selectedStartTime = time
+                isTimePickerBottomSheetVisible = false
+            },
+            initialTime = selectedStartTime ?:  LocalTime.of(12, 0)
+        )
     }
 }
 
@@ -376,6 +423,7 @@ private fun DraggableListItem(
     itemBounds: Map<String, Rect>,
     itemSpacingPx: Float,
     onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit,
+    onCategoryClick: (Category) -> Unit,
 ) {
     val currentDraggingItemIndex =
         remember(draggingItemId, flatList) {
@@ -422,6 +470,7 @@ private fun DraggableListItem(
                     BbangZipCategoryChip(
                         categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
                         categoryName = item.category.categoryName,
+                        onClick = { onCategoryClick(item.category) },
                     )
                 }
             }
@@ -457,7 +506,9 @@ private fun ListHeader(
             BbangZipWeeklyCalendar(onMenuClick = onMenuClick)
             if (isMenuOpen) {
                 MenuPopup(
-                    modifier = Modifier.offset(x = (-20).dp, y = 9.dp).fillMaxWidth(1 / 3f),
+                    modifier = Modifier
+                        .offset(x = (-20).dp, y = 9.dp)
+                        .fillMaxWidth(1 / 3f),
                     onDismissRequest = onMenuClick,
                 )
             }
@@ -645,7 +696,7 @@ fun TodoScreenPreview() {
                         listOf(
                             Todo(
                                 todoId = 11,
-                                content = "두줄 \n 두줄",
+                                content = "두줄 두줄",
                                 isCompleted = true,
                                 startTime = LocalTime.of(11, 0),
                             ),
@@ -677,7 +728,8 @@ fun TodoScreenPreview() {
             exampleCategories.flatMap { category ->
                 val categoryItem = ListItem.CategoryItem(category)
                 val todoItems =
-                    category.todos.mapIndexed { index, todo ->
+                    category.todos.mapIndexed {
+                        index, todo ->
                         ListItem.TodoItem(
                             todo = todo,
                             category = category,
@@ -696,6 +748,9 @@ fun TodoScreenPreview() {
             onMenuClick = { },
             onListItemMove = { _, _ -> },
             onTodoCheckBoxClick = { _, _, _ -> },
+            onTodoAdd = { categoryId, todoContent, startTime ->
+                Timber.d("Todo Added: CategoryId=$categoryId, Content='$todoContent', StartTime=$startTime")
+            }
         )
     }
 }

@@ -6,6 +6,7 @@ import org.android.bbangzip.presentation.model.Category
 import org.android.bbangzip.presentation.model.ListItem
 import org.android.bbangzip.presentation.util.base.BaseContract
 import java.time.LocalDate
+import java.time.LocalTime
 
 class TodoContract {
     @Parcelize
@@ -46,6 +47,8 @@ class TodoContract {
         data object OnManageCategoryClick : TodoEvent
 
         data class OnListItemMove(val from: Int, val to: Int) : TodoEvent
+
+        data class OnTodoAdd(val categoryId: Int, val todoContent: String, val startTime: LocalTime?) : TodoEvent
     }
 
     sealed interface TodoReduce : BaseContract.Reduce {
