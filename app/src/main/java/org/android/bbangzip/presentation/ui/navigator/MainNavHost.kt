@@ -29,6 +29,7 @@ fun MainNavHost(
 
         timerTodoNavGraph(
             navigateToTimer = navigator::navigateToTimerWithRestart,
+            navigateToBack = navigator::popBackStack
         )
 
         todoNavGraph()
