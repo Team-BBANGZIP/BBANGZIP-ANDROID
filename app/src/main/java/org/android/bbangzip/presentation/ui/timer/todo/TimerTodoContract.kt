@@ -35,6 +35,7 @@ class TimerTodoContract {
 
     sealed interface TimerTodoReduce : BaseContract.Reduce {
         data class UpdateFlatList(val flatList: List<ListItem>) : TimerTodoReduce
+        data class UpdateCategories(val categories: List<Category>, val flatList: List<ListItem>) : TimerTodoReduce
     }
 
     sealed interface TimerTodoSideEffect : BaseContract.SideEffect {
