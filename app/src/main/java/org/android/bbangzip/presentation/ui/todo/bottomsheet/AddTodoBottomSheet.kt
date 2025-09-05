@@ -99,29 +99,34 @@ fun AddTodoBottomSheet(
 
                     Gap()
 
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier.noRippleClickable(onClick = onSettingTimeClick),
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.add_todo_start_time_not_set),
-                            color = BbangZipTheme.color.labelAlternative_A29D96,
-                            style = BbangZipTheme.typography.body1Medium,
-                        )
-
-                        Gap(8.dp)
-
-                        Icon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right_24),
-                            contentDescription = stringResource(id = R.string.add_todo_arrow_icon_description),
-                            tint = BbangZipTheme.color.labelAlternative_A29D96,
-                            modifier = Modifier.size(20.dp),
-                        )
-                    }
+                    TimeSettingButton(onSettingTimeClick)
                 }
             }
         },
     )
+}
+
+@Composable
+private fun TimeSettingButton(onSettingTimeClick: () -> Unit) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.noRippleClickable(onClick = onSettingTimeClick),
+    ) {
+        Text(
+            text = stringResource(id = R.string.add_todo_start_time_not_set),
+            color = BbangZipTheme.color.labelAlternative_A29D96,
+            style = BbangZipTheme.typography.body1Medium,
+        )
+
+        Gap(8.dp)
+
+        Icon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right_24),
+            contentDescription = stringResource(id = R.string.add_todo_arrow_icon_description),
+            tint = BbangZipTheme.color.labelAlternative_A29D96,
+            modifier = Modifier.size(20.dp),
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
