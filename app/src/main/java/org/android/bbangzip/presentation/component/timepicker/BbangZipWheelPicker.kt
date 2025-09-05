@@ -19,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -54,6 +55,7 @@ fun BbangZipWheelPicker(
     initialIndex: Int = DEFAULT_INITIAL_INDEX,
     itemHeight: Dp = BbangZipWheelPickerDefaults.DefaultItemHeight,
     alignment: Alignment.Horizontal = Alignment.CenterHorizontally,
+    indicatorShape: Shape = BbangZipWheelPickerDefaults.IndicatorShape
 ) {
     val visibleItemsCount =
         remember(paddingItemsCount) {
@@ -102,7 +104,10 @@ fun BbangZipWheelPicker(
                 .fillMaxWidth(),
         contentAlignment = Alignment.Center,
     ) {
-        Indicator(backgroundColor = colors.indicatorBackgroundColor)
+        Indicator(
+            backgroundColor = colors.indicatorBackgroundColor,
+            indicatorShape = indicatorShape,
+            )
 
         LazyColumn(
             state = listState,
@@ -157,13 +162,14 @@ private fun calculateCenterOffset(
 private fun Indicator(
     backgroundColor: Color,
     modifier: Modifier = Modifier,
+    indicatorShape: Shape = BbangZipWheelPickerDefaults.IndicatorShape
 ) {
     Box(
         modifier =
             modifier
                 .height(height = BbangZipWheelPickerDefaults.IndicatorHeight)
                 .fillMaxWidth()
-                .clip(shape = BbangZipWheelPickerDefaults.IndicatorShape)
+                .clip(shape = indicatorShape)
                 .background(color = backgroundColor),
     )
 }
