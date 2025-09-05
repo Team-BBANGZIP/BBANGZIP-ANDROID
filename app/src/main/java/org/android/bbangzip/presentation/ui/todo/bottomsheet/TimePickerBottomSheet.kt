@@ -100,9 +100,9 @@ fun TimePickerBottomSheet(
                         )
                     },
                     colors =
-                    BbangZipButtonDefaults.colors(
-                        enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
-                    ),
+                        BbangZipButtonDefaults.colors(
+                            enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
+                        ),
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_setting),
@@ -122,17 +122,18 @@ fun TimePickerBottomSheetPreview() {
 
     BBANGZIPANDROIDTheme {
         Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .systemBarsPadding(),
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .systemBarsPadding(),
         ) {
             Button(
                 modifier = Modifier.fillMaxWidth(),
                 colors =
-                ButtonDefaults.buttonColors(
-                    containerColor = Color.Black,
-                    contentColor = Color.Blue,
-                ),
+                    ButtonDefaults.buttonColors(
+                        containerColor = Color.Black,
+                        contentColor = Color.Blue,
+                    ),
                 onClick = { isBottomSheetVisible = !isBottomSheetVisible },
             ) {
                 Text("바텀시트 띄우기")

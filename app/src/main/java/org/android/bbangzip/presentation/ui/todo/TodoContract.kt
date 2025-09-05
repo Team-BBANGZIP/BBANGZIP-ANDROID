@@ -53,7 +53,7 @@ class TodoContract {
 
         data class OnTodoAdd(val category: Category?, val todoContent: String, val startTime: LocalTime?) : TodoEvent
 
-        data class OnTimeConfirmButtonClick(val startTime: LocalTime?): TodoEvent
+        data class OnTimeConfirmButtonClick(val startTime: LocalTime?) : TodoEvent
 
         data object OnTimePickerBottomSheetDismissRequest : TodoEvent
 

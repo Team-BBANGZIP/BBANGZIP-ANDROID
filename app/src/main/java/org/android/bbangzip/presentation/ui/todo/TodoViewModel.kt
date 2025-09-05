@@ -85,14 +85,15 @@ class TodoViewModel
                 }
 
                 is TodoEvent.OnTodoAdd -> {
-                    if (event.todoContent.isNotBlank() && event.category != null){
-                        onTodoAdd(event.category.categoryId, event.todoContent, event.startTime)
-                        updateState(TodoReduce.ClearAddTodoState)
-                    }
+                    if (event.todoContent.isNotBlank() && event.category != null)
+                        {
+                            onTodoAdd(event.category.categoryId, event.todoContent, event.startTime)
+                            updateState(TodoReduce.ClearAddTodoState)
+                        }
                 }
 
                 is TodoEvent.OnTimeConfirmButtonClick -> {
-                   updateState(TodoReduce.UpdateSelectedStartTime(event.startTime))
+                    updateState(TodoReduce.UpdateSelectedStartTime(event.startTime))
                 }
 
                 TodoEvent.OnTimePickerBottomSheetDismissRequest -> {
@@ -116,7 +117,7 @@ class TodoViewModel
                 }
 
                 is TodoEvent.OnTodoTextChange -> {
-                   updateState(TodoReduce.UpdateTodoText(event.todoText))
+                    updateState(TodoReduce.UpdateTodoText(event.todoText))
                 }
                 TodoEvent.OnAddCategoryClick -> TODO()
                 TodoEvent.OnCommitmentAreaClick -> TODO()
@@ -420,24 +421,30 @@ class TodoViewModel
                         ),
                 ),
             )
-                }
+        }
 
-        fun onTodoAdd(categoryId: Int, todoContent: String, startTime: LocalTime?) {
+        fun onTodoAdd(
+            categoryId: Int,
+            todoContent: String,
+            startTime: LocalTime?,
+        ) {
             val newTodoId = (currentUiState.categories.flatMap { it.todos }.maxOfOrNull { it.todoId } ?: 0) + 1
-            val newTodo = Todo(
-                todoId = newTodoId,
-                content = todoContent,
-                isCompleted = false,
-                startTime = startTime
-            )
+            val newTodo =
+                Todo(
+                    todoId = newTodoId,
+                    content = todoContent,
+                    isCompleted = false,
+                    startTime = startTime,
+                )
 
-            val updatedCategories = currentUiState.categories.map { category ->
-                if (category.categoryId == categoryId) {
-                    category.copy(todos = category.todos + newTodo)
-                } else {
-                    category
+            val updatedCategories =
+                currentUiState.categories.map { category ->
+                    if (category.categoryId == categoryId) {
+                        category.copy(todos = category.todos + newTodo)
+                    } else {
+                        category
+                    }
                 }
-            }
             updateCategoriesAndFlatList(updatedCategories)
         }
     }

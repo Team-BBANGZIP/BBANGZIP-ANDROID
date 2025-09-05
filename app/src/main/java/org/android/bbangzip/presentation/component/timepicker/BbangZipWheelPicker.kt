@@ -55,7 +55,7 @@ fun BbangZipWheelPicker(
     initialIndex: Int = DEFAULT_INITIAL_INDEX,
     itemHeight: Dp = BbangZipWheelPickerDefaults.DefaultItemHeight,
     alignment: Alignment.Horizontal = Alignment.CenterHorizontally,
-    indicatorShape: Shape = BbangZipWheelPickerDefaults.IndicatorShape
+    indicatorShape: Shape = BbangZipWheelPickerDefaults.IndicatorShape,
 ) {
     val visibleItemsCount =
         remember(paddingItemsCount) {
@@ -107,7 +107,7 @@ fun BbangZipWheelPicker(
         Indicator(
             backgroundColor = colors.indicatorBackgroundColor,
             indicatorShape = indicatorShape,
-            )
+        )
 
         LazyColumn(
             state = listState,
@@ -162,7 +162,7 @@ private fun calculateCenterOffset(
 private fun Indicator(
     backgroundColor: Color,
     modifier: Modifier = Modifier,
-    indicatorShape: Shape = BbangZipWheelPickerDefaults.IndicatorShape
+    indicatorShape: Shape = BbangZipWheelPickerDefaults.IndicatorShape,
 ) {
     Box(
         modifier =
