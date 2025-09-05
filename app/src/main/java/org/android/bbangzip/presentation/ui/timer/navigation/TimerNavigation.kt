@@ -11,7 +11,7 @@ import org.android.bbangzip.presentation.ui.timer.TimerRoute
 
 fun NavController.navigateToTimer(navOptions: NavOptions) {
     navigate(
-        route = BottomNavigationRoute.Timer,
+        route = BottomNavigationRoute.Timer(),
         navOptions = navOptions,
     )
 }

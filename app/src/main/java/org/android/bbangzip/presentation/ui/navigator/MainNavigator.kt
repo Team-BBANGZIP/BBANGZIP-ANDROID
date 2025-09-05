@@ -10,6 +10,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import org.android.bbangzip.presentation.model.BottomNavigationRoute
+import org.android.bbangzip.presentation.model.BottomNavigationRoute.Companion.routeName
 import org.android.bbangzip.presentation.model.Route
 import org.android.bbangzip.presentation.type.BottomNavigationType
 import org.android.bbangzip.presentation.ui.friend.navigation.navigateToFriend
@@ -25,13 +26,16 @@ class MainNavigator(
     private val currentDestination: NavDestination?
         @Composable get() = navHostController.currentBackStackEntryAsState().value?.destination
 
-    val startDestination = BottomNavigationRoute.Timer
+    val startDestination = BottomNavigationRoute.Timer()
 
     val currentBottomNavigationBarItem: BottomNavigationType?
         @Composable get() =
-            BottomNavigationType.find { mainBottomNavigationRoute ->
-                currentDestination?.route == mainBottomNavigationRoute::class.qualifiedName
+            BottomNavigationType.entries.find { type ->
+                currentDestination?.route?.contains(
+                    "BottomNavigationRoute.${type.route.routeName()}"
+                ) == true
             }
+
 
     @SuppressLint("RestrictedApi")
     fun navigateBottomNavigation(bottomNavigationType: BottomNavigationType) {
@@ -96,10 +100,11 @@ class MainNavigator(
 
     @Composable
     fun isBottomBarVisible(): Boolean {
-        val isVisibleByRoute =
-            BottomNavigationType.any {
-                currentDestination?.route == it::class.qualifiedName
-            }
+        val isVisibleByRoute = BottomNavigationType.entries.any { type ->
+            currentDestination?.route?.contains(
+                "BottomNavigationRoute.${type.route.routeName()}"
+            ) == true
+        }
 
         return isVisibleByRoute
     }
