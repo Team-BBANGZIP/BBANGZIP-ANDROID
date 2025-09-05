@@ -19,6 +19,8 @@
     <string name="button_label_setting">설정</string>
     <string name="button_label_delete">삭제하기</string>
     <string name="button_label_save">저장하기</string>
+    <string name='button_cancel_description'>취소 버튼</string>
+    <string name='button_setting_description'>설정 버튼</string>
 
     <!-- component - textfield -->
     <string name="textfield_character_counter">%s/%s</string>
@@ -85,4 +87,7 @@
     <string name="add_todo_start_time_not_set">미설정</string>
     <string name="add_todo_timer_icon_description">시작 시간 설정 아이콘</string>
     <string name="add_todo_arrow_icon_description">시간 설정 화면으로 이동 아이콘</string>
+
+    <!-- Time Picker BottomSheet -->
+    <string name = "time_picker_title">시작 시간 설정</string>
 </resources>
