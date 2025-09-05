@@ -9,9 +9,9 @@ import org.android.bbangzip.presentation.model.BottomNavigationRoute
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 import org.android.bbangzip.presentation.ui.timer.TimerRoute
 
-fun NavController.navigateToTimer(navOptions: NavOptions) {
+fun NavController.navigateToTimer(navOptions: NavOptions, shouldRestart: Boolean = false) {
     navigate(
-        route = BottomNavigationRoute.Timer(),
+        route = BottomNavigationRoute.Timer(shouldRestart = shouldRestart),
         navOptions = navOptions,
     )
 }

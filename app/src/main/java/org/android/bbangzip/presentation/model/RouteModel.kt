@@ -14,10 +14,10 @@ sealed interface BottomNavigationRoute : Route {
         const val MY = "My"
 
         fun BottomNavigationRoute.routeName(): String = when (this) {
-            is BottomNavigationRoute.Timer  -> BottomNavigationRoute.TIMER
-            is BottomNavigationRoute.Todo   -> BottomNavigationRoute.TODO
-            is BottomNavigationRoute.Friend -> BottomNavigationRoute.FRIEND
-            is BottomNavigationRoute.My     -> BottomNavigationRoute.MY
+            is Timer  -> TIMER
+            is Todo   -> TODO
+            is Friend -> FRIEND
+            is My     -> MY
         }
     }
 

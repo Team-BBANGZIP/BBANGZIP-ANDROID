@@ -74,8 +74,9 @@ class MainNavigator(
         navHostController.navigateToTodo(navOptions)
     }
 
-    fun navigateToTimerWithRestart() {
+    fun navigateToTimerWithRestart(shouldRestart : Boolean) {
         navHostController.navigateToTimer(
+            shouldRestart  = shouldRestart,
             navOptions = navOptions {
                 popUpTo(BottomNavigationRoute.Timer) {
                     saveState = false

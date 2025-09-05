@@ -57,6 +57,7 @@ constructor(
                         }
                     }
                 updateCategoriesAndFlatList(updatedCategories)
+
                 postCheckedTodo()
             }
 

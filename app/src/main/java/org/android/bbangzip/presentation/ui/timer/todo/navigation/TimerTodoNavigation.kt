@@ -16,7 +16,7 @@ fun NavController.navigateTimerTodo() {
 }
 
 fun NavGraphBuilder.timerTodoNavGraph(
-    navigateToTimer: () -> Unit,
+    navigateToTimer: (Boolean) -> Unit,
     navigateToBack: () -> Unit,
 ) {
     composable<TimerTodo> {
