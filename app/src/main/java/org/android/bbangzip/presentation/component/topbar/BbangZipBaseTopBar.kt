@@ -21,6 +21,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 
 @Composable
@@ -53,7 +54,9 @@ fun BbangZipBaseTopBar(
                         imageVector = ImageVector.vectorResource(it),
                         contentDescription = null,
                         modifier =
-                            Modifier.padding(8.dp),
+                            Modifier
+                                .noRippleClickable { onLeadingIconClick }
+                                .padding(8.dp),
                     )
                 }
             }
@@ -77,7 +80,9 @@ fun BbangZipBaseTopBar(
                         imageVector = ImageVector.vectorResource(it),
                         contentDescription = null,
                         modifier =
-                            Modifier.padding(8.dp),
+                            Modifier
+                                .noRippleClickable { onTrailingIconClick }
+                                .padding(8.dp),
                     )
                 }
             }
