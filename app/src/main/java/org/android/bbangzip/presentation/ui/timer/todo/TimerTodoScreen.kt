@@ -1,23 +1,31 @@
 package org.android.bbangzip.presentation.ui.timer.todo
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.systemBars
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
+import org.android.bbangzip.presentation.component.chip.BbangZipCategoryChip
+import org.android.bbangzip.presentation.component.taskbox.BbangZipTaskBox
 import org.android.bbangzip.presentation.component.topbar.BbangZipBaseTopBar
+import org.android.bbangzip.presentation.model.Category
+import org.android.bbangzip.presentation.model.ListItem
+import org.android.bbangzip.presentation.model.Todo
+import org.android.bbangzip.presentation.type.CategoryColor
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.ui.theme.BbangZipTheme
+import java.time.LocalTime
 
 @Composable
 fun TimerTodoScreen(
@@ -29,30 +37,45 @@ fun TimerTodoScreen(
     onAddTodoIconClick: () -> Unit = {},
     onTodoCheckBoxClick: (categoryId: Int, todoId: Int, isChecked: Boolean) -> Unit = { _, _, _ -> },
 ) {
-    Column(
+    Box(
         modifier =
             modifier
                 .fillMaxSize()
                 .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
-                .windowInsetsPadding(WindowInsets.systemBars),
-        horizontalAlignment = Alignment.CenterHorizontally,
+                .systemBarsPadding(),
     ) {
-        TodoTopBar(onBackIconClick = onBackIconClick)
-
-        Gap(18.dp)
-
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
+        LazyColumn(
+            modifier = modifier,
+            verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
-            TodoTitle()
+            item {
+                TodoTopBar(onBackIconClick = onBackIconClick)
+            }
 
+            item { Gap(18.dp) }
 
+            item {
+                TodoTitle(modifier = Modifier.padding(horizontal = 20.dp))
+            }
+
+            item { Gap(30.dp) }
+
+            itemsIndexed(
+                items = uiState.flatList,
+                key = { _, item -> item.id },
+            ) { index, item ->
+                TodoListItem(
+                    item = item,
+                    itemIndex = index,
+                    onTodoCheckBoxClick = onTodoCheckBoxClick,
+                    onAddTodoIconClick = onAddTodoIconClick,
+                    modifier = Modifier.padding(horizontal = 20.dp),
+                )
+            }
         }
     }
 }
+
 
 @Composable
 private fun TodoTopBar(
@@ -73,11 +96,107 @@ fun TodoTitle(modifier: Modifier = Modifier) {
         text = stringResource(R.string.timer_todo_title),
         style = BbangZipTheme.typography.picker1SemiBold,
         color = BbangZipTheme.color.labelNormal_6B6560,
+        modifier = modifier
     )
+}
+
+
+@Composable
+private fun TodoListItem(
+    item: ListItem,
+    itemIndex: Int,
+    onTodoCheckBoxClick: (categoryId: Int, todoId: Int, isChecked: Boolean) -> Unit,
+    onAddTodoIconClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(modifier = modifier) {
+        when (item) {
+            is ListItem.CategoryItem -> {
+                Column {
+                    Gap(height = if (itemIndex == 0) 4.dp else 16.dp)
+                    BbangZipCategoryChip(
+                        categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
+                        categoryName = item.category.categoryName,
+                        onClick = onAddTodoIconClick
+                    )
+                }
+            }
+
+            is ListItem.TodoItem -> {
+                BbangZipTaskBox(
+                    task = item.todo.content,
+                    isCompleted = item.todo.isCompleted,
+                    onCheckBoxClick = { isChecked ->
+                        onTodoCheckBoxClick(item.category.categoryId, item.todo.todoId, isChecked)
+                    },
+                    isLast = item.isLastInCategory,
+                    startTime = item.todo.startTime,
+                    categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
+                )
+            }
+        }
+    }
 }
 
 @Preview
 @Composable
 private fun TimerTodoScreenPreview() {
-    TimerTodoScreen(uiState = TimerTodoContract.TimerTodoState())
+    val exampleCategories =
+        listOf(
+            Category(
+                categoryId = 1,
+                categoryName = "제과제빵점",
+                categoryColor = "BbangZipTheme.color.todoRed1_EA7152",
+                todos =
+                    listOf(
+                        Todo(
+                            todoId = 11,
+                            content = "두줄 \n 두줄",
+                            isCompleted = true,
+                            startTime = LocalTime.of(11, 0),
+                        ),
+                        Todo(
+                            todoId = 12,
+                            content = "제과제빵점_한줄_실패",
+                            isCompleted = false,
+                            startTime = null,
+                        ),
+                    ),
+            ),
+            Category(
+                categoryId = 2,
+                categoryName = "경제학개론",
+                categoryColor = "BbangZipTheme.color.todoBlue1_5C62AC",
+                todos =
+                    listOf(
+                        Todo(
+                            todoId = 21,
+                            content = "경제학개론_한줄_완료",
+                            isCompleted = true,
+                            startTime = null,
+                        ),
+                    ),
+            ),
+        )
+
+    val flatList =
+        exampleCategories.flatMap { category ->
+            val categoryItem = ListItem.CategoryItem(category)
+            val todoItems =
+                category.todos.mapIndexed { index, todo ->
+                    ListItem.TodoItem(
+                        todo = todo,
+                        category = category,
+                        isLastInCategory = index == category.todos.size - 1,
+                    )
+                }
+            listOf(categoryItem) + todoItems
+        }
+
+    val previewState =
+        TimerTodoContract.TimerTodoState(
+            categories = exampleCategories,
+            flatList = flatList,
+        )
+    TimerTodoScreen(uiState = previewState)
 }

@@ -8,10 +8,13 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
+import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoEvent
+import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoSideEffect
+
 
 @Composable
 fun TimerTodoRoute(
-    navigateToTimer: (shouldRestart : Boolean) -> Unit,
+    navigateToTimer: (shouldRestart: Boolean) -> Unit,
     navigateToBack: () -> Unit,
     modifier: Modifier = Modifier,
     viewModel: TimerTodoViewModel = hiltViewModel(),
@@ -22,16 +25,31 @@ fun TimerTodoRoute(
     LaunchedEffect(viewModel.uiSideEffect) {
         viewModel.uiSideEffect.collectLatest { effect ->
             when (effect) {
-                is TimerTodoContract.TimerTodoSideEffect.NavigateToBack -> navigateToBack()
-                is TimerTodoContract.TimerTodoSideEffect.NavigateToTimer -> navigateToTimer(effect.shouldRestart)
+                is TimerTodoSideEffect.NavigateToBack -> navigateToBack()
+                is TimerTodoSideEffect.NavigateToTimer -> navigateToTimer(effect.shouldRestart)
             }
         }
     }
 
-    when(success) {
+    when (success) {
         true -> TimerTodoScreen(
+            uiState = uiState,
             modifier = modifier,
+            onBackIconClick = { viewModel.setEvent(TimerTodoEvent.OnBackIconClick) },
+            onExitBtnClick = { viewModel.setEvent(TimerTodoEvent.OnExitBtnClick) },
+            onRestartTimerBtnClick = { viewModel.setEvent(TimerTodoEvent.OnRestartTimerBtnClick) },
+            onAddTodoIconClick = { viewModel.setEvent(TimerTodoEvent.OnAddTodoIconClick) },
+            onTodoCheckBoxClick = { categoryId, todoId, isChecked ->
+                viewModel.setEvent(
+                    TimerTodoEvent.OnTodoCheckBoxClick(
+                        categoryId = categoryId,
+                        todoId = todoId,
+                        isChecked = isChecked,
+                    ),
+                )
+            },
         )
+
         false -> {
             CircularProgressIndicator()
         }
