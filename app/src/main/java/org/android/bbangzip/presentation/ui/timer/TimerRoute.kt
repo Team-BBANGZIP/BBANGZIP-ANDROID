@@ -16,8 +16,9 @@ import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 @Composable
 fun TimerRoute(
     sharedViewModel: SharedViewModel,
+    navigateToTimerTodo: () -> Unit ,
+    shouldRestartTimer : Boolean,
     modifier: Modifier = Modifier,
-    navigateToCompleteTask: () -> Unit = {},
     timerViewmodel: TimerViewModel = hiltViewModel(),
 ) {
     val timerState by timerViewmodel.uiState.collectAsStateWithLifecycle()
@@ -27,10 +28,16 @@ fun TimerRoute(
     LaunchedEffect(timerViewmodel.uiSideEffect) {
         timerViewmodel.uiSideEffect.collectLatest { effect ->
             when (effect) {
-                TimerContract.TimerSideEffect.NavigateToCompleteTask -> navigateToCompleteTask()
+                TimerContract.TimerSideEffect.NavigateToCompleteTask -> navigateToTimerTodo()
                 TimerContract.TimerSideEffect.ShowBottomBar -> sharedViewModel.setEvent(SharedContract.SharedEvent.OnShowBottomBar)
                 TimerContract.TimerSideEffect.HideBottomBar -> sharedViewModel.setEvent(SharedContract.SharedEvent.OnHideBottomBar)
             }
+        }
+    }
+
+    LaunchedEffect(shouldRestartTimer) {
+        if (shouldRestartTimer) {
+            timerViewmodel.setEvent(TimerContract.TimerEvent.OnRestartSheetApproveBtnClick)
         }
     }
 
