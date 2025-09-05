@@ -11,7 +11,9 @@ sealed interface BottomNavigationRoute : Route {
     data object Dummy : BottomNavigationRoute
 
     @Serializable
-    data object Timer : BottomNavigationRoute
+    data class Timer (
+        val shouldRestart : Boolean =false
+    ) : BottomNavigationRoute
 
     @Serializable
     data object Todo : BottomNavigationRoute
