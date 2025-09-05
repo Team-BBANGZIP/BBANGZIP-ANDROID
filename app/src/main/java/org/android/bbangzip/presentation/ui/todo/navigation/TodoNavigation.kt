@@ -16,11 +16,11 @@ fun NavController.navigateToTodo(navOptions: NavOptions) {
 }
 
 fun NavGraphBuilder.todoNavGraph(
-    padding: PaddingValues
+    padding: PaddingValues,
 ) {
     composable<BottomNavigationRoute.Todo> {
         TodoRoute(
-            padding = padding
+            padding = padding,
         )
     }
 }

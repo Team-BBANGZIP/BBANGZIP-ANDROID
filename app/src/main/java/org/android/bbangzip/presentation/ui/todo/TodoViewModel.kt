@@ -85,11 +85,10 @@ class TodoViewModel
                 }
 
                 is TodoEvent.OnTodoAdd -> {
-                    if (event.todoContent.isNotBlank() && event.category != null)
-                        {
-                            onTodoAdd(event.category.categoryId, event.todoContent, event.startTime)
-                            updateState(TodoReduce.ClearAddTodoState)
-                        }
+                    if (event.todoContent.isNotBlank() && event.category != null) {
+                        onTodoAdd(event.category.categoryId, event.todoContent, event.startTime)
+                        updateState(TodoReduce.ClearAddTodoState)
+                    }
                 }
 
                 is TodoEvent.OnTimeConfirmButtonClick -> {

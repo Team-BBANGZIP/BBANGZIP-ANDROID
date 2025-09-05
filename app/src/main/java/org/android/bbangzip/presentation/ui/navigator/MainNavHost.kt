@@ -26,7 +26,7 @@ fun MainNavHost(
         )
 
         todoNavGraph(
-            padding = padding
+            padding = padding,
         )
 
         myNavGraph()
