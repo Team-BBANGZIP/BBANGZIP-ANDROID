@@ -114,7 +114,7 @@ constructor(
                 launch {
                     //자연스러운 화면전환을 위해 추가
                     delay(200L)
-                    setSideEffect(TimerContract.TimerSideEffect.NavigateToTimerTodo)
+                    setSideEffect(TimerContract.TimerSideEffect.NavigateToTimerTodo(currentUiState.selectedTimeOptionIndex))
                     updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle))
                     resetTimer()
                 }

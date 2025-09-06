@@ -18,7 +18,7 @@ fun NavController.navigateToTimer(navOptions: NavOptions, shouldRestart: Boolean
 
 fun NavGraphBuilder.timerNavGraph(
     sharedViewModel: SharedViewModel,
-    navigateToTimerTodo: () -> Unit = {},
+    navigateToTimerTodo: (Int) -> Unit = {},
 ) {
     composable<BottomNavigationRoute.Timer> { backStackEntry ->
         val item = backStackEntry.toRoute<BottomNavigationRoute.Timer>()

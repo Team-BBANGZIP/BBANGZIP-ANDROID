@@ -17,7 +17,7 @@ import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 @Composable
 fun TimerRoute(
     sharedViewModel: SharedViewModel,
-    navigateToTimerTodo: () -> Unit,
+    navigateToTimerTodo: (timeOptionIndex: Int) -> Unit,
     shouldRestartTimer: Boolean,
     modifier: Modifier = Modifier,
     timerViewmodel: TimerViewModel = hiltViewModel(),
@@ -29,7 +29,7 @@ fun TimerRoute(
     LaunchedEffect(timerViewmodel.uiSideEffect) {
         timerViewmodel.uiSideEffect.collectLatest { effect ->
             when (effect) {
-                TimerContract.TimerSideEffect.NavigateToTimerTodo -> navigateToTimerTodo()
+                is TimerContract.TimerSideEffect.NavigateToTimerTodo -> navigateToTimerTodo(effect.timeOptionIndex)
             }
         }
     }

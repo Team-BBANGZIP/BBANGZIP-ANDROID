@@ -16,6 +16,7 @@ import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTo
 fun TimerTodoRoute(
     navigateToTimer: (shouldRestart: Boolean) -> Unit,
     navigateToBack: () -> Unit,
+    timeOptionIndex: Int,
     modifier: Modifier = Modifier,
     viewModel: TimerTodoViewModel = hiltViewModel(),
 ) {
@@ -34,6 +35,7 @@ fun TimerTodoRoute(
     when (success) {
         true -> TimerTodoScreen(
             uiState = uiState,
+            timeOptionIndex = timeOptionIndex,
             modifier = modifier,
             onBackIconClick = { viewModel.setEvent(TimerTodoEvent.OnBackIconClick) },
             onExitBtnClick = { viewModel.setEvent(TimerTodoEvent.OnExitBtnClick) },

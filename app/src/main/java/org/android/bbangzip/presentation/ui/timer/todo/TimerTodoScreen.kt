@@ -35,9 +35,12 @@ import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
 
+
+//TODO timeOptionIndex 연결 / todoadd 바텀시트 추가 , picker 추가
 @Composable
 fun TimerTodoScreen(
     uiState: TimerTodoContract.TimerTodoState,
+    timeOptionIndex: Int,
     modifier: Modifier = Modifier,
     onBackIconClick: () -> Unit = {},
     onExitBtnClick: () -> Unit = {},
@@ -85,7 +88,7 @@ fun TimerTodoScreen(
         DualActionButton(
             onRestartBtnClick = onRestartTimerBtnClick,
             onExitBtnClick = onExitBtnClick,
-            timeOptionIndex = 0,
+            timeOptionIndex = timeOptionIndex,
             modifier = Modifier
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 20.dp)
@@ -277,5 +280,5 @@ private fun TimerTodoScreenPreview() {
             categories = exampleCategories,
             flatList = flatList,
         )
-    TimerTodoScreen(uiState = previewState)
+    TimerTodoScreen(uiState = previewState, timeOptionIndex = 0)
 }

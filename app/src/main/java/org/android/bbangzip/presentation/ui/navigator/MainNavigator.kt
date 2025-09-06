@@ -88,8 +88,8 @@ class MainNavigator(
         )
     }
 
-    fun navigateToTimerTodo() {
-        navHostController.navigateTimerTodo()
+    fun navigateToTimerTodo(timeOptionIndex : Int) {
+        navHostController.navigateTimerTodo(timeOptionIndex = timeOptionIndex)
     }
 
     fun popBackStack() {
