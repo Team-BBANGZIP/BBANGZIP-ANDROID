@@ -23,7 +23,8 @@ fun TodoRoute(
         totalTodoCount = uiState.totalTodoCount,
         completedTodoCount = uiState.completedTodoCount,
         isMenuOpen = uiState.isMenuOpen,
-        commitmentMessage = uiState.commitmentMessage,
+        textFieldCommitmentMessage = uiState.textFieldCommitmentMessage,
+        confirmedCommitmentMessage = uiState.confirmedCommitmentMessage,
         isCommitmentBottomSheetVisible = uiState.isCommitmentBottomSheetVisible,
         isAddTodoBottomSheetVisible = uiState.isAddTodoBottomSheetVisible,
         isTimePickerBottomSheetVisible = uiState.isTimePickerBottomSheetVisible,
@@ -66,8 +67,8 @@ fun TodoRoute(
         onCommitmentDone = {
             viewModel.setEvent(TodoEvent.OnCommitmentDone)
         },
-        onCommitmentMessageChange = { text ->
-            viewModel.setEvent(TodoEvent.OnCommitmentMessageChange(text))
+        onTextFieldCommitmentMessageChange = { text ->
+            viewModel.setEvent(TodoEvent.OnTextFieldCommitmentMessageChange(text))
         },
         onCommitmentBottomSheetDismissRequest = {
             viewModel.setEvent(TodoEvent.OnCommitmentBottomSheetDismissRequest)

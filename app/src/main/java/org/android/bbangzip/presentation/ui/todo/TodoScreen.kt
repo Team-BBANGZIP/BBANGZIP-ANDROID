@@ -72,9 +72,9 @@ import org.android.bbangzip.presentation.model.Category
 import org.android.bbangzip.presentation.model.ListItem
 import org.android.bbangzip.presentation.model.Todo
 import org.android.bbangzip.presentation.type.CategoryColor
-import org.android.bbangzip.presentation.ui.todo.bottomsheet.AddTodoBottomSheet
+import org.android.bbangzip.presentation.component.bottomsheet.AddTodoBottomSheet
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.CommitmentBottomSheet
-import org.android.bbangzip.presentation.ui.todo.bottomsheet.TimePickerBottomSheet
+import org.android.bbangzip.presentation.component.bottomsheet.TimePickerBottomSheet
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.dropShadow
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
@@ -102,7 +102,8 @@ fun TodoScreen(
     totalTodoCount: Int,
     completedTodoCount: Int,
     isMenuOpen: Boolean,
-    commitmentMessage: String,
+    textFieldCommitmentMessage: String,
+    confirmedCommitmentMessage: String,
     isCommitmentBottomSheetVisible: Boolean,
     isTimePickerBottomSheetVisible: Boolean,
     isAddTodoBottomSheetVisible: Boolean,
@@ -121,7 +122,7 @@ fun TodoScreen(
     onCategoryChipClick: (Category) -> Unit,
     onCommitmentAreaClick: () -> Unit,
     onCommitmentDone: () -> Unit,
-    onCommitmentMessageChange: (String) -> Unit,
+    onTextFieldCommitmentMessageChange: (String) -> Unit,
     onCommitmentBottomSheetDismissRequest: () -> Unit,
 ) {
     val localDensity = LocalDensity.current
@@ -255,7 +256,7 @@ fun TodoScreen(
         ) {
             item {
                 ListHeader(
-                    commitmentMessage = commitmentMessage,
+                    commitmentMessage = confirmedCommitmentMessage,
                     isMenuOpen = isMenuOpen,
                     onMenuClick = onMenuClick,
                     onCommitmentAreaClick = onCommitmentAreaClick,
@@ -331,8 +332,8 @@ fun TodoScreen(
             isBottomSheetVisible = isCommitmentBottomSheetVisible,
             onDismissRequest = onCommitmentBottomSheetDismissRequest,
             focusManager = focusManager,
-            commitmentMessage = commitmentMessage,
-            oncommitmentMessageChange = onCommitmentMessageChange,
+            commitmentMessage = textFieldCommitmentMessage,
+            oncommitmentMessageChange = onTextFieldCommitmentMessageChange,
             onDoneAction = onCommitmentDone,
         )
     }
@@ -556,7 +557,7 @@ fun CommitmentMessageBox(
         ) {
             Text(
                 text = commitmentMessage,
-                color = BbangZipTheme.color.labelNormal_6B6560,
+                color = BbangZipTheme.color.labelNormal_6B6560.copy(0.7f),
                 style = BbangZipTheme.typography.body4Medium,
             )
         }
@@ -768,11 +769,12 @@ fun TodoScreenPreview() {
         onTimePickerBottomSheetShowRequest = {},
         onTodoTextChange = {},
         onCategoryChipClick = {},
-        commitmentMessage = "",
+        textFieldCommitmentMessage = "",
+        confirmedCommitmentMessage = "",
         isCommitmentBottomSheetVisible = false,
         onCommitmentAreaClick = {},
         onCommitmentDone = {},
-        onCommitmentMessageChange = { },
+        onTextFieldCommitmentMessageChange = { },
         onCommitmentBottomSheetDismissRequest = {},
     )
 }

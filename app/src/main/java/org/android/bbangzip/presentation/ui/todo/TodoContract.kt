@@ -17,7 +17,8 @@ class TodoContract {
         val isMenuOpen: Boolean = false,
         // commitment state
         val isCommitmentBottomSheetVisible: Boolean = false,
-        val commitmentMessage: String = "",
+        val confirmedCommitmentMessage: String = "나만의 다짐을 적어보세요.",
+        val textFieldCommitmentMessage: String = "",
         // add todo state
         val isAddTodoBottomSheetVisible: Boolean = false,
         val isTimePickerBottomSheetVisible: Boolean = false,
@@ -67,7 +68,7 @@ class TodoContract {
 
         data object OnCommitmentDone : TodoEvent
 
-        data class OnCommitmentMessageChange(val text: String) : TodoEvent
+        data class OnTextFieldCommitmentMessageChange(val text: String) : TodoEvent
 
         data object OnCommitmentBottomSheetDismissRequest : TodoEvent
     }
@@ -98,7 +99,9 @@ class TodoContract {
 
         data object ClearAddTodoState : TodoReduce
 
-        data class UpdateCommitmentMessage(val commitmentMessage: String) : TodoReduce
+        data class UpdateTextFieldCommitmentMessage(val commitmentMessage: String) : TodoReduce
+
+        data class UpdateConfirmedCommitmentMessage(val commitmentMessage: String) : TodoReduce
 
         data class UpdateIsCommitmentBottomSheetVisible(val isVisible: Boolean) : TodoReduce
     }

@@ -122,10 +122,11 @@ class TodoViewModel
                     updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(true))
                 }
                 TodoEvent.OnCommitmentDone -> {
+                    updateState(TodoReduce.UpdateConfirmedCommitmentMessage(commitmentMessage = currentUiState.textFieldCommitmentMessage))
                     updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(false))
                 }
-                is TodoEvent.OnCommitmentMessageChange -> {
-                    updateState(TodoReduce.UpdateCommitmentMessage(commitmentMessage = event.text))
+                is TodoEvent.OnTextFieldCommitmentMessageChange -> {
+                    updateState(TodoReduce.UpdateTextFieldCommitmentMessage(commitmentMessage = event.text))
                 }
                 TodoEvent.OnCommitmentBottomSheetDismissRequest -> {
                     updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(false))
@@ -178,8 +179,11 @@ class TodoViewModel
                 is TodoReduce.UpdateIsCommitmentBottomSheetVisible -> {
                     state.copy(isCommitmentBottomSheetVisible = reduce.isVisible)
                 }
-                is TodoReduce.UpdateCommitmentMessage -> {
-                    state.copy(commitmentMessage = reduce.commitmentMessage)
+                is TodoReduce.UpdateTextFieldCommitmentMessage -> {
+                    state.copy(textFieldCommitmentMessage = reduce.commitmentMessage)
+                }
+                is TodoReduce.UpdateConfirmedCommitmentMessage -> {
+                    state.copy(confirmedCommitmentMessage = reduce.commitmentMessage)
                 }
             }
         }
