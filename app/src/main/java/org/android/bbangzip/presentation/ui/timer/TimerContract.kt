@@ -166,6 +166,6 @@ class TimerContract {
     }
 
     sealed interface TimerSideEffect : BaseContract.SideEffect {
-        data class NavigateToTimerTodo(val timeOptionIndex : Int) : TimerSideEffect
+        data class NavigateToTimerTodo(val timeOptionIndex: Int) : TimerSideEffect
     }
 }

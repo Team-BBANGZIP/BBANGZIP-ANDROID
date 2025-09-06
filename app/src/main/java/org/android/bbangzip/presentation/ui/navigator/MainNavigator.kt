@@ -32,10 +32,9 @@ class MainNavigator(
         @Composable get() =
             BottomNavigationType.entries.find { type ->
                 currentDestination?.route?.contains(
-                    "BottomNavigationRoute.${type.route.routeName()}"
+                    "BottomNavigationRoute.${type.route.routeName()}",
                 ) == true
             }
-
 
     @SuppressLint("RestrictedApi")
     fun navigateBottomNavigation(bottomNavigationType: BottomNavigationType) {
@@ -74,21 +73,22 @@ class MainNavigator(
         navHostController.navigateToTodo(navOptions)
     }
 
-    fun navigateToTimerWithRestart(shouldRestart : Boolean) {
+    fun navigateToTimerWithRestart(shouldRestart: Boolean) {
         navHostController.navigateToTimer(
-            shouldRestart  = shouldRestart,
-            navOptions = navOptions {
-                popUpTo(BottomNavigationRoute.Timer()) {
-                    saveState = false
-                    inclusive = true
-                }
-                launchSingleTop = true
-                restoreState = false
-            },
+            shouldRestart = shouldRestart,
+            navOptions =
+                navOptions {
+                    popUpTo(BottomNavigationRoute.Timer()) {
+                        saveState = false
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                    restoreState = false
+                },
         )
     }
 
-    fun navigateToTimerTodo(timeOptionIndex : Int) {
+    fun navigateToTimerTodo(timeOptionIndex: Int) {
         navHostController.navigateTimerTodo(timeOptionIndex = timeOptionIndex)
     }
 
@@ -101,11 +101,12 @@ class MainNavigator(
 
     @Composable
     fun isBottomBarVisible(): Boolean {
-        val isVisibleByRoute = BottomNavigationType.entries.any { type ->
-            currentDestination?.route?.contains(
-                "BottomNavigationRoute.${type.route.routeName()}"
-            ) == true
-        }
+        val isVisibleByRoute =
+            BottomNavigationType.entries.any { type ->
+                currentDestination?.route?.contains(
+                    "BottomNavigationRoute.${type.route.routeName()}",
+                ) == true
+            }
 
         return isVisibleByRoute
     }

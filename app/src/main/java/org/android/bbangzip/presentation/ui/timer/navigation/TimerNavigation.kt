@@ -9,7 +9,10 @@ import org.android.bbangzip.presentation.model.BottomNavigationRoute
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 import org.android.bbangzip.presentation.ui.timer.TimerRoute
 
-fun NavController.navigateToTimer(navOptions: NavOptions, shouldRestart: Boolean = false) {
+fun NavController.navigateToTimer(
+    navOptions: NavOptions,
+    shouldRestart: Boolean = false,
+) {
     navigate(
         route = BottomNavigationRoute.Timer(shouldRestart = shouldRestart),
         navOptions = navOptions,
@@ -25,7 +28,7 @@ fun NavGraphBuilder.timerNavGraph(
         TimerRoute(
             sharedViewModel = sharedViewModel,
             navigateToTimerTodo = navigateToTimerTodo,
-            shouldRestartTimer = item.shouldRestart
+            shouldRestartTimer = item.shouldRestart,
         )
     }
 }

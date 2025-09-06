@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.collectLatest
 import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoEvent
 import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoSideEffect
 
-
 @Composable
 fun TimerTodoRoute(
     navigateToTimer: (shouldRestart: Boolean) -> Unit,
@@ -33,44 +32,44 @@ fun TimerTodoRoute(
     }
 
     when (success) {
-        true -> TimerTodoScreen(
-            uiState = uiState,
-            timeOptionIndex = timeOptionIndex,
-            modifier = modifier,
-            onBackIconClick = { viewModel.setEvent(TimerTodoEvent.OnBackIconClick) },
-            onExitBtnClick = { viewModel.setEvent(TimerTodoEvent.OnExitBtnClick) },
-            onRestartTimerBtnClick = { viewModel.setEvent(TimerTodoEvent.OnRestartTimerBtnClick) },
-            onTodoCheckBoxClick = { categoryId, todoId, isChecked ->
-                viewModel.setEvent(
-                    TimerTodoEvent.OnTodoCheckBoxClick(
-                        categoryId = categoryId,
-                        todoId = todoId,
-                        isChecked = isChecked,
-                    ),
-                )
-            },
-            onCategoryChipClick = { category ->
-                viewModel.setEvent(TimerTodoEvent.OnCategoryChipClick(category))
-            },
-            onAddTodoBottomSheetDismissRequest = { viewModel.setEvent(TimerTodoEvent.OnAddTodoBottomSheetDismissRequest) },
-            onAddTodoDone = { todoContent, category, startTime ->
-                viewModel.setEvent(
-                    TimerTodoEvent.OnAddTodoDone(
-                        todoContent = todoContent,
-                        category = category,
-                        startTime = startTime
+        true ->
+            TimerTodoScreen(
+                uiState = uiState,
+                timeOptionIndex = timeOptionIndex,
+                modifier = modifier,
+                onBackIconClick = { viewModel.setEvent(TimerTodoEvent.OnBackIconClick) },
+                onExitBtnClick = { viewModel.setEvent(TimerTodoEvent.OnExitBtnClick) },
+                onRestartTimerBtnClick = { viewModel.setEvent(TimerTodoEvent.OnRestartTimerBtnClick) },
+                onTodoCheckBoxClick = { categoryId, todoId, isChecked ->
+                    viewModel.setEvent(
+                        TimerTodoEvent.OnTodoCheckBoxClick(
+                            categoryId = categoryId,
+                            todoId = todoId,
+                            isChecked = isChecked,
+                        ),
                     )
-                )
-            },
-            onTimeConfirmButtonClick = { startTime -> viewModel.setEvent(TimerTodoEvent.OnTimeConfirmButtonClick(startTime)) },
-            onTimePickerBottomSheetDismissRequest = { viewModel.setEvent(TimerTodoEvent.OnTimePickerBottomSheetDismissRequest) },
-            onTimePickerBottomSheetShowRequest = { viewModel.setEvent(TimerTodoEvent.OnTimePickerBottomSheetShowRequest) },
-            onTodoTextChange = { todoText -> viewModel.setEvent(TimerTodoEvent.OnTodoTextChange(todoText)) },
-        )
+                },
+                onCategoryChipClick = { category ->
+                    viewModel.setEvent(TimerTodoEvent.OnCategoryChipClick(category))
+                },
+                onAddTodoBottomSheetDismissRequest = { viewModel.setEvent(TimerTodoEvent.OnAddTodoBottomSheetDismissRequest) },
+                onAddTodoDone = { todoContent, category, startTime ->
+                    viewModel.setEvent(
+                        TimerTodoEvent.OnAddTodoDone(
+                            todoContent = todoContent,
+                            category = category,
+                            startTime = startTime,
+                        ),
+                    )
+                },
+                onTimeConfirmButtonClick = { startTime -> viewModel.setEvent(TimerTodoEvent.OnTimeConfirmButtonClick(startTime)) },
+                onTimePickerBottomSheetDismissRequest = { viewModel.setEvent(TimerTodoEvent.OnTimePickerBottomSheetDismissRequest) },
+                onTimePickerBottomSheetShowRequest = { viewModel.setEvent(TimerTodoEvent.OnTimePickerBottomSheetShowRequest) },
+                onTodoTextChange = { todoText -> viewModel.setEvent(TimerTodoEvent.OnTodoTextChange(todoText)) },
+            )
 
         false -> {
             CircularProgressIndicator()
         }
     }
-
 }

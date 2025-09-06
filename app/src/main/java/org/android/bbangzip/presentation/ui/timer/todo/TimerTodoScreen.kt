@@ -38,7 +38,6 @@ import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
 
-
 @Composable
 fun TimerTodoScreen(
     uiState: TimerTodoContract.TimerTodoState,
@@ -99,10 +98,11 @@ fun TimerTodoScreen(
             onRestartBtnClick = onRestartTimerBtnClick,
             onExitBtnClick = onExitBtnClick,
             timeOptionIndex = timeOptionIndex,
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(horizontal = 20.dp)
-                .padding(top = 20.dp, bottom = 12.dp),
+            modifier =
+                Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(horizontal = 20.dp)
+                    .padding(top = 20.dp, bottom = 12.dp),
         )
 
         AddTodoBottomSheet(
@@ -114,7 +114,7 @@ fun TimerTodoScreen(
             onSettingTimeClick = onTimePickerBottomSheetShowRequest,
             startTime = uiState.selectedStartTime,
             onDoneAction = {
-                onAddTodoDone(uiState.todoText,uiState.selectedCategory,  uiState.selectedStartTime)
+                onAddTodoDone(uiState.todoText, uiState.selectedCategory, uiState.selectedStartTime)
             },
         )
         TimePickerBottomSheet(
@@ -127,17 +127,16 @@ fun TimerTodoScreen(
     }
 }
 
-
 @Composable
 private fun TodoTopBar(
     onBackIconClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     BbangZipBaseTopBar(
         modifier = modifier,
         leadingIcon = R.drawable.ic_arrow_left_24,
         leadingIconColor = BbangZipTheme.color.labelAlternative_A29D96,
-        onLeadingIconClick = onBackIconClick
+        onLeadingIconClick = onBackIconClick,
     )
 }
 
@@ -147,18 +146,17 @@ fun TodoTitle(modifier: Modifier = Modifier) {
         text = stringResource(R.string.timer_todo_title),
         style = BbangZipTheme.typography.picker1SemiBold,
         color = BbangZipTheme.color.labelNormal_6B6560,
-        modifier = modifier
+        modifier = modifier,
     )
 }
-
 
 @Composable
 private fun TodoListItem(
     item: ListItem,
     itemIndex: Int,
     onTodoCheckBoxClick: (categoryId: Int, todoId: Int, isChecked: Boolean) -> Unit,
-    onCategoryChipClick: (category : Category) -> Unit,
-    modifier: Modifier = Modifier
+    onCategoryChipClick: (category: Category) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Box(modifier = modifier) {
         when (item) {
@@ -168,7 +166,7 @@ private fun TodoListItem(
                     BbangZipCategoryChip(
                         categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
                         categoryName = item.category.categoryName,
-                        onClick = { onCategoryChipClick(item.category) }
+                        onClick = { onCategoryChipClick(item.category) },
                     )
                 }
             }
@@ -194,7 +192,7 @@ fun DualActionButton(
     onRestartBtnClick: () -> Unit,
     onExitBtnClick: () -> Unit,
     timeOptionIndex: Int,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val leftBtnText =
         if (timeOptionIndex == 0) {
@@ -203,8 +201,9 @@ fun DualActionButton(
             stringResource(R.string.complete_sheet_left_btn_sixty)
         }
     Row(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {

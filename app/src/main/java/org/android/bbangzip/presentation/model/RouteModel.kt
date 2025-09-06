@@ -13,17 +13,18 @@ sealed interface BottomNavigationRoute : Route {
         const val FRIEND = "Friend"
         const val MY = "My"
 
-        fun BottomNavigationRoute.routeName(): String = when (this) {
-            is Timer  -> TIMER
-            is Todo   -> TODO
-            is Friend -> FRIEND
-            is My     -> MY
-        }
+        fun BottomNavigationRoute.routeName(): String =
+            when (this) {
+                is Timer -> TIMER
+                is Todo -> TODO
+                is Friend -> FRIEND
+                is My -> MY
+            }
     }
 
     @Serializable
     data class Timer(
-        val shouldRestart: Boolean = false
+        val shouldRestart: Boolean = false,
     ) : BottomNavigationRoute
 
     @Serializable

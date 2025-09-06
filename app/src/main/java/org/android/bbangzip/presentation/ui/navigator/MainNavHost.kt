@@ -24,12 +24,12 @@ fun MainNavHost(
     ) {
         timerNavGraph(
             sharedViewModel = sharedViewModel,
-            navigateToTimerTodo = navigator::navigateToTimerTodo
+            navigateToTimerTodo = navigator::navigateToTimerTodo,
         )
 
         timerTodoNavGraph(
             navigateToTimer = navigator::navigateToTimerWithRestart,
-            navigateToBack = navigator::popBackStack
+            navigateToBack = navigator::popBackStack,
         )
 
         todoNavGraph(
