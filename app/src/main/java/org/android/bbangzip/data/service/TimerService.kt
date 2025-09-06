@@ -14,13 +14,13 @@ import retrofit2.http.POST
 
 interface TimerService {
     @GET("$API/$VERSIONS/$TIMER/today-count")
-    suspend fun getTodayBreadCount(): BaseResponse<ResponseTodayBreadDto>
+    suspend fun getTodayBreadCount(): BaseResponse<ResponseTodayBreadDto?>
 
     @GET("$API/$VERSIONS/$TIMER/breads")
-    suspend fun getBreadList(): BaseResponse<ResponseBreadListDto>
+    suspend fun getBreadList(): BaseResponse<ResponseBreadListDto?>
 
     @POST("$API/$VERSIONS/$TIMER")
     suspend fun postTimerCompleted(
         @Body requestCompleteTimerDto: RequestCompleteTimerDto,
-    ): BaseResponse<ResponseCompleteTimerDto>
+    ): BaseResponse<ResponseCompleteTimerDto?>
 }
