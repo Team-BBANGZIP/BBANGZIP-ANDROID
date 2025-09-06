@@ -63,13 +63,13 @@ class TodoContract {
 
         data class OnCategoryChipClick(val category: Category) : TodoEvent
 
-        data object OnCommitmentAreaClick: TodoEvent
+        data object OnCommitmentAreaClick : TodoEvent
 
-        data object OnCommitmentDone: TodoEvent
+        data object OnCommitmentDone : TodoEvent
 
-        data class OnCommitmentMessageChange(val text: String): TodoEvent
+        data class OnCommitmentMessageChange(val text: String) : TodoEvent
 
-        data object OnCommitmentBottomSheetDismissRequest: TodoEvent
+        data object OnCommitmentBottomSheetDismissRequest : TodoEvent
     }
 
     sealed interface TodoReduce : BaseContract.Reduce {

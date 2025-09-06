@@ -71,6 +71,6 @@ fun TodoRoute(
         },
         onCommitmentBottomSheetDismissRequest = {
             viewModel.setEvent(TodoEvent.OnCommitmentBottomSheetDismissRequest)
-        }
+        },
     )
 }

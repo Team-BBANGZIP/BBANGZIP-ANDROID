@@ -508,7 +508,7 @@ private fun ListHeader(
     Column {
         CommitmentMessageBox(
             commitmentMessage = commitmentMessage,
-            onCommitmentAreaClick = onCommitmentAreaClick
+            onCommitmentAreaClick = onCommitmentAreaClick,
         )
 
         Box(modifier = Modifier.fillMaxWidth()) {

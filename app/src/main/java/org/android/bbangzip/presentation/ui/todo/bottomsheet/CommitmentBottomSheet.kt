@@ -61,7 +61,7 @@ fun CommitmentBottomSheet(
                     focusManager = focusManager,
                     placeholder = R.string.commitment_placeholder,
                     onEnterClick = onDoneAction,
-                    maxCharacter = 50
+                    maxCharacter = 50,
                 )
 
                 Gap(28.dp)
@@ -98,14 +98,12 @@ fun CommitmentBottomSheetPreview() {
             }
             CommitmentBottomSheet(
                 isBottomSheetVisible = isBottomSheetVisible,
-                onDismissRequest = {isBottomSheetVisible = false},
+                onDismissRequest = { isBottomSheetVisible = false },
                 focusManager = focusManager,
                 commitmentMessage = text,
-                oncommitmentMessageChange = {text = it},
-                onDoneAction = {isBottomSheetVisible = false},
+                oncommitmentMessageChange = { text = it },
+                onDoneAction = { isBottomSheetVisible = false },
             )
         }
     }
 }
-
-
