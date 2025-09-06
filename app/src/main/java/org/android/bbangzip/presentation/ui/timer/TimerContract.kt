@@ -166,10 +166,6 @@ class TimerContract {
     }
 
     sealed interface TimerSideEffect : BaseContract.SideEffect {
-        data object NavigateToCompleteTask : TimerSideEffect
-
-        data object ShowBottomBar : TimerSideEffect
-
-        data object HideBottomBar : TimerSideEffect
+        data object NavigateToTimerTodo : TimerSideEffect
     }
 }
