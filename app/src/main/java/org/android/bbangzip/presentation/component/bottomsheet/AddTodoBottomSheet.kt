@@ -1,4 +1,4 @@
-package org.android.bbangzip.presentation.ui.todo.bottomsheet
+package org.android.bbangzip.presentation.component.bottomsheet
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,7 +28,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
-import org.android.bbangzip.presentation.component.bottomsheet.BbangZipBottomSheetSlot
 import org.android.bbangzip.presentation.component.textfield.BbangZipTextField
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.noRippleClickable
