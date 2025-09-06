@@ -20,7 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -51,6 +51,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInParent
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -71,9 +72,10 @@ import org.android.bbangzip.presentation.model.Category
 import org.android.bbangzip.presentation.model.ListItem
 import org.android.bbangzip.presentation.model.Todo
 import org.android.bbangzip.presentation.type.CategoryColor
+import org.android.bbangzip.presentation.ui.todo.bottomsheet.AddTodoBottomSheet
+import org.android.bbangzip.presentation.ui.todo.bottomsheet.TimePickerBottomSheet
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.dropShadow
-import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
 
@@ -99,9 +101,21 @@ fun TodoScreen(
     totalTodoCount: Int,
     completedTodoCount: Int,
     isMenuOpen: Boolean,
+    isTimePickerBottomSheetVisible: Boolean,
+    isAddTodoBottomSheetVisible: Boolean,
+    todoText: String,
+    selectedCategory: Category?,
+    selectedStartTime: LocalTime?,
     onMenuClick: () -> Unit,
     onListItemMove: (from: Int, to: Int) -> Unit,
     onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit,
+    onAddTodoDone: (category: Category?, todoContent: String, startTime: LocalTime?) -> Unit,
+    onTimeConfirmButtonClick: (startTime: LocalTime) -> Unit,
+    onTimePickerBottomSheetDismissRequest: () -> Unit,
+    onAddTodoBottomSheetDismissRequest: () -> Unit,
+    onTimePickerBottomSheetShowRequest: () -> Unit,
+    onTodoTextChange: (String) -> Unit,
+    onCategoryChipClick: (Category) -> Unit,
 ) {
     val localDensity = LocalDensity.current
     val itemSpacingPx = with(localDensity) { ITEM_SPACING.toPx() }
@@ -119,12 +133,14 @@ fun TodoScreen(
     var touchPointInItem by remember { mutableStateOf(Offset.Zero) }
     var touchPointY by remember { mutableFloatStateOf(0f) }
 
+    val focusManager = LocalFocusManager.current
+
     Box(
         modifier =
             modifier
                 .fillMaxSize()
                 .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
-                .systemBarsPadding(),
+                .statusBarsPadding(),
     ) {
         LazyColumn(
             modifier =
@@ -253,6 +269,7 @@ fun TodoScreen(
                     itemBounds = itemBounds,
                     itemSpacingPx = itemSpacingPx,
                     onTodoCheckBoxClick = onTodoCheckBoxClick,
+                    onCategoryClick = onCategoryChipClick,
                     modifier =
                         Modifier.onGloballyPositioned { coordinates ->
                             itemBounds[item.id] = coordinates.boundsInParent()
@@ -283,6 +300,25 @@ fun TodoScreen(
                 )
             }
         }
+        AddTodoBottomSheet(
+            isBottomSheetVisible = isAddTodoBottomSheetVisible,
+            onDismissRequest = onAddTodoBottomSheetDismissRequest,
+            focusManager = focusManager,
+            todo = todoText,
+            onTodoChange = onTodoTextChange,
+            onSettingTimeClick = onTimePickerBottomSheetShowRequest,
+            startTime = selectedStartTime,
+            onDoneAction = {
+                onAddTodoDone(selectedCategory, todoText, selectedStartTime)
+            },
+        )
+        TimePickerBottomSheet(
+            isBottomSheetVisible = isTimePickerBottomSheetVisible,
+            onDismissRequest = onTimePickerBottomSheetDismissRequest,
+            onCancleButtonClick = onTimePickerBottomSheetDismissRequest,
+            onConfirmButtonClick = onTimeConfirmButtonClick,
+            initialTime = selectedStartTime ?: LocalTime.of(12, 0),
+        )
     }
 }
 
@@ -376,6 +412,7 @@ private fun DraggableListItem(
     itemBounds: Map<String, Rect>,
     itemSpacingPx: Float,
     onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit,
+    onCategoryClick: (Category) -> Unit,
 ) {
     val currentDraggingItemIndex =
         remember(draggingItemId, flatList) {
@@ -422,6 +459,7 @@ private fun DraggableListItem(
                     BbangZipCategoryChip(
                         categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
                         categoryName = item.category.categoryName,
+                        onClick = { onCategoryClick(item.category) },
                     )
                 }
             }
@@ -457,7 +495,10 @@ private fun ListHeader(
             BbangZipWeeklyCalendar(onMenuClick = onMenuClick)
             if (isMenuOpen) {
                 MenuPopup(
-                    modifier = Modifier.offset(x = (-20).dp, y = 9.dp).fillMaxWidth(1 / 3f),
+                    modifier =
+                        Modifier
+                            .offset(x = (-20).dp, y = 9.dp)
+                            .fillMaxWidth(1 / 3f),
                     onDismissRequest = onMenuClick,
                 )
             }
@@ -631,71 +672,80 @@ private fun MenuPopup(
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
 fun TodoScreenPreview() {
-    BBANGZIPANDROIDTheme {
-        val exampleCategories =
-            listOf(
-                Category(
-                    categoryId = 1,
-                    categoryName = "제과제빵점",
-                    categoryColor = "BbangZipTheme.color.todoRed1_EA7152",
-                    todos =
-                        listOf(
-                            Todo(
-                                todoId = 11,
-                                content = "두줄 \n 두줄",
-                                isCompleted = true,
-                                startTime = LocalTime.of(11, 0),
-                            ),
-                            Todo(
-                                todoId = 12,
-                                content = "제과제빵점_한줄_실패",
-                                isCompleted = false,
-                                startTime = null,
-                            ),
+    val exampleCategories =
+        listOf(
+            Category(
+                categoryId = 1,
+                categoryName = "제과제빵점",
+                categoryColor = "BbangZipTheme.color.todoRed1_EA7152",
+                todos =
+                    listOf(
+                        Todo(
+                            todoId = 11,
+                            content = "두줄 두줄",
+                            isCompleted = true,
+                            startTime = LocalTime.of(11, 0),
                         ),
-                ),
-                Category(
-                    categoryId = 2,
-                    categoryName = "경제학개론",
-                    categoryColor = "BbangZipTheme.color.todoBlue1_5C62AC",
-                    todos =
-                        listOf(
-                            Todo(
-                                todoId = 21,
-                                content = "경제학개론_한줄_완료",
-                                isCompleted = true,
-                                startTime = null,
-                            ),
+                        Todo(
+                            todoId = 12,
+                            content = "제과제빵점_한줄_실패",
+                            isCompleted = false,
+                            startTime = null,
                         ),
-                ),
-            )
-
-        val flatList =
-            exampleCategories.flatMap { category ->
-                val categoryItem = ListItem.CategoryItem(category)
-                val todoItems =
-                    category.todos.mapIndexed { index, todo ->
-                        ListItem.TodoItem(
-                            todo = todo,
-                            category = category,
-                            isLastInCategory = index == category.todos.size - 1,
-                        )
-                    }
-                listOf(categoryItem) + todoItems
-            }
-
-        TodoScreen(
-            flatList = flatList,
-            motivationMessage = stringResource(R.string.todo_preview_motivation_message),
-            totalTodoCount = 3,
-            completedTodoCount = 2,
-            isMenuOpen = false,
-            onMenuClick = { },
-            onListItemMove = { _, _ -> },
-            onTodoCheckBoxClick = { _, _, _ -> },
+                    ),
+            ),
+            Category(
+                categoryId = 2,
+                categoryName = "경제학개론",
+                categoryColor = "BbangZipTheme.color.todoBlue1_5C62AC",
+                todos =
+                    listOf(
+                        Todo(
+                            todoId = 21,
+                            content = "경제학개론_한줄_완료",
+                            isCompleted = true,
+                            startTime = null,
+                        ),
+                    ),
+            ),
         )
-    }
+
+    val flatList =
+        exampleCategories.flatMap { category ->
+            val categoryItem = ListItem.CategoryItem(category)
+            val todoItems =
+                category.todos.mapIndexed { index, todo ->
+                    ListItem.TodoItem(
+                        todo = todo,
+                        category = category,
+                        isLastInCategory = index == category.todos.size - 1,
+                    )
+                }
+            listOf(categoryItem) + todoItems
+        }
+    TodoScreen(
+        flatList = flatList,
+        motivationMessage = "오늘도 힘내세요!",
+        totalTodoCount = 5,
+        completedTodoCount = 2,
+        isMenuOpen = false,
+        isTimePickerBottomSheetVisible = false,
+        isAddTodoBottomSheetVisible = false,
+        todoText = "새로운 할 일",
+        selectedCategory = exampleCategories[0],
+        selectedStartTime = LocalTime.NOON,
+        onMenuClick = {},
+        onListItemMove = { _, _ -> },
+        onTodoCheckBoxClick = { _, _, _ -> },
+        onAddTodoDone = { _, _, _ -> },
+        onTimeConfirmButtonClick = {},
+        onTimePickerBottomSheetDismissRequest = {},
+        onAddTodoBottomSheetDismissRequest = {},
+        onTimePickerBottomSheetShowRequest = {},
+        onTodoTextChange = {},
+        onCategoryChipClick = {},
+    )
 }

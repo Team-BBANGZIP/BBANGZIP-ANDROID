@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -96,6 +97,7 @@ fun BbangZipTimePicker(
             alignment = Alignment.End,
             colors = colors,
             typography = typography,
+            indicatorShape = RoundedCornerShape(topStart = 10.dp, bottomStart = 10.dp),
         )
 
         // 시각 선택 휠 피커
@@ -111,6 +113,7 @@ fun BbangZipTimePicker(
             alignment = Alignment.CenterHorizontally,
             colors = colors,
             typography = typography,
+            indicatorShape = RoundedCornerShape(0.dp),
         )
 
         // 분 선택 휠 피커
@@ -126,6 +129,7 @@ fun BbangZipTimePicker(
             alignment = Alignment.Start,
             colors = colors,
             typography = typography,
+            indicatorShape = RoundedCornerShape(topEnd = 10.dp, bottomEnd = 10.dp),
         )
     }
 }
