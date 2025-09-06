@@ -4,8 +4,6 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.presentation.model.Category
 import org.android.bbangzip.presentation.model.ListItem
-import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoEvent
-import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce
 import org.android.bbangzip.presentation.util.base.BaseContract
 import java.time.LocalDate
 import java.time.LocalTime

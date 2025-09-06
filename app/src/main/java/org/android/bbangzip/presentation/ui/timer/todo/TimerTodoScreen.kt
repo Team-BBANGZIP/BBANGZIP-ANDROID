@@ -17,6 +17,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,12 +32,13 @@ import org.android.bbangzip.presentation.model.Category
 import org.android.bbangzip.presentation.model.ListItem
 import org.android.bbangzip.presentation.model.Todo
 import org.android.bbangzip.presentation.type.CategoryColor
+import org.android.bbangzip.presentation.ui.todo.bottomsheet.AddTodoBottomSheet
+import org.android.bbangzip.presentation.ui.todo.bottomsheet.TimePickerBottomSheet
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
 
 
-//TODO timeOptionIndex 연결 / todoadd 바텀시트 추가 , picker 추가
 @Composable
 fun TimerTodoScreen(
     uiState: TimerTodoContract.TimerTodoState,
@@ -45,9 +47,17 @@ fun TimerTodoScreen(
     onBackIconClick: () -> Unit = {},
     onExitBtnClick: () -> Unit = {},
     onRestartTimerBtnClick: () -> Unit = {},
-    onAddTodoIconClick: () -> Unit = {},
     onTodoCheckBoxClick: (categoryId: Int, todoId: Int, isChecked: Boolean) -> Unit = { _, _, _ -> },
+    onCategoryChipClick: (Category) -> Unit = {},
+    onAddTodoBottomSheetDismissRequest: () -> Unit = {},
+    onAddTodoDone: (String, Category?, LocalTime?) -> Unit = { _, _, _ -> },
+    onTimeConfirmButtonClick: (LocalTime) -> Unit = {},
+    onTimePickerBottomSheetDismissRequest: () -> Unit = {},
+    onTimePickerBottomSheetShowRequest: () -> Unit = {},
+    onTodoTextChange: (String) -> Unit = {},
 ) {
+    val focusManager = LocalFocusManager.current
+
     Box(
         modifier =
             modifier
@@ -79,7 +89,7 @@ fun TimerTodoScreen(
                     item = item,
                     itemIndex = index,
                     onTodoCheckBoxClick = onTodoCheckBoxClick,
-                    onAddTodoIconClick = onAddTodoIconClick,
+                    onCategoryChipClick = onCategoryChipClick,
                     modifier = Modifier.padding(horizontal = 20.dp),
                 )
             }
@@ -93,6 +103,26 @@ fun TimerTodoScreen(
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 20.dp)
                 .padding(top = 20.dp, bottom = 12.dp),
+        )
+
+        AddTodoBottomSheet(
+            isBottomSheetVisible = uiState.isAddTodoBottomSheetVisible,
+            onDismissRequest = onAddTodoBottomSheetDismissRequest,
+            focusManager = focusManager,
+            todo = uiState.todoText,
+            onTodoChange = onTodoTextChange,
+            onSettingTimeClick = onTimePickerBottomSheetShowRequest,
+            startTime = uiState.selectedStartTime,
+            onDoneAction = {
+                onAddTodoDone(uiState.todoText,uiState.selectedCategory,  uiState.selectedStartTime)
+            },
+        )
+        TimePickerBottomSheet(
+            isBottomSheetVisible = uiState.isTimePickerBottomSheetVisible,
+            onDismissRequest = onTimePickerBottomSheetDismissRequest,
+            onCancleButtonClick = onTimePickerBottomSheetDismissRequest,
+            onConfirmButtonClick = onTimeConfirmButtonClick,
+            initialTime = uiState.selectedStartTime ?: LocalTime.of(12, 0),
         )
     }
 }
@@ -127,7 +157,7 @@ private fun TodoListItem(
     item: ListItem,
     itemIndex: Int,
     onTodoCheckBoxClick: (categoryId: Int, todoId: Int, isChecked: Boolean) -> Unit,
-    onAddTodoIconClick: () -> Unit,
+    onCategoryChipClick: (category : Category) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier) {
@@ -138,7 +168,7 @@ private fun TodoListItem(
                     BbangZipCategoryChip(
                         categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
                         categoryName = item.category.categoryName,
-                        onClick = onAddTodoIconClick
+                        onClick = { onCategoryChipClick(item.category) }
                     )
                 }
             }

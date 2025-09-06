@@ -40,7 +40,6 @@ fun TimerTodoRoute(
             onBackIconClick = { viewModel.setEvent(TimerTodoEvent.OnBackIconClick) },
             onExitBtnClick = { viewModel.setEvent(TimerTodoEvent.OnExitBtnClick) },
             onRestartTimerBtnClick = { viewModel.setEvent(TimerTodoEvent.OnRestartTimerBtnClick) },
-            onAddTodoIconClick = { viewModel.setEvent(TimerTodoEvent.OnAddTodoIconClick) },
             onTodoCheckBoxClick = { categoryId, todoId, isChecked ->
                 viewModel.setEvent(
                     TimerTodoEvent.OnTodoCheckBoxClick(
@@ -50,6 +49,23 @@ fun TimerTodoRoute(
                     ),
                 )
             },
+            onCategoryChipClick = { category ->
+                viewModel.setEvent(TimerTodoEvent.OnCategoryChipClick(category))
+            },
+            onAddTodoBottomSheetDismissRequest = { viewModel.setEvent(TimerTodoEvent.OnAddTodoBottomSheetDismissRequest) },
+            onAddTodoDone = { todoContent, category, startTime ->
+                viewModel.setEvent(
+                    TimerTodoEvent.OnAddTodoDone(
+                        todoContent = todoContent,
+                        category = category,
+                        startTime = startTime
+                    )
+                )
+            },
+            onTimeConfirmButtonClick = { startTime -> viewModel.setEvent(TimerTodoEvent.OnTimeConfirmButtonClick(startTime)) },
+            onTimePickerBottomSheetDismissRequest = { viewModel.setEvent(TimerTodoEvent.OnTimePickerBottomSheetDismissRequest) },
+            onTimePickerBottomSheetShowRequest = { viewModel.setEvent(TimerTodoEvent.OnTimePickerBottomSheetShowRequest) },
+            onTodoTextChange = { todoText -> viewModel.setEvent(TimerTodoEvent.OnTodoTextChange(todoText)) },
         )
 
         false -> {
