@@ -20,10 +20,12 @@ fun TodoRoute(
     TodoScreen(
         modifier = modifier.padding(bottom = padding.calculateBottomPadding()),
         flatList = uiState.flatList,
-        motivationMessage = uiState.motivationMessage,
         totalTodoCount = uiState.totalTodoCount,
         completedTodoCount = uiState.completedTodoCount,
         isMenuOpen = uiState.isMenuOpen,
+        textFieldCommitmentMessage = uiState.textFieldCommitmentMessage,
+        confirmedCommitmentMessage = uiState.confirmedCommitmentMessage,
+        isCommitmentBottomSheetVisible = uiState.isCommitmentBottomSheetVisible,
         isAddTodoBottomSheetVisible = uiState.isAddTodoBottomSheetVisible,
         isTimePickerBottomSheetVisible = uiState.isTimePickerBottomSheetVisible,
         todoText = uiState.todoText,
@@ -58,6 +60,18 @@ fun TodoRoute(
         },
         onCategoryChipClick = { category ->
             viewModel.setEvent(TodoEvent.OnCategoryChipClick(category))
+        },
+        onCommitmentAreaClick = {
+            viewModel.setEvent(TodoEvent.OnCommitmentAreaClick)
+        },
+        onCommitmentDone = {
+            viewModel.setEvent(TodoEvent.OnCommitmentDone)
+        },
+        onTextFieldCommitmentMessageChange = { text ->
+            viewModel.setEvent(TodoEvent.OnTextFieldCommitmentMessageChange(text))
+        },
+        onCommitmentBottomSheetDismissRequest = {
+            viewModel.setEvent(TodoEvent.OnCommitmentBottomSheetDismissRequest)
         },
     )
 }

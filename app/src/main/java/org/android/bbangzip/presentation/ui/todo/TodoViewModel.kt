@@ -12,7 +12,6 @@ import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateC
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategoriesAndFlatList
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateFlatList
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateIsMenuOpen
-import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateMotivationMessage
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateSelectedDate
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoSideEffect
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoState
@@ -117,9 +116,21 @@ class TodoViewModel
                     updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(true))
                 }
                 TodoEvent.OnAddCategoryClick -> TODO()
-                TodoEvent.OnCommitmentAreaClick -> TODO()
                 TodoEvent.OnDateChanged -> TODO()
                 TodoEvent.OnManageCategoryClick -> TODO()
+                TodoEvent.OnCommitmentAreaClick -> {
+                    updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(true))
+                }
+                TodoEvent.OnCommitmentDone -> {
+                    updateState(TodoReduce.UpdateConfirmedCommitmentMessage(commitmentMessage = currentUiState.textFieldCommitmentMessage))
+                    updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(false))
+                }
+                is TodoEvent.OnTextFieldCommitmentMessageChange -> {
+                    updateState(TodoReduce.UpdateTextFieldCommitmentMessage(commitmentMessage = event.text))
+                }
+                TodoEvent.OnCommitmentBottomSheetDismissRequest -> {
+                    updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(false))
+                }
             }
         }
 
@@ -128,9 +139,6 @@ class TodoViewModel
             reduce: TodoReduce,
         ): TodoState {
             return when (reduce) {
-                is UpdateMotivationMessage -> {
-                    state.copy(motivationMessage = reduce.message)
-                }
                 is UpdateCategories -> {
                     state.copy(categories = reduce.categories)
                 }
@@ -148,9 +156,6 @@ class TodoViewModel
                 }
                 is TodoReduce.UpdateIsAddTodoBottomSheetVisible -> {
                     state.copy(isAddTodoBottomSheetVisible = reduce.isVisible)
-                }
-                is TodoReduce.UpdateIsCommitmentBottomSheetVisible -> {
-                    state.copy(isCommitmentBottomSheetVisible = reduce.isVisible)
                 }
                 is TodoReduce.UpdateIsTimePickerBottomSheetVisible -> {
                     state.copy(isTimePickerBottomSheetVisible = reduce.isVisible)
@@ -170,6 +175,15 @@ class TodoViewModel
                         selectedCategory = null,
                         selectedStartTime = null,
                     )
+                }
+                is TodoReduce.UpdateIsCommitmentBottomSheetVisible -> {
+                    state.copy(isCommitmentBottomSheetVisible = reduce.isVisible)
+                }
+                is TodoReduce.UpdateTextFieldCommitmentMessage -> {
+                    state.copy(textFieldCommitmentMessage = reduce.commitmentMessage)
+                }
+                is TodoReduce.UpdateConfirmedCommitmentMessage -> {
+                    state.copy(confirmedCommitmentMessage = reduce.commitmentMessage)
                 }
             }
         }
