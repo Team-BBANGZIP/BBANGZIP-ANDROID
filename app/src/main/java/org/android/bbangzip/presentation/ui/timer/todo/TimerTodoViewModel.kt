@@ -8,7 +8,16 @@ import org.android.bbangzip.presentation.model.ListItem
 import org.android.bbangzip.presentation.model.Todo
 import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoEvent
 import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoReduce
+import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoReduce.ClearAddTodoState
+import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoReduce.UpdateAddTodoBottomSheetState
+import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoReduce.UpdateCategoriesAndFlatList
+import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoReduce.UpdateFlatList
+import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoReduce.UpdateSelectedCategory
+import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoReduce.UpdateSelectedStartTime
+import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoReduce.UpdateTimePickerBottomSheetState
+import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoReduce.UpdateTodoText
 import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoSideEffect
+import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoSideEffect.NavigateToTimer
 import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoState
 import org.android.bbangzip.presentation.util.base.BaseViewModel
 import java.time.LocalTime
@@ -65,32 +74,68 @@ constructor(
             }
 
             is TimerTodoEvent.OnExitBtnClick -> {
-                setSideEffect(TimerTodoSideEffect.NavigateToTimer(shouldRestart = false))
+                setSideEffect(NavigateToTimer(shouldRestart = false))
             }
 
             is TimerTodoEvent.OnRestartTimerBtnClick -> {
-                setSideEffect(TimerTodoSideEffect.NavigateToTimer(shouldRestart = true))
+                setSideEffect(NavigateToTimer(shouldRestart = true))
             }
 
-            is TimerTodoEvent.OnAddTodoIconClick -> {
-                updateState(TimerTodoReduce.UpdateAddTodoBottomSheetState(isAddTodoBottomSheetVisible = true))
+            is TimerTodoEvent.OnCategoryChipClick -> {
+                updateState(UpdateSelectedCategory(event.category))
+                updateState(UpdateAddTodoBottomSheetState(isAddTodoBottomSheetVisible = true))
             }
 
+            is TimerTodoEvent.OnAddTodoBottomSheetDismissRequest ->{
+                updateState(ClearAddTodoState)
+                updateState(UpdateAddTodoBottomSheetState(false))
+            }
+            is TimerTodoEvent.OnAddTodoDone -> {
+                if (event.todoContent.isNotBlank() && event.category != null) {
+                    onTodoAdd(event.category.categoryId, event.todoContent, event.startTime)
+                    updateState(ClearAddTodoState)
+                    updateState(UpdateAddTodoBottomSheetState(false))
+                }
+            }
+
+            is TimerTodoEvent.OnTimeConfirmButtonClick -> {
+                updateState(UpdateSelectedStartTime(event.startTime))
+                updateState(UpdateTimePickerBottomSheetState(false))
+            }
+
+            is TimerTodoEvent.OnTimePickerBottomSheetDismissRequest -> {
+                updateState(ClearAddTodoState)
+                updateState(UpdateTimePickerBottomSheetState(isTimePickerBottomSheetVisible = false))
+            }
+
+            is TimerTodoEvent.OnTimePickerBottomSheetShowRequest -> {
+                updateState(UpdateTimePickerBottomSheetState(isTimePickerBottomSheetVisible = true))
+            }
+
+            is TimerTodoEvent.OnTodoTextChange -> {
+                updateState(UpdateTodoText(event.todoText))
+
+            }
         }
     }
 
     override fun reduceState(state: TimerTodoState, reduce: TimerTodoReduce): TimerTodoState {
         return when (reduce) {
-            is TimerTodoReduce.UpdateFlatList -> state.copy(flatList = reduce.flatList)
-            is TimerTodoReduce.UpdateCategoriesAndFlatList -> state.copy(categories = reduce.categories, flatList = reduce.flatList)
-            is TimerTodoReduce.UpdateAddTodoBottomSheetState -> state.copy(isAddTodoBottomSheetVisible = reduce.isAddTodoBottomSheetVisible)
-            is TimerTodoReduce.UpdateTimePickerBottomSheetState -> state.copy(isTimePickerBottomSheetVisible = reduce.isTimePickerBottomSheetVisible)
+            is UpdateFlatList -> state.copy(flatList = reduce.flatList)
+            is UpdateCategoriesAndFlatList -> state.copy(categories = reduce.categories, flatList = reduce.flatList)
+            is UpdateAddTodoBottomSheetState -> state.copy(isAddTodoBottomSheetVisible = reduce.isAddTodoBottomSheetVisible)
+            is UpdateTimePickerBottomSheetState -> state.copy(isTimePickerBottomSheetVisible = reduce.isTimePickerBottomSheetVisible)
+            is ClearAddTodoState -> state.copy(todoText = "", selectedCategory = null, selectedStartTime = null)
+            is UpdateSelectedStartTime -> state.copy(selectedStartTime = reduce.startTime)
+            is UpdateTodoText -> state.copy(todoText = reduce.todoText)
+            is UpdateSelectedCategory -> state.copy(selectedCategory = reduce.category)
+
         }
     }
 
     private fun updateCategoriesAndFlatList(categories: List<Category>) {
         val flatList = categories.toFlatList()
-        updateState(TimerTodoReduce.UpdateCategoriesAndFlatList(categories, flatList))
+        updateState(UpdateCategoriesAndFlatList(categories, flatList))
     }
 
 
@@ -273,5 +318,29 @@ constructor(
         )
     }
 
+    fun onTodoAdd(
+        categoryId: Int,
+        todoContent: String,
+        startTime: LocalTime?,
+    ) {
+        val newTodoId = (currentUiState.categories.flatMap { it.todos }.maxOfOrNull { it.todoId } ?: 0) + 1
+        val newTodo =
+            Todo(
+                todoId = newTodoId,
+                content = todoContent,
+                isCompleted = false,
+                startTime = startTime,
+            )
+
+        val updatedCategories =
+            currentUiState.categories.map { category ->
+                if (category.categoryId == categoryId) {
+                    category.copy(todos = category.todos + newTodo)
+                } else {
+                    category
+                }
+            }
+        updateCategoriesAndFlatList(updatedCategories)
+    }
     private fun postCheckedTodo() {}
 }
