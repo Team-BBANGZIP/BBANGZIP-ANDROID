@@ -90,4 +90,8 @@
 
     <!-- Time Picker BottomSheet -->
     <string name = "time_picker_title">시작 시간 설정</string>
+
+    <!-- Commitment BottomSheet -->
+    <string name = "commitment_title">나만의 다짐 작성</string>
+    <string name = "commitment_placeholder">나만의 다짐을 적어보세요</string>
 </resources>
