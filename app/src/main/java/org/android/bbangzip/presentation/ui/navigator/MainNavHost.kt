@@ -32,7 +32,9 @@ fun MainNavHost(
             navigateToBack = navigator::popBackStack
         )
 
-        todoNavGraph()
+        todoNavGraph(
+            padding = padding,
+        )
 
         myNavGraph()
 

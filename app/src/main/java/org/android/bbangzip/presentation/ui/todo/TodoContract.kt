@@ -6,6 +6,7 @@ import org.android.bbangzip.presentation.model.Category
 import org.android.bbangzip.presentation.model.ListItem
 import org.android.bbangzip.presentation.util.base.BaseContract
 import java.time.LocalDate
+import java.time.LocalTime
 
 class TodoContract {
     @Parcelize
@@ -18,6 +19,9 @@ class TodoContract {
         val isCommitmentBottomSheetVisible: Boolean = false,
         val isAddTodoBottomSheetVisible: Boolean = false,
         val isTimePickerBottomSheetVisible: Boolean = false,
+        val todoText: String = "",
+        val selectedCategory: Category? = null,
+        val selectedStartTime: LocalTime? = null,
     ) : BaseContract.State, Parcelable {
         override fun toParcelable(): Parcelable = this
 
@@ -35,8 +39,6 @@ class TodoContract {
 
         data object OnMenuClick : TodoEvent
 
-        data object OnCategoryChipClick : TodoEvent
-
         data class OnTodoCheckBoxClick(val todoId: Int, val categoryId: Int, val isChecked: Boolean) : TodoEvent
 
         data object OnDateChanged : TodoEvent
@@ -46,6 +48,20 @@ class TodoContract {
         data object OnManageCategoryClick : TodoEvent
 
         data class OnListItemMove(val from: Int, val to: Int) : TodoEvent
+
+        data class OnAddTodoDone(val category: Category?, val todoContent: String, val startTime: LocalTime?) : TodoEvent
+
+        data class OnTimeConfirmButtonClick(val startTime: LocalTime?) : TodoEvent
+
+        data object OnTimePickerBottomSheetDismissRequest : TodoEvent
+
+        data object OnAddTodoBottomSheetDismissRequest : TodoEvent
+
+        data object OnTimePickerBottomSheetShowRequest : TodoEvent
+
+        data class OnTodoTextChange(val todoText: String) : TodoEvent
+
+        data class OnCategoryChipClick(val category: Category) : TodoEvent
     }
 
     sealed interface TodoReduce : BaseContract.Reduce {
@@ -63,6 +79,20 @@ class TodoContract {
         data class UpdateSelectedDate(val selectedDate: LocalDate) : TodoReduce
 
         data class UpdateIsMenuOpen(val isMenuOpen: Boolean) : TodoReduce
+
+        data class UpdateIsTimePickerBottomSheetVisible(val isVisible: Boolean) : TodoReduce
+
+        data class UpdateIsCommitmentBottomSheetVisible(val isVisible: Boolean) : TodoReduce
+
+        data class UpdateIsAddTodoBottomSheetVisible(val isVisible: Boolean) : TodoReduce
+
+        data class UpdateTodoText(val todoText: String) : TodoReduce
+
+        data class UpdateSelectedCategory(val category: Category?) : TodoReduce
+
+        data class UpdateSelectedStartTime(val startTime: LocalTime?) : TodoReduce
+
+        data object ClearAddTodoState : TodoReduce
     }
 
     sealed interface TodoSideEffect : BaseContract.SideEffect
