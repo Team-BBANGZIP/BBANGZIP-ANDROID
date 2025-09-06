@@ -103,21 +103,19 @@ fun TodoScreen(
     isMenuOpen: Boolean,
     isTimePickerBottomSheetVisible: Boolean,
     isAddTodoBottomSheetVisible: Boolean,
-    isCommitmentBottomSheetVisible: Boolean,
     todoText: String,
     selectedCategory: Category?,
     selectedStartTime: LocalTime?,
     onMenuClick: () -> Unit,
     onListItemMove: (from: Int, to: Int) -> Unit,
     onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit,
-    onTodoAdd: (category: Category?, todoContent: String, startTime: LocalTime?) -> Unit,
+    onAddTodoDone: (category: Category?, todoContent: String, startTime: LocalTime?) -> Unit,
     onTimeConfirmButtonClick: (startTime: LocalTime) -> Unit,
     onTimePickerBottomSheetDismissRequest: () -> Unit,
     onAddTodoBottomSheetDismissRequest: () -> Unit,
-    onAddTodoBottomSheetShowRequest: () -> Unit,
     onTimePickerBottomSheetShowRequest: () -> Unit,
-    onCategorySelect: (category: Category) -> Unit,
     onTodoTextChange: (String) -> Unit,
+    onCategoryChipClick: (Category) -> Unit,
 ) {
     val localDensity = LocalDensity.current
     val itemSpacingPx = with(localDensity) { ITEM_SPACING.toPx() }
@@ -271,10 +269,7 @@ fun TodoScreen(
                     itemBounds = itemBounds,
                     itemSpacingPx = itemSpacingPx,
                     onTodoCheckBoxClick = onTodoCheckBoxClick,
-                    onCategoryClick = { category ->
-                        onCategorySelect(category)
-                        onAddTodoBottomSheetShowRequest()
-                    },
+                    onCategoryClick = onCategoryChipClick,
                     modifier =
                         Modifier.onGloballyPositioned { coordinates ->
                             itemBounds[item.id] = coordinates.boundsInParent()
@@ -314,18 +309,14 @@ fun TodoScreen(
             onSettingTimeClick = onTimePickerBottomSheetShowRequest,
             startTime = selectedStartTime,
             onDoneAction = {
-                onTodoAdd(selectedCategory, todoText, selectedStartTime)
-                onAddTodoBottomSheetDismissRequest()
+                onAddTodoDone(selectedCategory, todoText, selectedStartTime)
             },
         )
         TimePickerBottomSheet(
             isBottomSheetVisible = isTimePickerBottomSheetVisible,
             onDismissRequest = onTimePickerBottomSheetDismissRequest,
             onCancleButtonClick = onTimePickerBottomSheetDismissRequest,
-            onConfirmButtonClick = { time ->
-                onTimeConfirmButtonClick(time)
-                onTimePickerBottomSheetDismissRequest()
-            },
+            onConfirmButtonClick = onTimeConfirmButtonClick,
             initialTime = selectedStartTime ?: LocalTime.of(12, 0),
         )
     }
@@ -743,20 +734,18 @@ fun TodoScreenPreview() {
         isMenuOpen = false,
         isTimePickerBottomSheetVisible = false,
         isAddTodoBottomSheetVisible = false,
-        isCommitmentBottomSheetVisible = false,
         todoText = "새로운 할 일",
         selectedCategory = exampleCategories[0],
         selectedStartTime = LocalTime.NOON,
         onMenuClick = {},
         onListItemMove = { _, _ -> },
         onTodoCheckBoxClick = { _, _, _ -> },
-        onTodoAdd = { _, _, _ -> },
+        onAddTodoDone = { _, _, _ -> },
         onTimeConfirmButtonClick = {},
         onTimePickerBottomSheetDismissRequest = {},
         onAddTodoBottomSheetDismissRequest = {},
-        onAddTodoBottomSheetShowRequest = {},
         onTimePickerBottomSheetShowRequest = {},
-        onCategorySelect = {},
         onTodoTextChange = {},
+        onCategoryChipClick = {},
     )
 }

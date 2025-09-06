@@ -25,7 +25,6 @@ fun TodoRoute(
         completedTodoCount = uiState.completedTodoCount,
         isMenuOpen = uiState.isMenuOpen,
         isAddTodoBottomSheetVisible = uiState.isAddTodoBottomSheetVisible,
-        isCommitmentBottomSheetVisible = uiState.isCommitmentBottomSheetVisible,
         isTimePickerBottomSheetVisible = uiState.isTimePickerBottomSheetVisible,
         todoText = uiState.todoText,
         selectedCategory = uiState.selectedCategory,
@@ -39,8 +38,8 @@ fun TodoRoute(
         onMenuClick = {
             viewModel.setEvent(TodoEvent.OnMenuClick)
         },
-        onTodoAdd = { category, todo, todoDate ->
-            viewModel.setEvent(TodoEvent.OnTodoAdd(category, todo, todoDate))
+        onAddTodoDone = { category, todo, todoDate ->
+            viewModel.setEvent(TodoEvent.OnAddTodoDone(category, todo, todoDate))
         },
         onTimeConfirmButtonClick = { startTime ->
             viewModel.setEvent(TodoEvent.OnTimeConfirmButtonClick(startTime))
@@ -51,17 +50,14 @@ fun TodoRoute(
         onAddTodoBottomSheetDismissRequest = {
             viewModel.setEvent(TodoEvent.OnAddTodoBottomSheetDismissRequest)
         },
-        onAddTodoBottomSheetShowRequest = {
-            viewModel.setEvent(TodoEvent.OnAddTodoBottomSheetShowRequest)
-        },
         onTimePickerBottomSheetShowRequest = {
             viewModel.setEvent(TodoEvent.OnTimePickerBottomSheetShowRequest)
         },
-        onCategorySelect = { category ->
-            viewModel.setEvent(TodoEvent.OnCategorySelect(category))
-        },
         onTodoTextChange = { todoText ->
             viewModel.setEvent(TodoEvent.OnTodoTextChange(todoText))
+        },
+        onCategoryChipClick = { category ->
+            viewModel.setEvent(TodoEvent.OnCategoryChipClick(category))
         },
     )
 }

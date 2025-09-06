@@ -84,15 +84,17 @@ class TodoViewModel
                     updateState(UpdateIsMenuOpen(isMenuOpen = !currentUiState.isMenuOpen))
                 }
 
-                is TodoEvent.OnTodoAdd -> {
+                is TodoEvent.OnAddTodoDone -> {
                     if (event.todoContent.isNotBlank() && event.category != null) {
                         onTodoAdd(event.category.categoryId, event.todoContent, event.startTime)
                         updateState(TodoReduce.ClearAddTodoState)
+                        updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(false))
                     }
                 }
 
                 is TodoEvent.OnTimeConfirmButtonClick -> {
                     updateState(TodoReduce.UpdateSelectedStartTime(event.startTime))
+                    updateState(TodoReduce.UpdateIsTimePickerBottomSheetVisible(false))
                 }
 
                 TodoEvent.OnTimePickerBottomSheetDismissRequest -> {
@@ -103,20 +105,16 @@ class TodoViewModel
                     updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(false))
                 }
 
-                is TodoEvent.OnCategorySelect -> {
-                    updateState(TodoReduce.UpdateSelectedCategory(event.category))
-                }
-
                 TodoEvent.OnTimePickerBottomSheetShowRequest -> {
                     updateState(TodoReduce.UpdateIsTimePickerBottomSheetVisible(true))
                 }
 
-                TodoEvent.OnAddTodoBottomSheetShowRequest -> {
-                    updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(true))
-                }
-
                 is TodoEvent.OnTodoTextChange -> {
                     updateState(TodoReduce.UpdateTodoText(event.todoText))
+                }
+                is TodoEvent.OnCategoryChipClick -> {
+                    updateState(TodoReduce.UpdateSelectedCategory(event.category))
+                    updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(true))
                 }
                 TodoEvent.OnAddCategoryClick -> TODO()
                 TodoEvent.OnCommitmentAreaClick -> TODO()

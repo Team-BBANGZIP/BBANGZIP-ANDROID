@@ -39,8 +39,6 @@ class TodoContract {
 
         data object OnMenuClick : TodoEvent
 
-        data class OnCategorySelect(val category: Category?) : TodoEvent
-
         data class OnTodoCheckBoxClick(val todoId: Int, val categoryId: Int, val isChecked: Boolean) : TodoEvent
 
         data object OnDateChanged : TodoEvent
@@ -51,7 +49,7 @@ class TodoContract {
 
         data class OnListItemMove(val from: Int, val to: Int) : TodoEvent
 
-        data class OnTodoAdd(val category: Category?, val todoContent: String, val startTime: LocalTime?) : TodoEvent
+        data class OnAddTodoDone(val category: Category?, val todoContent: String, val startTime: LocalTime?) : TodoEvent
 
         data class OnTimeConfirmButtonClick(val startTime: LocalTime?) : TodoEvent
 
@@ -61,9 +59,9 @@ class TodoContract {
 
         data object OnTimePickerBottomSheetShowRequest : TodoEvent
 
-        data object OnAddTodoBottomSheetShowRequest : TodoEvent
-
         data class OnTodoTextChange(val todoText: String) : TodoEvent
+
+        data class OnCategoryChipClick(val category: Category) : TodoEvent
     }
 
     sealed interface TodoReduce : BaseContract.Reduce {
