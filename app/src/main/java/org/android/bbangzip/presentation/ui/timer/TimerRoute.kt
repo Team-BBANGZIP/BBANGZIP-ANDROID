@@ -10,14 +10,15 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
+import org.android.bbangzip.presentation.model.TimerStatus
 import org.android.bbangzip.presentation.ui.shared.SharedContract
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 
 @Composable
 fun TimerRoute(
     sharedViewModel: SharedViewModel,
-    navigateToTimerTodo: () -> Unit ,
-    shouldRestartTimer : Boolean,
+    navigateToTimerTodo: () -> Unit,
+    shouldRestartTimer: Boolean,
     modifier: Modifier = Modifier,
     timerViewmodel: TimerViewModel = hiltViewModel(),
 ) {
@@ -28,9 +29,7 @@ fun TimerRoute(
     LaunchedEffect(timerViewmodel.uiSideEffect) {
         timerViewmodel.uiSideEffect.collectLatest { effect ->
             when (effect) {
-                TimerContract.TimerSideEffect.NavigateToCompleteTask -> navigateToTimerTodo()
-                TimerContract.TimerSideEffect.ShowBottomBar -> sharedViewModel.setEvent(SharedContract.SharedEvent.OnShowBottomBar)
-                TimerContract.TimerSideEffect.HideBottomBar -> sharedViewModel.setEvent(SharedContract.SharedEvent.OnHideBottomBar)
+                TimerContract.TimerSideEffect.NavigateToTimerTodo -> navigateToTimerTodo()
             }
         }
     }
@@ -38,6 +37,14 @@ fun TimerRoute(
     LaunchedEffect(shouldRestartTimer) {
         if (shouldRestartTimer) {
             timerViewmodel.setEvent(TimerContract.TimerEvent.OnRestartSheetApproveBtnClick)
+        }
+    }
+
+    LaunchedEffect(timerState.timerStatus) {
+        if (timerState.timerStatus == TimerStatus.Idle) {
+            sharedViewModel.setEvent(SharedContract.SharedEvent.OnShowBottomBar)
+        } else {
+            sharedViewModel.setEvent(SharedContract.SharedEvent.OnHideBottomBar)
         }
     }
 

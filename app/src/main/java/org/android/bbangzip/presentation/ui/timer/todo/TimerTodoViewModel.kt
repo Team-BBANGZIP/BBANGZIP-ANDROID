@@ -13,7 +13,6 @@ import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTo
 import org.android.bbangzip.presentation.util.base.BaseViewModel
 import java.time.LocalTime
 import javax.inject.Inject
-import kotlin.collections.forEach
 
 @HiltViewModel
 class TimerTodoViewModel
@@ -73,7 +72,9 @@ constructor(
                 setSideEffect(TimerTodoSideEffect.NavigateToTimer(shouldRestart = true))
             }
 
-            is TimerTodoEvent.OnAddTodoIconClick -> TODO()
+            is TimerTodoEvent.OnAddTodoIconClick -> {
+                updateState(TimerTodoReduce.UpdateAddTodoBottomSheetState(isAddTodoBottomSheetVisible = true))
+            }
 
         }
     }
@@ -107,7 +108,6 @@ constructor(
             listOf(categoryItem) + todoItems
         }
     }
-
 
 
     private fun getExampleList(): List<Category> {
