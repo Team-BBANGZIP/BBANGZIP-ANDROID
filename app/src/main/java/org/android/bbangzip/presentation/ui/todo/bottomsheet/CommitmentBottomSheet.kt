@@ -33,8 +33,8 @@ fun CommitmentBottomSheet(
     isBottomSheetVisible: Boolean,
     onDismissRequest: () -> Unit,
     focusManager: FocusManager,
-    commitment: String,
-    onCommitmentChange: (String) -> Unit,
+    commitmentMessage: String,
+    oncommitmentMessageChange: (String) -> Unit,
     onDoneAction: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -56,8 +56,8 @@ fun CommitmentBottomSheet(
                 Gap(31.dp)
 
                 BbangZipTextField(
-                    value = commitment,
-                    onValueChange = onCommitmentChange,
+                    value = commitmentMessage,
+                    onValueChange = oncommitmentMessageChange,
                     focusManager = focusManager,
                     placeholder = R.string.commitment_placeholder,
                     onEnterClick = onDoneAction,
@@ -100,8 +100,8 @@ fun CommitmentBottomSheetPreview() {
                 isBottomSheetVisible = isBottomSheetVisible,
                 onDismissRequest = {isBottomSheetVisible = false},
                 focusManager = focusManager,
-                commitment = text,
-                onCommitmentChange = {text = it},
+                commitmentMessage = text,
+                oncommitmentMessageChange = {text = it},
                 onDoneAction = {isBottomSheetVisible = false},
             )
         }

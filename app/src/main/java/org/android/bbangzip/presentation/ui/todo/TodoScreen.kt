@@ -73,9 +73,11 @@ import org.android.bbangzip.presentation.model.ListItem
 import org.android.bbangzip.presentation.model.Todo
 import org.android.bbangzip.presentation.type.CategoryColor
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.AddTodoBottomSheet
+import org.android.bbangzip.presentation.ui.todo.bottomsheet.CommitmentBottomSheet
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.TimePickerBottomSheet
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.presentation.util.extension.dropShadow
+import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
 
@@ -97,10 +99,11 @@ private enum class AutoScrollDirection {
 fun TodoScreen(
     modifier: Modifier = Modifier,
     flatList: List<ListItem>,
-    motivationMessage: String,
     totalTodoCount: Int,
     completedTodoCount: Int,
     isMenuOpen: Boolean,
+    commitmentMessage: String,
+    isCommitmentBottomSheetVisible: Boolean,
     isTimePickerBottomSheetVisible: Boolean,
     isAddTodoBottomSheetVisible: Boolean,
     todoText: String,
@@ -116,6 +119,10 @@ fun TodoScreen(
     onTimePickerBottomSheetShowRequest: () -> Unit,
     onTodoTextChange: (String) -> Unit,
     onCategoryChipClick: (Category) -> Unit,
+    onCommitmentAreaClick: () -> Unit,
+    onCommitmentDone: () -> Unit,
+    onCommitmentMessageChange: (String) -> Unit,
+    onCommitmentBottomSheetDismissRequest: () -> Unit,
 ) {
     val localDensity = LocalDensity.current
     val itemSpacingPx = with(localDensity) { ITEM_SPACING.toPx() }
@@ -248,9 +255,10 @@ fun TodoScreen(
         ) {
             item {
                 ListHeader(
-                    motivationMessage = motivationMessage,
+                    commitmentMessage = commitmentMessage,
                     isMenuOpen = isMenuOpen,
                     onMenuClick = onMenuClick,
+                    onCommitmentAreaClick = onCommitmentAreaClick,
                     completedTodoCount = completedTodoCount,
                     totalTodoCount = totalTodoCount,
                 )
@@ -318,6 +326,14 @@ fun TodoScreen(
             onCancleButtonClick = onTimePickerBottomSheetDismissRequest,
             onConfirmButtonClick = onTimeConfirmButtonClick,
             initialTime = selectedStartTime ?: LocalTime.of(12, 0),
+        )
+        CommitmentBottomSheet(
+            isBottomSheetVisible = isCommitmentBottomSheetVisible,
+            onDismissRequest = onCommitmentBottomSheetDismissRequest,
+            focusManager = focusManager,
+            commitmentMessage = commitmentMessage,
+            oncommitmentMessageChange = onCommitmentMessageChange,
+            onDoneAction = onCommitmentDone,
         )
     }
 }
@@ -482,14 +498,18 @@ private fun DraggableListItem(
 
 @Composable
 private fun ListHeader(
-    motivationMessage: String,
+    commitmentMessage: String,
     isMenuOpen: Boolean,
     onMenuClick: () -> Unit,
+    onCommitmentAreaClick: () -> Unit,
     completedTodoCount: Int,
     totalTodoCount: Int,
 ) {
     Column {
-        MotivationMessageBox(motivationMessage = motivationMessage)
+        CommitmentMessageBox(
+            commitmentMessage = commitmentMessage,
+            onCommitmentAreaClick = onCommitmentAreaClick
+        )
 
         Box(modifier = Modifier.fillMaxWidth()) {
             BbangZipWeeklyCalendar(onMenuClick = onMenuClick)
@@ -514,14 +534,16 @@ private fun ListHeader(
 }
 
 @Composable
-fun MotivationMessageBox(
-    motivationMessage: String,
+fun CommitmentMessageBox(
+    commitmentMessage: String,
+    onCommitmentAreaClick: () -> Unit = {},
 ) {
     Box(
         modifier =
             Modifier
                 .fillMaxWidth()
                 .height(60.dp)
+                .noRippleClickable(onClick = onCommitmentAreaClick)
                 .background(BbangZipTheme.color.secondaryStrong_F2EAE4)
                 .clipToBounds(),
     ) {
@@ -533,7 +555,7 @@ fun MotivationMessageBox(
                     .align(Alignment.CenterStart),
         ) {
             Text(
-                text = motivationMessage,
+                text = commitmentMessage,
                 color = BbangZipTheme.color.labelNormal_6B6560,
                 style = BbangZipTheme.typography.body4Medium,
             )
@@ -728,7 +750,6 @@ fun TodoScreenPreview() {
         }
     TodoScreen(
         flatList = flatList,
-        motivationMessage = "오늘도 힘내세요!",
         totalTodoCount = 5,
         completedTodoCount = 2,
         isMenuOpen = false,
@@ -747,5 +768,11 @@ fun TodoScreenPreview() {
         onTimePickerBottomSheetShowRequest = {},
         onTodoTextChange = {},
         onCategoryChipClick = {},
+        commitmentMessage = "",
+        isCommitmentBottomSheetVisible = false,
+        onCommitmentAreaClick = {},
+        onCommitmentDone = {},
+        onCommitmentMessageChange = { },
+        onCommitmentBottomSheetDismissRequest = {},
     )
 }

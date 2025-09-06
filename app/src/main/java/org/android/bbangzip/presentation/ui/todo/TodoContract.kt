@@ -13,10 +13,12 @@ class TodoContract {
     data class TodoState(
         val categories: List<Category> = emptyList(),
         val flatList: List<ListItem> = emptyList(),
-        val motivationMessage: String = "나만의 다짐을 적어보세요.",
         val selectedDate: LocalDate = LocalDate.now(),
         val isMenuOpen: Boolean = false,
+        // commitment state
         val isCommitmentBottomSheetVisible: Boolean = false,
+        val commitmentMessage: String = "",
+        // add todo state
         val isAddTodoBottomSheetVisible: Boolean = false,
         val isTimePickerBottomSheetVisible: Boolean = false,
         val todoText: String = "",
@@ -34,8 +36,6 @@ class TodoContract {
 
     sealed interface TodoEvent : BaseContract.Event {
         data object Initialize : TodoEvent
-
-        data object OnCommitmentAreaClick : TodoEvent
 
         data object OnMenuClick : TodoEvent
 
@@ -62,11 +62,17 @@ class TodoContract {
         data class OnTodoTextChange(val todoText: String) : TodoEvent
 
         data class OnCategoryChipClick(val category: Category) : TodoEvent
+
+        data object OnCommitmentAreaClick: TodoEvent
+
+        data object OnCommitmentDone: TodoEvent
+
+        data class OnCommitmentMessageChange(val text: String): TodoEvent
+
+        data object OnCommitmentBottomSheetDismissRequest: TodoEvent
     }
 
     sealed interface TodoReduce : BaseContract.Reduce {
-        data class UpdateMotivationMessage(val message: String) : TodoReduce
-
         data class UpdateCategories(val categories: List<Category>) : TodoReduce
 
         data class UpdateFlatList(val flatList: List<ListItem>) : TodoReduce
@@ -82,8 +88,6 @@ class TodoContract {
 
         data class UpdateIsTimePickerBottomSheetVisible(val isVisible: Boolean) : TodoReduce
 
-        data class UpdateIsCommitmentBottomSheetVisible(val isVisible: Boolean) : TodoReduce
-
         data class UpdateIsAddTodoBottomSheetVisible(val isVisible: Boolean) : TodoReduce
 
         data class UpdateTodoText(val todoText: String) : TodoReduce
@@ -93,6 +97,10 @@ class TodoContract {
         data class UpdateSelectedStartTime(val startTime: LocalTime?) : TodoReduce
 
         data object ClearAddTodoState : TodoReduce
+
+        data class UpdateCommitmentMessage(val commitmentMessage: String) : TodoReduce
+
+        data class UpdateIsCommitmentBottomSheetVisible(val isVisible: Boolean) : TodoReduce
     }
 
     sealed interface TodoSideEffect : BaseContract.SideEffect
