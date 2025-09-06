@@ -78,7 +78,7 @@ class MainNavigator(
         navHostController.navigateToTimer(
             shouldRestart  = shouldRestart,
             navOptions = navOptions {
-                popUpTo(BottomNavigationRoute.Timer) {
+                popUpTo(BottomNavigationRoute.Timer()) {
                     saveState = false
                     inclusive = true
                 }
