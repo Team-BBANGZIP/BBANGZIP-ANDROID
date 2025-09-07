@@ -5,7 +5,7 @@ import org.android.bbangzip.domain.model.CompleteBreadCountEntity
 import org.android.bbangzip.domain.model.TodayBreadCountEntity
 
 interface TimerRepository {
-    suspend fun postTimerCompleted(): Result<CompleteBreadCountEntity>
+    suspend fun postTimerCompleted(targetDate: String, count: Int): Result<CompleteBreadCountEntity>
     suspend fun fetchTodayBreadCount(): Result<TodayBreadCountEntity>
     suspend fun fetchBreadList(): Result<BreadListEntity>
 }

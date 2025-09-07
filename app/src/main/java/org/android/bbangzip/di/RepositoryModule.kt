@@ -6,8 +6,10 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.android.bbangzip.data.repositoryImpl.local.UserRepositoryImpl
 import org.android.bbangzip.data.repositoryImpl.remote.DummyRepositoryImpl
+import org.android.bbangzip.data.repositoryImpl.remote.TimerRepositoryImpl
 import org.android.bbangzip.domain.repository.local.UserRepository
 import org.android.bbangzip.domain.repository.remote.DummyRepository
+import org.android.bbangzip.domain.repository.remote.TimerRepository
 import javax.inject.Singleton
 
 @Module
@@ -20,4 +22,8 @@ abstract class RepositoryModule {
     @Binds
     @Singleton
     abstract fun bindsDummyRepository(repositoryImpl: DummyRepositoryImpl): DummyRepository
+
+    @Binds
+    @Singleton
+    abstract fun bindsTimerRepository(repositoryImpl: TimerRepositoryImpl): TimerRepository
 }
