@@ -34,6 +34,6 @@ data class ResponseBreadListDto(
     fun toBreadListEntity() =
         BreadListEntity(
             totalCount = totalCount,
-            breadList = breadList.map { it.toBreadInfoEntity() }
+            breadList = breadList.map { it.toBreadInfoEntity() },
         )
 }

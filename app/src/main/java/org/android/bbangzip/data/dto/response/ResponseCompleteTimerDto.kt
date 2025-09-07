@@ -8,7 +8,7 @@ import org.android.bbangzip.domain.model.CompleteBreadCountEntity
 data class ResponseCompleteTimerDto(
     @SerialName("count")
     val count: Int,
-){
+) {
     fun toCompleteTimerEntity() =
         CompleteBreadCountEntity(
             count = count,
