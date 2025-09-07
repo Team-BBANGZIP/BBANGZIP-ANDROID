@@ -2,14 +2,22 @@ package org.android.bbangzip.data.dto.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.android.bbangzip.domain.model.BreadInfoEntity
+import org.android.bbangzip.domain.model.BreadListEntity
 
 @Serializable
 data class ResponseBreadListDto(
     @SerialName("totalCount")
-    val totalCount : Int,
+    val totalCount: Int,
     @SerialName("breadList")
-    val breadList : List<BreadInfoDto>,
-)
+    val breadList: List<BreadInfoDto>,
+) {
+    fun toBreadListEntity() =
+        BreadListEntity(
+            totalCount = totalCount,
+            breadList = breadList.map { it.toBreadInfoEntity() }
+        )
+}
 
 @Serializable
 data class BreadInfoDto(
@@ -21,4 +29,12 @@ data class BreadInfoDto(
     val isUnlocked: Boolean,
     @SerialName("requiredCount")
     val requiredCount: Int,
-)
+) {
+    fun toBreadInfoEntity() =
+        BreadInfoEntity(
+            breadId = breadId,
+            breadName = breadName,
+            isUnlocked = isUnlocked,
+            requiredCount = requiredCount,
+        )
+}
