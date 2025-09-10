@@ -94,10 +94,12 @@ class TodoViewModel
                 is TodoEvent.OnTimeConfirmButtonClick -> {
                     updateState(TodoReduce.UpdateSelectedStartTime(event.startTime))
                     updateState(TodoReduce.UpdateIsTimePickerBottomSheetVisible(false))
+                    updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(true))
                 }
 
                 TodoEvent.OnTimePickerBottomSheetDismissRequest -> {
                     updateState(TodoReduce.UpdateIsTimePickerBottomSheetVisible(false))
+                    updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(true))
                 }
                 TodoEvent.OnAddTodoBottomSheetDismissRequest -> {
                     updateState(TodoReduce.ClearAddTodoState)
@@ -106,6 +108,7 @@ class TodoViewModel
 
                 TodoEvent.OnTimePickerBottomSheetShowRequest -> {
                     updateState(TodoReduce.UpdateIsTimePickerBottomSheetVisible(true))
+                    updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(false))
                 }
 
                 is TodoEvent.OnTodoTextChange -> {
