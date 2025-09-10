@@ -265,6 +265,7 @@ fun TodoScreen(
                     totalTodoCount = totalTodoCount,
                 )
             }
+
             itemsIndexed(
                 items = flatList,
                 key = { _, item -> item.id },
@@ -285,6 +286,10 @@ fun TodoScreen(
                             itemBounds[item.id] = coordinates.boundsInParent()
                         },
                 )
+            }
+
+            item{
+                Gap(height = 24.dp)
             }
         }
 
