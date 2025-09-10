@@ -551,8 +551,8 @@ fun CommitmentMessageBox(
         Box(
             modifier =
                 Modifier
-                    .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 14.dp)
+                    .fillMaxWidth(2/3f)
                     .align(Alignment.CenterStart),
         ) {
             Text(
