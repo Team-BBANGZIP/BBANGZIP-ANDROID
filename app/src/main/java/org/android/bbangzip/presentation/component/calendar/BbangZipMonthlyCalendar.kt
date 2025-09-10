@@ -47,6 +47,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.YearMonth
 import java.time.format.DateTimeFormatter
+import java.time.temporal.ChronoUnit // 추가된 import
 import java.util.Locale
 import java.time.format.TextStyle as TimeTextStyle
 
@@ -106,13 +107,14 @@ fun MonthlyCalendar(
     )
     var selectedDate by remember { mutableStateOf(value = LocalDate.now()) }
     val today = remember { LocalDate.now() }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(selectedDate) {
         onDateSelected(selectedDate)
     }
 
     val currentYearMonth = remember(pagerState.currentPage, initialYearMonth) {
-        initialYearMonth.plusMonths((pagerState.currentPage - STARTING_PAGE_INDEX).toLong())
+            initialYearMonth.plusMonths((pagerState.currentPage - STARTING_PAGE_INDEX).toLong())
     }
 
     Column(
@@ -139,7 +141,7 @@ fun MonthlyCalendar(
                 generateMonthDays(
                     yearMonth = yearMonthForPage,
                     today = today,
-                    )
+                )
             }
 
             Column(modifier = Modifier.fillMaxWidth()) {
@@ -154,8 +156,16 @@ fun MonthlyCalendar(
                     days = daysInMonth,
                     selectedDate = selectedDate,
                     onDateClick = { day ->
-                        if (day.isCurrentMonth) {
-                            selectedDate = day.date
+                        selectedDate = day.date
+
+                        val newSelectedYearMonth = YearMonth.from(day.date)
+
+                        if (newSelectedYearMonth != yearMonthForPage) {
+                            val monthDiff = ChronoUnit.MONTHS.between(initialYearMonth, newSelectedYearMonth)
+                            val targetPage = STARTING_PAGE_INDEX + monthDiff.toInt()
+                            scope.launch {
+                                pagerState.animateScrollToPage(targetPage)
+                            }
                         }
                     },
                     colors = colors,
@@ -331,7 +341,7 @@ private fun CalendarDayCell(
             .aspectRatio(1f)
             .clip(BbangZipMonthlyCalendarDefaults.DayCellShape)
             .noRippleClickable(
-                enabled = day.isCurrentMonth,
+                enabled = true,
                 onClick = onClick,
             )
             .background(backgroundColor),
@@ -409,6 +419,7 @@ fun MonthlyCalendarPreview() {
                 .padding(20.dp),
         ) {
             MonthlyCalendar(
+                initialYearMonth = YearMonth.now(),
                 onDateSelected = {
                     Timber.tag("BbangZipMonthlyCalendar").d("onDateSelected: $it")
                 },
