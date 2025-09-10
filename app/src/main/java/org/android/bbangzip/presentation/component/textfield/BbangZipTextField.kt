@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
@@ -32,6 +33,7 @@ fun BbangZipTextField(
     value: String,
     onValueChange: (String) -> Unit,
     focusManager: FocusManager,
+    focusRequester: FocusRequester,
     modifier: Modifier = Modifier,
     onFocusChange: (Boolean) -> Unit = {},
     onEnterClick: () -> Unit = {},
@@ -69,6 +71,7 @@ fun BbangZipTextField(
         value = value,
         onValueChange = onValueChange,
         focusManager = focusManager,
+        focusRequester = focusRequester,
         modifier = modifier,
         onFocusChange = onFocusChange,
         trailingIcon = trailingIcon,
@@ -92,6 +95,8 @@ fun BbangZipTextField(
 private fun TextFieldPreview() {
     BBANGZIPANDROIDTheme {
         val focusManager = LocalFocusManager.current
+        val focusRequester = remember { FocusRequester() }
+        val focusRequesterForLimit = remember { FocusRequester() }
 
         var text by remember { mutableStateOf("") }
         var textWithLimit by remember { mutableStateOf("") }
@@ -111,6 +116,7 @@ private fun TextFieldPreview() {
                 value = text,
                 onValueChange = { text = it },
                 focusManager = focusManager,
+                focusRequester = focusRequester,
                 placeholder = R.string.app_name,
             )
 
@@ -120,6 +126,7 @@ private fun TextFieldPreview() {
                 value = textWithLimit,
                 onValueChange = { textWithLimit = it },
                 focusManager = focusManager,
+                focusRequester = focusRequesterForLimit,
                 placeholder = R.string.app_name,
                 maxCharacter = 50,
             )

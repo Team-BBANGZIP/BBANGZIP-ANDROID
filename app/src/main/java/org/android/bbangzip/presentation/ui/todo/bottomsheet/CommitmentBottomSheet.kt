@@ -9,12 +9,14 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -38,6 +40,8 @@ fun CommitmentBottomSheet(
     onDoneAction: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val focusRequester = remember { FocusRequester() }
+
     BbangZipBottomSheetSlot(
         isBottomSheetVisible = isBottomSheetVisible,
         onDismissRequest = onDismissRequest,
@@ -59,6 +63,7 @@ fun CommitmentBottomSheet(
                     value = commitmentMessage,
                     onValueChange = oncommitmentMessageChange,
                     focusManager = focusManager,
+                    focusRequester = focusRequester,
                     placeholder = R.string.commitment_placeholder,
                     onEnterClick = onDoneAction,
                     maxCharacter = 50,

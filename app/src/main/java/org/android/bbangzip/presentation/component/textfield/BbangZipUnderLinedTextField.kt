@@ -18,6 +18,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
@@ -31,6 +32,7 @@ fun BbangZipUnderLinedTextField(
     value: String,
     onValueChange: (String) -> Unit,
     focusManager: FocusManager,
+    focusRequester: FocusRequester,
     modifier: Modifier = Modifier,
     onFocusChange: (Boolean) -> Unit = {},
     onEnterClick: () -> Unit = {},
@@ -60,6 +62,7 @@ fun BbangZipUnderLinedTextField(
         value = value,
         onValueChange = onValueChange,
         focusManager = focusManager,
+        focusRequester = focusRequester,
         modifier = modifier,
         onFocusChange = onFocusChange,
         trailingIcon = trailingIcon,
@@ -81,6 +84,7 @@ fun BbangZipUnderLinedTextField(
 private fun UnderLineTextFieldPreview() {
     BBANGZIPANDROIDTheme {
         val focusManager = LocalFocusManager.current
+        val focusRequester = remember { FocusRequester() }
         var underlinedText by remember { mutableStateOf("") }
 
         Column(
@@ -98,6 +102,7 @@ private fun UnderLineTextFieldPreview() {
                 value = underlinedText,
                 onValueChange = { underlinedText = it },
                 focusManager = focusManager,
+                focusRequester = focusRequester,
                 placeholder = R.string.app_name,
             )
         }
