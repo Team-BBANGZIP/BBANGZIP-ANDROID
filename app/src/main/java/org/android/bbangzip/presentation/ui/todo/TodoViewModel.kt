@@ -102,10 +102,9 @@ class TodoViewModel
                     updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(true))
                 }
                 TodoEvent.OnAddTodoBottomSheetDismissRequest -> {
-                    if (currentUiState.selectedCategory != null && currentUiState.todoText.isNotBlank())
-                        {
-                            onTodoAdd(categoryId = currentUiState.selectedCategory!!.categoryId, todoContent = currentUiState.todoText, startTime = currentUiState.selectedStartTime)
-                        }
+                    if (currentUiState.selectedCategory != null && currentUiState.todoText.isNotBlank()) {
+                        onTodoAdd(categoryId = currentUiState.selectedCategory!!.categoryId, todoContent = currentUiState.todoText, startTime = currentUiState.selectedStartTime)
+                    }
                     updateState(TodoReduce.ClearAddTodoState)
                     updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(false))
                 }
