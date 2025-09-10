@@ -13,6 +13,7 @@ import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -497,8 +498,7 @@ private fun ListHeader(
                 MenuPopup(
                     modifier =
                         Modifier
-                            .offset(x = (-20).dp, y = 9.dp)
-                            .fillMaxWidth(1 / 3f),
+                            .offset(x = (-20).dp, y = 9.dp),
                     onDismissRequest = onMenuClick,
                 )
             }
@@ -617,6 +617,8 @@ private fun MenuPopup(
                         .padding(horizontal = 8.dp, vertical = 4.dp),
             ) {
                 Column(
+                    modifier = Modifier
+                        .width(IntrinsicSize.Max),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Row(
