@@ -132,9 +132,10 @@ private fun TaskCheckBox(
         contentAlignment = Alignment.Center,
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_bread_default_24),
+            painter = painterResource(R.drawable.ic_bread_default_14),
             contentDescription = if (isCompleted) stringResource(R.string.task_box_completed_task_description) else stringResource(R.string.task_box_uncompleted_task_description),
             tint = if (isCompleted) checkedBoxColor else uncheckedBoxColor,
+            modifier = Modifier.size(BbangZipTaskBoxDefaults.CHECK_ICON_SIZE),
         )
         if (isCompleted) {
             Icon(
