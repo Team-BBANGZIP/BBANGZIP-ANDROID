@@ -642,7 +642,9 @@ private fun MenuPopup(
                         )
                     }
 
-                    HorizontalDivider()
+                    HorizontalDivider(
+                        color = BbangZipTheme.color.labelDisable_E4E2E0,
+                    )
 
                     Row(
                         modifier =
