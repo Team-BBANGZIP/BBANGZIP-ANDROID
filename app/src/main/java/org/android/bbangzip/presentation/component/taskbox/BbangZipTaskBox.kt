@@ -195,9 +195,9 @@ private fun TaskTimeDisplay(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_clock_default_24),
+            painter = painterResource(R.drawable.ic_clock_default_10),
             contentDescription = stringResource(id = R.string.task_box_time_description),
-            modifier = Modifier.size(BbangZipTaskBoxDefaults.CLOCK_ICON_SIZE),
+            modifier = Modifier.padding(horizontal = 1.dp),
             tint = textColor,
         )
 
