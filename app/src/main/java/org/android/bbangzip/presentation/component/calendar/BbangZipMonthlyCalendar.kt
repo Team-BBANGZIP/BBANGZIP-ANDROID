@@ -20,7 +20,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -101,10 +100,11 @@ fun MonthlyCalendar(
     colors: MonthlyCalendarColors = BbangZipMonthlyCalendarDefaults.colors(),
     typography: MonthlyCalendarTypography = BbangZipMonthlyCalendarDefaults.typography(),
 ) {
-    val pagerState = rememberPagerState(
-        initialPage = STARTING_PAGE_INDEX,
-        pageCount = { Int.MAX_VALUE }
-    )
+    val pagerState =
+        rememberPagerState(
+            initialPage = STARTING_PAGE_INDEX,
+            pageCount = { Int.MAX_VALUE },
+        )
     var selectedDate by remember { mutableStateOf(value = LocalDate.now()) }
     val today = remember { LocalDate.now() }
     val scope = rememberCoroutineScope()
@@ -113,9 +113,10 @@ fun MonthlyCalendar(
         onDateSelected(selectedDate)
     }
 
-    val currentYearMonth = remember(pagerState.currentPage, initialYearMonth) {
+    val currentYearMonth =
+        remember(pagerState.currentPage, initialYearMonth) {
             initialYearMonth.plusMonths((pagerState.currentPage - STARTING_PAGE_INDEX).toLong())
-    }
+        }
 
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -133,16 +134,18 @@ fun MonthlyCalendar(
             state = pagerState,
             modifier = Modifier.fillMaxWidth(),
         ) { pageIndex ->
-            val yearMonthForPage = remember(pageIndex, initialYearMonth) {
-                initialYearMonth.plusMonths((pageIndex - STARTING_PAGE_INDEX).toLong())
-            }
+            val yearMonthForPage =
+                remember(pageIndex, initialYearMonth) {
+                    initialYearMonth.plusMonths((pageIndex - STARTING_PAGE_INDEX).toLong())
+                }
 
-            val daysInMonth = remember(key1 = yearMonthForPage, key2 = today) {
-                generateMonthDays(
-                    yearMonth = yearMonthForPage,
-                    today = today,
-                )
-            }
+            val daysInMonth =
+                remember(key1 = yearMonthForPage, key2 = today) {
+                    generateMonthDays(
+                        yearMonth = yearMonthForPage,
+                        today = today,
+                    )
+                }
 
             Column(modifier = Modifier.fillMaxWidth()) {
                 DayOfWeekHeader(
@@ -214,14 +217,14 @@ private fun CalendarHeader(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_left_24),
             contentDescription = stringResource(R.string.calendar_previous_month_description),
             modifier =
-            Modifier
-                .noRippleClickable(onClick = {
-                    scope.launch {
-                        if (pagerState.currentPage > 0) {
-                            pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                Modifier
+                    .noRippleClickable(onClick = {
+                        scope.launch {
+                            if (pagerState.currentPage > 0) {
+                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                            }
                         }
-                    }
-                }),
+                    }),
             tint = colors.headerNavigationIconColor,
         )
 
@@ -231,14 +234,14 @@ private fun CalendarHeader(
             imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right_24),
             contentDescription = stringResource(R.string.calendar_next_month_description),
             modifier =
-            Modifier
-                .noRippleClickable(onClick = {
-                    scope.launch {
-                        if (pagerState.currentPage < pagerState.pageCount -1) {
-                             pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                Modifier
+                    .noRippleClickable(onClick = {
+                        scope.launch {
+                            if (pagerState.currentPage < pagerState.pageCount - 1) {
+                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                            }
                         }
-                    }
-                }),
+                    }),
             tint = colors.headerNavigationIconColor,
         )
     }
@@ -295,7 +298,7 @@ private fun CalendarGrid(
         modifier = Modifier.fillMaxWidth(),
         verticalArrangement = Arrangement.spacedBy(space = BbangZipMonthlyCalendarDefaults.DayCellVerticalSpacing),
         horizontalArrangement = Arrangement.spacedBy(space = BbangZipMonthlyCalendarDefaults.DayCellHorizontalSpacing),
-        userScrollEnabled = false
+        userScrollEnabled = false,
     ) {
         items(
             items = days,
@@ -337,14 +340,14 @@ private fun CalendarDayCell(
 
     Box(
         modifier =
-        Modifier
-            .aspectRatio(1f)
-            .clip(BbangZipMonthlyCalendarDefaults.DayCellShape)
-            .noRippleClickable(
-                enabled = true,
-                onClick = onClick,
-            )
-            .background(backgroundColor),
+            Modifier
+                .aspectRatio(1f)
+                .clip(BbangZipMonthlyCalendarDefaults.DayCellShape)
+                .noRippleClickable(
+                    enabled = true,
+                    onClick = onClick,
+                )
+                .background(backgroundColor),
         contentAlignment = Alignment.Center,
     ) {
         Text(
@@ -385,13 +388,12 @@ private fun generateMonthDays(
             MonthlyCalendarDay(
                 date = date,
                 isCurrentMonth = YearMonth.from(date) == yearMonth,
-                isToday = date.isEqual(today)
-            )
+                isToday = date.isEqual(today),
+            ),
         )
     }
     return days
 }
-
 
 /**
  * 지정된 [startDayOfWeek]부터 시작하는 요일 목록을 반환하는 함수
@@ -407,16 +409,16 @@ private fun getDaysOfWeekStartingFrom(startDayOfWeek: DayOfWeek = DayOfWeek.MOND
     return daysOfWeek.slice(startIndex until daysOfWeek.size) + daysOfWeek.slice(0 until startIndex)
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun MonthlyCalendarPreview() {
     BBANGZIPANDROIDTheme {
         Column(
             modifier =
-            Modifier
-                .fillMaxSize()
-                .padding(20.dp),
+                Modifier
+                    .fillMaxSize()
+                    .padding(top = 80.dp)
+                    .padding(20.dp),
         ) {
             MonthlyCalendar(
                 initialYearMonth = YearMonth.now(),

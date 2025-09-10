@@ -288,7 +288,7 @@ fun TodoScreen(
                 )
             }
 
-            item{
+            item {
                 Gap(height = 24.dp)
             }
         }
@@ -557,7 +557,7 @@ fun CommitmentMessageBox(
             modifier =
                 Modifier
                     .padding(horizontal = 20.dp, vertical = 14.dp)
-                    .fillMaxWidth(2/3f)
+                    .fillMaxWidth(2 / 3f)
                     .align(Alignment.CenterStart),
         ) {
             Text(
@@ -645,8 +645,9 @@ private fun MenuPopup(
                         .padding(horizontal = 8.dp, vertical = 4.dp),
             ) {
                 Column(
-                    modifier = Modifier
-                        .width(IntrinsicSize.Max),
+                    modifier =
+                        Modifier
+                            .width(IntrinsicSize.Max),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Row(
