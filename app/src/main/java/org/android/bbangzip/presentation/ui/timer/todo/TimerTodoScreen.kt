@@ -35,6 +35,7 @@ import org.android.bbangzip.presentation.model.ListItem
 import org.android.bbangzip.presentation.model.Todo
 import org.android.bbangzip.presentation.type.CategoryColor
 import org.android.bbangzip.presentation.util.extension.Gap
+import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
 
@@ -69,17 +70,16 @@ fun TimerTodoScreen(
             verticalArrangement = Arrangement.spacedBy(4.dp),
         ) {
             item {
-                TodoTopBar(onBackIconClick = onBackIconClick)
+                Column {
+                    TodoTopBar(onBackIconClick = onBackIconClick)
 
+                    Gap(18.dp)
+
+                    TodoTitle(modifier = Modifier.padding(horizontal = 20.dp))
+
+                    Gap(26.dp)
+                }
             }
-
-            item { Gap(14.dp) }
-
-            item {
-                TodoTitle(modifier = Modifier.padding(horizontal = 20.dp))
-            }
-
-            item { Gap(26.dp) }
 
             itemsIndexed(
                 items = uiState.flatList,
@@ -253,62 +253,64 @@ fun DualActionButton(
 @Preview
 @Composable
 private fun TimerTodoScreenPreview() {
-    val exampleCategories =
-        listOf(
-            Category(
-                categoryId = 1,
-                categoryName = "제과제빵점",
-                categoryColor = "BbangZipTheme.color.todoRed1_EA7152",
-                todos =
-                    listOf(
-                        Todo(
-                            todoId = 11,
-                            content = "두줄 \n 두줄",
-                            isCompleted = true,
-                            startTime = LocalTime.of(11, 0),
+    BBANGZIPANDROIDTheme {
+        val exampleCategories =
+            listOf(
+                Category(
+                    categoryId = 1,
+                    categoryName = "제과제빵점",
+                    categoryColor = "BbangZipTheme.color.todoRed1_EA7152",
+                    todos =
+                        listOf(
+                            Todo(
+                                todoId = 11,
+                                content = "두줄 \n 두줄",
+                                isCompleted = true,
+                                startTime = LocalTime.of(11, 0),
+                            ),
+                            Todo(
+                                todoId = 12,
+                                content = "제과제빵점_한줄_실패",
+                                isCompleted = false,
+                                startTime = null,
+                            ),
                         ),
-                        Todo(
-                            todoId = 12,
-                            content = "제과제빵점_한줄_실패",
-                            isCompleted = false,
-                            startTime = null,
+                ),
+                Category(
+                    categoryId = 2,
+                    categoryName = "경제학개론",
+                    categoryColor = "BbangZipTheme.color.todoBlue1_5C62AC",
+                    todos =
+                        listOf(
+                            Todo(
+                                todoId = 21,
+                                content = "경제학개론_한줄_완료",
+                                isCompleted = true,
+                                startTime = null,
+                            ),
                         ),
-                    ),
-            ),
-            Category(
-                categoryId = 2,
-                categoryName = "경제학개론",
-                categoryColor = "BbangZipTheme.color.todoBlue1_5C62AC",
-                todos =
-                    listOf(
-                        Todo(
-                            todoId = 21,
-                            content = "경제학개론_한줄_완료",
-                            isCompleted = true,
-                            startTime = null,
-                        ),
-                    ),
-            ),
-        )
+                ),
+            )
 
-    val flatList =
-        exampleCategories.flatMap { category ->
-            val categoryItem = ListItem.CategoryItem(category)
-            val todoItems =
-                category.todos.mapIndexed { index, todo ->
-                    ListItem.TodoItem(
-                        todo = todo,
-                        category = category,
-                        isLastInCategory = index == category.todos.size - 1,
-                    )
-                }
-            listOf(categoryItem) + todoItems
-        }
+        val flatList =
+            exampleCategories.flatMap { category ->
+                val categoryItem = ListItem.CategoryItem(category)
+                val todoItems =
+                    category.todos.mapIndexed { index, todo ->
+                        ListItem.TodoItem(
+                            todo = todo,
+                            category = category,
+                            isLastInCategory = index == category.todos.size - 1,
+                        )
+                    }
+                listOf(categoryItem) + todoItems
+            }
 
-    val previewState =
-        TimerTodoContract.TimerTodoState(
-            categories = exampleCategories,
-            flatList = flatList,
-        )
-    TimerTodoScreen(uiState = previewState, timeOptionIndex = 0)
+        val previewState =
+            TimerTodoContract.TimerTodoState(
+                categories = exampleCategories,
+                flatList = flatList,
+            )
+        TimerTodoScreen(uiState = previewState, timeOptionIndex = 0)
+    }
 }
