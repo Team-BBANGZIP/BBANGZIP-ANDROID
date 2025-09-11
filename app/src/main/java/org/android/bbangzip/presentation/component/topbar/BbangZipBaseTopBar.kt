@@ -18,23 +18,31 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
+import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @Composable
 fun BbangZipBaseTopBar(
     modifier: Modifier = Modifier,
     title: String = "",
+    titleColor: Color = Color.Black,
+    titleStyle: TextStyle = BbangZipTheme.typography.title2Medium,
+    backGroundColor: Color = BbangZipTheme.color.backgroundNormal_FFFFFF,
     @DrawableRes leadingIcon: Int? = null,
     @DrawableRes trailingIcon: Int? = null,
+    leadingIconColor: Color = BbangZipTheme.color.staticBlack_121212,
+    trailingIconColor: Color = BbangZipTheme.color.staticBlack_121212,
     onTrailingIconClick: () -> Unit = {},
     onLeadingIconClick: () -> Unit = {},
 ) {
     Box(
         modifier =
-            modifier.background(Color.Yellow),
+            modifier.background(backGroundColor),
     ) {
         Row(
             modifier = modifier,
@@ -52,8 +60,11 @@ fun BbangZipBaseTopBar(
                     Icon(
                         imageVector = ImageVector.vectorResource(it),
                         contentDescription = null,
+                        tint = leadingIconColor,
                         modifier =
-                            Modifier.padding(8.dp),
+                            Modifier
+                                .noRippleClickable { onLeadingIconClick() }
+                                .padding(8.dp),
                     )
                 }
             }
@@ -61,7 +72,8 @@ fun BbangZipBaseTopBar(
             Text(
                 text = title,
                 modifier = Modifier.weight(1f),
-                color = Color.Blue,
+                color = titleColor,
+                style = titleStyle,
                 textAlign = TextAlign.Center,
             )
 
@@ -76,8 +88,11 @@ fun BbangZipBaseTopBar(
                     Icon(
                         imageVector = ImageVector.vectorResource(it),
                         contentDescription = null,
+                        tint = trailingIconColor,
                         modifier =
-                            Modifier.padding(8.dp),
+                            Modifier
+                                .noRippleClickable { onTrailingIconClick() }
+                                .padding(8.dp),
                     )
                 }
             }

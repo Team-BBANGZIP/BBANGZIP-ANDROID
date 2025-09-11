@@ -8,6 +8,7 @@ import org.android.bbangzip.presentation.ui.friend.navigation.friendNavGraph
 import org.android.bbangzip.presentation.ui.my.navigation.myNavGraph
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 import org.android.bbangzip.presentation.ui.timer.navigation.timerNavGraph
+import org.android.bbangzip.presentation.ui.timer.todo.navigation.timerTodoNavGraph
 import org.android.bbangzip.presentation.ui.todo.navigation.todoNavGraph
 
 @Composable
@@ -23,6 +24,12 @@ fun MainNavHost(
     ) {
         timerNavGraph(
             sharedViewModel = sharedViewModel,
+            navigateToTimerTodo = navigator::navigateToTimerTodo,
+        )
+
+        timerTodoNavGraph(
+            navigateToTimer = navigator::navigateToTimerWithRestart,
+            navigateToBack = navigator::popBackStack,
         )
 
         todoNavGraph(

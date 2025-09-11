@@ -15,7 +15,7 @@ enum class BottomNavigationType(
     TIMER(
         bottomNaviIcon = R.drawable.ic_timer_default_24,
         bottomNaviTitle = R.string.bottom_navi_timer_tab_title,
-        route = BottomNavigationRoute.Timer,
+        route = BottomNavigationRoute.Timer(),
     ),
     TODO(
         bottomNaviIcon = R.drawable.ic_book_default_24,
