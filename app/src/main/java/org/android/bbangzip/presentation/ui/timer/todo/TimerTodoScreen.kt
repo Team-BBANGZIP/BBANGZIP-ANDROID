@@ -70,15 +70,16 @@ fun TimerTodoScreen(
         ) {
             item {
                 TodoTopBar(onBackIconClick = onBackIconClick)
+
             }
 
-            item { Gap(18.dp) }
+            item { Gap(14.dp) }
 
             item {
                 TodoTitle(modifier = Modifier.padding(horizontal = 20.dp))
             }
 
-            item { Gap(30.dp) }
+            item { Gap(26.dp) }
 
             itemsIndexed(
                 items = uiState.flatList,
