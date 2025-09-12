@@ -69,6 +69,8 @@
     <string name="complete_sheet_sub_title_n2">빵 두 개를 휙득했어요</string>
     <string name="complete_sheet_title">역시 사장님은 제빵왕!</string>
     <string name="complete_sheet_right_btn">완료한 일 체크</string>
+    <!-- timer - todo - view - complete sheet-->
+    <string name="timer_todo_title">어떤 할 일을 완료하셨나요?</string>
 
     <!-- TodoScreen -->
     <string name="todo_bread_icon_description">빵 아이콘</string>

@@ -10,11 +10,13 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import org.android.bbangzip.presentation.model.BottomNavigationRoute
+import org.android.bbangzip.presentation.model.BottomNavigationRoute.Companion.routeName
 import org.android.bbangzip.presentation.model.Route
 import org.android.bbangzip.presentation.type.BottomNavigationType
 import org.android.bbangzip.presentation.ui.friend.navigation.navigateToFriend
 import org.android.bbangzip.presentation.ui.my.navigation.navigateToMy
 import org.android.bbangzip.presentation.ui.timer.navigation.navigateToTimer
+import org.android.bbangzip.presentation.ui.timer.todo.navigation.navigateTimerTodo
 import org.android.bbangzip.presentation.ui.todo.navigation.navigateToTodo
 import timber.log.Timber
 
@@ -24,12 +26,14 @@ class MainNavigator(
     private val currentDestination: NavDestination?
         @Composable get() = navHostController.currentBackStackEntryAsState().value?.destination
 
-    val startDestination = BottomNavigationRoute.Timer
+    val startDestination = BottomNavigationRoute.Timer()
 
     val currentBottomNavigationBarItem: BottomNavigationType?
         @Composable get() =
-            BottomNavigationType.find { mainBottomNavigationRoute ->
-                currentDestination?.route == mainBottomNavigationRoute::class.qualifiedName
+            BottomNavigationType.entries.find { type ->
+                currentDestination?.route?.contains(
+                    "BottomNavigationRoute.${type.route.routeName()}",
+                ) == true
             }
 
     @SuppressLint("RestrictedApi")
@@ -69,7 +73,26 @@ class MainNavigator(
         navHostController.navigateToTodo(navOptions)
     }
 
-    private fun popBackStack() {
+    fun navigateToTimerWithRestart(shouldRestart: Boolean) {
+        navHostController.navigateToTimer(
+            shouldRestart = shouldRestart,
+            navOptions =
+                navOptions {
+                    popUpTo(BottomNavigationRoute.Timer()) {
+                        saveState = false
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                    restoreState = false
+                },
+        )
+    }
+
+    fun navigateToTimerTodo(timeOptionIndex: Int) {
+        navHostController.navigateTimerTodo(timeOptionIndex = timeOptionIndex)
+    }
+
+    fun popBackStack() {
         navHostController.popBackStack()
     }
 
@@ -79,8 +102,10 @@ class MainNavigator(
     @Composable
     fun isBottomBarVisible(): Boolean {
         val isVisibleByRoute =
-            BottomNavigationType.any {
-                currentDestination?.route == it::class.qualifiedName
+            BottomNavigationType.entries.any { type ->
+                currentDestination?.route?.contains(
+                    "BottomNavigationRoute.${type.route.routeName()}",
+                ) == true
             }
 
         return isVisibleByRoute

@@ -7,11 +7,25 @@ sealed interface Route
 
 @Serializable
 sealed interface BottomNavigationRoute : Route {
-    @Serializable
-    data object Dummy : BottomNavigationRoute
+    companion object {
+        const val TIMER = "Timer"
+        const val TODO = "Todo"
+        const val FRIEND = "Friend"
+        const val MY = "My"
+
+        fun BottomNavigationRoute.routeName(): String =
+            when (this) {
+                is Timer -> TIMER
+                is Todo -> TODO
+                is Friend -> FRIEND
+                is My -> MY
+            }
+    }
 
     @Serializable
-    data object Timer : BottomNavigationRoute
+    data class Timer(
+        val shouldRestart: Boolean = false,
+    ) : BottomNavigationRoute
 
     @Serializable
     data object Todo : BottomNavigationRoute

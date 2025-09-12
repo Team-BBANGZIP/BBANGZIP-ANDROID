@@ -53,7 +53,6 @@ class TimerViewModel
                     if (currentUiState.timerStatus == TimerStatus.Idle) {
                         updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Running))
                         startTimer(currentUiState.totalTime)
-                        setSideEffect(TimerContract.TimerSideEffect.HideBottomBar)
                     } else if (currentUiState.timerStatus == TimerStatus.Paused) {
                         resumeTimer()
                         updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Running))
@@ -70,7 +69,6 @@ class TimerViewModel
                 is TimerContract.TimerEvent.OnResetSheetApproveBtnClick -> {
                     resetTimer()
                     updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle))
-                    setSideEffect(TimerContract.TimerSideEffect.ShowBottomBar)
                     updateState(TimerContract.TimerReduce.UpdateResetSheetState(false))
                 }
 
@@ -112,11 +110,14 @@ class TimerViewModel
                 }
 
                 is TimerContract.TimerEvent.OnCompleteSheetCheckBtnClick -> {
-                    resetTimer()
-                    updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle))
                     updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(false))
-
-//              TODO : setSideEffect(TimerContract.TimerSideEffect.NavigateToCompleteTask) // Task 스크린 만들기
+                    launch {
+                        // 자연스러운 화면전환을 위해 추가
+                        delay(200L)
+                        setSideEffect(TimerContract.TimerSideEffect.NavigateToTimerTodo(currentUiState.selectedTimeOptionIndex))
+                        updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle))
+                        resetTimer()
+                    }
                 }
 
                 is TimerContract.TimerEvent.OnCompleteSheetRestartBtnClick -> {
@@ -129,7 +130,6 @@ class TimerViewModel
                     resetTimer()
                     updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle))
                     updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(false))
-                    setSideEffect(TimerContract.TimerSideEffect.ShowBottomBar)
                 }
 
                 is TimerContract.TimerEvent.OnTimeOptionToggleClick -> {
@@ -167,7 +167,6 @@ class TimerViewModel
 
                 is TimerContract.TimerEvent.OnLockButtonPressed -> {
                     updateState(TimerContract.TimerReduce.UpdateIsScreenOn(false))
-                    Timber.d("lockedButtonPressed timer paused", "Screen auto turned off - timer continues")
                     if (currentUiState.timerStatus == TimerStatus.Running) {
                         stopTimer()
                         updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Paused))
@@ -321,7 +320,6 @@ class TimerViewModel
                     if (!currentUiState.isAppActive && currentUiState.timerStatus == TimerStatus.Paused) {
                         updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle))
                         resetTimer()
-                        setSideEffect(TimerContract.TimerSideEffect.ShowBottomBar)
                         Timber.tag("TimerViewModel").d("Auto transition to idle after 1min exit")
                     }
                 }
