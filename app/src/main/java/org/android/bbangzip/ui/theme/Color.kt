@@ -3,6 +3,7 @@ package org.android.bbangzip.ui.theme
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
 
 // Common
 private val Common100: Color = Color(0xFF121212)
@@ -99,7 +100,7 @@ val defaultBbangZipColor =
         // Label
         labelDisable_E4E2E0 = Grayscale20,
         labelAssistive_C9C7C5 = Grayscale30,
-        labelAlternative_A29D96 = Grayscale50,
+        labelAlternative_A29D96 = (Common100.copy(alpha = defaultBbangZipOpacity.opacity20)).compositeOver(Grayscale50),
         labelNeutral_706A63 = Grayscale70,
         labelNormal_6B6560 = Grayscale80,
         labelStrong_463D34 = Grayscale90,

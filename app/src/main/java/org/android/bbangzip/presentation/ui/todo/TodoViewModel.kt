@@ -94,18 +94,24 @@ class TodoViewModel
                 is TodoEvent.OnTimeConfirmButtonClick -> {
                     updateState(TodoReduce.UpdateSelectedStartTime(event.startTime))
                     updateState(TodoReduce.UpdateIsTimePickerBottomSheetVisible(false))
+                    updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(true))
                 }
 
                 TodoEvent.OnTimePickerBottomSheetDismissRequest -> {
                     updateState(TodoReduce.UpdateIsTimePickerBottomSheetVisible(false))
+                    updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(true))
                 }
                 TodoEvent.OnAddTodoBottomSheetDismissRequest -> {
+                    if (currentUiState.selectedCategory != null && currentUiState.todoText.isNotBlank()) {
+                        onTodoAdd(categoryId = currentUiState.selectedCategory!!.categoryId, todoContent = currentUiState.todoText, startTime = currentUiState.selectedStartTime)
+                    }
                     updateState(TodoReduce.ClearAddTodoState)
                     updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(false))
                 }
 
                 TodoEvent.OnTimePickerBottomSheetShowRequest -> {
                     updateState(TodoReduce.UpdateIsTimePickerBottomSheetVisible(true))
+                    updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(false))
                 }
 
                 is TodoEvent.OnTodoTextChange -> {

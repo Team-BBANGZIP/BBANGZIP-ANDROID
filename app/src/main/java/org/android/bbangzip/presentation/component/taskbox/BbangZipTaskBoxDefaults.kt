@@ -26,11 +26,11 @@ object BbangZipTaskBoxDefaults {
     val GAP_CONTENT_TO_MENU: Dp = 12.dp
     val GAP_TASK_TO_TIME = 4.dp
     val GAP_TIME_ICON_TO_TEXT: Dp = 3.dp
-    val GAP_CONTENT_TO_DIVIDER: Dp = 10.dp
+    val GAP_CONTENT_TO_DIVIDER: Dp = 12.dp
 
     // PADDING
-    val TASK_TEXT_TOP_PADDING: Dp = 4.dp
-    val TASK_CONTENT_TOP_PADDING: Dp = 10.dp
+    val TASK_TEXT_TOP_PADDING: Dp = 5.dp
+    val TASK_CONTENT_TOP_PADDING: Dp = 5.dp
 
     /**
      * [BbangZipTaskBox]에 사용될 기본 [TaskBoxColors]를 생성

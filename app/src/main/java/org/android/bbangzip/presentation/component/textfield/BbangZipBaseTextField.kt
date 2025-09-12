@@ -35,7 +35,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import kotlinx.serialization.json.JsonNull.content
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.util.cache.RegexCaches
 
@@ -47,6 +46,7 @@ import org.android.bbangzip.presentation.util.cache.RegexCaches
  * @param value 현재 텍스트 필드에 입력된 값
  * @param onValueChange 텍스트가 변경될 때 호출되는 콜백 함수
  * @param focusManager 포커스를 수동으로 제어할 수 있는 Compose의 FocusManager
+ * @param focusRequester 포커스 요청을 위한 FocusRequester
  * @param modifier 텍스트 필드 전체에 적용할 Modifier
  * @param onFocusChange 포커스 상태가 변경될 때 호출되는 콜백 (true = 포커스됨)
  * @param onEnterClick 키보드의 엔터 키 입력 시 호출되는 콜백 (기본 동작: 텍스트 트리밍 + 포커스 해제)
@@ -59,7 +59,7 @@ import org.android.bbangzip.presentation.util.cache.RegexCaches
  * @param contentPadding 텍스트 필드 내부의 패딩 값 (기본값 제공)
  * @param borderRadius 텍스트 필드 외곽의 둥근 정도를 설정 (default: 8.dp 등)
  * @param borderSize 텍스트 필드 외곽 테두리의 두께
- * @param contentHeight 텍스트 필드의 최소 높이 설정 (nullable, 설정하지 않으면 높이 제한 없음)
+ * @param maxLines 최대 줄 수
  * @param maxCharacter 입력 가능한 최대 문자 수 (null이면 제한 없음, 설정 시 글자 수 카운터 표시됨)
  * @param isUnderLined true일 경우 텍스트 필드 하단에 밑줄 Divider 표시
  * @param keyboardOptions 키보드 동작 방식(IMeAction 등)을 정의하는 옵션 객체
@@ -71,6 +71,7 @@ fun BbangZipBaseTextField(
     value: String,
     onValueChange: (String) -> Unit,
     focusManager: FocusManager,
+    focusRequester: FocusRequester,
     modifier: Modifier = Modifier,
     onFocusChange: (Boolean) -> Unit = {},
     onEnterClick: () -> Unit = {},
@@ -101,7 +102,6 @@ fun BbangZipBaseTextField(
         ),
 ) {
     var isFocused by remember { mutableStateOf(false) }
-    val focusRequester = remember { FocusRequester() }
     val aspectRatio = 336f / 90f
     val heightModifier =
         if (maxCharacter != null) {
@@ -161,6 +161,7 @@ fun BbangZipBaseTextField(
                     if (value.isEmpty()) {
                         if (placeholder != null) {
                             Text(
+                                modifier = Modifier.padding(start = 1.dp),
                                 text = stringResource(placeholder),
                                 color = placeholderColor,
                                 style = textStyles.textStyle,

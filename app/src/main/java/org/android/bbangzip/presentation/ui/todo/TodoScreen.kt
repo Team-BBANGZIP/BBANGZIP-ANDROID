@@ -13,6 +13,7 @@ import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -264,6 +265,7 @@ fun TodoScreen(
                     totalTodoCount = totalTodoCount,
                 )
             }
+
             itemsIndexed(
                 items = flatList,
                 key = { _, item -> item.id },
@@ -284,6 +286,10 @@ fun TodoScreen(
                             itemBounds[item.id] = coordinates.boundsInParent()
                         },
                 )
+            }
+
+            item {
+                Gap(height = 24.dp)
             }
         }
 
@@ -518,8 +524,7 @@ private fun ListHeader(
                 MenuPopup(
                     modifier =
                         Modifier
-                            .offset(x = (-20).dp, y = 9.dp)
-                            .fillMaxWidth(1 / 3f),
+                            .offset(x = (-20).dp, y = 9.dp),
                     onDismissRequest = onMenuClick,
                 )
             }
@@ -551,8 +556,8 @@ fun CommitmentMessageBox(
         Box(
             modifier =
                 Modifier
-                    .fillMaxWidth()
                     .padding(horizontal = 20.dp, vertical = 14.dp)
+                    .fillMaxWidth(2 / 3f)
                     .align(Alignment.CenterStart),
         ) {
             Text(
@@ -640,6 +645,9 @@ private fun MenuPopup(
                         .padding(horizontal = 8.dp, vertical = 4.dp),
             ) {
                 Column(
+                    modifier =
+                        Modifier
+                            .width(IntrinsicSize.Max),
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Row(
@@ -665,7 +673,9 @@ private fun MenuPopup(
                         )
                     }
 
-                    HorizontalDivider()
+                    HorizontalDivider(
+                        color = BbangZipTheme.color.labelDisable_E4E2E0,
+                    )
 
                     Row(
                         modifier =
