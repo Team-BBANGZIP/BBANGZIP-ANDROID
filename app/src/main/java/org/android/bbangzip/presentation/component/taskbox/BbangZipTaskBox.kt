@@ -15,8 +15,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -91,7 +93,7 @@ fun BbangZipTaskBox(
                     Gap(width = BbangZipTaskBoxDefaults.GAP_CONTENT_TO_MENU)
 
                     Icon(
-                        painter = painterResource(R.drawable.ic_meatball_menu_default_24),
+                        imageVector = ImageVector.vectorResource(R.drawable.ic_meatball_menu_default_24),
                         contentDescription = stringResource(id = R.string.task_box_menu_description),
                         modifier =
                             Modifier
@@ -132,14 +134,14 @@ private fun TaskCheckBox(
         contentAlignment = Alignment.Center,
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_bread_default_14),
+            imageVector = ImageVector.vectorResource(R.drawable.ic_bread_default_14),
             contentDescription = if (isCompleted) stringResource(R.string.task_box_completed_task_description) else stringResource(R.string.task_box_uncompleted_task_description),
             tint = if (isCompleted) checkedBoxColor else uncheckedBoxColor,
             modifier = Modifier.size(BbangZipTaskBoxDefaults.CHECK_ICON_SIZE),
         )
         if (isCompleted) {
             Icon(
-                painter = painterResource(R.drawable.ic_check_default_24),
+                imageVector = ImageVector.vectorResource(R.drawable.ic_check_default_24),
                 contentDescription = stringResource(R.string.task_box_completed_task_description),
                 modifier = Modifier.size(BbangZipTaskBoxDefaults.CHECK_ICON_SIZE),
                 tint = checkIconColor,
@@ -195,7 +197,7 @@ private fun TaskTimeDisplay(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
-            painter = painterResource(R.drawable.ic_clock_default_10),
+            imageVector = ImageVector.vectorResource(R.drawable.ic_clock_default_10),
             contentDescription = stringResource(id = R.string.task_box_time_description),
             modifier = Modifier.padding(horizontal = 1.dp),
             tint = textColor,

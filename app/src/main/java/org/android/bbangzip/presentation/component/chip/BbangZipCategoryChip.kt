@@ -17,7 +17,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import org.android.bbangzip.R
@@ -86,7 +88,7 @@ fun BbangZipCategoryChip(
         )
 
         Icon(
-            painter = painterResource(id = R.drawable.ic_plus_bold_24),
+            imageVector = ImageVector.vectorResource(id = R.drawable.ic_plus_bold_24),
             contentDescription = null,
             modifier = Modifier.size(BbangZipCategoryChipDefaults.ICON_SIZE),
             tint = BbangZipCategoryChipDefaults.iconColor(),
