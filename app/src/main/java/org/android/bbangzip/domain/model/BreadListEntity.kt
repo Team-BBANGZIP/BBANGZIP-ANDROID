@@ -11,4 +11,3 @@ class BreadInfoEntity(
     val isUnlocked: Boolean,
     val requiredCount: Int,
 )
-
