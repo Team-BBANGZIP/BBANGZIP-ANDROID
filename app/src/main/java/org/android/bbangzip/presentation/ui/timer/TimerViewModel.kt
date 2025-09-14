@@ -5,7 +5,9 @@ import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import org.android.bbangzip.domain.repository.remote.TimerRepository
+import org.android.bbangzip.domain.usecase.CompleteTimerUseCase
+import org.android.bbangzip.domain.usecase.SelectBreadUseCase
+import org.android.bbangzip.domain.usecase.UpdateTodayBreadCountUseCase
 import org.android.bbangzip.presentation.model.TimerStatus
 import org.android.bbangzip.presentation.ui.timer.lifecycle.TimerLifecycleManager
 import org.android.bbangzip.presentation.util.base.BaseViewModel
@@ -19,7 +21,9 @@ class TimerViewModel
     constructor(
         savedStateHandle: SavedStateHandle,
         private val lifecycleManagerFactory: TimerLifecycleManager.Factory,
-        private val timerRepository: TimerRepository,
+        private val completeTimerUseCase: CompleteTimerUseCase,
+        private val selectBreadUseCase: SelectBreadUseCase,
+        private val updateTodayBreadCountUseCase: UpdateTodayBreadCountUseCase,
     ) : BaseViewModel<TimerContract.TimerEvent, TimerContract.TimerState, TimerContract.TimerReduce, TimerContract.TimerSideEffect>(
             savedStateHandle = savedStateHandle,
         ) {
