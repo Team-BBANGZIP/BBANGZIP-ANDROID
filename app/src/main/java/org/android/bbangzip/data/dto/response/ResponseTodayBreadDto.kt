@@ -7,10 +7,10 @@ import org.android.bbangzip.domain.model.TodayBreadCountEntity
 @Serializable
 data class ResponseTodayBreadDto(
     @SerialName("todayBakedCount")
-    val todayBreadCount: Int,
+    val todayBakedCount: Int,
 ) {
     fun toTodayBreadEntity() =
         TodayBreadCountEntity(
-            todayBreadCount = todayBreadCount,
+            todayBreadCount = todayBakedCount,
         )
 }
