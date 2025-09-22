@@ -57,7 +57,7 @@
     <string name="reset_sheet_sub_title_second">%1$d초만 더 하면 빵 한 개를 얻을 수 있어요.</string>
     <string name="reset_sheet_title">정말 종료하시겠어요?</string>
     <!-- timer - view - restart sheet-->
-    <string name="restart_sheet_right_btn">초기화하기</string>
+    <string name="restart_sheet_right_btn">초기화 하기</string>
     <string name="restart_sheet_title">정말 초기화 하시겠어요?</string>
     <string name="restart_sheet_sub_title">지금까지 구운 빵이 완성되지 않아요</string>
     <!-- timer - view - reset/restart sheet common string-->
