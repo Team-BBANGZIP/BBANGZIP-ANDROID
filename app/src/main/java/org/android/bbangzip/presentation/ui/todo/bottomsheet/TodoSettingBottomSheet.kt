@@ -45,20 +45,20 @@ fun TodoSettingBottomSheet(
     isNotificationEnabled: Boolean,
     onNotificationEnabledChange: () -> Unit,
     modifier: Modifier = Modifier,
-    startTime: LocalTime? = null
-){
+    startTime: LocalTime? = null,
+) {
     BbangZipBottomSheetSlot(
         isBottomSheetVisible = isBottomSheetVisible,
         onDismissRequest = onDismissRequest,
         modifier = modifier,
         title = {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally
-            ){
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
                 Text(
                     text = todoName,
                     style = BbangZipTheme.typography.title3SemiBold,
-                    color = BbangZipTheme.color.labelNormal_6B6560
+                    color = BbangZipTheme.color.labelNormal_6B6560,
                 )
 
                 Gap(height = 4.dp)
@@ -66,72 +66,74 @@ fun TodoSettingBottomSheet(
                 Text(
                     text = categoryName,
                     style = BbangZipTheme.typography.title3SemiBold,
-                    color = BbangZipTheme.color.labelAlternative_A29D96
+                    color = BbangZipTheme.color.labelAlternative_A29D96,
                 )
 
                 Gap(height = 28.dp)
             }
         },
         content = {
-            Column{
+            Column {
                 InteractionButtons()
 
                 Gap(20.dp)
 
-                if(isCompleted){
-                    HorizontalDivider(
-                        color = BbangZipTheme.color.componentStrong_F6F6F5,
-                    )
+                if (isCompleted)
+                    {
+                        HorizontalDivider(
+                            color = BbangZipTheme.color.componentStrong_F6F6F5,
+                        )
 
-                    Gap(20.dp)
+                        Gap(20.dp)
 
-                    InteractionRow(
-                        interactionIconResId = R.drawable.ic_again_default_24,
-                        actionName = stringResource(R.string.todo_setting_do_again_action_name),
-                    )
-                }else{
-                    Column(
-                        verticalArrangement = Arrangement.spacedBy(16.dp)
-                    ) {
-                        TodoSettingActionType.entries.forEachIndexed {index, actionType ->
-                            InteractionRow(
-                                interactionIconResId = actionType.interactionIconResId!!,
-                                actionName = stringResource(actionType.actionName!!),
-                                interactionButton = {
-                                    when (actionType) {
-                                        TodoSettingActionType.START_TIME -> {
-                                            TimeSettingButton(
-                                                onSettingTimeClick = {},
-                                                startTime = startTime
-                                            )
+                        InteractionRow(
+                            interactionIconResId = R.drawable.ic_again_default_24,
+                            actionName = stringResource(R.string.todo_setting_do_again_action_name),
+                        )
+                    } else
+                    {
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(16.dp),
+                        ) {
+                            TodoSettingActionType.entries.forEachIndexed { index, actionType ->
+                                InteractionRow(
+                                    interactionIconResId = actionType.interactionIconResId!!,
+                                    actionName = stringResource(actionType.actionName!!),
+                                    interactionButton = {
+                                        when (actionType) {
+                                            TodoSettingActionType.START_TIME -> {
+                                                TimeSettingButton(
+                                                    onSettingTimeClick = {},
+                                                    startTime = startTime,
+                                                )
+                                            }
+
+                                            TodoSettingActionType.NOTIFICATION -> {
+                                                BbangZipSwitch(
+                                                    modifier = Modifier.fillMaxWidth(44 / 335f),
+                                                    isChecked = isNotificationEnabled,
+                                                    onCheckedChange = onNotificationEnabledChange,
+                                                )
+                                            }
+
+                                            else -> {}
                                         }
-
-                                        TodoSettingActionType.NOTIFICATION -> {
-                                            BbangZipSwitch(
-                                                modifier = Modifier.fillMaxWidth(44/335f),
-                                                isChecked = isNotificationEnabled,
-                                                onCheckedChange = onNotificationEnabledChange
-                                            )
-                                        }
-
-                                        else -> {}
-                                    }
-                                }
-                            )
-
-                            if(index == 1) {
-                                HorizontalDivider(
-                                    modifier = Modifier.padding(vertical = 4.dp),
-                                    color = BbangZipTheme.color.componentStrong_F6F6F5
+                                    },
                                 )
+
+                                if (index == 1) {
+                                    HorizontalDivider(
+                                        modifier = Modifier.padding(vertical = 4.dp),
+                                        color = BbangZipTheme.color.componentStrong_F6F6F5,
+                                    )
+                                }
                             }
                         }
                     }
-                }
 
                 Gap(height = 28.dp)
             }
-        }
+        },
     )
 }
 
@@ -150,7 +152,7 @@ private fun InteractionButtons(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_return_thin_24),
                     contentDescription = null,
                     modifier = Modifier.size(20.dp),
-                    tint = BbangZipTheme.color.staticWhite_FFFFFF
+                    tint = BbangZipTheme.color.staticWhite_FFFFFF,
                 )
             },
             content = {
@@ -176,7 +178,7 @@ private fun InteractionButtons(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_trash_default_24),
                     contentDescription = null,
                     modifier = Modifier.size(20.dp),
-                    tint = BbangZipTheme.color.staticWhite_FFFFFF
+                    tint = BbangZipTheme.color.staticWhite_FFFFFF,
                 )
             },
             colors =
@@ -200,10 +202,10 @@ private fun InteractionRow(
     actionName: String,
     modifier: Modifier = Modifier,
     interactionButton: @Composable () -> Unit = {},
-){
+) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(interactionIconResId),
@@ -233,22 +235,21 @@ fun TodoSettingBottomSheetPreview() {
 
     TodoSettingBottomSheet(
         isBottomSheetVisible = isBottomSheetVisible,
-        onDismissRequest = {isBottomSheetVisible = !isBottomSheetVisible},
+        onDismissRequest = { isBottomSheetVisible = !isBottomSheetVisible },
         todoName = "미완료 바텀시트",
         categoryName = "바텀시트",
         isCompleted = false,
         isNotificationEnabled = isNotificationEnabled,
-        onNotificationEnabledChange = {isNotificationEnabled = !isNotificationEnabled}
+        onNotificationEnabledChange = { isNotificationEnabled = !isNotificationEnabled },
     )
 
     TodoSettingBottomSheet(
         isBottomSheetVisible = !isBottomSheetVisible,
-        onDismissRequest = {isBottomSheetVisible = !isBottomSheetVisible},
+        onDismissRequest = { isBottomSheetVisible = !isBottomSheetVisible },
         todoName = "완료 바텀시트",
         categoryName = "바텀시트",
         isCompleted = true,
         isNotificationEnabled = isNotificationEnabled,
-        onNotificationEnabledChange = {isNotificationEnabled = !isNotificationEnabled}
+        onNotificationEnabledChange = { isNotificationEnabled = !isNotificationEnabled },
     )
 }
-

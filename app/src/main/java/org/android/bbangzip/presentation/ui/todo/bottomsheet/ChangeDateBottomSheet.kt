@@ -77,7 +77,7 @@ fun ChangeDateBottomSheet(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_calendar_default_24),
                             contentDescription = null,
                             modifier = Modifier.size(20.dp),
-                            tint = BbangZipTheme.color.staticWhite_FFFFFF
+                            tint = BbangZipTheme.color.staticWhite_FFFFFF,
                         )
                     },
                     colors =
@@ -98,7 +98,6 @@ fun ChangeDateBottomSheet(
         },
     )
 }
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, showSystemUi = true)

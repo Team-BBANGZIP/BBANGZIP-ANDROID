@@ -27,5 +27,5 @@ enum class TodoSettingActionType(
     CHANGE_DATE(
         interactionIconResId = R.drawable.ic_calendar_default_24,
         actionName = R.string.todo_setting_change_date_action_name,
-    );
+    ),
 }
