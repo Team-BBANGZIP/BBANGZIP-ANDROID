@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -29,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.android.bbangzip.presentation.util.extension.innerShadow
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import org.android.bbangzip.ui.theme.defaultBbangZipBrush
 
@@ -81,7 +83,15 @@ fun CircularProgressBar(
         Canvas(
             modifier =
                 Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .innerShadow(
+                        shape = CircleShape,
+                        color = BbangZipTheme.color.primaryNormal_897869.copy(BbangZipTheme.opacity.opacity10),
+                        blur = 0.dp,
+                        offsetX = 2.dp,
+                        offsetY = 4.dp,
+                        spread = 0.dp,
+                    )
         ) {
             val canvasSize = this.size
             val center = Offset(canvasSize.width / 2f, canvasSize.height / 2f)
