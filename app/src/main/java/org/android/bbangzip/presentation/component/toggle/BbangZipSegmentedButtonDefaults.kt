@@ -9,9 +9,9 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
 
 object BbangZipSegmentedButtonDefaults {
     val CONTAINER_PADDING = 1.dp
-    val CONTAINER_CORNER_RADIUS = 12.dp
+    val CONTAINER_CORNER_RADIUS = 32.dp
 
-    val INDICATOR_VERTICAL_PADDING = 4.5.dp
+    val INDICATOR_VERTICAL_PADDING = 6.dp
 
     @Composable
     fun optionStyle() = BbangZipTheme.typography.body4Medium
