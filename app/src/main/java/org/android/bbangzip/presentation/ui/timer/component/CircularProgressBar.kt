@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -29,6 +30,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import org.android.bbangzip.ui.theme.BbangZipTheme
+import org.android.bbangzip.ui.theme.defaultBbangZipBrush
 
 @Composable
 fun CircularProgressBar(
@@ -106,8 +108,8 @@ fun CircularProgressBar(
                 roundBorder = roundBorder,
             )
 
-            drawCircularProgressBackground(
-                color = Color.White,
+            drawCircularProgressInnerBackground(
+                brush = defaultBbangZipBrush.backgroundAccentGradient,
                 radius = innerWhiteRadius,
                 center = center,
                 strokeWidth = backgroundWhiteStrokeWithPx,
@@ -124,6 +126,19 @@ private fun DrawScope.drawCircularProgressBackground(
 ) {
     drawCircle(
         color = color,
+        radius = radius,
+        center = center,
+        style = Stroke(width = strokeWidth),
+    )
+}
+private fun DrawScope.drawCircularProgressInnerBackground(
+    center: Offset,
+    radius: Float,
+    brush: Brush,
+    strokeWidth: Float,
+) {
+    drawCircle(
+        brush = brush,
         radius = radius,
         center = center,
         style = Stroke(width = strokeWidth),
