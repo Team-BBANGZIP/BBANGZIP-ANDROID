@@ -109,4 +109,7 @@
     <!-- Edit Todo BottomSheet -->
     <string name = "edit_todo_title">할 일 수정</string>
     <string name = "edit_todo_placeholder">할 일을 입력해 주세요</string>
+
+    <!-- Change Date BottomSheet -->
+    <string name = "change_date_title">날짜 변경</string>"
 </resources>

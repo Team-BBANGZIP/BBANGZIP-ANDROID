@@ -96,6 +96,7 @@ private data class MonthlyCalendarDay(
 fun MonthlyCalendar(
     modifier: Modifier = Modifier,
     initialYearMonth: YearMonth = YearMonth.now(),
+    initialDate: LocalDate = LocalDate.now(),
     onDateSelected: (LocalDate) -> Unit = {},
     colors: MonthlyCalendarColors = BbangZipMonthlyCalendarDefaults.colors(),
     typography: MonthlyCalendarTypography = BbangZipMonthlyCalendarDefaults.typography(),
@@ -105,7 +106,7 @@ fun MonthlyCalendar(
             initialPage = STARTING_PAGE_INDEX,
             pageCount = { Int.MAX_VALUE },
         )
-    var selectedDate by remember { mutableStateOf(value = LocalDate.now()) }
+    var selectedDate by remember { mutableStateOf(value = initialDate) }
     val today = remember { LocalDate.now() }
     val scope = rememberCoroutineScope()
 
