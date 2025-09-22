@@ -31,13 +31,12 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import org.android.bbangzip.R
+import org.android.bbangzip.presentation.component.button.TimeSettingButton
 import org.android.bbangzip.presentation.component.textfield.BbangZipTextField
 import org.android.bbangzip.presentation.util.extension.Gap
-import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
-import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -124,36 +123,6 @@ fun AddTodoBottomSheet(
     }
 }
 
-@Composable
-private fun TimeSettingButton(
-    onSettingTimeClick: () -> Unit,
-    startTime: LocalTime?,
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.noRippleClickable(onClick = onSettingTimeClick),
-    ) {
-        Text(
-            text =
-                if (startTime != null) {
-                    startTime.format(DateTimeFormatter.ofPattern("a hh:mm"))
-                } else {
-                    stringResource(id = R.string.add_todo_start_time_not_set)
-                },
-            color = BbangZipTheme.color.labelAlternative_A29D96,
-            style = BbangZipTheme.typography.body1Medium,
-        )
-
-        Gap(8.dp)
-
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_arrow_right_24),
-            contentDescription = stringResource(id = R.string.add_todo_arrow_icon_description),
-            tint = BbangZipTheme.color.labelAlternative_A29D96,
-            modifier = Modifier.size(20.dp),
-        )
-    }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true, showSystemUi = true)
