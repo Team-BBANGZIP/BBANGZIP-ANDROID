@@ -78,58 +78,56 @@ fun TodoSettingBottomSheet(
 
                 Gap(20.dp)
 
-                if (isCompleted)
-                    {
-                        HorizontalDivider(
-                            color = BbangZipTheme.color.componentStrong_F6F6F5,
-                        )
+                if (isCompleted) {
+                    HorizontalDivider(
+                        color = BbangZipTheme.color.componentStrong_F6F6F5,
+                    )
 
-                        Gap(20.dp)
+                    Gap(20.dp)
 
-                        InteractionRow(
-                            interactionIconResId = R.drawable.ic_again_default_24,
-                            actionName = stringResource(R.string.todo_setting_do_again_action_name),
-                        )
-                    } else
-                    {
-                        Column(
-                            verticalArrangement = Arrangement.spacedBy(16.dp),
-                        ) {
-                            TodoSettingActionType.entries.forEachIndexed { index, actionType ->
-                                InteractionRow(
-                                    interactionIconResId = actionType.interactionIconResId!!,
-                                    actionName = stringResource(actionType.actionName!!),
-                                    interactionButton = {
-                                        when (actionType) {
-                                            TodoSettingActionType.START_TIME -> {
-                                                TimeSettingButton(
-                                                    onSettingTimeClick = {},
-                                                    startTime = startTime,
-                                                )
-                                            }
-
-                                            TodoSettingActionType.NOTIFICATION -> {
-                                                BbangZipSwitch(
-                                                    modifier = Modifier.fillMaxWidth(44 / 335f),
-                                                    isChecked = isNotificationEnabled,
-                                                    onCheckedChange = onNotificationEnabledChange,
-                                                )
-                                            }
-
-                                            else -> {}
+                    InteractionRow(
+                        interactionIconResId = R.drawable.ic_again_default_24,
+                        actionName = stringResource(R.string.todo_setting_do_again_action_name),
+                    )
+                } else {
+                    Column(
+                        verticalArrangement = Arrangement.spacedBy(16.dp),
+                    ) {
+                        TodoSettingActionType.entries.forEachIndexed { index, actionType ->
+                            InteractionRow(
+                                interactionIconResId = actionType.interactionIconResId!!,
+                                actionName = stringResource(actionType.actionName!!),
+                                interactionButton = {
+                                    when (actionType) {
+                                        TodoSettingActionType.START_TIME -> {
+                                            TimeSettingButton(
+                                                onSettingTimeClick = {},
+                                                startTime = startTime,
+                                            )
                                         }
-                                    },
-                                )
 
-                                if (index == 1) {
-                                    HorizontalDivider(
-                                        modifier = Modifier.padding(vertical = 4.dp),
-                                        color = BbangZipTheme.color.componentStrong_F6F6F5,
-                                    )
-                                }
+                                        TodoSettingActionType.NOTIFICATION -> {
+                                            BbangZipSwitch(
+                                                modifier = Modifier.fillMaxWidth(44 / 335f),
+                                                isChecked = isNotificationEnabled,
+                                                onCheckedChange = onNotificationEnabledChange,
+                                            )
+                                        }
+
+                                        else -> {}
+                                    }
+                                },
+                            )
+
+                            if (index == 1) {
+                                HorizontalDivider(
+                                    modifier = Modifier.padding(vertical = 4.dp),
+                                    color = BbangZipTheme.color.componentStrong_F6F6F5,
+                                )
                             }
                         }
                     }
+                }
 
                 Gap(height = 28.dp)
             }
