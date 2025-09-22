@@ -91,7 +91,7 @@ fun CircularProgressBar(
                         offsetX = 2.dp,
                         offsetY = 4.dp,
                         spread = 0.dp,
-                    )
+                    ),
         ) {
             val canvasSize = this.size
             val center = Offset(canvasSize.width / 2f, canvasSize.height / 2f)
@@ -141,6 +141,7 @@ private fun DrawScope.drawCircularProgressBackground(
         style = Stroke(width = strokeWidth),
     )
 }
+
 private fun DrawScope.drawCircularProgressInnerBackground(
     center: Offset,
     radius: Float,

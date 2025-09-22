@@ -54,7 +54,8 @@
     <string name="reset_sheet_right_btn">종료하기</string>
     <string name="reset_sheet_sub_title_minute_n1">%1$d분만 더 하면 빵 한 개를 얻을 수 있어요.</string>
     <string name="reset_sheet_sub_title_minute_n2">%1$d분만 더 하면 빵 두 개를 얻을 수 있어요.</string>
-    <string name="reset_sheet_sub_title_second">%1$d초만 더 하면 빵 한 개를 얻을 수 있어요.</string>
+    <string name="reset_sheet_sub_title_second_n1">%1$d초만 더 하면 빵 한 개를 얻을 수 있어요.</string>
+    <string name="reset_sheet_sub_title_second_n2">%1$d초만 더 하면 빵 두 개를 얻을 수 있어요.</string>
     <string name="reset_sheet_title">정말 종료하시겠어요?</string>
     <!-- timer - view - restart sheet-->
     <string name="restart_sheet_right_btn">초기화 하기</string>
