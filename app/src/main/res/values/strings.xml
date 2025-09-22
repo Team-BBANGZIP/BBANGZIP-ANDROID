@@ -105,4 +105,8 @@
     <string name="todo_setting_duplicate_action_name">할 일 복제하기</string>
     <string name="todo_setting_change_date_action_name">날짜 바꾸기</string>
     <string name="todo_setting_do_again_action_name">다른 날 또 하기</string>
+
+    <!-- Edit Todo BottomSheet -->
+    <string name = "edit_todo_title">할 일 수정</string>
+    <string name = "edit_todo_placeholder">할 일을 입력해 주세요</string>
 </resources>
