@@ -78,12 +78,13 @@ private fun getBottomSheetState(
             val timeToMilestoneMillis = remainingTime
             val secondsToMilestone = TimeUnit.MILLISECONDS.toSeconds(timeToMilestoneMillis).coerceAtLeast(0)
 
-            val title = if (secondsToMilestone < 60) {
-                stringResource(R.string.reset_sheet_sub_title_second_n1, secondsToMilestone)
-            } else {
-                val minutesToMilestone = TimeUnit.MILLISECONDS.toMinutes(timeToMilestoneMillis).coerceAtLeast(1)
-                stringResource(R.string.reset_sheet_sub_title_minute_n1, minutesToMilestone)
-            }
+            val title =
+                if (secondsToMilestone < 60) {
+                    stringResource(R.string.reset_sheet_sub_title_second_n1, secondsToMilestone)
+                } else {
+                    val minutesToMilestone = TimeUnit.MILLISECONDS.toMinutes(timeToMilestoneMillis).coerceAtLeast(1)
+                    stringResource(R.string.reset_sheet_sub_title_minute_n1, minutesToMilestone)
+                }
             ResetBottomSheetInfo(title = title, breadImg = R.drawable.img_shine_bread_n1)
         }
 
@@ -91,31 +92,32 @@ private fun getBottomSheetState(
             if (elapsedTimeMillis < milestone30min) {
                 val timeToMilestoneMillis = milestone30min - elapsedTimeMillis
                 val secondsToMilestone = TimeUnit.MILLISECONDS.toSeconds(timeToMilestoneMillis).coerceAtLeast(0)
-                val title = if (secondsToMilestone < 60) {
-                    stringResource(R.string.reset_sheet_sub_title_second_n1, secondsToMilestone)
-                } else {
-                    val minutesToMilestone = TimeUnit.MILLISECONDS.toMinutes(timeToMilestoneMillis).coerceAtLeast(1)
-                    stringResource(R.string.reset_sheet_sub_title_minute_n1, minutesToMilestone)
-                }
+                val title =
+                    if (secondsToMilestone < 60) {
+                        stringResource(R.string.reset_sheet_sub_title_second_n1, secondsToMilestone)
+                    } else {
+                        val minutesToMilestone = TimeUnit.MILLISECONDS.toMinutes(timeToMilestoneMillis).coerceAtLeast(1)
+                        stringResource(R.string.reset_sheet_sub_title_minute_n1, minutesToMilestone)
+                    }
                 ResetBottomSheetInfo(title = title, breadImg = R.drawable.img_shine_bread_n1)
-            } else  {
+            } else {
                 val timeToMilestoneMillis = milestone60min - elapsedTimeMillis
                 val secondsToMilestone = TimeUnit.MILLISECONDS.toSeconds(timeToMilestoneMillis).coerceAtLeast(0)
-                val title = if (secondsToMilestone < 60) {
-                    // '빵 두 개'용 초 단위 문자열 리소스 (strings.xml에 추가 권장)
-                    stringResource(R.string.reset_sheet_sub_title_second_n2, secondsToMilestone)
-                } else {
-                    val minutesToMilestone = TimeUnit.MILLISECONDS.toMinutes(timeToMilestoneMillis).coerceAtLeast(1)
-                    stringResource(R.string.reset_sheet_sub_title_minute_n2, minutesToMilestone)
-                }
+                val title =
+                    if (secondsToMilestone < 60) {
+                        stringResource(R.string.reset_sheet_sub_title_second_n2, secondsToMilestone)
+                    } else {
+                        val minutesToMilestone = TimeUnit.MILLISECONDS.toMinutes(timeToMilestoneMillis).coerceAtLeast(1)
+                        stringResource(R.string.reset_sheet_sub_title_minute_n2, minutesToMilestone)
+                    }
                 ResetBottomSheetInfo(title = title, breadImg = R.drawable.img_shine_bread_n2)
             }
         }
 
-        // 예외 처리
-        else -> ResetBottomSheetInfo(
-            title = stringResource(id = R.string.reset_sheet_title),
-            breadImg = R.drawable.img_shine_bread_n1
-        )
+        else ->
+            ResetBottomSheetInfo(
+                title = stringResource(id = R.string.reset_sheet_title),
+                breadImg = R.drawable.img_shine_bread_n1,
+            )
     }
 }
