@@ -1,12 +1,12 @@
-package org.android.bbangzip.presentation.type
+package org.android.bbangzip.presentation.ui.todo.type
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import org.android.bbangzip.R
 
 enum class TodoSettingActionType(
-    @DrawableRes val interactionIconResId: Int? = null,
-    @StringRes val actionName: Int? = null,
+    @DrawableRes val interactionIconResId: Int,
+    @StringRes val actionName: Int,
 ) {
     START_TIME(
         interactionIconResId = R.drawable.ic_clock_default_24,

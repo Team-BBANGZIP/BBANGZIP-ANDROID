@@ -29,7 +29,7 @@ import org.android.bbangzip.presentation.component.button.BbangZipButtonDefaults
 import org.android.bbangzip.presentation.component.button.BbangzipBaseButton
 import org.android.bbangzip.presentation.component.button.TimeSettingButton
 import org.android.bbangzip.presentation.component.toggle.BbangZipSwitch
-import org.android.bbangzip.presentation.type.TodoSettingActionType
+import org.android.bbangzip.presentation.ui.todo.type.TodoSettingActionType
 import org.android.bbangzip.presentation.util.extension.Gap
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
@@ -95,8 +95,8 @@ fun TodoSettingBottomSheet(
                     ) {
                         TodoSettingActionType.entries.forEachIndexed { index, actionType ->
                             InteractionRow(
-                                interactionIconResId = actionType.interactionIconResId!!,
-                                actionName = stringResource(actionType.actionName!!),
+                                interactionIconResId = actionType.interactionIconResId,
+                                actionName = stringResource(actionType.actionName),
                                 interactionButton = {
                                     when (actionType) {
                                         TodoSettingActionType.START_TIME -> {
