@@ -30,6 +30,7 @@ data class BbangZipTypography(
     val subTitle3Medium: TextStyle,
     // Body
     val body1Medium: TextStyle,
+    val body1Bold: TextStyle,
     val body2Medium: TextStyle,
     val body3Medium: TextStyle,
     val body4Medium: TextStyle,
@@ -118,6 +119,13 @@ val defaultBbangZipTypography =
                 fontFamily = pretendardMedium,
                 lineHeight = 22.4.sp,
                 letterSpacing = (-0.48).sp,
+            ),
+        body1Bold =
+            TextStyle(
+                fontSize = 16.sp,
+                fontFamily = pretendardSemiBold,
+                lineHeight = 24.sp,
+                letterSpacing = (-0.57).sp
             ),
         body2Medium =
             TextStyle(

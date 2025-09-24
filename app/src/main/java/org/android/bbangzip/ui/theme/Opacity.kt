@@ -14,6 +14,7 @@ data class BbangZipOpacity(
     val opacity60: Float,
     val opacity70: Float,
     val opacity80: Float,
+    val opacity85: Float,
     val opacity90: Float,
     val opacity100: Float,
 )
@@ -29,6 +30,7 @@ val defaultBbangZipOpacity =
         opacity60 = 0.6f,
         opacity70 = 0.7f,
         opacity80 = 0.8f,
+        opacity85 = 0.85f,
         opacity90 = 0.9f,
         opacity100 = 1f,
     )
