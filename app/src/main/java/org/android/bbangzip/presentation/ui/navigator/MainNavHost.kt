@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
+import org.android.bbangzip.presentation.ui.auth.loginNavGraph
 import org.android.bbangzip.presentation.ui.friend.navigation.friendNavGraph
 import org.android.bbangzip.presentation.ui.my.navigation.myNavGraph
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
@@ -22,6 +23,11 @@ fun MainNavHost(
         navController = navigator.navHostController,
         startDestination = navigator.startDestination,
     ) {
+        loginNavGraph(
+            navigateToTodo = navigator::navigateToTodo,
+            navigateToOnboarding = navigator::navigateToOnboarding
+        )
+
         timerNavGraph(
             sharedViewModel = sharedViewModel,
             navigateToTimerTodo = navigator::navigateToTimerTodo,

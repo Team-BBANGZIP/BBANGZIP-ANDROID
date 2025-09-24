@@ -13,6 +13,8 @@ import org.android.bbangzip.presentation.model.BottomNavigationRoute
 import org.android.bbangzip.presentation.model.BottomNavigationRoute.Companion.routeName
 import org.android.bbangzip.presentation.model.Route
 import org.android.bbangzip.presentation.type.BottomNavigationType
+import org.android.bbangzip.presentation.ui.auth.LoginRoute
+import org.android.bbangzip.presentation.ui.auth.navigateToLogin
 import org.android.bbangzip.presentation.ui.friend.navigation.navigateToFriend
 import org.android.bbangzip.presentation.ui.my.navigation.navigateToMy
 import org.android.bbangzip.presentation.ui.timer.navigation.navigateToTimer
@@ -26,7 +28,7 @@ class MainNavigator(
     private val currentDestination: NavDestination?
         @Composable get() = navHostController.currentBackStackEntryAsState().value?.destination
 
-    val startDestination = BottomNavigationRoute.Timer()
+    val startDestination = LoginRoute
 
     val currentBottomNavigationBarItem: BottomNavigationType?
         @Composable get() =
@@ -57,6 +59,10 @@ class MainNavigator(
         }
     }
 
+    private fun navigateToLogin() {
+        navHostController.navigateToLogin()
+    }
+
     private fun navigateToFriend(navOptions: NavOptions) {
         navHostController.navigateToFriend(navOptions)
     }
@@ -69,8 +75,12 @@ class MainNavigator(
         navHostController.navigateToTimer(navOptions)
     }
 
-    private fun navigateToTodo(navOptions: NavOptions) {
+    fun navigateToTodo(navOptions: NavOptions) {
         navHostController.navigateToTodo(navOptions)
+    }
+
+    fun navigateToOnboarding() {
+        // TODO Onboarding 구현 후 변경
     }
 
     fun navigateToTimerWithRestart(shouldRestart: Boolean) {
