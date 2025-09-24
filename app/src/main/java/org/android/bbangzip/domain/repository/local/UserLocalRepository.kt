@@ -3,7 +3,7 @@ package org.android.bbangzip.domain.repository.local
 import kotlinx.coroutines.flow.Flow
 import org.android.bbangzip.UserPreferences
 
-interface UserRepository {
+interface UserLocalRepository {
     val userPreferenceFlow: Flow<UserPreferences>
 
     suspend fun setAccessToken(accessToken: String)

@@ -3,14 +3,14 @@ package org.android.bbangzip.data.repositoryImpl.local
 import kotlinx.coroutines.flow.Flow
 import org.android.bbangzip.UserPreferences
 import org.android.bbangzip.data.datasource.local.UserLocalDataSource
-import org.android.bbangzip.domain.repository.local.UserRepository
+import org.android.bbangzip.domain.repository.local.UserLocalRepository
 import javax.inject.Inject
 
-class UserRepositoryImpl
+class UserLocalRepositoryImpl
     @Inject
     constructor(
         private val userDataSource: UserLocalDataSource,
-    ) : UserRepository {
+    ) : UserLocalRepository {
         override val userPreferenceFlow: Flow<UserPreferences> = userDataSource.userPreferencesFlow
 
         override suspend fun setAccessToken(accessToken: String) {
