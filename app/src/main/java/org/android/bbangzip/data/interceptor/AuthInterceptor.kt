@@ -5,26 +5,26 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
-import org.android.bbangzip.domain.repository.local.UserRepository
+import org.android.bbangzip.domain.repository.local.UserLocalRepository
 import javax.inject.Inject
 
 class AuthInterceptor
     @Inject
     constructor(
-        private val userRepository: UserRepository,
+        private val userLocalRepository: UserLocalRepository,
     ) : Interceptor {
         override fun intercept(chain: Interceptor.Chain): Response {
             val originalRequest = chain.request()
 
             val accessToken =
                 runBlocking {
-                    userRepository.userPreferenceFlow
+                    userLocalRepository.userPreferenceFlow
                         .map { it.accessToken }
                         .firstOrNull()
                 }
             val isLogin =
                 runBlocking {
-                    userRepository.userPreferenceFlow
+                    userLocalRepository.userPreferenceFlow
                         .map { it.isLogin }
                         .firstOrNull()
                 }
@@ -40,7 +40,6 @@ class AuthInterceptor
 
             when (response.code) {
                 EXPIRE_TOKEN_CODE -> {
-                    // TODO 토큰 재발급 api 연동
                 }
             }
             return response
