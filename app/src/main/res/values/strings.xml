@@ -112,4 +112,7 @@
 
     <!-- Change Date BottomSheet -->
     <string name = "change_date_title">날짜 변경</string>"
+
+    <!-- auth -->
+    <string name="auth_kakao_login">카카오로 로그인하기</string>
 </resources>
