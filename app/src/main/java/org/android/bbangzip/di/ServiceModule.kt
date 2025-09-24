@@ -6,6 +6,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.android.bbangzip.data.service.DummyService
 import org.android.bbangzip.data.service.TimerService
+import org.android.bbangzip.data.service.UserService
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -23,4 +24,11 @@ object ServiceModule {
     fun provideTimerService(
         @BbangZip retrofit: Retrofit,
     ): TimerService = retrofit.create(TimerService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideUserService(
+        @BbangZip retrofit: Retrofit,
+    ): UserService =
+        retrofit.create(UserService::class.java)
 }
