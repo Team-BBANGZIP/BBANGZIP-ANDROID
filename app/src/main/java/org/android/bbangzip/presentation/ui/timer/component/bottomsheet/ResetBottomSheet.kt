@@ -9,16 +9,17 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
+import org.android.bbangzip.presentation.util.constant.TimerConstants
+import java.util.concurrent.TimeUnit
 
-private data class ResetBottomSheetState(
-    val breadCount: Int,
+private data class ResetBottomSheetInfo(
+    val title: String,
     val breadImg: Int,
-    val minuteStringRes: Int,
 )
 
 @Composable
 fun ResetBottomSheet(
-    iisBottomSheetVisible: Boolean,
+    isBottomSheetVisible: Boolean,
     remainingTime: Long,
     onReturnBtnClick: () -> Unit,
     onResetBtnClick: () -> Unit,
@@ -26,29 +27,19 @@ fun ResetBottomSheet(
     timeOptionIndex: Int,
     modifier: Modifier = Modifier,
 ) {
-    val totalSeconds = remainingTime / 1000L
-    val minutes = totalSeconds / 60L
-
-    val sheetState = getBottomSheetState(timeOptionIndex, minutes)
-
-    val remainingTimeText =
-        if (totalSeconds >= 60) {
-            stringResource(sheetState.minuteStringRes, minutes)
-        } else {
-            stringResource(R.string.reset_sheet_sub_title_second, totalSeconds)
-        }
+    val sheetInfo = getBottomSheetState(timeOptionIndex, remainingTime)
 
     TimerActionBottomSheet(
-        isBottomSheetVisible = iisBottomSheetVisible,
+        isBottomSheetVisible = isBottomSheetVisible,
         titleText = stringResource(R.string.reset_sheet_title),
-        subTitleText = remainingTimeText,
+        subTitleText = sheetInfo.title,
         leftBtnText = stringResource(R.string.re_sheet_left_btn),
         rightBtnText = stringResource(R.string.reset_sheet_right_btn),
         leftBtnIcon = R.drawable.ic_go_back_default_24,
         rightBtnIcon = R.drawable.ic_x_default_24,
         content = {
             Image(
-                painter = painterResource(id = sheetState.breadImg),
+                painter = painterResource(id = sheetInfo.breadImg),
                 contentDescription = null,
                 modifier =
                     Modifier
@@ -63,15 +54,70 @@ fun ResetBottomSheet(
     )
 }
 
+private fun getTotalDurationMillis(timeOptionIndex: Int): Long {
+    return when (timeOptionIndex) {
+        0 -> TimerConstants.THIRTY_MINUTES
+        1 -> TimerConstants.SIXTY_MINUTES
+        else -> 0L
+    }
+}
+
+@Composable
 private fun getBottomSheetState(
     timeOptionIndex: Int,
-    minutes: Long,
-): ResetBottomSheetState {
-    val breadCount = if (timeOptionIndex == 0 || minutes <= 30) 1 else 2
+    remainingTime: Long,
+): ResetBottomSheetInfo {
+    val totalDurationMillis = getTotalDurationMillis(timeOptionIndex)
+    val elapsedTimeMillis = totalDurationMillis - remainingTime
 
-    return ResetBottomSheetState(
-        breadCount = breadCount,
-        breadImg = if (breadCount == 1) R.drawable.img_shine_bread_n1 else R.drawable.img_shine_bread_n2,
-        minuteStringRes = if (breadCount == 1) R.string.reset_sheet_sub_title_minute_n1 else R.string.reset_sheet_sub_title_minute_n2,
-    )
+    val milestone30min = TimerConstants.THIRTY_MINUTES
+    val milestone60min = TimerConstants.SIXTY_MINUTES
+
+    return when (timeOptionIndex) {
+        0 -> {
+            val timeToMilestoneMillis = remainingTime
+            val secondsToMilestone = TimeUnit.MILLISECONDS.toSeconds(timeToMilestoneMillis).coerceAtLeast(0)
+
+            val title =
+                if (secondsToMilestone < 60) {
+                    stringResource(R.string.reset_sheet_sub_title_second_n1, secondsToMilestone)
+                } else {
+                    val minutesToMilestone = TimeUnit.MILLISECONDS.toMinutes(timeToMilestoneMillis).coerceAtLeast(1)
+                    stringResource(R.string.reset_sheet_sub_title_minute_n1, minutesToMilestone)
+                }
+            ResetBottomSheetInfo(title = title, breadImg = R.drawable.img_shine_bread_n1)
+        }
+
+        1 -> {
+            if (elapsedTimeMillis < milestone30min) {
+                val timeToMilestoneMillis = milestone30min - elapsedTimeMillis
+                val secondsToMilestone = TimeUnit.MILLISECONDS.toSeconds(timeToMilestoneMillis).coerceAtLeast(0)
+                val title =
+                    if (secondsToMilestone < 60) {
+                        stringResource(R.string.reset_sheet_sub_title_second_n1, secondsToMilestone)
+                    } else {
+                        val minutesToMilestone = TimeUnit.MILLISECONDS.toMinutes(timeToMilestoneMillis).coerceAtLeast(1)
+                        stringResource(R.string.reset_sheet_sub_title_minute_n1, minutesToMilestone)
+                    }
+                ResetBottomSheetInfo(title = title, breadImg = R.drawable.img_shine_bread_n1)
+            } else {
+                val timeToMilestoneMillis = milestone60min - elapsedTimeMillis
+                val secondsToMilestone = TimeUnit.MILLISECONDS.toSeconds(timeToMilestoneMillis).coerceAtLeast(0)
+                val title =
+                    if (secondsToMilestone < 60) {
+                        stringResource(R.string.reset_sheet_sub_title_second_n2, secondsToMilestone)
+                    } else {
+                        val minutesToMilestone = TimeUnit.MILLISECONDS.toMinutes(timeToMilestoneMillis).coerceAtLeast(1)
+                        stringResource(R.string.reset_sheet_sub_title_minute_n2, minutesToMilestone)
+                    }
+                ResetBottomSheetInfo(title = title, breadImg = R.drawable.img_shine_bread_n2)
+            }
+        }
+
+        else ->
+            ResetBottomSheetInfo(
+                title = stringResource(id = R.string.reset_sheet_title),
+                breadImg = R.drawable.img_shine_bread_n1,
+            )
+    }
 }
