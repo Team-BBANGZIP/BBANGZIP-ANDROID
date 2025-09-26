@@ -13,17 +13,17 @@ data class ResponseBreadListDto(
     @SerialName("breadList")
     val breadList: List<BreadInfoDto>,
 ) {
-    fun toBreadListEntity() =
+    fun toBreadList() =
         BreadList(
             totalCount = totalCount,
-            breadList = breadList.map { it.toBreadInfoEntity() },
+            breadList = breadList.map { it.toBreadInfo() },
         )
 }
 
 @Serializable
 data class BreadInfoDto(
     @SerialName("breadId")
-    val breadId: Int,
+    val breadId: Long,
     @SerialName("breadName")
     val breadName: String,
     @SerialName("isUnlocked")
@@ -31,7 +31,7 @@ data class BreadInfoDto(
     @SerialName("requiredCount")
     val requiredCount: Int,
 ) {
-    fun toBreadInfoEntity() =
+    fun toBreadInfo() =
         BreadInfo(
             breadId = breadId,
             breadName = breadName,

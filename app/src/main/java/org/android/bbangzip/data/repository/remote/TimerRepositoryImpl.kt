@@ -41,6 +41,6 @@ class TimerRepositoryImpl
 
                 val responseData = response.data ?: throw IllegalStateException(response.message)
 
-                responseData.toBreadListEntity()
+                responseData.toBreadList()
             }
     }
