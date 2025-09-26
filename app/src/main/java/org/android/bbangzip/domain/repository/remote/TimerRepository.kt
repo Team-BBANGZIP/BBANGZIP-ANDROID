@@ -1,16 +1,14 @@
 package org.android.bbangzip.domain.repository.remote
 
-import org.android.bbangzip.domain.model.BreadListEntity
-import org.android.bbangzip.domain.model.CompleteBreadCountEntity
-import org.android.bbangzip.domain.model.TodayBreadCountEntity
+import org.android.bbangzip.domain.model.BreadList
 
 interface TimerRepository {
     suspend fun postTimerCompleted(
         targetDate: String,
         count: Int,
-    ): Result<CompleteBreadCountEntity>
+    ): Result<Int>
 
-    suspend fun fetchTodayBreadCount(): Result<TodayBreadCountEntity>
+    suspend fun fetchTodayBreadCount(): Result<Int>
 
-    suspend fun fetchBreadList(): Result<BreadListEntity>
+    suspend fun fetchBreadList(): Result<BreadList>
 }

@@ -1,12 +1,12 @@
 package org.android.bbangzip.domain.model
 
-data class BreadListEntity(
+data class BreadList(
     val totalCount: Int,
-    val breadList: List<BreadInfoEntity>,
+    val breadList: List<BreadInfo>,
 )
 
-class BreadInfoEntity(
-    val breadId: Int,
+class BreadInfo(
+    val breadId: Long,
     val breadName: String,
     val isUnlocked: Boolean,
     val requiredCount: Int,

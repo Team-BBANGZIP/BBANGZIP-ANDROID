@@ -1,10 +1,10 @@
 package org.android.bbangzip.domain.usecase
 
-import org.android.bbangzip.domain.model.BreadListEntity
+import org.android.bbangzip.domain.model.BreadList
 import org.android.bbangzip.domain.repository.remote.TimerRepository
 import javax.inject.Inject
 
-class SelectBreadUseCase
+class FetchBreadListUseCase
     @Inject
     constructor(
         private val timerRepository: TimerRepository,
@@ -12,5 +12,5 @@ class SelectBreadUseCase
         suspend operator fun invoke(
             targetDate: String,
             count: Int,
-        ): Result<BreadListEntity> = timerRepository.fetchBreadList()
+        ): Result<BreadList> = timerRepository.fetchBreadList()
     }
