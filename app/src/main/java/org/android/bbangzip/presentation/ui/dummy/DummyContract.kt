@@ -2,7 +2,6 @@ package org.android.bbangzip.presentation.ui.dummy
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import org.android.bbangzip.presentation.ui.dummy.Dummy
 import org.android.bbangzip.presentation.common.base.BaseContract
 
 class DummyContract {

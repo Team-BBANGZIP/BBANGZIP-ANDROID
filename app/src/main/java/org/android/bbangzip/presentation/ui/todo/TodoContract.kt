@@ -2,9 +2,9 @@ package org.android.bbangzip.presentation.ui.todo
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
+import org.android.bbangzip.presentation.common.base.BaseContract
 import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.model.ListItem
-import org.android.bbangzip.presentation.common.base.BaseContract
 import java.time.LocalDate
 import java.time.LocalTime
 

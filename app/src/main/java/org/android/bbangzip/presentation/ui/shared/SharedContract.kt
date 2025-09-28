@@ -2,8 +2,8 @@ package org.android.bbangzip.presentation.ui.shared
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import org.android.bbangzip.presentation.ui.timer.contract.type.BreadType
 import org.android.bbangzip.presentation.common.base.BaseContract
+import org.android.bbangzip.presentation.ui.timer.contract.type.BreadType
 
 class SharedContract {
     @Parcelize

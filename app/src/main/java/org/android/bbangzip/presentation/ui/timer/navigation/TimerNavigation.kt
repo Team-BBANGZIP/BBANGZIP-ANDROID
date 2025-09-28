@@ -10,7 +10,6 @@ import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 import org.android.bbangzip.presentation.ui.timer.TimerRoute
 import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoRoute
 
-
 fun NavGraphBuilder.timerNavGraph(
     sharedViewModel: SharedViewModel,
     navigateToTimerTodo: (Int) -> Unit = {},

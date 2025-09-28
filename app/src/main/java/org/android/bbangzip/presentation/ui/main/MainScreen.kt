@@ -12,7 +12,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import okhttp3.internal.toImmutableList
-import org.android.bbangzip.presentation.ui.main.BottomNavigationType
 import org.android.bbangzip.presentation.ui.main.component.BottomNavigationBar
 import org.android.bbangzip.presentation.ui.main.component.MainNavHost
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
