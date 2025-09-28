@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -18,6 +19,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -28,7 +30,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.android.bbangzip.presentation.util.extension.innerShadow
 import org.android.bbangzip.ui.theme.BbangZipTheme
+import org.android.bbangzip.ui.theme.defaultBbangZipBrush
 
 @Composable
 fun CircularProgressBar(
@@ -79,7 +83,15 @@ fun CircularProgressBar(
         Canvas(
             modifier =
                 Modifier
-                    .fillMaxSize(),
+                    .fillMaxSize()
+                    .innerShadow(
+                        shape = CircleShape,
+                        color = BbangZipTheme.color.primaryNormal_897869.copy(BbangZipTheme.opacity.opacity10),
+                        blur = 0.dp,
+                        offsetX = 2.dp,
+                        offsetY = 4.dp,
+                        spread = 0.dp,
+                    ),
         ) {
             val canvasSize = this.size
             val center = Offset(canvasSize.width / 2f, canvasSize.height / 2f)
@@ -106,8 +118,8 @@ fun CircularProgressBar(
                 roundBorder = roundBorder,
             )
 
-            drawCircularProgressBackground(
-                color = Color.White,
+            drawCircularProgressInnerBackground(
+                brush = defaultBbangZipBrush.backgroundAccentGradient,
                 radius = innerWhiteRadius,
                 center = center,
                 strokeWidth = backgroundWhiteStrokeWithPx,
@@ -124,6 +136,20 @@ private fun DrawScope.drawCircularProgressBackground(
 ) {
     drawCircle(
         color = color,
+        radius = radius,
+        center = center,
+        style = Stroke(width = strokeWidth),
+    )
+}
+
+private fun DrawScope.drawCircularProgressInnerBackground(
+    center: Offset,
+    radius: Float,
+    brush: Brush,
+    strokeWidth: Float,
+) {
+    drawCircle(
+        brush = brush,
         radius = radius,
         center = center,
         style = Stroke(width = strokeWidth),

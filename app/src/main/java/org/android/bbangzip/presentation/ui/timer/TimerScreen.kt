@@ -57,6 +57,10 @@ import org.android.bbangzip.presentation.ui.timer.contract.TimerContract
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerStatus
 import org.android.bbangzip.presentation.ui.timer.contract.model.getTimerFontColor
 import org.android.bbangzip.presentation.ui.timer.contract.model.getTitleText
+import org.android.bbangzip.presentation.util.extension.Gap
+import org.android.bbangzip.presentation.util.extension.dropShadow
+import org.android.bbangzip.presentation.util.extension.innerShadow
+import org.android.bbangzip.presentation.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
@@ -204,7 +208,7 @@ fun TimerScreen(
         )
 
         ResetBottomSheet(
-            iisBottomSheetVisible = timerState.isResetSheetVisible,
+            isBottomSheetVisible = timerState.isResetSheetVisible,
             remainingTime = timerState.remainingTime,
             onReturnBtnClick = { onResetSheetDismissBtnClick() },
             onResetBtnClick = { onResetSheetApproveBtnClick() },
@@ -386,7 +390,32 @@ fun MainTimerButton(
                     iconTint = BbangZipTheme.color.primaryNormal_897869,
                 ),
             onClick = onStopClick,
-            modifier = modifier,
+            modifier =
+                modifier
+                    .innerShadow(
+                        shape = CircleShape,
+                        color = BbangZipTheme.color.primaryStrong_4B4137.copy(BbangZipTheme.opacity.opacity20),
+                        blur = 1.dp,
+                        offsetX = 0.dp,
+                        offsetY = 1.dp,
+                        spread = 0.dp,
+                    )
+                    .innerShadow(
+                        shape = CircleShape,
+                        color = BbangZipTheme.color.primaryStrong_4B4137.copy(BbangZipTheme.opacity.opacity20),
+                        blur = 10.dp,
+                        offsetX = 0.dp,
+                        offsetY = 2.dp,
+                        spread = 0.dp,
+                    )
+                    .dropShadow(
+                        shape = CircleShape,
+                        color = BbangZipTheme.color.primaryStrong_4B4137.copy(BbangZipTheme.opacity.opacity20),
+                        blur = 5.dp,
+                        offsetX = 0.dp,
+                        offsetY = 2.dp,
+                        spread = 0.dp,
+                    ),
         )
     } else {
         TimerButton(
