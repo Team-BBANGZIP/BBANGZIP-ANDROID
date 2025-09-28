@@ -1,4 +1,4 @@
-package org.android.bbangzip.presentation.component.button
+package org.android.bbangzip.presentation.common.component.button
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
@@ -12,8 +12,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
-import org.android.bbangzip.presentation.util.extension.Gap
-import org.android.bbangzip.presentation.util.extension.noRippleClickable
+import org.android.bbangzip.presentation.common.util.extension.Gap
+import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
