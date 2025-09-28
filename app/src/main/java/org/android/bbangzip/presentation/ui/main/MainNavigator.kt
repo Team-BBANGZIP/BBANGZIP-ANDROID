@@ -16,7 +16,7 @@ import org.android.bbangzip.presentation.ui.main.BottomNavigationType
 import org.android.bbangzip.presentation.ui.friend.navigation.navigateToFriend
 import org.android.bbangzip.presentation.ui.my.navigation.navigateToMy
 import org.android.bbangzip.presentation.ui.timer.navigation.navigateToTimer
-import org.android.bbangzip.presentation.ui.timer.todo.navigation.navigateTimerTodo
+import org.android.bbangzip.presentation.ui.timer.navigation.navigateTimerTodo
 import org.android.bbangzip.presentation.ui.todo.navigation.navigateToTodo
 import timber.log.Timber
 

@@ -8,16 +8,8 @@ import androidx.navigation.toRoute
 import org.android.bbangzip.presentation.common.model.BottomNavigationRoute
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 import org.android.bbangzip.presentation.ui.timer.TimerRoute
+import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoRoute
 
-fun NavController.navigateToTimer(
-    navOptions: NavOptions,
-    shouldRestart: Boolean = false,
-) {
-    navigate(
-        route = BottomNavigationRoute.Timer(shouldRestart = shouldRestart),
-        navOptions = navOptions,
-    )
-}
 
 fun NavGraphBuilder.timerNavGraph(
     sharedViewModel: SharedViewModel,
@@ -31,4 +23,34 @@ fun NavGraphBuilder.timerNavGraph(
             shouldRestartTimer = item.shouldRestart,
         )
     }
+}
+
+fun NavGraphBuilder.timerTodoNavGraph(
+    navigateToTimer: (Boolean) -> Unit,
+    navigateToBack: () -> Unit,
+) {
+    composable<TimerTodo> { backStackEntry ->
+        val timeOptionIndex = backStackEntry.toRoute<TimerTodo>().timeOptionIndex
+        TimerTodoRoute(
+            navigateToTimer = navigateToTimer,
+            navigateToBack = navigateToBack,
+            timeOptionIndex = timeOptionIndex,
+        )
+    }
+}
+
+fun NavController.navigateToTimer(
+    navOptions: NavOptions,
+    shouldRestart: Boolean = false,
+) {
+    navigate(
+        route = BottomNavigationRoute.Timer(shouldRestart = shouldRestart),
+        navOptions = navOptions,
+    )
+}
+
+fun NavController.navigateTimerTodo(timeOptionIndex: Int) {
+    navigate(
+        route = TimerTodo(timeOptionIndex = timeOptionIndex),
+    )
 }

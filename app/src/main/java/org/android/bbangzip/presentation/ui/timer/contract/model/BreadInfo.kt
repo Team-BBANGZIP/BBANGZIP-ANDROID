@@ -1,4 +1,4 @@
-package org.android.bbangzip.presentation.common.model
+package org.android.bbangzip.presentation.ui.timer.contract.model
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

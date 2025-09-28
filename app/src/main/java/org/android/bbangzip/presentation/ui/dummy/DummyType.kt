@@ -1,4 +1,4 @@
-package org.android.bbangzip.presentation.common.type
+package org.android.bbangzip.presentation.ui.dummy
 
 import androidx.annotation.StringRes
 import org.android.bbangzip.R

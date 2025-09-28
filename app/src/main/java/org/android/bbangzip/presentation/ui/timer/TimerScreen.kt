@@ -45,9 +45,9 @@ import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.toggle.BbangZipSegmentedButton
-import org.android.bbangzip.presentation.common.model.TimerStatus
-import org.android.bbangzip.presentation.common.model.getTimerFontColor
-import org.android.bbangzip.presentation.common.model.getTitleText
+import org.android.bbangzip.presentation.ui.timer.contract.model.TimerStatus
+import org.android.bbangzip.presentation.ui.timer.contract.model.getTimerFontColor
+import org.android.bbangzip.presentation.ui.timer.contract.model.getTitleText
 import org.android.bbangzip.presentation.ui.shared.SharedContract
 import org.android.bbangzip.presentation.ui.timer.component.CircularProgressBar
 import org.android.bbangzip.presentation.ui.timer.component.bottomsheet.BreadSelectBottomSheet
@@ -56,6 +56,7 @@ import org.android.bbangzip.presentation.ui.timer.component.bottomsheet.ResetBot
 import org.android.bbangzip.presentation.ui.timer.component.bottomsheet.RestartBottomSheet
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
+import org.android.bbangzip.presentation.ui.timer.contract.TimerContract
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 

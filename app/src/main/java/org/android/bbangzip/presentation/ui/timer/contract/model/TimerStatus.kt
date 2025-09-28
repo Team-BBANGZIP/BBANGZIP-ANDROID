@@ -1,9 +1,9 @@
-package org.android.bbangzip.presentation.common.model
+package org.android.bbangzip.presentation.ui.timer.contract.model
 
 import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import kotlinx.parcelize.Parcelize
-import org.android.bbangzip.presentation.common.type.TimerViewType
+import org.android.bbangzip.presentation.ui.timer.contract.type.TimerViewType
 
 @Parcelize
 sealed class TimerStatus : Parcelable {

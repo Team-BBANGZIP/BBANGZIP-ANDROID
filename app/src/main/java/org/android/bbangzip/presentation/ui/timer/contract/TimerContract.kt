@@ -1,12 +1,12 @@
-package org.android.bbangzip.presentation.ui.timer
+package org.android.bbangzip.presentation.ui.timer.contract
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.R
-import org.android.bbangzip.presentation.common.model.BreadInfo
-import org.android.bbangzip.presentation.common.model.TimerStatus
 import org.android.bbangzip.presentation.common.base.BaseContract
+import org.android.bbangzip.presentation.ui.timer.contract.model.BreadInfo
+import org.android.bbangzip.presentation.ui.timer.contract.model.TimerStatus
 import org.android.bbangzip.presentation.common.util.constant.TimerConstants
 import org.android.bbangzip.presentation.common.util.extension.formatTime
 

@@ -1,4 +1,4 @@
-package org.android.bbangzip.presentation.common.model
+package org.android.bbangzip.presentation.ui.dummy
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize

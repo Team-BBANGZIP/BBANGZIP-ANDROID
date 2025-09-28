@@ -9,7 +9,7 @@ import org.android.bbangzip.presentation.ui.main.MainNavigator
 import org.android.bbangzip.presentation.ui.my.navigation.myNavGraph
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 import org.android.bbangzip.presentation.ui.timer.navigation.timerNavGraph
-import org.android.bbangzip.presentation.ui.timer.todo.navigation.timerTodoNavGraph
+import org.android.bbangzip.presentation.ui.timer.navigation.timerTodoNavGraph
 import org.android.bbangzip.presentation.ui.todo.navigation.todoNavGraph
 
 @Composable

@@ -30,8 +30,8 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.bottomsheet.BbangZipBottomSheetSlot
-import org.android.bbangzip.presentation.common.model.BreadInfo
-import org.android.bbangzip.presentation.common.type.BreadType
+import org.android.bbangzip.presentation.ui.timer.contract.model.BreadInfo
+import org.android.bbangzip.presentation.ui.timer.contract.type.BreadType
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BbangZipTheme

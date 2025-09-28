@@ -9,7 +9,7 @@ import kotlinx.coroutines.launch
 import org.android.bbangzip.UserPreferences
 import org.android.bbangzip.domain.repository.local.UserRepository
 import org.android.bbangzip.domain.usecase.FetchDummyUseCase
-import org.android.bbangzip.presentation.common.model.Dummy
+import org.android.bbangzip.presentation.ui.dummy.Dummy
 import org.android.bbangzip.presentation.common.base.BaseViewModel
 import javax.inject.Inject
 
