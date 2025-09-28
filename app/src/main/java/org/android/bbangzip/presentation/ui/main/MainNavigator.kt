@@ -1,4 +1,4 @@
-package org.android.bbangzip.presentation.ui.navigator
+package org.android.bbangzip.presentation.ui.main
 
 import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
@@ -12,7 +12,7 @@ import androidx.navigation.navOptions
 import org.android.bbangzip.presentation.common.model.BottomNavigationRoute
 import org.android.bbangzip.presentation.common.model.BottomNavigationRoute.Companion.routeName
 import org.android.bbangzip.presentation.common.model.Route
-import org.android.bbangzip.presentation.type.BottomNavigationType
+import org.android.bbangzip.presentation.ui.main.BottomNavigationType
 import org.android.bbangzip.presentation.ui.friend.navigation.navigateToFriend
 import org.android.bbangzip.presentation.ui.my.navigation.navigateToMy
 import org.android.bbangzip.presentation.ui.timer.navigation.navigateToTimer

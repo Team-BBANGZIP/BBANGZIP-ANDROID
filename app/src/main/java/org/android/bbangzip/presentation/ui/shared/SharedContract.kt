@@ -2,7 +2,7 @@ package org.android.bbangzip.presentation.ui.shared
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import org.android.bbangzip.presentation.type.BreadType
+import org.android.bbangzip.presentation.common.type.BreadType
 import org.android.bbangzip.presentation.common.base.BaseContract
 
 class SharedContract {

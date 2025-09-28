@@ -1,10 +1,11 @@
-package org.android.bbangzip.presentation.ui.navigator
+package org.android.bbangzip.presentation.ui.main.component
 
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import org.android.bbangzip.presentation.ui.friend.navigation.friendNavGraph
+import org.android.bbangzip.presentation.ui.main.MainNavigator
 import org.android.bbangzip.presentation.ui.my.navigation.myNavGraph
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 import org.android.bbangzip.presentation.ui.timer.navigation.timerNavGraph

@@ -1,4 +1,4 @@
-package org.android.bbangzip.presentation.type
+package org.android.bbangzip.presentation.ui.main
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes

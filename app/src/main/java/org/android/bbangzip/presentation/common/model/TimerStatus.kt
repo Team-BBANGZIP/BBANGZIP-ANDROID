@@ -3,7 +3,7 @@ package org.android.bbangzip.presentation.common.model
 import android.os.Parcelable
 import androidx.compose.ui.graphics.Color
 import kotlinx.parcelize.Parcelize
-import org.android.bbangzip.presentation.type.TimerViewType
+import org.android.bbangzip.presentation.common.type.TimerViewType
 
 @Parcelize
 sealed class TimerStatus : Parcelable {

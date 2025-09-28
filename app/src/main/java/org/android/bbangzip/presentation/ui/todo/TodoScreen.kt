@@ -74,7 +74,7 @@ import org.android.bbangzip.presentation.common.component.taskbox.BbangZipTaskBo
 import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.model.ListItem
 import org.android.bbangzip.presentation.common.model.Todo
-import org.android.bbangzip.presentation.type.CategoryColor
+import org.android.bbangzip.presentation.common.type.CategoryColor
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.CommitmentBottomSheet
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.dropShadow

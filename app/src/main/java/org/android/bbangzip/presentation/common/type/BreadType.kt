@@ -1,4 +1,4 @@
-package org.android.bbangzip.presentation.type
+package org.android.bbangzip.presentation.common.type
 
 import androidx.annotation.DrawableRes
 import org.android.bbangzip.R

@@ -1,4 +1,4 @@
-package org.android.bbangzip.presentation.type
+package org.android.bbangzip.presentation.common.type
 
 import androidx.compose.ui.graphics.Color
 import org.android.bbangzip.ui.theme.defaultBbangZipColor

@@ -1,4 +1,4 @@
-package org.android.bbangzip.presentation.ui.navigator.component
+package org.android.bbangzip.presentation.ui.main.component
 
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import okhttp3.internal.toImmutableList
-import org.android.bbangzip.presentation.type.BottomNavigationType
+import org.android.bbangzip.presentation.ui.main.BottomNavigationType
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
