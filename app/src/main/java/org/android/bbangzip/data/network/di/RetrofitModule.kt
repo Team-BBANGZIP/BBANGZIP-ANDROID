@@ -1,4 +1,4 @@
-package org.android.bbangzip.data.source.remote.util.di
+package org.android.bbangzip.data.network.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -13,9 +13,9 @@ import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.android.bbangzip.BuildConfig
 import org.android.bbangzip.BuildConfig.DEBUG
-import org.android.bbangzip.data.source.remote.util.interceptor.AuthInterceptor
-import org.android.bbangzip.data.source.remote.util.qualifier.Auth
-import org.android.bbangzip.data.source.remote.util.qualifier.BbangZip
+import org.android.bbangzip.data.network.auth.interceptor.AuthInterceptor
+import org.android.bbangzip.data.network.auth.qualifier.Auth
+import org.android.bbangzip.data.network.auth.qualifier.BbangZip
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton

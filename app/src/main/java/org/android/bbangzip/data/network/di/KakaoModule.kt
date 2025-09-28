@@ -1,4 +1,4 @@
-package org.android.bbangzip.data.source.remote.util.di
+package org.android.bbangzip.data.network.di
 
 import com.kakao.sdk.user.UserApiClient
 import dagger.Module

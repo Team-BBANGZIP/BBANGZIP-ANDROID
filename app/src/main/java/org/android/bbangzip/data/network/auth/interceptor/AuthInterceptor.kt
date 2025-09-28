@@ -1,4 +1,4 @@
-package org.android.bbangzip.data.source.remote.util.interceptor
+package org.android.bbangzip.data.network.auth.interceptor
 
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
