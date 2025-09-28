@@ -3,9 +3,9 @@ package org.android.bbangzip.presentation.ui.timer.todo
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
-import org.android.bbangzip.presentation.model.Category
-import org.android.bbangzip.presentation.model.ListItem
-import org.android.bbangzip.presentation.model.Todo
+import org.android.bbangzip.presentation.common.model.Category
+import org.android.bbangzip.presentation.common.model.ListItem
+import org.android.bbangzip.presentation.common.model.Todo
 import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoEvent
 import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoReduce
 import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoReduce.ClearAddTodoState
@@ -19,7 +19,7 @@ import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTo
 import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoSideEffect
 import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoSideEffect.NavigateToTimer
 import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoState
-import org.android.bbangzip.presentation.util.base.BaseViewModel
+import org.android.bbangzip.presentation.common.base.BaseViewModel
 import java.time.LocalTime
 import javax.inject.Inject
 

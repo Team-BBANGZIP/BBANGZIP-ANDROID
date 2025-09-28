@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".presentation.observer.ScreenStateReceiver" />
+        <receiver android:name=".presentation.common.observer.ScreenStateReceiver" />
     </application>
 
 </manifest>

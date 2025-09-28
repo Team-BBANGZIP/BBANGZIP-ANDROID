@@ -2,7 +2,7 @@ package org.android.bbangzip.data.source.remote.dto.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.android.bbangzip.domain.model.DummyEntity
+import org.android.bbangzip.domain.model.Dummy
 
 @Serializable
 data class ResponseDummyDto(
@@ -10,7 +10,7 @@ data class ResponseDummyDto(
     val dummyName: String,
 ) {
     fun toDummyEntity() =
-        DummyEntity(
+        Dummy(
             dummyName = dummyName,
         )
 }

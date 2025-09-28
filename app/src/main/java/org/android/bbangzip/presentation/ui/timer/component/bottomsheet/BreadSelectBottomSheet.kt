@@ -29,11 +29,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
-import org.android.bbangzip.presentation.component.bottomsheet.BbangZipBottomSheetSlot
-import org.android.bbangzip.presentation.model.BreadInfo
+import org.android.bbangzip.presentation.common.component.bottomsheet.BbangZipBottomSheetSlot
+import org.android.bbangzip.presentation.common.model.BreadInfo
 import org.android.bbangzip.presentation.type.BreadType
-import org.android.bbangzip.presentation.util.extension.Gap
-import org.android.bbangzip.presentation.util.extension.noRippleClickable
+import org.android.bbangzip.presentation.common.util.extension.Gap
+import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @OptIn(ExperimentalMaterial3Api::class)

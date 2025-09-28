@@ -27,8 +27,8 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import okhttp3.internal.toImmutableList
 import org.android.bbangzip.presentation.type.BottomNavigationType
-import org.android.bbangzip.presentation.util.extension.Gap
-import org.android.bbangzip.presentation.util.extension.noRippleClickable
+import org.android.bbangzip.presentation.common.util.extension.Gap
+import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 

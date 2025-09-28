@@ -7,7 +7,7 @@ import org.android.bbangzip.presentation.ui.shared.SharedContract.SharedEvent
 import org.android.bbangzip.presentation.ui.shared.SharedContract.SharedReduce
 import org.android.bbangzip.presentation.ui.shared.SharedContract.SharedSideEffect
 import org.android.bbangzip.presentation.ui.shared.SharedContract.SharedState
-import org.android.bbangzip.presentation.util.base.BaseViewModel
+import org.android.bbangzip.presentation.common.base.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel

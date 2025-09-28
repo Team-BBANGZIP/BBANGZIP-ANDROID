@@ -9,9 +9,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
-import org.android.bbangzip.presentation.model.BottomNavigationRoute
-import org.android.bbangzip.presentation.model.BottomNavigationRoute.Companion.routeName
-import org.android.bbangzip.presentation.model.Route
+import org.android.bbangzip.presentation.common.model.BottomNavigationRoute
+import org.android.bbangzip.presentation.common.model.BottomNavigationRoute.Companion.routeName
+import org.android.bbangzip.presentation.common.model.Route
 import org.android.bbangzip.presentation.type.BottomNavigationType
 import org.android.bbangzip.presentation.ui.friend.navigation.navigateToFriend
 import org.android.bbangzip.presentation.ui.my.navigation.navigateToMy

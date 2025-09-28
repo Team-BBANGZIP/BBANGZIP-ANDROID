@@ -4,8 +4,8 @@ import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Composable
 import org.android.bbangzip.R
-import org.android.bbangzip.presentation.model.BottomNavigationRoute
-import org.android.bbangzip.presentation.model.Route
+import org.android.bbangzip.presentation.common.model.BottomNavigationRoute
+import org.android.bbangzip.presentation.common.model.Route
 
 enum class BottomNavigationType(
     @DrawableRes val bottomNaviIcon: Int,

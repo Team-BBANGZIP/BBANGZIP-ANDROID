@@ -10,8 +10,8 @@ import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject
 import dagger.hilt.android.qualifiers.ApplicationContext
-import org.android.bbangzip.presentation.observer.AppLifecycleObserver
-import org.android.bbangzip.presentation.observer.ScreenStateReceiver
+import org.android.bbangzip.presentation.common.observer.AppLifecycleObserver
+import org.android.bbangzip.presentation.common.observer.ScreenStateReceiver
 import org.android.bbangzip.presentation.ui.timer.TimerContract
 import timber.log.Timber
 
