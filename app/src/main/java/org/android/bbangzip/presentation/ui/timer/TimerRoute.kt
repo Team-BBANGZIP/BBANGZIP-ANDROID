@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.collectLatest
 import org.android.bbangzip.presentation.ui.shared.SharedContract
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 import org.android.bbangzip.presentation.ui.timer.contract.TimerContract
+import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionUiState
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerStatus
 
 @Composable
@@ -41,8 +42,8 @@ fun TimerRoute(
         }
     }
 
-    LaunchedEffect(timerState.timerStatus) {
-        if (timerState.timerStatus == TimerStatus.Idle) {
+    LaunchedEffect(timerState.timerSessionState) {
+        if (timerState.timerSessionState is TimerSessionUiState.Ready) {
             sharedViewModel.setEvent(SharedContract.SharedEvent.OnShowBottomBar)
         } else {
             sharedViewModel.setEvent(SharedContract.SharedEvent.OnHideBottomBar)
