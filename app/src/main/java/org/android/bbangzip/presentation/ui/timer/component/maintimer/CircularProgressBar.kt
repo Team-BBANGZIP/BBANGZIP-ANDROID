@@ -1,4 +1,4 @@
-package org.android.bbangzip.presentation.ui.timer.component
+package org.android.bbangzip.presentation.ui.timer.component.maintimer
 
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
