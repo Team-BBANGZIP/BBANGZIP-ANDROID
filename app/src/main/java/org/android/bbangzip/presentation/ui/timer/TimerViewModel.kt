@@ -57,7 +57,7 @@ constructor(
         when (event) {
             is TimerContract.TimerEvent.Initialize ->
                 launch {
-                    updateTodayBreadCount()
+//                    updateTodayBreadCount()
                 }
 
             // Start
@@ -88,6 +88,7 @@ constructor(
             }
 
             is TimerContract.TimerEvent.OnRestartSheetApproveBtnClick -> {
+                Timber.d("다시 돌ㅇ왔을떄 ${currentUiState.timerOption.totalTime}")
                 resetTimer()
                 updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Running))
                 startTimer(currentUiState.timerOption.totalTime)

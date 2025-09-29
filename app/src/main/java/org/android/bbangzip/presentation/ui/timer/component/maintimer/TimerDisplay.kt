@@ -44,7 +44,7 @@ fun TimerDisplay(
         CircularProgressBar(
             modifier = Modifier.padding(horizontal = 32.dp),
             progress = timerState.progress,
-            progressMax = 100f,
+            progressMax = 1f,
             centerContent = { modifier ->
                 Column(
                     modifier = modifier,
