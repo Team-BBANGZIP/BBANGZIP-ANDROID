@@ -102,7 +102,7 @@ fun TimerScreen(
                     .alpha(
                         if (!isReady) 0f else 1f,
                     ),
-            enabled = isReady
+            enabled = isReady,
         )
 
         Gap(57.dp)

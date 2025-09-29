@@ -54,7 +54,7 @@ fun BreadWithTriangleIndicator(
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         AnimatedVisibility(
             visible = showTriangle,
@@ -62,7 +62,7 @@ fun BreadWithTriangleIndicator(
             exit = fadeOut(animationSpec = tween(300)),
         ) {
             Icon(
-                modifier = Modifier.offset(y = ( triangleOffset).dp),
+                modifier = Modifier.offset(y = (triangleOffset).dp),
                 imageVector = ImageVector.Companion.vectorResource(id = R.drawable.ic_triangle_down_24),
                 contentDescription = "moving triangle",
                 tint = BbangZipTheme.color.primaryNormal_897869,
@@ -87,7 +87,7 @@ private fun BreadWithTriangleIndicatorPreview_Hidden() {
             breadImageRes = R.drawable.img_baking_bread_level2, // 예시 굽는 중인 빵 이미지
             showTriangle = false,
             isClickable = false,
-            onClick = {}
+            onClick = {},
         )
     }
 }

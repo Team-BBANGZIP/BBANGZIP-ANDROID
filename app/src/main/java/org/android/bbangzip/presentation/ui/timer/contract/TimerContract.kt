@@ -12,7 +12,6 @@ import org.android.bbangzip.presentation.ui.timer.contract.model.TimerConstants
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionUiState
 import org.android.bbangzip.presentation.ui.timer.contract.type.TimeOption
 
-
 class TimerContract {
     @Parcelize
     data class TimerState(
@@ -32,16 +31,15 @@ class TimerContract {
             }
         }
 
-
         @get:DrawableRes
         val breadImg: Int
-            get() = when {
-                progress >= 0.75f -> R.drawable.img_baking_bread_level4
-                progress >= 0.5f -> R.drawable.img_baking_bread_level3
-                progress >= 0.25f -> R.drawable.img_baking_bread_level2
-                else -> R.drawable.img_baking_bread_level1
-            }
-
+            get() =
+                when {
+                    progress >= 0.75f -> R.drawable.img_baking_bread_level4
+                    progress >= 0.5f -> R.drawable.img_baking_bread_level3
+                    progress >= 0.25f -> R.drawable.img_baking_bread_level2
+                    else -> R.drawable.img_baking_bread_level1
+                }
 
         val formattedTime: String get() = remainingTime.formatTime()
 
@@ -55,21 +53,21 @@ class TimerContract {
 
         data object OnStopBtnClick : TimerEvent
 
-        //Restart
+        // Restart
         data object OnRestartBtnClick : TimerEvent
 
         data object OnRestartSheetDismissBtnClick : TimerEvent
 
         data object OnRestartSheetApproveBtnClick : TimerEvent
 
-        //Reset
+        // Reset
         data object OnResetBtnClick : TimerEvent
 
         data object OnResetSheetDismissBtnClick : TimerEvent
 
         data object OnResetSheetApproveBtnClick : TimerEvent
 
-        //BreadSelection
+        // BreadSelection
         data object OnBreadIconClick : TimerEvent
 
         data object OnBreadSelectionSheetClick : TimerEvent
@@ -97,7 +95,7 @@ class TimerContract {
 
         data class UpdateTimeOption(val option: TimeOption) : TimerReduce
 
-        data class UpdateTodayBreadCount( val breadCount: Int) : TimerReduce
+        data class UpdateTodayBreadCount(val breadCount: Int) : TimerReduce
     }
 
     sealed interface TimerSideEffect : BaseContract.SideEffect {

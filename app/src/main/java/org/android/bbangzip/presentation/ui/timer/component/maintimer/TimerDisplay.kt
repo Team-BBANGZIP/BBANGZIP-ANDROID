@@ -23,16 +23,15 @@ fun TimerDisplay(
     timerState: TimerContract.TimerState,
     sharedState: SharedContract.SharedState,
     onBreadIconClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val sessionState = timerState.timerSessionState
     val isReady = sessionState is TimerSessionUiState.Ready
 
     Column(
         modifier = modifier,
-        horizontalAlignment = Alignment.CenterHorizontally
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-
         Text(
             text = stringResource(sessionState.getTitleText()),
             style = BbangZipTheme.typography.title2Medium,
@@ -58,11 +57,12 @@ fun TimerDisplay(
                 }
             },
             bottomContent = { mod ->
-                val breadImageRes = if (isReady) {
-                    sharedState.breadImg
-                } else {
-                    timerState.breadImg
-                }
+                val breadImageRes =
+                    if (isReady) {
+                        sharedState.breadImg
+                    } else {
+                        timerState.breadImg
+                    }
 
                 BreadWithTriangleIndicator(
                     modifier = mod,
@@ -76,17 +76,17 @@ fun TimerDisplay(
     }
 }
 
-
 @Preview(showBackground = true, backgroundColor = 0xFFF8F1E9)
 @Composable
 private fun TimerDisplayPreview() {
     BBANGZIPANDROIDTheme {
         TimerDisplay(
-            timerState = TimerContract.TimerState(
-                timerSessionState = TimerSessionUiState.Ready(todayBreadCount = 5)
-            ),
+            timerState =
+                TimerContract.TimerState(
+                    timerSessionState = TimerSessionUiState.Ready(todayBreadCount = 5),
+                ),
             sharedState = SharedContract.SharedState(),
-            onBreadIconClick = {}
+            onBreadIconClick = {},
         )
     }
 }

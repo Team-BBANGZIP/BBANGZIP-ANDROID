@@ -14,7 +14,6 @@ import org.android.bbangzip.presentation.ui.shared.SharedContract
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 import org.android.bbangzip.presentation.ui.timer.contract.TimerContract
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionUiState
-import org.android.bbangzip.presentation.ui.timer.contract.model.TimerStatus
 
 @Composable
 fun TimerRoute(
