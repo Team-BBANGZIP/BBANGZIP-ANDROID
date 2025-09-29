@@ -1,4 +1,4 @@
-package org.android.bbangzip.presentation.common.util.constant
+package org.android.bbangzip.presentation.ui.timer.contract.model
 
 object TimerConstants {
     const val THIRTY_MINUTES = 1800000L

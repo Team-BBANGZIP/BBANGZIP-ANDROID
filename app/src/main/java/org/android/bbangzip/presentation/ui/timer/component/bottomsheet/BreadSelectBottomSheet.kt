@@ -32,15 +32,15 @@ import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.bottomsheet.BbangZipBottomSheetSlot
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
-import org.android.bbangzip.presentation.ui.timer.contract.model.BreadInfo
-import org.android.bbangzip.presentation.ui.timer.contract.type.BreadType
+import org.android.bbangzip.presentation.ui.timer.contract.model.BreadInfoUiState
+import org.android.bbangzip.presentation.common.type.BreadType
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BreadSelectBottomSheet(
     currentBreadId: Int,
-    breadList: List<BreadInfo>,
+    breadList: List<BreadInfoUiState>,
     isBottomSheetVisible: Boolean,
     breadCount: Int,
     onDismissRequest: () -> Unit,
@@ -115,7 +115,7 @@ private fun BreadSelectHeader(
 @Composable
 private fun BreadSelectionGrid(
     currentBreadId: Int,
-    breadList: List<BreadInfo>,
+    breadList: List<BreadInfoUiState>,
     onBreadSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -141,7 +141,7 @@ private fun BreadSelectionGrid(
 
 @Composable
 private fun BreadItem(
-    breadInfo: BreadInfo,
+    breadInfo: BreadInfoUiState,
     isSelected: Boolean,
     onBreadSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -167,7 +167,7 @@ private fun BreadItem(
 
 @Composable
 private fun BreadItemImage(
-    breadInfo: BreadInfo,
+    breadInfo: BreadInfoUiState,
     isSelected: Boolean,
     onBreadSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -204,7 +204,7 @@ private fun LockedBreadImage(
 
 @Composable
 private fun UnlockedBreadImage(
-    breadInfo: BreadInfo,
+    breadInfo: BreadInfoUiState,
     onBreadSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -223,7 +223,7 @@ private fun UnlockedBreadImage(
 
 @Composable
 private fun BreadItemLabel(
-    breadInfo: BreadInfo,
+    breadInfo: BreadInfoUiState,
     modifier: Modifier = Modifier,
 ) {
     Text(

@@ -2,98 +2,123 @@ package org.android.bbangzip.presentation.ui.timer.contract
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.base.BaseContract
-import org.android.bbangzip.presentation.common.util.constant.TimerConstants
 import org.android.bbangzip.presentation.common.util.extension.formatTime
-import org.android.bbangzip.presentation.ui.timer.contract.model.BreadInfo
+import org.android.bbangzip.presentation.ui.timer.contract.model.BreadInfoUiState
+import org.android.bbangzip.presentation.ui.timer.contract.model.TimerBottomSheetVisibleState
+import org.android.bbangzip.presentation.ui.timer.contract.model.TimerConstants
+import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionState
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerStatus
+import org.android.bbangzip.presentation.ui.timer.contract.type.TimeOption
+
+
+//        val isScreenOn: Boolean = true,
+//        val isAppActive: Boolean = true,
+//        val backgroundStartTime: Long = 0L,
+//        val pausedTime: Long = 0L, -> 4개는 ui와 상관없으므류  viewmodel에 따로 선언
+
+// 공통 : remainingTime , <enum> timerOption(timeOptionIndex , totalTime)
+// ready ->  ,todayBreadCount  , breadList
+//running, paused , resume : breadLevel - >breadImg
+// timeOptionIndex -> totalTime, 반환해야하는 bread 개수
 
 class TimerContract {
     @Parcelize
     data class TimerState(
         val remainingTime: Long = TimerConstants.THIRTY_MINUTES,
-        val totalTime: Long = TimerConstants.THIRTY_MINUTES,
-        val pausedTime: Long = 0L,
-        val timerStatus: TimerStatus = TimerStatus.Idle,
-        val breadLevel: Int = 1,
-        val todayBreadCount: Int = 6,
-        val selectedTimeOptionIndex: Int = 0,
-        val breadList: List<BreadInfo> =
-            listOf(
-                BreadInfo(1, "소금빵", false, 0),
-                BreadInfo(2, "식빵", false, 5),
-                BreadInfo(3, "바게트", true, 10),
-                BreadInfo(4, "크루아상", true, 15),
-                BreadInfo(5, "모닝빵", true, 20),
-                BreadInfo(6, "바게트", true, 10),
-                BreadInfo(7, "크루아상", true, 15),
-                BreadInfo(8, "모닝빵", true, 20),
-                BreadInfo(9, "모닝빵", true, 20),
-            ),
-        val isBreadSelectionSheetVisible: Boolean = false,
-        val isRestartSheetVisible: Boolean = false,
-        val isResetSheetVisible: Boolean = false,
-        val isCompleteSheetVisible: Boolean = false,
-        // Lifecycle State
-        val isScreenOn: Boolean = true,
-        val isAppActive: Boolean = true,
-        val backgroundStartTime: Long = 0L,
+        val timerOption: TimeOption = TimeOption.THIRTY,
+        val timerSessionState: TimerSessionState,
+        val bottomSheetState: TimerBottomSheetVisibleState,
     ) : BaseContract.State, Parcelable {
-        val formattedTime: String get() = remainingTime.formatTime()
-        val progress: Float get() = ((totalTime - remainingTime).toFloat() / totalTime.toFloat()) * 100f
-        val breadImg: Int
-            @DrawableRes get() =
-                when (breadLevel) {
-                    1 -> R.drawable.img_baking_bread_level1
-                    2 -> R.drawable.img_baking_bread_level2
-                    3 -> R.drawable.img_baking_bread_level3
-                    4 -> R.drawable.img_baking_bread_level4
-                    else -> R.drawable.img_salt_bread
+        @IgnoredOnParcel
+        val progress: Float by lazy {
+            val totalTime = timerOption.totalTime
+            if (totalTime > 0 && totalTime - remainingTime > 0) {
+                ((totalTime - remainingTime).toFloat() / totalTime.toFloat())
+            } else {
+                0f
+            }
+        }
+
+        @get:DrawableRes
+        val breadImg: Int?
+            get() {
+                val level = when (val session = timerSessionState) {
+                    is TimerSessionState.Running -> session.breadLevel
+                    is TimerSessionState.Paused -> session.breadLevel
+                    is TimerSessionState.Complete -> 4
+                    else -> null
                 }
+
+                return level?.let {
+                    when (it) {
+                        1 -> R.drawable.img_baking_bread_level1
+                        2 -> R.drawable.img_baking_bread_level2
+                        3 -> R.drawable.img_baking_bread_level3
+                        4 -> R.drawable.img_baking_bread_level4
+                        else -> R.drawable.img_salt_bread // 기본값 또는 예외 케이스
+                    }
+                }
+            }
+
+        val formattedTime: String get() = remainingTime.formatTime()
 
         override fun toParcelable(): Parcelable = this
     }
 
     sealed interface TimerEvent : BaseContract.Event {
+
+        sealed interface BottomSheetVisibleEvent : TimerEvent
+
+        sealed interface BottomSheetDismissRequestEvent : TimerEvent
+
+        sealed interface BottomSheetApproveBtnClickEvent : TimerEvent
+
+        sealed interface BottomSheetDismissBtnClickEvent : TimerEvent
+
+
         data object Initialize : TimerEvent
 
         data object OnStartBtnClick : TimerEvent
 
         data object OnStopBtnClick : TimerEvent
 
-        data object OnRestartBtnClick : TimerEvent
+        //Restart
+        data object OnRestartBtnClick : TimerEvent, BottomSheetVisibleEvent
 
-        data object OnRestartSheetDismissBtnClick : TimerEvent
+        data object OnRestartSheetDismissBtnClick : BottomSheetDismissBtnClickEvent
 
-        data object OnRestartSheetApproveBtnClick : TimerEvent
+        data object OnRestartSheetApproveBtnClick : BottomSheetApproveBtnClickEvent
 
-        data object OnResetBtnClick : TimerEvent
+        //Reset
+        data object OnResetBtnClick : TimerEvent, BottomSheetVisibleEvent
 
-        data object OnResetSheetDismissBtnClick : TimerEvent
+        data object OnResetSheetDismissBtnClick : TimerEvent ,BottomSheetDismissBtnClickEvent
 
-        data object OnResetSheetApproveBtnClick : TimerEvent
+        data object OnResetSheetApproveBtnClick : TimerEvent, BottomSheetApproveBtnClickEvent
 
-        data object OnBreadIconClick : TimerEvent
+        //BreadSelection
+        data object OnBreadIconClick : TimerEvent, BottomSheetVisibleEvent
 
-        data object OnBreadSelectionSheetDismissRequest : TimerEvent
+        data object OnBreadSelectionSheetClick : TimerEvent
 
-        data object OnTimerCompleted : TimerEvent
+        data object OnBreadSelectionSheetDismissRequest : TimerEvent, BottomSheetDismissRequestEvent
+
+        // complete
+        data object OnTimerCompleted : TimerEvent, BottomSheetVisibleEvent
 
         data object OnCompleteSheetRestartBtnClick : TimerEvent
 
         data object OnCompleteSheetCheckBtnClick : TimerEvent
 
-        data object OnCompleteSheetDismissRequest : TimerEvent
-
-        data object OnTimerTick : TimerEvent
+        data object OnCompleteSheetDismissRequest : TimerEvent, BottomSheetDismissRequestEvent
 
         data class OnTimeOptionToggleClick(
             val selectedTimeOptionIndex: Int,
         ) : TimerEvent
-
-        data object OnBreadSelectionSheetClick : TimerEvent
 
         // Lifecycle events
         data object OnScreenTimeOut : TimerEvent
@@ -149,7 +174,7 @@ class TimerContract {
         ) : TimerReduce
 
         data class UpdateBreadList(
-            val breadList: List<BreadInfo>,
+            val breadList: List<BreadInfoUiState>,
         ) : TimerReduce
 
         data class UpdateIsScreenOn(
