@@ -18,6 +18,7 @@ class TimerContract {
     data class TimerState(
         val remainingTime: Long = TimerConstants.THIRTY_MINUTES,
         val timerOption: TimeOption = TimeOption.THIRTY,
+        val todayBreadCount: Int = 0,
         val timerSessionState: TimerSessionUiState = TimerSessionUiState.Ready(),
         val bottomSheetState: TimerBottomSheetVisibleState = TimerBottomSheetVisibleState(),
     ) : BaseContract.State, Parcelable {
@@ -48,16 +49,6 @@ class TimerContract {
     }
 
     sealed interface TimerEvent : BaseContract.Event {
-
-        sealed interface BottomSheetVisibleEvent : TimerEvent
-
-        sealed interface BottomSheetDismissRequestEvent : TimerEvent
-
-        sealed interface BottomSheetApproveBtnClickEvent : TimerEvent
-
-        sealed interface BottomSheetDismissBtnClickEvent : TimerEvent
-
-
         data object Initialize : TimerEvent
 
         data object OnStartBtnClick : TimerEvent
@@ -65,32 +56,32 @@ class TimerContract {
         data object OnStopBtnClick : TimerEvent
 
         //Restart
-        data object OnRestartBtnClick : TimerEvent, BottomSheetVisibleEvent
+        data object OnRestartBtnClick : TimerEvent
 
-        data object OnRestartSheetDismissBtnClick : BottomSheetDismissBtnClickEvent
+        data object OnRestartSheetDismissBtnClick : TimerEvent
 
-        data object OnRestartSheetApproveBtnClick : BottomSheetApproveBtnClickEvent
+        data object OnRestartSheetApproveBtnClick : TimerEvent
 
         //Reset
-        data object OnResetBtnClick : TimerEvent, BottomSheetVisibleEvent
+        data object OnResetBtnClick : TimerEvent
 
-        data object OnResetSheetDismissBtnClick : TimerEvent, BottomSheetDismissBtnClickEvent
+        data object OnResetSheetDismissBtnClick : TimerEvent
 
-        data object OnResetSheetApproveBtnClick : TimerEvent, BottomSheetApproveBtnClickEvent
+        data object OnResetSheetApproveBtnClick : TimerEvent
 
         //BreadSelection
-        data object OnBreadIconClick : TimerEvent, BottomSheetVisibleEvent
+        data object OnBreadIconClick : TimerEvent
 
         data object OnBreadSelectionSheetClick : TimerEvent
 
-        data object OnBreadSelectionSheetDismissRequest : TimerEvent, BottomSheetDismissRequestEvent
+        data object OnBreadSelectionSheetDismissRequest : TimerEvent
 
         // complete
         data object OnCompleteSheetRestartBtnClick : TimerEvent
 
         data object OnCompleteSheetCheckBtnClick : TimerEvent
 
-        data object OnCompleteSheetDismissRequest : TimerEvent, BottomSheetDismissRequestEvent
+        data object OnCompleteSheetDismissRequest : TimerEvent
 
         data class OnTimeOptionToggleClick(
             val selectedTimeOptionIndex: Int,
@@ -105,6 +96,8 @@ class TimerContract {
         data class UpdateBottomSheetState(val bottomSheetState: TimerBottomSheetVisibleState) : TimerReduce
 
         data class UpdateTimeOption(val option: TimeOption) : TimerReduce
+
+        data class UpdateTodayBreadCount( val breadCount: Int) : TimerReduce
     }
 
     sealed interface TimerSideEffect : BaseContract.SideEffect {

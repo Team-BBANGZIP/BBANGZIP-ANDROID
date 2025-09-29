@@ -10,11 +10,9 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.android.bbangzip.domain.repository.remote.TimerRepository
 import org.android.bbangzip.presentation.common.base.BaseViewModel
-import org.android.bbangzip.presentation.ui.timer.contract.model.TimerConstants
 import org.android.bbangzip.presentation.ui.timer.contract.TimerContract
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerBottomSheetVisibleState
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionUiState
-import org.android.bbangzip.presentation.ui.timer.contract.model.TimerStatus
 import org.android.bbangzip.presentation.ui.timer.contract.type.TimeOption
 import org.android.bbangzip.presentation.ui.timer.lifecycle.TimerLifecycleManager
 import timber.log.Timber
@@ -151,6 +149,9 @@ constructor(
                 timerOption = reduce.option,
                 remainingTime = reduce.option.totalTime
             )
+            is TimerContract.TimerReduce.UpdateTodayBreadCount ->   state.copy(
+                todayBreadCount = reduce.breadCount
+            )
         }
     }
 
@@ -220,7 +221,7 @@ constructor(
         updateState(TimerContract.TimerReduce.UpdateRemainingTime(currentUiState.timerOption.totalTime))
         if (moveToReady) {
             // TODO: todayBreadCount는 Repository에서 다시 가져와야 함
-            updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Ready(todayBreadCount = 5)))
+            updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Ready()))
         }
     }
 
@@ -230,13 +231,7 @@ constructor(
             val breadCount = data
             val currentState = currentUiState.timerSessionState
             if (currentState is TimerSessionUiState.Ready)
-                updateState(
-                    TimerContract.TimerReduce.UpdateTimerSessionState(
-                        sessionState = currentState.copy(
-                            todayBreadCount = breadCount
-                        )
-                    )
-                )
+                updateState(TimerContract.TimerReduce.UpdateTodayBreadCount(breadCount))
         }
     }
 

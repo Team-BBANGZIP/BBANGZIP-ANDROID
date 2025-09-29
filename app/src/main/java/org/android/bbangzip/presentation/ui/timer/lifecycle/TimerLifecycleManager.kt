@@ -18,11 +18,11 @@ class TimerLifecycleManager
 @AssistedInject
 constructor(
     @ApplicationContext private val context: Context,
-    @Assisted private val onScreenOn: () -> Unit,
-    @Assisted private val onScreenOffByTimeout: () -> Unit,
-    @Assisted private val onScreenOffByLock: () -> Unit,
-    @Assisted private val onAppForeground: (backgroundDuration: Long) -> Unit,
-    @Assisted private val onAppBackground: () -> Unit,
+    @Assisted("onScreenOn") private val onScreenOnViewmodel: () -> Unit,
+    @Assisted("onScreenOffByTimeout") private val onScreenOffByTimeout: () -> Unit,
+    @Assisted("onScreenOffByLock") private val onScreenOffByLock: () -> Unit,
+    @Assisted("onAppForeground") private val onAppForeground: (backgroundDuration: Long) -> Unit,
+    @Assisted("onAppBackground") private val onAppBackgroundViewmodel: () -> Unit,
 ) {
     private val screenStateReceiver = ScreenStateReceiver()
     private val lifecycleObserver = AppLifecycleObserver()
@@ -42,7 +42,7 @@ constructor(
                 override fun onScreenOn() {
                     lifecycleObserver.updateScreenState(true)
                     lastUserInteractionTime = System.currentTimeMillis()
-                    onScreenOn() // ViewModel의 onScreenOn() 호출
+                    onScreenOnViewmodel()
                 }
 
                 override fun onScreenOff() {
@@ -72,11 +72,11 @@ constructor(
         lifecycleObserver.setListener(
             object : AppLifecycleObserver.AppLifecycleListener {
                 override fun onAppForeground() {
-                    onAppForeground(lifecycleObserver.getBackgroundDuration()) // ViewModel의 onAppForeground() 호출
+                    onAppForeground(lifecycleObserver.getBackgroundDuration())
                 }
 
                 override fun onAppBackground() {
-                    onAppBackground() // ViewModel의 onAppBackground() 호출
+                    onAppBackgroundViewmodel()
                 }
             },
         )
@@ -141,11 +141,11 @@ constructor(
     @AssistedFactory
     interface Factory {
         fun create(
-            onScreenOn: () -> Unit,
-            onScreenOffByTimeout: () -> Unit,
-            onScreenOffByLock: () -> Unit,
-            onAppForeground: (backgroundDuration: Long) -> Unit,
-            onAppBackground: () -> Unit,
+            @Assisted("onScreenOn") onScreenOn: () -> Unit,
+            @Assisted("onScreenOffByTimeout") onScreenOffByTimeout: () -> Unit,
+            @Assisted("onScreenOffByLock") onScreenOffByLock: () -> Unit,
+            @Assisted("onAppForeground") onAppForeground: (backgroundDuration: Long) -> Unit,
+            @Assisted("onAppBackground") onAppBackground: () -> Unit,
         ): TimerLifecycleManager
     }
 }
