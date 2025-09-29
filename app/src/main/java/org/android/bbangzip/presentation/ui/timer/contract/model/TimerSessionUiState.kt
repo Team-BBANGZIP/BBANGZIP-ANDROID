@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-sealed class TimerSessionState : Parcelable {
+sealed class TimerSessionUiState : Parcelable {
     data class Ready(
         val breadList: List<BreadInfoUiState>
         = listOf(
@@ -18,12 +18,12 @@ sealed class TimerSessionState : Parcelable {
             BreadInfoUiState(8, "모닝빵", true, 20),
             BreadInfoUiState(9, "모닝빵", true, 20),
         ), val todayBreadCount: Int = 0
-    ) : TimerSessionState()
+    ) : TimerSessionUiState()
 
-    data class Running(val breadLevel: Int = 1) : TimerSessionState()
+    data class Running(val breadLevel: Int = 1) : TimerSessionUiState()
 
-    data class Paused(val breadLevel: Int = 1) : TimerSessionState()
+    data class Paused(val breadLevel: Int = 1) : TimerSessionUiState()
 
-    data class Complete(val breadLevel: Int = 4) : TimerSessionState()
+    data class Complete(val breadLevel: Int = 4) : TimerSessionUiState()
 
 }

@@ -7,10 +7,12 @@ import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.base.BaseContract
 import org.android.bbangzip.presentation.common.util.extension.formatTime
+import org.android.bbangzip.presentation.ui.timer.contract.TimerContract.TimerEvent
+import org.android.bbangzip.presentation.ui.timer.contract.TimerContract.TimerReduce
 import org.android.bbangzip.presentation.ui.timer.contract.model.BreadInfoUiState
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerBottomSheetVisibleState
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerConstants
-import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionState
+import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionUiState
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerStatus
 import org.android.bbangzip.presentation.ui.timer.contract.type.TimeOption
 
@@ -19,6 +21,29 @@ import org.android.bbangzip.presentation.ui.timer.contract.type.TimeOption
 //        val isAppActive: Boolean = true,
 //        val backgroundStartTime: Long = 0L,
 //        val pausedTime: Long = 0L, -> 4개는 ui와 상관없으므류  viewmodel에 따로 선언
+//
+//// Lifecycle events
+//data object OnScreenTimeOut : TimerEvent
+//
+//data object OnLockButtonPressed : TimerEvent
+//
+//data object OnScreenTurnedOn : TimerEvent
+//
+//data object OnAppBackground : TimerEvent
+//
+//data class OnAppForeground(val exitDuration: Long) : TimerEvent
+
+//data class UpdateIsScreenOn(
+//    val isScreenOn: Boolean,
+//) : TimerReduce
+//
+//data class UpdateIsAppActive(
+//    val isActive: Boolean,
+//) : TimerReduce
+//
+//data class UpdateBackgroundStartTime(
+//    val time: Long,
+//) : TimerReduce
 
 // 공통 : remainingTime , <enum> timerOption(timeOptionIndex , totalTime)
 // ready ->  ,todayBreadCount  , breadList
@@ -30,7 +55,7 @@ class TimerContract {
     data class TimerState(
         val remainingTime: Long = TimerConstants.THIRTY_MINUTES,
         val timerOption: TimeOption = TimeOption.THIRTY,
-        val timerSessionState: TimerSessionState,
+        val timerSessionState: TimerSessionUiState,
         val bottomSheetState: TimerBottomSheetVisibleState,
     ) : BaseContract.State, Parcelable {
         @IgnoredOnParcel
@@ -47,9 +72,9 @@ class TimerContract {
         val breadImg: Int?
             get() {
                 val level = when (val session = timerSessionState) {
-                    is TimerSessionState.Running -> session.breadLevel
-                    is TimerSessionState.Paused -> session.breadLevel
-                    is TimerSessionState.Complete -> 4
+                    is TimerSessionUiState.Running -> session.breadLevel
+                    is TimerSessionUiState.Paused -> session.breadLevel
+                    is TimerSessionUiState.Complete -> 4
                     else -> null
                 }
 
@@ -119,75 +144,16 @@ class TimerContract {
         data class OnTimeOptionToggleClick(
             val selectedTimeOptionIndex: Int,
         ) : TimerEvent
-
-        // Lifecycle events
-        data object OnScreenTimeOut : TimerEvent
-
-        data object OnLockButtonPressed : TimerEvent
-
-        data object OnScreenTurnedOn : TimerEvent
-
-        data object OnAppBackground : TimerEvent
-
-        data class OnAppForeground(val exitDuration: Long) : TimerEvent
     }
 
     sealed interface TimerReduce : BaseContract.Reduce {
-        data class UpdateTimerStatus(
-            val timerStatus: TimerStatus,
-        ) : TimerReduce
+        data class UpdateRemainingTime(val remainingTime: Long) : TimerReduce
 
-        data class UpdateRemainingTime(
-            val remainingTime: Long,
-        ) : TimerReduce
+        data class UpdateTimerSessionState(val sessionState: TimerSessionUiState) : TimerReduce
 
-        data class UpdateBreadLevel(
-            val breadLevel: Int,
-        ) : TimerReduce
+        data class UpdateBottomSheetState(val bottomSheetState: TimerBottomSheetVisibleState) : TimerReduce
 
-        data class UpdateTodayBreadCount(
-            val todayBreadCount: Int,
-        ) : TimerReduce
-
-        data class UpdateSelectedTimeOptionIndex(
-            val selectedTimeOptionIndex: Int,
-        ) : TimerReduce
-
-        data class UpdateBreadSelectionSheetState(
-            val isBreadSelectionSheetVisible: Boolean,
-        ) : TimerReduce
-
-        data class UpdateRestartSheetState(
-            val isRestartSheetVisible: Boolean,
-        ) : TimerReduce
-
-        data class UpdateResetSheetState(
-            val isResetSheetVisible: Boolean,
-        ) : TimerReduce
-
-        data class UpdateCompleteSheetState(
-            val isCompleteSheetVisible: Boolean,
-        ) : TimerReduce
-
-        data class UpdateTotalTime(
-            val totalTime: Long,
-        ) : TimerReduce
-
-        data class UpdateBreadList(
-            val breadList: List<BreadInfoUiState>,
-        ) : TimerReduce
-
-        data class UpdateIsScreenOn(
-            val isScreenOn: Boolean,
-        ) : TimerReduce
-
-        data class UpdateIsAppActive(
-            val isActive: Boolean,
-        ) : TimerReduce
-
-        data class UpdateBackgroundStartTime(
-            val time: Long,
-        ) : TimerReduce
+        data class UpdateTimeOption(val option: TimeOption) : TimerReduce
     }
 
     sealed interface TimerSideEffect : BaseContract.SideEffect {
