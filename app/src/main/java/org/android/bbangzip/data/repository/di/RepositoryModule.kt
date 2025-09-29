@@ -7,9 +7,9 @@ import dagger.hilt.components.SingletonComponent
 import org.android.bbangzip.data.repository.local.UserRepositoryImpl
 import org.android.bbangzip.data.repository.remote.DummyRepositoryImpl
 import org.android.bbangzip.data.repository.remote.TimerRepositoryImpl
-import org.android.bbangzip.domain.repository.local.UserRepository
-import org.android.bbangzip.domain.repository.remote.DummyRepository
-import org.android.bbangzip.domain.repository.remote.TimerRepository
+import org.android.bbangzip.domain.repository.UserRepository
+import org.android.bbangzip.domain.repository.DummyRepository
+import org.android.bbangzip.domain.repository.TimerRepository
 import javax.inject.Singleton
 
 @Module

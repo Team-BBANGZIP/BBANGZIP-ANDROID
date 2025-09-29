@@ -1,4 +1,4 @@
-package org.android.bbangzip.domain.repository.local
+package org.android.bbangzip.domain.repository
 
 import kotlinx.coroutines.flow.Flow
 import org.android.bbangzip.UserPreferences

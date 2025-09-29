@@ -5,7 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
-import org.android.bbangzip.domain.repository.remote.TimerRepository
+import org.android.bbangzip.domain.repository.TimerRepository
 import org.android.bbangzip.presentation.common.base.BaseViewModel
 import org.android.bbangzip.presentation.common.util.constant.TimerConstants
 import org.android.bbangzip.presentation.ui.timer.contract.TimerContract

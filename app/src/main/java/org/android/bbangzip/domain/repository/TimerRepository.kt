@@ -1,4 +1,4 @@
-package org.android.bbangzip.domain.repository.remote
+package org.android.bbangzip.domain.repository
 
 import org.android.bbangzip.domain.model.BreadList
 

@@ -3,7 +3,7 @@ package org.android.bbangzip.data.repository.local
 import kotlinx.coroutines.flow.Flow
 import org.android.bbangzip.UserPreferences
 import org.android.bbangzip.data.source.local.datasource.UserLocalDataSource
-import org.android.bbangzip.domain.repository.local.UserRepository
+import org.android.bbangzip.domain.repository.UserRepository
 import javax.inject.Inject
 
 class UserRepositoryImpl

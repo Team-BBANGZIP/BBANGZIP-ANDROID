@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.runBlocking
 import okhttp3.Interceptor
 import okhttp3.Response
-import org.android.bbangzip.domain.repository.local.UserRepository
+import org.android.bbangzip.domain.repository.UserRepository
 import javax.inject.Inject
 
 class AuthInterceptor
