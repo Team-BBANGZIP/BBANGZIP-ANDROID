@@ -8,7 +8,7 @@ import org.android.bbangzip.domain.model.BreadCount
 data class ResponseCompleteTimerDto(
     @SerialName("count")
     val count: Int,
-){
+) {
     fun toBreadCount(): BreadCount =
         BreadCount(count = count)
 }
