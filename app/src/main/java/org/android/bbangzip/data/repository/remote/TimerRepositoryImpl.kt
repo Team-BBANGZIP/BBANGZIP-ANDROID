@@ -2,6 +2,7 @@ package org.android.bbangzip.data.repository.remote
 
 import org.android.bbangzip.data.datasource.remote.TimerRemoteDataSource
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestCompleteTimerDto
+import org.android.bbangzip.domain.model.BreadCount
 import org.android.bbangzip.domain.model.BreadList
 import org.android.bbangzip.domain.repository.TimerRepository
 import javax.inject.Inject
@@ -14,7 +15,7 @@ class TimerRepositoryImpl
         override suspend fun postTimerCompleted(
             targetDate: String,
             count: Int,
-        ): Result<Int> =
+        ): Result<BreadCount> =
             runCatching {
                 val response =
                     timerRemoteDataSource.postTimerCompleted(
@@ -23,16 +24,16 @@ class TimerRepositoryImpl
 
                 val responseData = response.data ?: throw IllegalStateException(response.message)
 
-                responseData.count
+                responseData.toBreadCount()
             }
 
-        override suspend fun fetchTodayBreadCount(): Result<Int> =
+        override suspend fun fetchTodayBreadCount(): Result<BreadCount> =
             runCatching {
                 val response = timerRemoteDataSource.getTodayBreadCount()
 
                 val responseData = response.data ?: throw IllegalStateException(response.message)
 
-                responseData.todayBakedCount
+                responseData.toBreadCount()
             }
 
         override suspend fun fetchBreadList(): Result<BreadList> =
