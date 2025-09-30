@@ -14,10 +14,10 @@ object UserSerializer : Serializer<UserPreferences> {
     override suspend fun readFrom(input: InputStream): UserPreferences {
         return try {
             val data = input.readBytes()
-            Timber.tag("[Proto DataStore]").d(data.decodeToString())
+            Timber.Forest.tag("[Proto DataStore]").d(data.decodeToString())
             UserPreferences.parseFrom(data)
         } catch (exception: Exception) {
-            Timber.tag("[Proto DataStore]").e(exception)
+            Timber.Forest.tag("[Proto DataStore]").e(exception)
             throw CorruptionException("Proto 데이터를 읽을 수 없습니다.", exception)
         }
     }

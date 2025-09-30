@@ -3,9 +3,10 @@ package org.android.bbangzip.presentation.ui.todo
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
-import org.android.bbangzip.presentation.model.Category
-import org.android.bbangzip.presentation.model.ListItem
-import org.android.bbangzip.presentation.model.Todo
+import org.android.bbangzip.presentation.common.base.BaseViewModel
+import org.android.bbangzip.presentation.common.model.Category
+import org.android.bbangzip.presentation.common.model.ListItem
+import org.android.bbangzip.presentation.common.model.Todo
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoEvent
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategories
@@ -15,7 +16,6 @@ import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateI
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateSelectedDate
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoSideEffect
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoState
-import org.android.bbangzip.presentation.util.base.BaseViewModel
 import java.time.LocalTime
 import javax.inject.Inject
 

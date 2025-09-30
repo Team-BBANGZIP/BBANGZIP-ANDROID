@@ -24,11 +24,11 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
-import org.android.bbangzip.presentation.component.bottomsheet.BbangZipBottomSheetSlot
-import org.android.bbangzip.presentation.component.button.BbangZipButtonDefaults
-import org.android.bbangzip.presentation.component.button.BbangzipBaseButton
-import org.android.bbangzip.presentation.component.calendar.MonthlyCalendar
-import org.android.bbangzip.presentation.util.extension.Gap
+import org.android.bbangzip.presentation.common.component.bottomsheet.BbangZipBottomSheetSlot
+import org.android.bbangzip.presentation.common.component.button.BbangZipButtonDefaults
+import org.android.bbangzip.presentation.common.component.button.BbangzipBaseButton
+import org.android.bbangzip.presentation.common.component.calendar.MonthlyCalendar
+import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalDate

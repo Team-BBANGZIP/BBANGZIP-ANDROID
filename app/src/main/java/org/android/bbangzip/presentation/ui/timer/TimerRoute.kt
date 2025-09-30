@@ -10,9 +10,10 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
-import org.android.bbangzip.presentation.model.TimerStatus
 import org.android.bbangzip.presentation.ui.shared.SharedContract
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
+import org.android.bbangzip.presentation.ui.timer.contract.TimerContract
+import org.android.bbangzip.presentation.ui.timer.contract.model.TimerStatus
 
 @Composable
 fun TimerRoute(

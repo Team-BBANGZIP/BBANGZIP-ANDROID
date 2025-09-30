@@ -21,7 +21,7 @@ class BbangZipApp : Application() {
     }
 
     private fun setTimber() {
-        if (BuildConfig.DEBUG) Timber.plant(Timber.DebugTree())
+        if (BuildConfig.DEBUG) Timber.Forest.plant(Timber.DebugTree())
     }
 
     private fun setKakao() {

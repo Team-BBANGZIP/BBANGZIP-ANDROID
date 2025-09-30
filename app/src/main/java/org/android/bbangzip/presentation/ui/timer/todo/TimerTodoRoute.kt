@@ -8,8 +8,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
-import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoEvent
-import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoContract.TimerTodoSideEffect
+import org.android.bbangzip.presentation.ui.timer.todo.contract.TimerTodoContract.TimerTodoEvent
+import org.android.bbangzip.presentation.ui.timer.todo.contract.TimerTodoContract.TimerTodoSideEffect
 
 @Composable
 fun TimerTodoRoute(

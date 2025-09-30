@@ -5,7 +5,7 @@ import androidx.datastore.core.DataStore
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import org.android.bbangzip.UserPreferences
-import org.android.bbangzip.data.util.context.userDataSource
+import org.android.bbangzip.data.datasource.local.util.context.userDataSource
 import javax.inject.Inject
 
 class UserLocalDataSource

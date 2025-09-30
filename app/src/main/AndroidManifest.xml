@@ -18,7 +18,7 @@
         android:theme="@style/Theme.BBANGZIPANDROID"
         tools:targetApi="31">
         <activity
-            android:name=".presentation.ui.navigator.MainActivity"
+            android:name=".presentation.ui.main.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.BBANGZIPANDROID">
             <intent-filter>
@@ -28,7 +28,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".presentation.observer.ScreenStateReceiver" />
+        <receiver android:name=".presentation.common.observer.ScreenStateReceiver" />
     </application>
 
 </manifest>

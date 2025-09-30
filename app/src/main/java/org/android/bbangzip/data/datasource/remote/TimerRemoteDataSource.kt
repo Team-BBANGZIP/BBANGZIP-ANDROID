@@ -1,11 +1,11 @@
 package org.android.bbangzip.data.datasource.remote
 
-import org.android.bbangzip.data.dto.request.RequestCompleteTimerDto
-import org.android.bbangzip.data.dto.response.ResponseBreadListDto
-import org.android.bbangzip.data.dto.response.ResponseCompleteTimerDto
-import org.android.bbangzip.data.dto.response.ResponseTodayBreadDto
-import org.android.bbangzip.data.service.TimerService
-import org.android.bbangzip.data.util.base.BaseResponse
+import org.android.bbangzip.data.datasource.remote.dto.request.RequestCompleteTimerDto
+import org.android.bbangzip.data.datasource.remote.dto.response.ResponseBreadListDto
+import org.android.bbangzip.data.datasource.remote.dto.response.ResponseCompleteTimerDto
+import org.android.bbangzip.data.datasource.remote.dto.response.ResponseTodayBreadDto
+import org.android.bbangzip.data.datasource.remote.service.TimerService
+import org.android.bbangzip.data.datasource.remote.util.base.BaseResponse
 import javax.inject.Inject
 
 class TimerRemoteDataSource

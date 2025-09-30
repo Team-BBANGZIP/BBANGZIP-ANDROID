@@ -24,9 +24,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.delay
 import org.android.bbangzip.R
-import org.android.bbangzip.presentation.component.bottomsheet.BbangZipBottomSheetSlot
-import org.android.bbangzip.presentation.component.textfield.BbangZipTextField
-import org.android.bbangzip.presentation.util.extension.Gap
+import org.android.bbangzip.presentation.common.component.bottomsheet.BbangZipBottomSheetSlot
+import org.android.bbangzip.presentation.common.component.textfield.BbangZipTextField
+import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 

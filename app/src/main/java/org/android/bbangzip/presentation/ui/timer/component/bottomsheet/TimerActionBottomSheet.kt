@@ -17,10 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
-import org.android.bbangzip.presentation.component.bottomsheet.BbangZipBottomSheetSlot
-import org.android.bbangzip.presentation.component.button.BbangZipButtonDefaults
-import org.android.bbangzip.presentation.component.button.BbangzipBaseButton
-import org.android.bbangzip.presentation.util.extension.Gap
+import org.android.bbangzip.presentation.common.component.bottomsheet.BbangZipBottomSheetSlot
+import org.android.bbangzip.presentation.common.component.button.BbangZipButtonDefaults
+import org.android.bbangzip.presentation.common.component.button.BbangzipBaseButton
+import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @OptIn(ExperimentalMaterial3Api::class)

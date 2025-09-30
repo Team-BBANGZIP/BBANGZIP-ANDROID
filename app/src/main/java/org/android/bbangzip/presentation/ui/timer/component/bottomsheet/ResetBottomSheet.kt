@@ -1,5 +1,6 @@
 package org.android.bbangzip.presentation.ui.timer.component.bottomsheet
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -9,12 +10,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
-import org.android.bbangzip.presentation.util.constant.TimerConstants
+import org.android.bbangzip.presentation.common.util.constant.TimerConstants
 import java.util.concurrent.TimeUnit
 
 private data class ResetBottomSheetInfo(
     val title: String,
-    val breadImg: Int,
+    @DrawableRes val breadImg: Int,
 )
 
 @Composable

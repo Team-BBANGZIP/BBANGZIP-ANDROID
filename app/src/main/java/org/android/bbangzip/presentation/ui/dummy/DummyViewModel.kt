@@ -7,10 +7,9 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.android.bbangzip.UserPreferences
-import org.android.bbangzip.domain.repository.local.UserRepository
+import org.android.bbangzip.domain.repository.UserRepository
 import org.android.bbangzip.domain.usecase.FetchDummyUseCase
-import org.android.bbangzip.presentation.model.Dummy
-import org.android.bbangzip.presentation.util.base.BaseViewModel
+import org.android.bbangzip.presentation.common.base.BaseViewModel
 import javax.inject.Inject
 
 @HiltViewModel
