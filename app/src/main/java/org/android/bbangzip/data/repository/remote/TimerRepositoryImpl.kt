@@ -1,7 +1,7 @@
 package org.android.bbangzip.data.repository.remote
 
-import org.android.bbangzip.data.source.remote.datasource.TimerRemoteDataSource
-import org.android.bbangzip.data.source.remote.dto.request.RequestCompleteTimerDto
+import org.android.bbangzip.data.datasource.remote.TimerRemoteDataSource
+import org.android.bbangzip.data.datasource.remote.dto.request.RequestCompleteTimerDto
 import org.android.bbangzip.domain.model.BreadList
 import org.android.bbangzip.domain.repository.TimerRepository
 import javax.inject.Inject
