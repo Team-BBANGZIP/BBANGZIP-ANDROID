@@ -1,4 +1,4 @@
-package org.android.bbangzip.data.network.di
+package org.android.bbangzip.data.network
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
@@ -12,10 +12,9 @@ import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import org.android.bbangzip.BuildConfig
-import org.android.bbangzip.BuildConfig.DEBUG
-import org.android.bbangzip.data.network.auth.interceptor.AuthInterceptor
-import org.android.bbangzip.data.network.auth.qualifier.Auth
-import org.android.bbangzip.data.network.auth.qualifier.BbangZip
+import org.android.bbangzip.data.auth.interceptor.AuthInterceptor
+import org.android.bbangzip.data.auth.qualifier.Auth
+import org.android.bbangzip.data.auth.qualifier.BbangZip
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
@@ -45,7 +44,7 @@ object RetrofitModule {
             writeTimeout(10, TimeUnit.SECONDS)
             readTimeout(10, TimeUnit.SECONDS)
             addInterceptor(authInterceptor)
-            if (DEBUG) addInterceptor(loggingInterceptor)
+            if (BuildConfig.DEBUG) addInterceptor(loggingInterceptor)
         }.build()
 
     @Provides

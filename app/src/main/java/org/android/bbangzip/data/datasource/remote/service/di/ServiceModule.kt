@@ -4,7 +4,7 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.android.bbangzip.data.network.auth.qualifier.BbangZip
+import org.android.bbangzip.data.auth.qualifier.BbangZip
 import org.android.bbangzip.data.datasource.remote.service.DummyService
 import org.android.bbangzip.data.datasource.remote.service.TimerService
 import retrofit2.Retrofit

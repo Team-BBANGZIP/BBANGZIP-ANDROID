@@ -1,4 +1,4 @@
-package org.android.bbangzip.data.network.auth.qualifier
+package org.android.bbangzip.data.auth.qualifier
 
 import javax.inject.Qualifier
 

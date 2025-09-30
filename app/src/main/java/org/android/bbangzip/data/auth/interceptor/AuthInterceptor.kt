@@ -1,4 +1,4 @@
-package org.android.bbangzip.data.network.auth.interceptor
+package org.android.bbangzip.data.auth.interceptor
 
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map

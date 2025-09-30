@@ -1,4 +1,4 @@
-package org.android.bbangzip.data.network.di
+package org.android.bbangzip.data.auth.di
 
 import com.kakao.sdk.user.UserApiClient
 import dagger.Module
@@ -10,5 +10,5 @@ import dagger.hilt.components.SingletonComponent
 @InstallIn(SingletonComponent::class)
 object KakaoModule {
     @Provides
-    fun providesUserApiClient(): UserApiClient = UserApiClient.instance
+    fun providesUserApiClient(): UserApiClient = UserApiClient.Companion.instance
 }
