@@ -6,6 +6,7 @@ import org.android.bbangzip.domain.model.OnboardingEntity
 import org.android.bbangzip.domain.model.ReissueEntity
 import org.android.bbangzip.domain.model.UserEntity
 import org.android.bbangzip.domain.repository.remote.UserRepository
+import org.android.bbangzip.presentation.util.device.DeviceInfoManager
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -17,15 +18,17 @@ constructor(
     override suspend fun login(code: String): Result<UserEntity> =
         runCatching {
             Timber.d("[카카오 로그인] -> 액세스 토큰 $code")
-            // TODO device info 담는 것으로 수정
+
+            val deviceInfo = DeviceInfoManager.getDeviceInfo()
+
             val request = RequestUserInfoDto(
-                deviceName = " ",
-                deviceType = " ",
+                deviceName = deviceInfo.deviceName,
+                deviceType = deviceInfo.deviceType,
                 provider = "KAKAO",
-                role = "a",
-                appVersion = "1.0",
-                osVersion = " ",
-                osType = " "
+                role = "USER",
+                appVersion = deviceInfo.appVersion,
+                osVersion = deviceInfo.osVersion,
+                osType = deviceInfo.osType
             )
 
             val response = userRemoteDataSource.login(code = code, request)
