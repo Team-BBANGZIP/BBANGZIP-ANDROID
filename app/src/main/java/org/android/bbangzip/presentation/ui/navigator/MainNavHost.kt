@@ -25,7 +25,7 @@ fun MainNavHost(
     ) {
         loginNavGraph(
             navigateToTodo = navigator::navigateToTodo,
-            navigateToOnboarding = navigator::navigateToOnboarding
+            navigateToOnboarding = navigator::navigateToOnboarding,
         )
 
         timerNavGraph(

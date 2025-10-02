@@ -15,7 +15,7 @@ object DeviceInfoManager {
             deviceType = deviceName,
             osVersion = osVersion,
             osType = osType,
-            appVersion = appVersion
+            appVersion = appVersion,
         )
     }
 }
@@ -25,5 +25,5 @@ data class DeviceInfo(
     val deviceType: String,
     val osVersion: String,
     val osType: String,
-    val appVersion: String
+    val appVersion: String,
 )

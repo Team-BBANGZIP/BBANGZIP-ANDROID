@@ -62,9 +62,10 @@ fun LoginScreen(
         AnimatedVisibility(
             visible = state.isBackgroundVisible,
             enter = fadeIn(animationSpec = tween(durationMillis = 600, easing = EaseOut)),
-            modifier = Modifier
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 43.dp, top = 40.dp)
+            modifier =
+                Modifier
+                    .align(Alignment.BottomCenter)
+                    .padding(bottom = 43.dp, top = 40.dp),
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_bbangzip_team_info),
@@ -79,7 +80,7 @@ fun LoginScreen(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .padding(start = 61.dp, end = 61.dp, top = 163.dp)
+                    .padding(start = 61.dp, end = 61.dp, top = 163.dp),
         ) {
             Image(
                 painter = painterResource(R.drawable.png_bbangzip_slogan),
@@ -115,7 +116,7 @@ fun LoginScreen(
                         text = stringResource(R.string.auth_kakao_login),
                         style = BbangZipTheme.typography.body1Bold,
                     )
-                }
+                },
             )
         }
     }
@@ -129,7 +130,7 @@ private fun LoginScreenPreview() {
             state =
                 LoginContract.LoginState(
                     isOnboardingCompleted = false,
-                )
+                ),
         )
     }
 }

@@ -91,7 +91,7 @@ data class BbangZipColor(
     val todoPurple2_B79FE8: Color,
     // Auth
     val kakaoYellow_FEE500: Color,
-    val kakaoBlack_0000D9: Color
+    val kakaoBlack_0000D9: Color,
 )
 
 val defaultBbangZipColor =
@@ -137,7 +137,7 @@ val defaultBbangZipColor =
         todoPurple2_B79FE8 = Todo10,
         // Auth
         kakaoYellow_FEE500 = KakaoYellow,
-        kakaoBlack_0000D9 = (KakaoBlack.copy(alpha = defaultBbangZipOpacity.opacity85))
+        kakaoBlack_0000D9 = (KakaoBlack.copy(alpha = defaultBbangZipOpacity.opacity85)),
     )
 
 val LocalBbangZipColor = staticCompositionLocalOf { defaultBbangZipColor }

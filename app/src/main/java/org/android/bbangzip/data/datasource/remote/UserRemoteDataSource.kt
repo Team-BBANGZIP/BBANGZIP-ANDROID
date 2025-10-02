@@ -13,7 +13,10 @@ class UserRemoteDataSource
 constructor(
     private val userService: UserService,
 ) {
-    suspend fun login(code: String, requestUserInfoDto: RequestUserInfoDto): BaseResponse<ResponseUserDto> = userService.login(code = code, requestUserInfoDto = requestUserInfoDto)
+    suspend fun login(
+        code: String,
+        requestUserInfoDto: RequestUserInfoDto,
+    ): BaseResponse<ResponseUserDto> = userService.login(code = code, requestUserInfoDto = requestUserInfoDto)
 
     suspend fun reissue(): BaseResponse<ResponseReissueDto> = userService.reissue()
 

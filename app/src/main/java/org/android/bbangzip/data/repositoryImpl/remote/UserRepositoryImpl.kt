@@ -21,15 +21,16 @@ constructor(
 
             val deviceInfo = DeviceInfoManager.getDeviceInfo()
 
-            val request = RequestUserInfoDto(
-                deviceName = deviceInfo.deviceName,
-                deviceType = deviceInfo.deviceType,
-                provider = "KAKAO",
-                role = "USER",
-                appVersion = deviceInfo.appVersion,
-                osVersion = deviceInfo.osVersion,
-                osType = deviceInfo.osType
-            )
+            val request =
+                RequestUserInfoDto(
+                    deviceName = deviceInfo.deviceName,
+                    deviceType = deviceInfo.deviceType,
+                    provider = "KAKAO",
+                    role = "USER",
+                    appVersion = deviceInfo.appVersion,
+                    osVersion = deviceInfo.osVersion,
+                    osType = deviceInfo.osType,
+                )
 
             val response = userRemoteDataSource.login(code = code, request)
             val responseData = response.data

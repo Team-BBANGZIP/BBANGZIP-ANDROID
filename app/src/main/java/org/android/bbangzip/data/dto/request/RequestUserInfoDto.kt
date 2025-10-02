@@ -18,5 +18,5 @@ data class RequestUserInfoDto(
     @SerialName("osVersion")
     val osVersion: String,
     @SerialName("appVersion")
-    val appVersion: String
+    val appVersion: String,
 )

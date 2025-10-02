@@ -125,7 +125,7 @@ val defaultBbangZipTypography =
                 fontSize = 16.sp,
                 fontFamily = pretendardSemiBold,
                 lineHeight = 24.sp,
-                letterSpacing = (-0.57).sp
+                letterSpacing = (-0.57).sp,
             ),
         body2Medium =
             TextStyle(

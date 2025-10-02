@@ -23,11 +23,12 @@ fun LoginRoute(
         viewModel.uiSideEffect.collectLatest { effect ->
             when (effect) {
                 is LoginContract.LoginSideEffect.NavigateToTodo -> {
-                    val navOptions = navOptions {
-                        popUpTo(LoginRoute) {
-                            inclusive = true
+                    val navOptions =
+                        navOptions {
+                            popUpTo(LoginRoute) {
+                                inclusive = true
+                            }
                         }
-                    }
                     navigateToTodo(navOptions)
                 }
 
@@ -35,7 +36,6 @@ fun LoginRoute(
             }
         }
     }
-
 
     LoginScreen(
         state = state,

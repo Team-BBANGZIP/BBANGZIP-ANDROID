@@ -25,7 +25,7 @@ interface UserService {
     @POST("$API/$VERSIONS/$USER/$AUTH/$SIGN_IN")
     suspend fun login(
         @Query(CODE) code: String,
-        @Body requestUserInfoDto: RequestUserInfoDto
+        @Body requestUserInfoDto: RequestUserInfoDto,
     ): BaseResponse<ResponseUserDto>
 
     @POST("$API/$VERSIONS/$USER/$AUTH/$REISSUE")

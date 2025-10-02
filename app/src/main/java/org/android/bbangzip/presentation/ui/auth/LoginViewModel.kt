@@ -74,7 +74,6 @@ constructor(
 
             delay(300)
             updateState(LoginContract.LoginReduce.UpdateState(currentUiState.copy(isKakaoLoginBtnVisible = true)))
-
         }
     }
 

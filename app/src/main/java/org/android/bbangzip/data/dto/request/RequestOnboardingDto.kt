@@ -10,5 +10,5 @@ data class RequestOnboardingDto(
     @SerialName("platform")
     val platform: String,
     @SerialName("profileImageKey")
-    val profileImageKey: Int
+    val profileImageKey: Int,
 )
