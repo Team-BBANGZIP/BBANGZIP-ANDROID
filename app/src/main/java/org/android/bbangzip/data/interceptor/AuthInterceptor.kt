@@ -84,8 +84,8 @@ class AuthInterceptor
 
                         runBlocking {
                             with(userLocalRepository) {
-                                setAccessToken(responseRefresh.data.accessToken)
-                                setRefreshToken(responseRefresh.data.refreshToken)
+                                setAccessToken(BEARER + responseRefresh.data.accessToken)
+                                setRefreshToken(BEARER + responseRefresh.data.refreshToken)
                             }
                         }
 

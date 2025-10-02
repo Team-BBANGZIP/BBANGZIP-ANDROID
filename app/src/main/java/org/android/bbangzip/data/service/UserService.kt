@@ -12,7 +12,6 @@ import org.android.bbangzip.data.util.constant.ApiConstants.REISSUE
 import org.android.bbangzip.data.util.constant.ApiConstants.SIGN_IN
 import org.android.bbangzip.data.util.constant.ApiConstants.SIGN_OUT
 import org.android.bbangzip.data.util.constant.ApiConstants.SIGN_UP
-import org.android.bbangzip.data.util.constant.ApiConstants.USER
 import org.android.bbangzip.data.util.constant.ApiConstants.VERSIONS
 import org.android.bbangzip.data.util.constant.ApiConstants.WITHDRAW
 import retrofit2.http.Body
@@ -22,22 +21,22 @@ import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface UserService {
-    @POST("$API/$VERSIONS/$USER/$AUTH/$SIGN_IN")
+    @POST("$API/$VERSIONS/$AUTH/$SIGN_IN")
     suspend fun login(
         @Query(CODE) code: String,
         @Body requestUserInfoDto: RequestUserInfoDto,
     ): BaseResponse<ResponseUserDto>
 
-    @POST("$API/$VERSIONS/$USER/$AUTH/$REISSUE")
+    @POST("$API/$VERSIONS/$AUTH/$REISSUE")
     suspend fun reissue(): BaseResponse<ResponseReissueDto>
 
-    @DELETE("$API/$VERSIONS/$USER/$AUTH/$SIGN_OUT")
+    @DELETE("$API/$VERSIONS/$AUTH/$SIGN_OUT")
     suspend fun logout(): BaseResponse<String>
 
-    @DELETE("$API/$VERSIONS/$USER/$AUTH/$WITHDRAW")
+    @DELETE("$API/$VERSIONS/$AUTH/$WITHDRAW")
     suspend fun withdraw(): BaseResponse<String>
 
-    @PATCH("$API/$VERSIONS/$USER/$AUTH/$SIGN_UP")
+    @PATCH("$API/$VERSIONS/$AUTH/$SIGN_UP")
     suspend fun onboardingComplete(
         @Body requestOnboardingDto: RequestOnboardingDto,
     ): BaseResponse<String>
