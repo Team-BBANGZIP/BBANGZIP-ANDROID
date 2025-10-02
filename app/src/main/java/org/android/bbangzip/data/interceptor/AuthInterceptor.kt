@@ -14,6 +14,7 @@ import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.android.bbangzip.BuildConfig
+import org.android.bbangzip.UserPreferences
 import org.android.bbangzip.data.dto.response.ResponseReissueDto
 import org.android.bbangzip.data.util.base.BaseResponse
 import org.android.bbangzip.domain.repository.local.UserLocalRepository
@@ -26,32 +27,36 @@ class AuthInterceptor
         private val userLocalRepository: UserLocalRepository,
         private val context: Application,
     ) : Interceptor {
+
+    private fun getStoredToken(mapper: (UserPreferences) -> String?): String? {
+        return runBlocking {
+            userLocalRepository.userPreferenceFlow
+                .map(mapper)
+                .firstOrNull()
+        }
+    }
+
+    private fun getIsLogin(mapper: (UserPreferences) -> Boolean?): Boolean? {
+        return runBlocking {
+            userLocalRepository.userPreferenceFlow
+                .map(mapper)
+                .firstOrNull()
+        }
+    }
+
         override fun intercept(chain: Interceptor.Chain): Response {
             val originalRequest = chain.request()
 
-            val accessToken =
-                runBlocking {
-                    userLocalRepository.userPreferenceFlow
-                        .map { it.accessToken }
-                        .firstOrNull()
-                }
-            val isLogin =
-                runBlocking {
-                    userLocalRepository.userPreferenceFlow
-                        .map { it.isLogin }
-                        .firstOrNull()
-                }
-            val refreshToken =
-                runBlocking {
-                    userLocalRepository.userPreferenceFlow
-                        .map { it.refreshToken }
-                        .firstOrNull()
-                }
+            val accessToken = getStoredToken { it.accessToken }
+            val refreshToken = getStoredToken { it.refreshToken }
+            val isLogin = getIsLogin { it.isLogin }
+
 
             val authRequest =
                 if (isLogin == true) {
                     originalRequest.newBuilder()
-                        .addHeader(AUTHORIZATION, "$accessToken").build()
+                        .addHeader(AUTHORIZATION, "$accessToken")
+                        .build()
                 } else {
                     originalRequest
                 }
@@ -79,8 +84,8 @@ class AuthInterceptor
 
                         runBlocking {
                             with(userLocalRepository) {
-                                setAccessToken(BEARER + responseRefresh.data.accessToken)
-                                setRefreshToken(BEARER + responseRefresh.data.refreshToken)
+                                setAccessToken(responseRefresh.data.accessToken)
+                                setRefreshToken(responseRefresh.data.refreshToken)
                             }
                         }
 
@@ -110,7 +115,7 @@ class AuthInterceptor
         }
 
     private fun newAuthBuilder(originalRequest: Request): Request {
-        val accessToken = runBlocking { userLocalRepository.userPreferenceFlow.map { it.accessToken }.firstOrNull() }
+        val accessToken = getStoredToken { it.accessToken }
         return originalRequest.newBuilder()
             .addHeader(AUTHORIZATION, accessToken ?: "")
             .build()
