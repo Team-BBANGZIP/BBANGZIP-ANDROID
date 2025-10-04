@@ -1,7 +1,7 @@
 package org.android.bbangzip.domain.usecase
 
 import org.android.bbangzip.domain.model.Dummy
-import org.android.bbangzip.domain.repository.remote.DummyRepository
+import org.android.bbangzip.domain.repository.DummyRepository
 import javax.inject.Inject
 
 class FetchDummyUseCase
