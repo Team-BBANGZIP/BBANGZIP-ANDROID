@@ -264,9 +264,10 @@ fun CheckBox(modifier: Modifier = Modifier) {
 @Composable
 private fun BreadSelectionSheetPreview() {
     BbangZipPreviewWrapper {
-        val sheetState = rememberStandardBottomSheetState  (
-             initialValue = SheetValue.Expanded
-        )
+        val sheetState =
+            rememberStandardBottomSheetState(
+                initialValue = SheetValue.Expanded,
+            )
         val mockBreadList =
             listOf(
                 BreadInfoUiState(1, "소금빵", isUnLocked = true, 0),
@@ -280,13 +281,11 @@ private fun BreadSelectionSheetPreview() {
                 BreadInfoUiState(9, "도넛", isUnLocked = false, 10),
             )
         val breadCount = 12
-        val currentBreadId = 2
 
         BbangZipBottomSheetSlot(
             isBottomSheetVisible = true,
             sheetState = sheetState,
             onDismissRequest = { },
-
             title = {
                 BreadSelectHeader(breadCount = breadCount)
             },
@@ -294,7 +293,7 @@ private fun BreadSelectionSheetPreview() {
                 BreadSelectionGrid(
                     currentBreadId = 1,
                     breadList = mockBreadList,
-                    onBreadSelect = {  },
+                    onBreadSelect = { },
                     modifier = Modifier,
                 )
             },

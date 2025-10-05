@@ -28,13 +28,15 @@ fun TimerRoute(
     val sharedState by sharedViewModel.uiState.collectAsStateWithLifecycle()
     val success by timerViewmodel.success.collectAsStateWithLifecycle(initialValue = true)
 
-    val dispatch = remember(timerViewmodel) {
-        { event: TimerContract.TimerEvent -> timerViewmodel.setEvent(event) }
-    }
+    val dispatch =
+        remember(timerViewmodel) {
+            { event: TimerContract.TimerEvent -> timerViewmodel.setEvent(event) }
+        }
 
-    val sharedDispatch = remember(sharedViewModel) {
-        { event: SharedContract.SharedEvent -> sharedViewModel.setEvent(event) }
-    }
+    val sharedDispatch =
+        remember(sharedViewModel) {
+            { event: SharedContract.SharedEvent -> sharedViewModel.setEvent(event) }
+        }
 
     LaunchedEffect(timerViewmodel.uiSideEffect) {
         timerViewmodel.uiSideEffect.collectLatest { effect ->

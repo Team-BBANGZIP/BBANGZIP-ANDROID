@@ -9,12 +9,12 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
 @Composable
 fun BbangZipPreviewWrapper(
     modifier: Modifier = Modifier,
-    content: @Composable () -> Unit = {}
+    content: @Composable () -> Unit = {},
 ) {
     BBANGZIPANDROIDTheme {
         Surface(
             color = BbangZipTheme.color.backgroundAlternative_FAF6F3,
-            modifier = modifier
+            modifier = modifier,
         ) {
             content()
         }

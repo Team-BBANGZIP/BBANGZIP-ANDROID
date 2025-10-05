@@ -42,7 +42,6 @@ import org.android.bbangzip.presentation.ui.timer.component.bottomsheet.RestartB
 import org.android.bbangzip.presentation.ui.timer.component.maintimer.TimerDisplay
 import org.android.bbangzip.presentation.ui.timer.contract.TimerContract
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionUiState
-import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @Composable

@@ -36,9 +36,9 @@ fun RestartBottomSheet(
                         .fillMaxWidth(),
             )
         },
-        onLeftClick =  onReturnBtnClick,
-        onRightClick =  onRestartBtnClick,
-        onDismissRequest =  onDismiss,
+        onLeftClick = onReturnBtnClick,
+        onRightClick = onRestartBtnClick,
+        onDismissRequest = onDismiss,
         modifier = modifier,
     )
 }

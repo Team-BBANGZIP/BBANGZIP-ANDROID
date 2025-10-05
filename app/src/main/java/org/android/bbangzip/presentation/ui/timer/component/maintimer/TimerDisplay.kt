@@ -16,7 +16,6 @@ import org.android.bbangzip.presentation.ui.timer.contract.TimerContract
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionUiState
 import org.android.bbangzip.presentation.ui.timer.contract.model.getTimerFontColor
 import org.android.bbangzip.presentation.ui.timer.contract.model.getTitleText
-import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @Composable

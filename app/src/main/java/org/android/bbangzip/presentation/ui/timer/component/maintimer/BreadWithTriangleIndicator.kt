@@ -28,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.preview.BbangZipPreviewWrapper
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
-import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @SuppressLint("UseOfNonLambdaOffsetOverload")
@@ -84,7 +83,7 @@ fun BreadWithTriangleIndicator(
 @Composable
 private fun BreadWithTriangleIndicatorPreview_Hidden() {
     BbangZipPreviewWrapper {
-    BreadWithTriangleIndicator(
+        BreadWithTriangleIndicator(
             breadImageRes = R.drawable.img_baking_bread_level2,
             showTriangle = true,
             isClickable = false,

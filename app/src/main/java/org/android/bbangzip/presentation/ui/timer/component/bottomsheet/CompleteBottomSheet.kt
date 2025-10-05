@@ -61,8 +61,8 @@ fun CompleteBottomSheet(
                 )
             }
         },
-        onLeftClick =  onRestartBtnClick,
-        onRightClick =  onCheckTodoBtnClick,
+        onLeftClick = onRestartBtnClick,
+        onRightClick = onCheckTodoBtnClick,
         onDismissRequest = onDismissRequest,
         modifier = modifier,
         isEqualWeight = false,
