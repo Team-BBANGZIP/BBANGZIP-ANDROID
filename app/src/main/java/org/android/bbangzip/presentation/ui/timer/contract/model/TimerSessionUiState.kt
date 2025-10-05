@@ -28,12 +28,15 @@ sealed interface TimerSessionUiState : Parcelable {
                 BreadInfoUiState(9, "모닝빵", false, 20),
             ).toImmutableList(),
         val totalBreadCount: Int = 0,
-    ) : TimerSessionUiState, Parcelable
+    ) : TimerSessionUiState
 
+    @Parcelize
     data object Running : TimerSessionUiState
 
+    @Parcelize
     data object Paused : TimerSessionUiState
 
+    @Parcelize
     data object Complete : TimerSessionUiState
 }
 
