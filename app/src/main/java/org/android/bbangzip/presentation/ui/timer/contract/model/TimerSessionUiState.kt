@@ -13,6 +13,7 @@ import org.android.bbangzip.ui.theme.defaultBbangZipColor
 @Immutable
 @Parcelize
 sealed interface TimerSessionUiState : Parcelable {
+    @Parcelize
     data class Ready(
         val breadList: ImmutableList<BreadInfoUiState> =
             listOf(
@@ -27,7 +28,7 @@ sealed interface TimerSessionUiState : Parcelable {
                 BreadInfoUiState(9, "모닝빵", false, 20),
             ).toImmutableList(),
         val totalBreadCount: Int = 0,
-    ) : TimerSessionUiState
+    ) : TimerSessionUiState, Parcelable
 
     data object Running : TimerSessionUiState
 
