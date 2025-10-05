@@ -83,7 +83,7 @@ fun TimerActionBottomSheet(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
             ) {
                 BbangzipBaseButton(
-                    onClick = onLeftClick,
+                    onClick =  onLeftClick,
                     modifier = Modifier.weight(leftWeight),
                     colors =
                         BbangZipButtonDefaults.colors(

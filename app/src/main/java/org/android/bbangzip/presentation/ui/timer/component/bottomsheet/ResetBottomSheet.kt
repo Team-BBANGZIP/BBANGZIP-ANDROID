@@ -22,10 +22,10 @@ private data class ResetBottomSheetInfo(
 fun ResetBottomSheet(
     isBottomSheetVisible: Boolean,
     remainingTime: Long,
+    timeOptionIndex: Int,
     onReturnBtnClick: () -> Unit,
     onResetBtnClick: () -> Unit,
-    onDismissRequest: () -> Unit,
-    timeOptionIndex: Int,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val sheetInfo = getBottomSheetState(timeOptionIndex, remainingTime)
@@ -48,9 +48,9 @@ fun ResetBottomSheet(
                         .fillMaxWidth(),
             )
         },
-        onLeftClick = { onReturnBtnClick() },
-        onRightClick = { onResetBtnClick() },
-        onDismissRequest = { onDismissRequest() },
+        onLeftClick =  onReturnBtnClick,
+        onRightClick =  onResetBtnClick,
+        onDismissRequest =  onDismiss,
         modifier = modifier,
     )
 }

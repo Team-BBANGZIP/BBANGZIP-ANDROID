@@ -95,7 +95,7 @@ fun TimerScreen(
         BbangZipSegmentedButton(
             options = listOf("30분", "60분"),
             indexOfSelectedOption = timerState.timerOption.timeOptionIndex,
-            onOptionSelect = { index -> onTimeOptionToggleClick(index) },
+            onOptionSelect = onTimeOptionToggleClick,
             modifier =
                 Modifier
                     .fillMaxWidth(0.25f)
@@ -148,31 +148,31 @@ fun TimerScreen(
             breadList = if (isReady) timerState.timerSessionState.breadList else emptyList(),
             isBottomSheetVisible = timerState.bottomSheetState.breadSelection,
             breadCount = timerState.todayBreadCount,
-            onDismissRequest = { onBreadSelectionSheetDismissRequest() },
-            onBreadSelect = { breadId -> onBreadSelectionSheetClick(breadId) },
+            onDismiss = onBreadSelectionSheetDismissRequest,
+            onBreadSelect = onBreadSelectionSheetClick,
         )
 
         ResetBottomSheet(
             isBottomSheetVisible = timerState.bottomSheetState.reset,
             remainingTime = timerState.remainingTime,
-            onReturnBtnClick = { onResetSheetDismissBtnClick() },
-            onResetBtnClick = { onResetSheetApproveBtnClick() },
-            onDismissRequest = { onResetSheetDismissBtnClick() },
             timeOptionIndex = timerState.timerOption.timeOptionIndex,
+            onReturnBtnClick = onResetSheetDismissBtnClick,
+            onResetBtnClick = onResetSheetApproveBtnClick,
+            onDismiss = onResetSheetDismissBtnClick,
         )
 
         RestartBottomSheet(
             iisBottomSheetVisible = timerState.bottomSheetState.restart,
-            onReturnBtnClick = { onRestartSheetDismissBtnClick() },
-            onRestartBtnClick = { onRestartSheetApproveBtnClick() },
-            onDismissRequest = { onRestartSheetDismissBtnClick() },
+            onReturnBtnClick = onRestartSheetDismissBtnClick,
+            onRestartBtnClick = onRestartSheetApproveBtnClick,
+            onDismiss = onRestartSheetDismissBtnClick,
         )
 
         CompleteBottomSheet(
             iisBottomSheetVisible = timerState.bottomSheetState.complete,
-            onRestartBtnClick = { onCompleteSheetRestartBtnClick() },
-            onCheckTodoBtnClick = { onCompleteSheetCheckBtnClick() },
-            onDismissRequest = { onCompleteSheetDismissRequest() },
+            onRestartBtnClick = onCompleteSheetRestartBtnClick,
+            onCheckTodoBtnClick = onCompleteSheetCheckBtnClick,
+            onDismissRequest = onCompleteSheetDismissRequest,
             timeOptionIndex = timerState.timerOption.timeOptionIndex,
         )
     }
@@ -214,7 +214,7 @@ fun BreadCounter(
                     shape = RoundedCornerShape(14.dp),
                 )
                 .padding(horizontal = 10.dp, vertical = 5.dp)
-                .noRippleClickable { onClick() },
+                .noRippleClickable(onClick = onClick),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center,
     ) {
@@ -262,7 +262,7 @@ fun TimerButton(
                         this
                     }
                 }
-                .noRippleClickable(enabled = enabled) { onClick() },
+                .noRippleClickable(enabled = enabled, onClick = onClick),
         contentAlignment = Alignment.Center,
     ) {
         Icon(

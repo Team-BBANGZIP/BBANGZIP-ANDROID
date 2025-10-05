@@ -43,13 +43,13 @@ fun BreadSelectBottomSheet(
     breadList: List<BreadInfoUiState>,
     isBottomSheetVisible: Boolean,
     breadCount: Int,
-    onDismissRequest: () -> Unit,
+    onDismiss: () -> Unit,
     onBreadSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BbangZipBottomSheetSlot(
         isBottomSheetVisible = isBottomSheetVisible,
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = onDismiss,
         modifier = modifier,
         contentPadding = contentPadding(top = 40.dp, start = 32.dp, end = 32.dp, bottom = 40.dp),
         title = {

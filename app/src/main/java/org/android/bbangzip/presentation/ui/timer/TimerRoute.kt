@@ -4,6 +4,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -26,6 +27,14 @@ fun TimerRoute(
     val timerState by timerViewmodel.uiState.collectAsStateWithLifecycle()
     val sharedState by sharedViewModel.uiState.collectAsStateWithLifecycle()
     val success by timerViewmodel.success.collectAsStateWithLifecycle(initialValue = true)
+
+    val dispatch = remember(timerViewmodel) {
+        { event: TimerContract.TimerEvent -> timerViewmodel.setEvent(event) }
+    }
+
+    val sharedDispatch = remember(sharedViewModel) {
+        { event: SharedContract.SharedEvent -> sharedViewModel.setEvent(event) }
+    }
 
     LaunchedEffect(timerViewmodel.uiSideEffect) {
         timerViewmodel.uiSideEffect.collectLatest { effect ->
@@ -59,24 +68,24 @@ fun TimerRoute(
                 timerState = timerState,
                 sharedState = sharedState,
                 modifier = modifier,
-                onBreadIconClick = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnBreadIconClick) },
-                onResetBtnClick = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnResetBtnClick) },
-                onRestartSheetApproveBtnClick = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnRestartSheetApproveBtnClick) },
-                onRestartSheetDismissBtnClick = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnRestartSheetDismissBtnClick) },
-                onRestartBtnClick = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnRestartBtnClick) },
-                onStartBtnClick = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnStartBtnClick) },
-                onStopBtnClick = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnStopBtnClick) },
-                onTimeOptionToggleClick = { timeOption -> timerViewmodel.setEvent(TimerContract.TimerEvent.OnTimeOptionToggleClick(timeOption)) },
+                onBreadIconClick = { dispatch(TimerContract.TimerEvent.OnBreadIconClick) },
+                onResetBtnClick = { dispatch(TimerContract.TimerEvent.OnResetBtnClick) },
+                onRestartSheetApproveBtnClick = { dispatch(TimerContract.TimerEvent.OnRestartSheetApproveBtnClick) },
+                onRestartSheetDismissBtnClick = { dispatch(TimerContract.TimerEvent.OnRestartSheetDismissBtnClick) },
+                onRestartBtnClick = { dispatch(TimerContract.TimerEvent.OnRestartBtnClick) },
+                onStartBtnClick = { dispatch(TimerContract.TimerEvent.OnStartBtnClick) },
+                onStopBtnClick = { dispatch(TimerContract.TimerEvent.OnStopBtnClick) },
+                onTimeOptionToggleClick = { timeOption -> dispatch(TimerContract.TimerEvent.OnTimeOptionToggleClick(timeOption)) },
                 onBreadSelectionSheetClick = { breadId ->
-                    sharedViewModel.setEvent(SharedContract.SharedEvent.OnClickBread(breadId = breadId))
-                    timerViewmodel.setEvent(TimerContract.TimerEvent.OnBreadSelectionSheetClick)
+                    sharedDispatch(SharedContract.SharedEvent.OnClickBread(breadId))
+                    dispatch(TimerContract.TimerEvent.OnBreadSelectionSheetClick)
                 },
-                onBreadSelectionSheetDismissRequest = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnBreadSelectionSheetDismissRequest) },
-                onCompleteSheetCheckBtnClick = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnCompleteSheetCheckBtnClick) },
-                onCompleteSheetRestartBtnClick = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnCompleteSheetRestartBtnClick) },
-                onCompleteSheetDismissRequest = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnCompleteSheetDismissRequest) },
-                onResetSheetApproveBtnClick = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnResetSheetApproveBtnClick) },
-                onResetSheetDismissBtnClick = { timerViewmodel.setEvent(TimerContract.TimerEvent.OnResetSheetDismissBtnClick) },
+                onBreadSelectionSheetDismissRequest = { dispatch(TimerContract.TimerEvent.OnBreadSelectionSheetDismissRequest) },
+                onCompleteSheetCheckBtnClick = { dispatch(TimerContract.TimerEvent.OnCompleteSheetCheckBtnClick) },
+                onCompleteSheetRestartBtnClick = { dispatch(TimerContract.TimerEvent.OnCompleteSheetRestartBtnClick) },
+                onCompleteSheetDismissRequest = { dispatch(TimerContract.TimerEvent.OnCompleteSheetDismissRequest) },
+                onResetSheetApproveBtnClick = { dispatch(TimerContract.TimerEvent.OnResetSheetApproveBtnClick) },
+                onResetSheetDismissBtnClick = { dispatch(TimerContract.TimerEvent.OnResetSheetDismissBtnClick) },
             )
         }
 
