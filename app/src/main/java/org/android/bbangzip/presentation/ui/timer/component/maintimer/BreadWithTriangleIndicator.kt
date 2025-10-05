@@ -84,7 +84,7 @@ fun BreadWithTriangleIndicator(
 private fun BreadWithTriangleIndicatorPreview_Hidden() {
     BBANGZIPANDROIDTheme {
         BreadWithTriangleIndicator(
-            breadImageRes = R.drawable.img_baking_bread_level2, // 예시 굽는 중인 빵 이미지
+            breadImageRes = R.drawable.img_baking_bread_level2,
             showTriangle = false,
             isClickable = false,
             onClick = {},

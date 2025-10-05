@@ -6,6 +6,7 @@ import androidx.lifecycle.LifecycleOwner
 class AppLifecycleObserver : DefaultLifecycleObserver {
     interface AppLifecycleListener {
         fun onAppForeground()
+
         fun onAppBackground()
     }
 
@@ -20,8 +21,6 @@ class AppLifecycleObserver : DefaultLifecycleObserver {
         super.onStart(owner)
         listener?.onAppForeground()
     }
-
-
 
     override fun onStop(owner: LifecycleOwner) {
         super.onStop(owner)

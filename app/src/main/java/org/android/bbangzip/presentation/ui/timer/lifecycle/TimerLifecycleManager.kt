@@ -47,14 +47,12 @@ class TimerLifecycleManager
 
                     override fun onScreenOff() {
                         val timeSinceLastInteraction = System.currentTimeMillis() - lastUserInteractionTime
-                        val lockPressThreshold = screenTimeoutMs -1000L
-
+                        val lockPressThreshold = screenTimeoutMs - 1000L
 
                         val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
                         val isLocked = keyguardManager.isKeyguardLocked
 
                         Timber.d("Screen OFF | timeSinceLastInteraction=$timeSinceLastInteraction | isLocked=$isLocked | screenTimeoutMs=$screenTimeoutMs")
-
 
                         if (isLocked || timeSinceLastInteraction < lockPressThreshold) {
                             onScreenOffByLock()

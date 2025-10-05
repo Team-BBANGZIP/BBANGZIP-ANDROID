@@ -17,5 +17,5 @@ fun BreadInfo.toUiState(): BreadInfoUiState =
         id = this.breadId.toInt(),
         name = this.breadName,
         isUnLocked = this.isUnlocked,
-        requiredCount = this.requiredCount
+        requiredCount = this.requiredCount,
     )
