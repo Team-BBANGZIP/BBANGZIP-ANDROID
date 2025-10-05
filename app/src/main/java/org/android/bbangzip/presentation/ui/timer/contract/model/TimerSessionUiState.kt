@@ -42,9 +42,6 @@ fun TimerSessionUiState.getTitleText(): Int {
     }
 }
 
-/**
- * TimerSessionUiState에 따라 타이머 텍스트의 색상을 반환합니다.
- */
 fun TimerSessionUiState.getTimerFontColor(): Color {
     return when (this) {
         is TimerSessionUiState.Ready -> defaultBbangZipColor.primaryLight_C8B5A2

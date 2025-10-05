@@ -33,7 +33,7 @@ constructor(
     }
 
     private var isAppActive: Boolean = true
-    private var backgroundStartTime: Long = 0L
+    private var isScreenLocked: Boolean = false
     private var timerJob: Job? = null
     private var appExitCheckJob: Job? = null
     private lateinit var lifecycleManager: TimerLifecycleManager
@@ -152,6 +152,7 @@ constructor(
                     timerOption = reduce.option,
                     remainingTime = reduce.option.totalTime,
                 )
+
             is TimerContract.TimerReduce.UpdateTodayBreadCount ->
                 state.copy(
                     todayBreadCount = reduce.breadCount,
@@ -243,7 +244,8 @@ constructor(
         appExitCheckJob =
             viewModelScope.launch {
                 delay(60 * 1000L)
-                if (!isAppActive) {
+                if (!isAppActive && currentUiState.timerSessionState !is TimerSessionUiState.Ready) {
+                    Timber.d("Lifecycle Event: App background timed out - reset Ready State")
                     resetTimer(moveToReady = true)
                 }
             }
@@ -260,14 +262,15 @@ constructor(
         lifecycleManager.cleanup()
     }
 
-    // --- 라이프사이클 이벤트 핸들러 ---
-    // TimerLifecycleManager로부터 호출되는 공개 함수들
+
     fun onScreenTimeOut() {
-        Timber.d("Lifecycle Event: Screen timed out")
+        Timber.d("Lifecycle Event: Screen timed out — timer continues running")
+        isScreenLocked = true
     }
 
     fun onLockButtonPressed() {
         Timber.d("Lifecycle Event: Lock button pressed")
+        isScreenLocked = true
         if (currentUiState.timerSessionState is TimerSessionUiState.Running) {
             handleStopTimer()
         }
@@ -275,13 +278,13 @@ constructor(
 
     fun onScreenTurnedOn() {
         Timber.d("Lifecycle Event: Screen turned on")
+        isScreenLocked = false
     }
 
     fun onAppBackground() {
         Timber.d("Lifecycle Event: App went to background")
         isAppActive = false
-        backgroundStartTime = System.currentTimeMillis()
-        if (currentUiState.timerSessionState is TimerSessionUiState.Running) {
+        if (!isScreenLocked && currentUiState.timerSessionState is TimerSessionUiState.Running) {
             handleStopTimer()
             scheduleIdleTransition()
         }
@@ -291,9 +294,5 @@ constructor(
         Timber.d("Lifecycle Event: App came to foreground after ${exitDuration}ms")
         isAppActive = true
         cancelIdleTransition()
-
-        if (exitDuration >= 60 * 1000L) {
-            resetTimer(moveToReady = true)
-        }
     }
 }

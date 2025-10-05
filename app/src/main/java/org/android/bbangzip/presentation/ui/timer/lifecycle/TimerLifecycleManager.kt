@@ -1,5 +1,6 @@
 package org.android.bbangzip.presentation.ui.timer.lifecycle
 
+import android.app.KeyguardManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -40,17 +41,22 @@ class TimerLifecycleManager
             screenStateReceiver.setListener(
                 object : ScreenStateReceiver.ScreenStateListener {
                     override fun onScreenOn() {
-                        lifecycleObserver.updateScreenState(true)
                         lastUserInteractionTime = System.currentTimeMillis()
                         onScreenOnViewmodel()
                     }
 
                     override fun onScreenOff() {
-                        lifecycleObserver.updateScreenState(isScreenOn = false)
                         val timeSinceLastInteraction = System.currentTimeMillis() - lastUserInteractionTime
-                        val threshold = screenTimeoutMs - 1000
+                        val lockPressThreshold = screenTimeoutMs -1000L
 
-                        if (timeSinceLastInteraction < threshold) {
+
+                        val keyguardManager = context.getSystemService(Context.KEYGUARD_SERVICE) as KeyguardManager
+                        val isLocked = keyguardManager.isKeyguardLocked
+
+                        Timber.d("Screen OFF | timeSinceLastInteraction=$timeSinceLastInteraction | isLocked=$isLocked | screenTimeoutMs=$screenTimeoutMs")
+
+
+                        if (isLocked || timeSinceLastInteraction < lockPressThreshold) {
                             onScreenOffByLock()
                         } else {
                             onScreenOffByTimeout()
