@@ -2,6 +2,7 @@ package org.android.bbangzip.presentation.ui.timer.contract
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
+import androidx.compose.runtime.Immutable
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.R
@@ -13,6 +14,7 @@ import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionUiS
 import org.android.bbangzip.presentation.ui.timer.contract.type.TimeOption
 
 class TimerContract {
+    @Immutable
     @Parcelize
     data class TimerState(
         val remainingTime: Long = TimerConstants.THIRTY_MINUTES,
@@ -31,6 +33,7 @@ class TimerContract {
             }
         }
 
+        @IgnoredOnParcel
         @get:DrawableRes
         val breadImg: Int
             get() =
@@ -41,6 +44,7 @@ class TimerContract {
                     else -> R.drawable.img_baking_bread_level1
                 }
 
+        @IgnoredOnParcel
         val formattedTime: String get() = remainingTime.formatTime()
 
         override fun toParcelable(): Parcelable = this

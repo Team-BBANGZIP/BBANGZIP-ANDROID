@@ -1,9 +1,11 @@
 package org.android.bbangzip.presentation.ui.timer.contract.type
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerConstants
 
+@Immutable
 @Parcelize
 enum class TimeOption(val timeOptionIndex: Int, val totalTime: Long) : Parcelable {
     THIRTY(timeOptionIndex = 0, totalTime = TimerConstants.THIRTY_MINUTES),

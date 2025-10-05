@@ -2,15 +2,19 @@ package org.android.bbangzip.presentation.ui.timer.contract.model
 
 import android.os.Parcelable
 import androidx.annotation.StringRes
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.R
 import org.android.bbangzip.ui.theme.defaultBbangZipColor
 
+@Immutable
 @Parcelize
 sealed interface TimerSessionUiState : Parcelable {
     data class Ready(
-        val breadList: List<BreadInfoUiState> =
+        val breadList: ImmutableList<BreadInfoUiState> =
             listOf(
                 BreadInfoUiState(1, "소금빵", true, 0),
                 BreadInfoUiState(2, "식빵", true, 5),
@@ -21,7 +25,7 @@ sealed interface TimerSessionUiState : Parcelable {
                 BreadInfoUiState(7, "크루아상", false, 15),
                 BreadInfoUiState(8, "모닝빵", false, 20),
                 BreadInfoUiState(9, "모닝빵", false, 20),
-            ),
+            ).toImmutableList(),
         val totalBreadCount: Int = 0,
     ) : TimerSessionUiState
 

@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -231,7 +232,7 @@ class TimerViewModel
             launch {
                 initializeUseCase().onSuccess { data ->
                     val todayBreadCount = data.todayBreadCount.count
-                    val breadList = data.breadList.breadList.map { it.toUiState() }
+                    val breadList = data.breadList.breadList.map { it.toUiState() }.toImmutableList()
                     val totalBreadCount = data.breadList.totalCount
                     val currentState = currentUiState.timerSessionState
 
