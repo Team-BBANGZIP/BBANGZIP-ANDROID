@@ -30,6 +30,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import org.android.bbangzip.presentation.common.component.preview.BbangZipPreviewWrapper
 import org.android.bbangzip.presentation.common.util.extension.innerShadow
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import org.android.bbangzip.ui.theme.defaultBbangZipBrush
@@ -190,24 +191,26 @@ private fun DrawScope.drawCircularProgress(
 @Preview
 @Composable
 private fun CircularProgressBarPreview() {
-    CircularProgressBar(
-        progress = 0f,
-        progressMax = 100f,
-        centerContent = { mod ->
-            Text(
-                text = "25%",
-                modifier = mod,
-                fontSize = 24.sp,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onBackground,
-            )
-        },
-        bottomContent = { mod ->
-            Box(
-                mod
-                    .size(120.dp, 100.dp)
-                    .background(color = Color.Blue),
-            )
-        },
-    )
+    BbangZipPreviewWrapper {
+        CircularProgressBar(
+            progress = 0f,
+            progressMax = 100f,
+            centerContent = { mod ->
+                Text(
+                    text = "25%",
+                    modifier = mod,
+                    fontSize = 24.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onBackground,
+                )
+            },
+            bottomContent = { mod ->
+                Box(
+                    mod
+                        .size(120.dp, 100.dp)
+                        .background(color = Color.Blue),
+                )
+            },
+        )
+    }
 }

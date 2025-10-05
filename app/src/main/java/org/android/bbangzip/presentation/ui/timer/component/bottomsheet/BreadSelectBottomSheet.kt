@@ -18,7 +18,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,9 +29,11 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.bottomsheet.BbangZipBottomSheetSlot
+import org.android.bbangzip.presentation.common.component.preview.BbangZipPreviewWrapper
 import org.android.bbangzip.presentation.common.type.BreadType
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
@@ -251,6 +255,49 @@ fun CheckBox(modifier: Modifier = Modifier) {
             modifier =
                 Modifier
                     .align(Alignment.Center),
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+private fun BreadSelectionSheetPreview() {
+    BbangZipPreviewWrapper {
+        val sheetState = rememberStandardBottomSheetState  (
+             initialValue = SheetValue.Expanded
+        )
+        val mockBreadList =
+            listOf(
+                BreadInfoUiState(1, "소금빵", isUnLocked = true, 0),
+                BreadInfoUiState(2, "식빵", isUnLocked = true, 5),
+                BreadInfoUiState(3, "바게트", isUnLocked = false, 10),
+                BreadInfoUiState(4, "크루아상", isUnLocked = true, 15),
+                BreadInfoUiState(5, "모닝빵", isUnLocked = true, 20),
+                BreadInfoUiState(6, "도넛", isUnLocked = false, 10),
+                BreadInfoUiState(7, "크루아상", isUnLocked = true, 15),
+                BreadInfoUiState(8, "모닝빵", isUnLocked = true, 20),
+                BreadInfoUiState(9, "도넛", isUnLocked = false, 10),
+            )
+        val breadCount = 12
+        val currentBreadId = 2
+
+        BbangZipBottomSheetSlot(
+            isBottomSheetVisible = true,
+            sheetState = sheetState,
+            onDismissRequest = { },
+
+            title = {
+                BreadSelectHeader(breadCount = breadCount)
+            },
+            content = {
+                BreadSelectionGrid(
+                    currentBreadId = 1,
+                    breadList = mockBreadList,
+                    onBreadSelect = {  },
+                    modifier = Modifier,
+                )
+            },
         )
     }
 }

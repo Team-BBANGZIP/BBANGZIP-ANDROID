@@ -28,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
+import org.android.bbangzip.presentation.common.component.preview.BbangZipPreviewWrapper
 import org.android.bbangzip.presentation.common.component.toggle.BbangZipSegmentedButton
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.dropShadow
@@ -370,10 +371,23 @@ data class TimerButtonStyle(
 @Preview
 @Composable
 private fun TimerScreenPreview() {
-    BBANGZIPANDROIDTheme {
+    BbangZipPreviewWrapper {
         TimerScreen(
             timerState =
                 TimerContract.TimerState(),
+            sharedState =
+                SharedContract.SharedState(),
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun TimerScreenRunningPreview() {
+    BbangZipPreviewWrapper {
+        TimerScreen(
+            timerState =
+                TimerContract.TimerState(timerSessionState = TimerSessionUiState.Running),
             sharedState =
                 SharedContract.SharedState(),
         )

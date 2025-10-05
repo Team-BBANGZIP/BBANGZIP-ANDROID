@@ -7,9 +7,15 @@ import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @Composable
-fun BbangZipPreviewWrapper(content: @Composable () -> Unit) {
+fun BbangZipPreviewWrapper(
+    modifier: Modifier = Modifier,
+    content: @Composable () -> Unit = {}
+) {
     BBANGZIPANDROIDTheme {
-        Surface(color = BbangZipTheme.color.backgroundAlternative_FAF6F3) {
+        Surface(
+            color = BbangZipTheme.color.backgroundAlternative_FAF6F3,
+            modifier = modifier
+        ) {
             content()
         }
     }

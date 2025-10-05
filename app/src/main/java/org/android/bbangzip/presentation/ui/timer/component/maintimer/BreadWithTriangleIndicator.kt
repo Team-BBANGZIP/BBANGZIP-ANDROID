@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
+import org.android.bbangzip.presentation.common.component.preview.BbangZipPreviewWrapper
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
@@ -82,10 +83,10 @@ fun BreadWithTriangleIndicator(
 @Preview(name = "Indicator Hidden", showBackground = true, backgroundColor = 0xFFF8F1E9)
 @Composable
 private fun BreadWithTriangleIndicatorPreview_Hidden() {
-    BBANGZIPANDROIDTheme {
-        BreadWithTriangleIndicator(
+    BbangZipPreviewWrapper {
+    BreadWithTriangleIndicator(
             breadImageRes = R.drawable.img_baking_bread_level2,
-            showTriangle = false,
+            showTriangle = true,
             isClickable = false,
             onClick = {},
         )
