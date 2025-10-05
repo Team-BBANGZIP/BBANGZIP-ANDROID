@@ -9,13 +9,19 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.android.bbangzip.domain.repository.TimerRepository
+import org.android.bbangzip.domain.usecase.InitializeTimerScreenUseCase
 import org.android.bbangzip.presentation.common.base.BaseViewModel
 import org.android.bbangzip.presentation.ui.timer.contract.TimerContract
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerBottomSheetVisibleState
+import org.android.bbangzip.presentation.ui.timer.contract.model.TimerConstants
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionUiState
+import org.android.bbangzip.presentation.ui.timer.contract.model.toUiState
 import org.android.bbangzip.presentation.ui.timer.contract.type.TimeOption
 import org.android.bbangzip.presentation.ui.timer.lifecycle.TimerLifecycleManager
 import timber.log.Timber
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -25,6 +31,7 @@ constructor(
     savedStateHandle: SavedStateHandle,
     private val lifecycleManagerFactory: TimerLifecycleManager.Factory,
     private val timerRepository: TimerRepository,
+    private val initializeUseCase: InitializeTimerScreenUseCase
 ) : BaseViewModel<TimerContract.TimerEvent, TimerContract.TimerState, TimerContract.TimerReduce, TimerContract.TimerSideEffect>(
     savedStateHandle = savedStateHandle,
 ) {
@@ -43,23 +50,9 @@ constructor(
         setupLifecycleManager()
     }
 
-    private fun setupLifecycleManager() {
-        lifecycleManager =
-            lifecycleManagerFactory.create(
-                onScreenOn = ::onScreenTurnedOn,
-                onScreenOffByTimeout = ::onScreenTimeOut,
-                onScreenOffByLock = ::onLockButtonPressed,
-                onAppForeground = ::onAppForeground,
-                onAppBackground = ::onAppBackground,
-            )
-    }
-
     override fun handleEvent(event: TimerContract.TimerEvent) {
         when (event) {
-            is TimerContract.TimerEvent.Initialize ->
-                launch {
-//                    updateTodayBreadCount()
-                }
+            is TimerContract.TimerEvent.Initialize -> initialize()
 
             // Start
             is TimerContract.TimerEvent.OnStartBtnClick -> handleStartOrResumeTimer()
@@ -89,7 +82,6 @@ constructor(
             }
 
             is TimerContract.TimerEvent.OnRestartSheetApproveBtnClick -> {
-                Timber.d("다시 돌ㅇ왔을떄 ${currentUiState.timerOption.totalTime}")
                 resetTimer()
                 updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Running))
                 startTimer(currentUiState.timerOption.totalTime)
@@ -138,6 +130,7 @@ constructor(
             }
         }
     }
+
 
     override fun reduceState(
         state: TimerContract.TimerState,
@@ -192,7 +185,11 @@ constructor(
         updateState(TimerContract.TimerReduce.UpdateRemainingTime(0L))
         updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Complete))
         updateState(TimerContract.TimerReduce.UpdateBottomSheetState(TimerBottomSheetVisibleState(complete = true)))
-        // Todo: 완료시 오늘 구운 빵 개수 증가 -> Index 개수로 판단
+
+        viewModelScope.launch {
+            val breadCount = currentUiState.timerOption.timeOptionIndex + 1
+            timerRepository.postTimerCompleted(targetDate = getBbangZipTimerDate(), count = breadCount)
+        }
     }
 
     private fun startTimer(duration: Long) {
@@ -224,17 +221,35 @@ constructor(
         stopTimer()
         updateState(TimerContract.TimerReduce.UpdateRemainingTime(currentUiState.timerOption.totalTime))
         if (moveToReady) {
-            // TODO: todayBreadCount는 Repository에서 다시 가져와야 함
+            viewModelScope.launch {
+                initialize()
+            }
             updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Ready()))
         }
     }
 
-    private suspend fun updateTodayBreadCount() {
-        timerRepository.fetchTodayBreadCount().onSuccess { data ->
-            val breadCount = data.count
-            val currentState = currentUiState.timerSessionState
-            if (currentState is TimerSessionUiState.Ready) {
-                updateState(TimerContract.TimerReduce.UpdateTodayBreadCount(breadCount))
+    private fun initialize() {
+        launch {
+            initializeUseCase().onSuccess { data ->
+                val todayBreadCount = data.todayBreadCount.count
+                val breadList = data.breadList.breadList.map { it.toUiState() }
+                val totalBreadCount = data.breadList.totalCount
+                val currentState = currentUiState.timerSessionState
+
+                if (currentState is TimerSessionUiState.Ready) {
+                    updateState(TimerContract.TimerReduce.UpdateTodayBreadCount(todayBreadCount))
+                    updateState(
+                        TimerContract.TimerReduce.UpdateTimerSessionState(
+                            TimerSessionUiState.Ready(
+                                breadList = breadList,
+                                totalBreadCount = totalBreadCount
+                            )
+                        )
+                    )
+                }
+            }.onFailure { throwable ->
+                Timber.d("TimerViewmodel 초기화 실패 $throwable")
+                updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Ready()))
             }
         }
     }
@@ -246,6 +261,10 @@ constructor(
                 delay(60 * 1000L)
                 if (!isAppActive && currentUiState.timerSessionState !is TimerSessionUiState.Ready) {
                     Timber.d("Lifecycle Event: App background timed out - reset Ready State")
+                    val elapsedTime = currentUiState.timerOption.totalTime - currentUiState.remainingTime
+                    if (elapsedTime > TimerConstants.THIRTY_MINUTES) {
+                        timerRepository.postTimerCompleted(targetDate = getBbangZipTimerDate(), count = 1)
+                    }
                     resetTimer(moveToReady = true)
                 }
             }
@@ -262,13 +281,23 @@ constructor(
         lifecycleManager.cleanup()
     }
 
+    private fun setupLifecycleManager() {
+        lifecycleManager =
+            lifecycleManagerFactory.create(
+                onScreenOn = ::onScreenTurnedOn,
+                onScreenOffByTimeout = ::onScreenTimeOut,
+                onScreenOffByLock = ::onLockButtonPressed,
+                onAppForeground = ::onAppForeground,
+                onAppBackground = ::onAppBackground,
+            )
+    }
 
-    fun onScreenTimeOut() {
+    private fun onScreenTimeOut() {
         Timber.d("Lifecycle Event: Screen timed out — timer continues running")
         isScreenLocked = true
     }
 
-    fun onLockButtonPressed() {
+    private fun onLockButtonPressed() {
         Timber.d("Lifecycle Event: Lock button pressed")
         isScreenLocked = true
         if (currentUiState.timerSessionState is TimerSessionUiState.Running) {
@@ -276,12 +305,12 @@ constructor(
         }
     }
 
-    fun onScreenTurnedOn() {
+    private fun onScreenTurnedOn() {
         Timber.d("Lifecycle Event: Screen turned on")
         isScreenLocked = false
     }
 
-    fun onAppBackground() {
+    private fun onAppBackground() {
         Timber.d("Lifecycle Event: App went to background")
         isAppActive = false
         if (!isScreenLocked && currentUiState.timerSessionState is TimerSessionUiState.Running) {
@@ -290,9 +319,19 @@ constructor(
         }
     }
 
-    fun onAppForeground(exitDuration: Long) {
+    private fun onAppForeground(exitDuration: Long) {
         Timber.d("Lifecycle Event: App came to foreground after ${exitDuration}ms")
         isAppActive = true
         cancelIdleTransition()
+    }
+
+    private fun getBbangZipTimerDate(): String {
+        val nowInSeoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"))
+
+        val adjustedDateTime = nowInSeoul.minusHours(5)
+
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+
+        return adjustedDateTime.format(formatter)
     }
 }

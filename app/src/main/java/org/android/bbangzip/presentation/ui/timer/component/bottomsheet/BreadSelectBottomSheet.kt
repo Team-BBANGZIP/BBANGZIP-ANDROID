@@ -176,9 +176,7 @@ private fun BreadItemImage(
         modifier = modifier.aspectRatio(1f),
         contentAlignment = Alignment.Center,
     ) {
-        if (breadInfo.isLocked) {
-            LockedBreadImage()
-        } else {
+        if (breadInfo.isUnLocked) {
             UnlockedBreadImage(
                 breadInfo = breadInfo,
                 onBreadSelect = onBreadSelect,
@@ -187,6 +185,8 @@ private fun BreadItemImage(
             if (isSelected) {
                 CheckBox(modifier = Modifier.align(Alignment.TopStart))
             }
+        } else {
+            LockedBreadImage()
         }
     }
 }
@@ -227,7 +227,7 @@ private fun BreadItemLabel(
     modifier: Modifier = Modifier,
 ) {
     Text(
-        text = if (breadInfo.isLocked) "???" else breadInfo.name,
+        text = if (breadInfo.isUnLocked) breadInfo.name else "???",
         color = BbangZipTheme.color.labelNormal_6B6560,
         style = BbangZipTheme.typography.body2Medium,
         modifier = modifier,

@@ -12,17 +12,17 @@ sealed interface TimerSessionUiState : Parcelable {
     data class Ready(
         val breadList: List<BreadInfoUiState> =
             listOf(
-                BreadInfoUiState(1, "소금빵", false, 0),
-                BreadInfoUiState(2, "식빵", false, 5),
-                BreadInfoUiState(3, "바게트", true, 10),
-                BreadInfoUiState(4, "크루아상", true, 15),
-                BreadInfoUiState(5, "모닝빵", true, 20),
-                BreadInfoUiState(6, "바게트", true, 10),
-                BreadInfoUiState(7, "크루아상", true, 15),
-                BreadInfoUiState(8, "모닝빵", true, 20),
-                BreadInfoUiState(9, "모닝빵", true, 20),
+                BreadInfoUiState(1, "소금빵", true, 0),
+                BreadInfoUiState(2, "식빵", true, 5),
+                BreadInfoUiState(3, "바게트", false, 10),
+                BreadInfoUiState(4, "크루아상", false, 15),
+                BreadInfoUiState(5, "모닝빵", false, 20),
+                BreadInfoUiState(6, "바게트", false, 10),
+                BreadInfoUiState(7, "크루아상", false, 15),
+                BreadInfoUiState(8, "모닝빵", false, 20),
+                BreadInfoUiState(9, "모닝빵", false, 20),
             ),
-        val todayBreadCount: Int = 0,
+        val totalBreadCount: Int = 0,
     ) : TimerSessionUiState
 
     data object Running : TimerSessionUiState

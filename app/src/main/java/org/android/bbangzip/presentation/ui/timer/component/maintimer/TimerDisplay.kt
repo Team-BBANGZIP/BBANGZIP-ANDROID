@@ -83,7 +83,7 @@ private fun TimerDisplayPreview() {
         TimerDisplay(
             timerState =
                 TimerContract.TimerState(
-                    timerSessionState = TimerSessionUiState.Ready(todayBreadCount = 5),
+                    timerSessionState = TimerSessionUiState.Ready(totalBreadCount = 5),
                 ),
             sharedState = SharedContract.SharedState(),
             onBreadIconClick = {},
