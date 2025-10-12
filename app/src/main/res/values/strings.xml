@@ -113,4 +113,7 @@
 
     <!-- Change Date BottomSheet -->
     <string name = "change_date_title">날짜 변경</string>"
+
+    <!-- Category Color Picker BottomSheet -->
+    <string name = "category_color_picker_title">카테고리 색상</string>"
 </resources>
