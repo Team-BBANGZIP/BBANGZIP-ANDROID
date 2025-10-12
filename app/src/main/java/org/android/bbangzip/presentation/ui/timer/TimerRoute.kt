@@ -27,7 +27,6 @@ fun TimerRoute(
     val sharedState by sharedViewModel.uiState.collectAsStateWithLifecycle()
     val success by timerViewmodel.success.collectAsStateWithLifecycle(initialValue = true)
 
-
     LaunchedEffect(timerViewmodel.uiSideEffect) {
         timerViewmodel.uiSideEffect.collectLatest { effect ->
             when (effect) {
