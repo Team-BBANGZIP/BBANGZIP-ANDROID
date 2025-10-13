@@ -4,6 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.awaitLongPressOrCancellation
+import androidx.compose.foundation.gestures.drag
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
@@ -52,6 +53,7 @@ fun ManageCategoryScreen(
 
     var draggingItem by remember { mutableStateOf<CategoryItem?>(null) }
     var fakeOffset by remember { mutableStateOf(Offset.Zero) }
+    var touchPointInItem by remember { mutableStateOf(Offset.Zero) }
 
     Box(
         modifier = modifier
@@ -82,6 +84,19 @@ fun ManageCategoryScreen(
 
                             fakeOffset = Offset(0f, pressedLazyColumnItem.offset.toFloat())
                             draggingItem = pressedItemOfCategories
+
+                            touchPointInItem = down.position - fakeOffset
+
+                            drag(pointerId = longPress.id){ change ->
+                                change.consume()
+                                fakeOffset +=
+                                    Offset(
+                                        x = change.position.x - change.previousPosition.x,
+                                        y = change.position.y - change.previousPosition.y,
+                                    )
+                            }
+
+                            draggingItem = null
                         }
                     }
                 },
