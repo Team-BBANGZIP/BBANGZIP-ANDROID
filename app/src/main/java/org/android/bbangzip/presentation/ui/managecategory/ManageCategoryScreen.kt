@@ -22,6 +22,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
@@ -104,7 +105,7 @@ fun ManageCategoryScreen(
         ) {
             stickyHeader {
                 BbangZipBaseTopBar(
-                    title = "카테고리 관리",
+                    title = stringResource(R.string.manage_category_screen_title),
                     titleColor = BbangZipTheme.color.labelNormal_6B6560,
                     titleStyle = BbangZipTheme.typography.title2Medium,
                     leadingIcon = R.drawable.ic_arrow_left_24,
