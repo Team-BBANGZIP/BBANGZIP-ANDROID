@@ -92,6 +92,19 @@
     <string name="add_category_done_button_label">완료</string>
     <string name="add_category_text_field_placeholder">카테고리명 입력</string>
 
+    <!-- Manage Category Screen -->
+    <string name="manage_category_screen_title">카테고리 관리</string>
+
+    <!-- Edit Category Screen -->
+    <string name="edit_category_screen_title">카테고리 관리</string>
+    <string name="edit_category_color_setting_row_label">색상</string>
+    <string name="edit_category_stop_category_row_label">그만하기</string>
+    <string name="edit_category_stop_category_row_description">기존 데이터는 보존되지만,\n종료 시점 이후 새로운 할 일을 추가할 수 없어요.</string>
+    <string name="edit_category_show_color_picker_icon_description">색상 선택하는 바텀시트 띄우기</string>
+    <string name="edit_category_text_field_placeholder">카테고리명 입력</string>
+    <string name="edit_category_back_navigation_icon_description">뒤로가기 아이콘</string>
+    <string name="edit_category_confirm_button_label">확인</string>
+
     <!-- Add Todo BottomSheet -->
     <string name="add_todo_title">할 일 추가</string>
     <string name="add_todo_placeholder">할 일을 입력해 주세요</string>

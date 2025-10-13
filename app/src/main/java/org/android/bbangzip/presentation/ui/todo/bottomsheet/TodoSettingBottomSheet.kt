@@ -1,6 +1,5 @@
 package org.android.bbangzip.presentation.ui.todo.bottomsheet
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -28,6 +27,7 @@ import org.android.bbangzip.presentation.common.component.bottomsheet.BbangZipBo
 import org.android.bbangzip.presentation.common.component.button.BbangZipButtonDefaults
 import org.android.bbangzip.presentation.common.component.button.BbangzipBaseButton
 import org.android.bbangzip.presentation.common.component.button.TimeSettingButton
+import org.android.bbangzip.presentation.common.component.row.InteractionRow
 import org.android.bbangzip.presentation.common.component.toggle.BbangZipSwitch
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.ui.todo.type.TodoSettingActionType
@@ -194,36 +194,6 @@ private fun InteractionButtons(
     }
 }
 
-@Composable
-private fun InteractionRow(
-    @DrawableRes interactionIconResId: Int,
-    actionName: String,
-    modifier: Modifier = Modifier,
-    interactionButton: @Composable () -> Unit = {},
-) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(interactionIconResId),
-            contentDescription = null,
-            tint = BbangZipTheme.color.labelAlternative_A29D96,
-        )
-
-        Gap(width = 8.dp)
-
-        Text(
-            text = actionName,
-            style = BbangZipTheme.typography.body2Medium,
-            color = BbangZipTheme.color.labelAlternative_A29D96,
-        )
-
-        Gap()
-
-        interactionButton()
-    }
-}
 
 @Preview
 @Composable
