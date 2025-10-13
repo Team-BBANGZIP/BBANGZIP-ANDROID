@@ -33,7 +33,7 @@ private const val MAX_CATEGORY_NAME_CHARACTER = 20
  * @param categoryColor 카테고리를 나타내는 색상
  * @param categoryName 표시할 카테고리 이름
  * @param modifier Modifier 설정
- * @param onclick 클릭 시 실행되는 콜백
+ * @param onClick 클릭 시 실행되는 콜백
  * @param isClickable 클릭 가능 여부
  * @param isDraggable 드래그 가능 여부 (현재는 사용되지 않음)
  * @param maxCharacters 카테고리 이름의 최대 글자 수
@@ -46,6 +46,7 @@ fun BbangZipCategoryChip(
     onClick: () -> Unit = {},
     isClickable: Boolean = true,
     isDraggable: Boolean = true,
+    isTrailingIconVisible: Boolean = true,
     maxCharacters: Int = MAX_CATEGORY_NAME_CHARACTER,
 ) {
     val displayText =
@@ -86,12 +87,14 @@ fun BbangZipCategoryChip(
             overflow = TextOverflow.Ellipsis,
         )
 
-        Icon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.ic_plus_bold_24),
-            contentDescription = null,
-            modifier = Modifier.size(BbangZipCategoryChipDefaults.ICON_SIZE),
-            tint = BbangZipCategoryChipDefaults.iconColor(),
-        )
+        if(isTrailingIconVisible){
+            Icon(
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_plus_bold_24),
+                contentDescription = null,
+                modifier = Modifier.size(BbangZipCategoryChipDefaults.ICON_SIZE),
+                tint = BbangZipCategoryChipDefaults.iconColor(),
+            )
+        }
     }
 }
 
