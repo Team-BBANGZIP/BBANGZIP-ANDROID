@@ -161,7 +161,7 @@ fun BbangZipBaseTextField(
                     if (value.isEmpty()) {
                         if (placeholder != null) {
                             Text(
-                                modifier = Modifier.padding(start = 1.dp),
+                                modifier = Modifier.padding(start = 2.dp),
                                 text = stringResource(placeholder),
                                 color = placeholderColor,
                                 style = textStyles.textStyle,

@@ -37,7 +37,7 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
 fun CategoryColorPickerBottomSheet(
     isBottomSheetVisible: Boolean,
     onDismissRequest: () -> Unit,
-    onColorSelected: (String) -> Unit,
+    onColorItemClick: (String) -> Unit,
 ){
     BbangZipBottomSheetSlot(
         isBottomSheetVisible = isBottomSheetVisible,
@@ -59,7 +59,7 @@ fun CategoryColorPickerBottomSheet(
                 CategoryColor.entries.forEach {
                     ColorChip(
                         color = it.color,
-                        onClick = { onColorSelected(it.name) }
+                        onClick = { onColorItemClick(it.name) }
                     )
                 }
             }
@@ -103,7 +103,7 @@ private fun CategoryColorPickerBottomSheetPreview(){
                         containerColor = Color.Black,
                         contentColor = Color.Blue,
                     ),
-                onClick = { isBottomSheetVisible = !isBottomSheetVisible },
+                onClick = { isBottomSheetVisible = true },
             ) {
                 Text("바텀시트 띄우기")
             }
@@ -113,7 +113,7 @@ private fun CategoryColorPickerBottomSheetPreview(){
         CategoryColorPickerBottomSheet(
             isBottomSheetVisible = isBottomSheetVisible,
             onDismissRequest = { isBottomSheetVisible = false },
-            onColorSelected = { selectedColor = it }
+            onColorItemClick = { selectedColor = it }
         )
     }
 }
