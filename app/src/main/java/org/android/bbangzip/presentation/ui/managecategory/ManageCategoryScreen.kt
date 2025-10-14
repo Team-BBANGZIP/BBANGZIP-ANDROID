@@ -1,6 +1,8 @@
 package org.android.bbangzip.presentation.ui.managecategory
 
-import android.util.Log
+import androidx.compose.animation.core.EaseInOutCubic
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
@@ -24,8 +26,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.layout.boundsInParent
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -63,10 +68,10 @@ fun ManageCategoryScreen(
     val lazyListState = rememberLazyListState()
 
     var draggingItem by remember { mutableStateOf<CategoryItem?>(null) }
+    var draggingItemIndex by remember { mutableStateOf<Int?>(null) }
     var fakeOffset by remember { mutableStateOf(Offset.Zero) }
-    var touchPointInItem by remember { mutableStateOf(Offset.Zero) }
     var targetIndex by remember { mutableStateOf<Int?>(null) }
-    var touchPointY by remember { mutableFloatStateOf(0f) }
+    var itemBound by remember {mutableStateOf<Rect?>(null)}
 
     Box(
         modifier = modifier
@@ -92,13 +97,11 @@ fun ManageCategoryScreen(
                                     } ?: return@awaitEachGesture
 
                             val pressedLazyColumnIndex = pressedLazyColumnItem.index
-                            val pressedIndexOfCategories = pressedLazyColumnIndex - LIST_HEADER_COUNT
-                            val pressedItemOfCategories = categories.getOrNull(pressedIndexOfCategories)
+                            draggingItemIndex = pressedLazyColumnIndex - LIST_HEADER_COUNT
+                            val pressedItemOfCategories = categories.getOrNull(draggingItemIndex!!)
 
                             fakeOffset = Offset(0f, pressedLazyColumnItem.offset.toFloat())
                             draggingItem = pressedItemOfCategories
-
-                            touchPointInItem = down.position - fakeOffset
 
                             try {
                                 drag(pointerId = longPress.id){ change ->
@@ -112,16 +115,16 @@ fun ManageCategoryScreen(
                                     targetIndex =
                                         updateTargetIndex(
                                             lazyListState = lazyListState,
-                                            list = categories,
                                             touchPointY = change.position.y,
+                                            currentTargetIndex = targetIndex,
                                         )
                                 }
                             }finally {
                                 Timber.tag("dragEnd").d("$targetIndex")
                                 targetIndex?.let {
-                                    if (pressedIndexOfCategories != it && it in categories.indices) {
+                                    if (draggingItemIndex != it && it in categories.indices) {
                                         onCategoryMove(
-                                            pressedIndexOfCategories,
+                                            draggingItemIndex!!,
                                             it,
                                         )
                                     }
@@ -150,6 +153,22 @@ fun ManageCategoryScreen(
 
             items(count = categories.size, key = { index -> categories[index].id }) { index ->
                 val category = categories[index]
+                val animatedShiftTarget = calculateAnimatedShift(
+                    currentItemIndex = index,
+                    currentDraggingItemIndex = draggingItemIndex,
+                    targetIndex = targetIndex,
+                    itemBound = itemBound,
+                )
+
+                val animatedShiftY =
+                    if (draggingItem == null) {
+                        0f
+                    } else {
+                        animateFloatAsState(
+                            targetValue = animatedShiftTarget,
+                            animationSpec = tween(durationMillis = 300, easing = EaseInOutCubic),
+                        ).value
+                    }
 
                 BbangZipCategoryChip(
                     categoryColor = CategoryColor.fromString(category.color).color,
@@ -158,8 +177,12 @@ fun ManageCategoryScreen(
                         .padding(start = 20.dp)
                         .padding(vertical = 10.dp)
                         .graphicsLayer(
+                            translationY = animatedShiftY,
                             alpha = if(category.id == draggingItem?.id) 0f else 1f
-                        ),
+                        )
+                        .onGloballyPositioned{ coordinates ->
+                            itemBound = coordinates.boundsInParent()
+                        },
                     isTrailingIconVisible = false
                 )
             }
@@ -190,12 +213,36 @@ fun ManageCategoryScreen(
     }
 }
 
+private fun calculateAnimatedShift(
+    currentItemIndex: Int,
+    currentDraggingItemIndex: Int?,
+    targetIndex: Int?,
+    itemBound: Rect?,
+    itemSpacing: Float = 0f,
+): Float {
+    if (currentDraggingItemIndex == null || targetIndex == null) {
+        return 0f
+    }
+    if (currentItemIndex == currentDraggingItemIndex) {
+        return 0f
+    }
+
+    val draggingItemHeight = itemBound?.height ?: 0f
+    val shiftAmount = draggingItemHeight + itemSpacing
+
+    return when {
+        currentDraggingItemIndex < targetIndex && currentItemIndex in (currentDraggingItemIndex + 1)..targetIndex -> -shiftAmount
+        currentDraggingItemIndex > targetIndex && currentItemIndex in targetIndex until currentDraggingItemIndex -> shiftAmount
+        else -> 0f
+    }
+}
+
 private fun updateTargetIndex(
     lazyListState: LazyListState,
-    list: List<CategoryItem>,
     touchPointY: Float,
+    currentTargetIndex: Int?,
 ): Int {
-    var newTargetIndex = -1
+    var newTargetIndex = currentTargetIndex ?: -1
 
     lazyListState.layoutInfo.visibleItemsInfo
         .firstOrNull { visibleItem ->
@@ -204,7 +251,6 @@ private fun updateTargetIndex(
             touchPointY >= itemTopY && touchPointY <= itemBottomY
         }
         ?.let {
-            val threshHold = it.size / 2
             val listIndex = it.index - LIST_HEADER_COUNT
             if (listIndex >= 0) {
                 newTargetIndex = listIndex
