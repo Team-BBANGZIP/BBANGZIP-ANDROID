@@ -74,27 +74,20 @@ import org.android.bbangzip.presentation.common.component.taskbox.BbangZipTaskBo
 import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.model.ListItem
 import org.android.bbangzip.presentation.common.model.Todo
+import org.android.bbangzip.presentation.common.type.AutoScrollDirection
 import org.android.bbangzip.presentation.common.type.CategoryColor
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.dropShadow
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
+import org.android.bbangzip.presentation.common.util.scroll.calculateScrollSpeed
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.CommitmentBottomSheet
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
 
 private const val LIST_HEADER_COUNT = 1
-private const val MIN_SCROLL_VALUE = 5f
-private const val MAX_SCROLL_VALUE = 30f
 private const val AUTO_SCROLL_DELAY = 8L
 private val AUTO_SCROLL_THRESHOLD = 50.dp
 private val ITEM_SPACING = 4.dp
-
-// 스크롤 방향을 명확한 상태로 정의
-private enum class AutoScrollDirection {
-    UP,
-    DOWN,
-    NONE,
-}
 
 @Composable
 fun TodoScreen(
@@ -222,7 +215,9 @@ fun TodoScreen(
                                                                     columnHeight = columnHeight,
                                                                     scrollThreshold = scrollThreshold,
                                                                 )
+
                                                             lazyListState.scrollBy(speed)
+
                                                             targetIndex =
                                                                 updateTargetIndex(
                                                                     lazyListState = lazyListState,
@@ -343,24 +338,6 @@ fun TodoScreen(
             onDoneAction = onCommitmentDone,
         )
     }
-}
-
-private fun calculateScrollSpeed(
-    direction: AutoScrollDirection,
-    touchPointY: Float,
-    columnHeight: Int,
-    scrollThreshold: Float,
-): Float {
-    val intensity =
-        when (direction) {
-            AutoScrollDirection.UP -> (scrollThreshold - touchPointY) / scrollThreshold
-            AutoScrollDirection.DOWN -> (touchPointY - (columnHeight - scrollThreshold)) / scrollThreshold
-            AutoScrollDirection.NONE -> 0f
-        }.coerceIn(0f, 1f)
-
-    val speed = MIN_SCROLL_VALUE + (MAX_SCROLL_VALUE - MIN_SCROLL_VALUE) * intensity
-
-    return if (direction == AutoScrollDirection.UP) -speed else speed
 }
 
 private fun updateTargetIndex(
