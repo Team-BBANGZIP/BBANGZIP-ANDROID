@@ -61,6 +61,7 @@ fun AddCategoryScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(BbangZipTheme.color.staticWhite_FFFFFF)
             .statusBarsPadding(),
     ){
         AddCategoryHeader(
