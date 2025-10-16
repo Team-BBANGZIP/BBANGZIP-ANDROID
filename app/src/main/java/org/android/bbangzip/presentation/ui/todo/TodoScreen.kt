@@ -306,7 +306,7 @@ fun TodoScreen(
                     onCheckBoxClick = {},
                     isLast = item.isLastInCategory,
                     startTime = item.todo.startTime,
-                    categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
+                    categoryColor = CategoryColor.fromString(item.category.color).color,
                 )
             }
         }
@@ -457,8 +457,8 @@ private fun DraggableListItem(
                 Column {
                     Gap(height = if (itemIndex == 0) 4.dp else 16.dp)
                     BbangZipCategoryChip(
-                        categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
-                        categoryName = item.category.categoryName,
+                        categoryColor = CategoryColor.fromString(item.category.color).color,
+                        categoryName = item.category.name,
                         onClick = { onCategoryClick(item.category) },
                     )
                 }
@@ -469,11 +469,11 @@ private fun DraggableListItem(
                     task = item.todo.content,
                     isCompleted = item.todo.isCompleted,
                     onCheckBoxClick = { isChecked ->
-                        onTodoCheckBoxClick(item.todo.todoId, item.category.categoryId, isChecked)
+                        onTodoCheckBoxClick(item.todo.todoId, item.category.id, isChecked)
                     },
                     isLast = item.isLastInCategory,
                     startTime = item.todo.startTime,
-                    categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
+                    categoryColor = CategoryColor.fromString(item.category.color).color,
                 )
             }
         }
@@ -688,9 +688,9 @@ fun TodoScreenPreview() {
     val exampleCategories =
         listOf(
             Category(
-                categoryId = 1,
-                categoryName = "제과제빵점",
-                categoryColor = "BbangZipTheme.color.todoRed1_EA7152",
+                id = 1,
+                name = "제과제빵점",
+                color = "RED1",
                 todos =
                     listOf(
                         Todo(
@@ -708,9 +708,9 @@ fun TodoScreenPreview() {
                     ),
             ),
             Category(
-                categoryId = 2,
-                categoryName = "경제학개론",
-                categoryColor = "BbangZipTheme.color.todoBlue1_5C62AC",
+                id = 2,
+                name = "경제학개론",
+                color = "BLUE1",
                 todos =
                     listOf(
                         Todo(

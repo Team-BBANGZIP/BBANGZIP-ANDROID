@@ -45,6 +45,7 @@ import kotlinx.coroutines.launch
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.chip.BbangZipCategoryChip
 import org.android.bbangzip.presentation.common.component.topbar.BbangZipBaseTopBar
+import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.type.AutoScrollDirection
 import org.android.bbangzip.presentation.common.type.CategoryColor
 import org.android.bbangzip.presentation.common.util.extension.Gap
@@ -57,16 +58,9 @@ private const val LIST_HEADER_COUNT = 2
 private val AUTO_SCROLL_THRESHOLD = 50.dp
 private const val AUTO_SCROLL_DELAY = 8L
 
-data class CategoryItem(
-    val id: Long,
-    val name: String,
-    val color: String,
-    val isStopped: Boolean
-)
-
 @Composable
 fun ManageCategoryScreen(
-    categories: List<CategoryItem>,
+    categories: List<Category>,
     modifier: Modifier = Modifier,
     onTopBarTrailingIconClick: () -> Unit = {},
     onTopBarLeadingIconClick: () -> Unit = {},
@@ -84,7 +78,7 @@ fun ManageCategoryScreen(
     val scrollThreshold = remember{ with(localDensity) { AUTO_SCROLL_THRESHOLD.toPx() } }
 
     // 드래그앤 드랍 변수
-    var draggingItem by remember { mutableStateOf<CategoryItem?>(null) }
+    var draggingItem by remember { mutableStateOf<Category?>(null) }
     var draggingItemIndex by remember { mutableStateOf<Int?>(null) }
     var fakeOffset by remember { mutableStateOf(Offset.Zero) }
     var targetIndex by remember { mutableStateOf<Int?>(null) }
@@ -337,25 +331,25 @@ fun ManageCategoryScreenPreview(
 ){
     val categories = remember {
         mutableStateListOf(
-            CategoryItem(id = 1, name = "아침 루틴", color = "RED1", isStopped = false),
-            CategoryItem(id = 2, name = "SOPT 안드로이드 파트", color = "YELLOW1", isStopped = false),
-            CategoryItem(id = 3, name = "운동", color = "BLUE1", isStopped = true),
-            CategoryItem(id = 4, name = "취미 생활", color = "GREEN1", isStopped = false),
-            CategoryItem(id = 5, name = "사이드 프로젝트", color = "PURPLE1", isStopped = false),
-            CategoryItem(id = 9, name = "여행 계획", color = "RED2", isStopped = true),
-            CategoryItem(id = 10, name = "블로그 글쓰기", color = "YELLOW2", isStopped = false),
-            CategoryItem(id = 11, name = "가족", color = "BLUE2", isStopped = false),
-            CategoryItem(id = 12, name = "친구 약속", color = "GREEN2", isStopped = true),
-            CategoryItem(id = 13, name = "업무", color = "PURPLE2", isStopped = false),
-            CategoryItem(id = 17, name = "대학 과제", color = "RED1", isStopped = false),
-            CategoryItem(id = 18, name = "자격증 공부", color = "YELLOW1", isStopped = true),
-            CategoryItem(id = 19, name = "새로운 기술 학습", color = "BLUE1", isStopped = false),
-            CategoryItem(id = 21, name = "취준", color = "GREEN1", isStopped = false),
-            CategoryItem(id = 22, name = "개발", color = "PURPLE1", isStopped = false),
-            CategoryItem(id = 23, name = "휴식", color = "RED1", isStopped = false),
-            CategoryItem(id = 24, name = "액티비티", color = "YELLOW1", isStopped = false),
-            CategoryItem(id = 25, name = "공부", color = "GREEN1", isStopped = false),
-            CategoryItem(id = 26, name = "뉴스", color = "BLUE1", isStopped = false),
+            Category(id = 1, name = "아침 루틴", color = "RED1", isStopped = false),
+            Category(id = 2, name = "SOPT 안드로이드 파트", color = "YELLOW1", isStopped = false),
+            Category(id = 3, name = "운동", color = "BLUE1", isStopped = true),
+            Category(id = 4, name = "취미 생활", color = "GREEN1", isStopped = false),
+            Category(id = 5, name = "사이드 프로젝트", color = "PURPLE1", isStopped = false),
+            Category(id = 9, name = "여행 계획", color = "RED2", isStopped = true),
+            Category(id = 10, name = "블로그 글쓰기", color = "YELLOW2", isStopped = false),
+            Category(id = 11, name = "가족", color = "BLUE2", isStopped = false),
+            Category(id = 12, name = "친구 약속", color = "GREEN2", isStopped = true),
+            Category(id = 13, name = "업무", color = "PURPLE2", isStopped = false),
+            Category(id = 17, name = "대학 과제", color = "RED1", isStopped = false),
+            Category(id = 18, name = "자격증 공부", color = "YELLOW1", isStopped = true),
+            Category(id = 19, name = "새로운 기술 학습", color = "BLUE1", isStopped = false),
+            Category(id = 21, name = "취준", color = "GREEN1", isStopped = false),
+            Category(id = 22, name = "개발", color = "PURPLE1", isStopped = false),
+            Category(id = 23, name = "휴식", color = "RED1", isStopped = false),
+            Category(id = 24, name = "액티비티", color = "YELLOW1", isStopped = false),
+            Category(id = 25, name = "공부", color = "GREEN1", isStopped = false),
+            Category(id = 26, name = "뉴스", color = "BLUE1", isStopped = false),
         )
     }
     BBANGZIPANDROIDTheme {
