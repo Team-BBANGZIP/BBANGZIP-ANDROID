@@ -10,11 +10,9 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -39,7 +37,6 @@ import org.android.bbangzip.presentation.common.component.button.ColorSettingBut
 import org.android.bbangzip.presentation.common.component.row.InteractionRow
 import org.android.bbangzip.presentation.common.component.textfield.BbangZipUnderLinedTextField
 import org.android.bbangzip.presentation.common.component.toggle.BbangZipSwitch
-import org.android.bbangzip.presentation.common.type.CategoryColor
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.presentation.ui.editcategory.type.EditCategoryActionType
@@ -48,18 +45,19 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @Composable
 fun EditCategoryScreen(
-    categoryName: String = "",
+    categoryNameInput: String = "",
     isConfirmEnable: Boolean = false,
-    isColorPickerVisible: Boolean = false,
+    isColorPickerBottomSheetVisible: Boolean = false,
     selectedColorString: String = "RED1",
-    isStopped: Boolean = false,
-    onCategoryNameChange: (String) -> Unit = {},
+    isCategoryStopped: Boolean = false,
+    onCategoryNameInputChange: (String) -> Unit = {},
     onBackIconClick: () -> Unit = {},
     onConfirmButtonClick: () -> Unit = {},
     onColorSettingRowActionIconClick: () -> Unit = {},
     onColorPickerBottomSheetDismissRequest: () -> Unit = {},
     onColorItemClick: (String) -> Unit = {},
     onStopRowSwitchClick: () -> Unit = {},
+    onDeleteButtonClick: () -> Unit = {},
 ){
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -67,8 +65,8 @@ fun EditCategoryScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .background(BbangZipTheme.color.staticWhite_FFFFFF)
             .statusBarsPadding()
-            .navigationBarsPadding()
             .padding(bottom = 12.dp),
     ){
         EditCategoryHeader(
@@ -84,8 +82,8 @@ fun EditCategoryScreen(
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ){
             BbangZipUnderLinedTextField(
-                value = categoryName,
-                onValueChange = onCategoryNameChange,
+                value = categoryNameInput,
+                onValueChange = onCategoryNameInputChange,
                 focusRequester = focusRequester,
                 focusManager = focusManager,
                 placeholder = R.string.edit_category_text_field_placeholder,
@@ -106,7 +104,7 @@ fun EditCategoryScreen(
                         EditCategoryActionType.STOP ->
                             BbangZipSwitch(
                                 modifier = Modifier.fillMaxWidth(44 / 335f),
-                                isChecked = isStopped,
+                                isChecked = isCategoryStopped,
                                 onCheckedChange = onStopRowSwitchClick,
                             )
                     }
@@ -117,7 +115,7 @@ fun EditCategoryScreen(
 
             BbangzipBaseButton(
                 modifier = Modifier.fillMaxWidth(),
-                onClick = {},
+                onClick = onDeleteButtonClick,
                 leadingIcon = {
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_trash_default_24),
@@ -136,7 +134,7 @@ fun EditCategoryScreen(
 
 
         CategoryColorPickerBottomSheet(
-            isBottomSheetVisible = isColorPickerVisible,
+            isBottomSheetVisible = isColorPickerBottomSheetVisible,
             onDismissRequest = onColorPickerBottomSheetDismissRequest,
             onColorItemClick = onColorItemClick
         )
@@ -208,15 +206,15 @@ private fun EditCategoryScreenPreview(){
 
     BBANGZIPANDROIDTheme {
         EditCategoryScreen(
-            categoryName = categoryName,
+            categoryNameInput = categoryName,
             selectedColorString = selectedColorString,
-            onCategoryNameChange = {
+            onCategoryNameInputChange = {
                 categoryName = it
                 isDoneEnable = it.isNotEmpty()
             },
             isConfirmEnable = isDoneEnable,
-            isColorPickerVisible = isColorPickerVisible,
-            isStopped = isStopped,
+            isColorPickerBottomSheetVisible = isColorPickerVisible,
+            isCategoryStopped = isStopped,
             onColorSettingRowActionIconClick = {isColorPickerVisible = !isColorPickerVisible},
             onColorPickerBottomSheetDismissRequest = {isColorPickerVisible = false},
             onColorItemClick = {
