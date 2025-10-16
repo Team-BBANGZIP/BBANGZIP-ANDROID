@@ -1,5 +1,6 @@
 package org.android.bbangzip.presentation.ui.timer.component.maintimer
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Text
@@ -20,12 +21,14 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @Composable
 fun TimerDisplay(
-    timerState: TimerContract.TimerState,
-    sharedState: SharedContract.SharedState,
+    sessionState: TimerSessionUiState,
+    progress: Float,
+    formattedTime: String,
+    @DrawableRes runningBreadImg: Int,
+    @DrawableRes readyBreadImg: Int,
     onBreadIconClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val sessionState = timerState.timerSessionState
     val isReady = sessionState is TimerSessionUiState.Ready
 
     Column(
@@ -42,30 +45,30 @@ fun TimerDisplay(
 
         CircularProgressBar(
             modifier = Modifier.padding(horizontal = 32.dp),
-            progress = timerState.progress,
+            progress = progress,
             progressMax = 1f,
-            centerContent = { modifier ->
+            centerContent = { centerModifier ->
                 Column(
-                    modifier = modifier,
+                    modifier = centerModifier,
                     horizontalAlignment = Alignment.CenterHorizontally,
                 ) {
                     Text(
-                        text = timerState.formattedTime,
+                        text = formattedTime,
                         style = BbangZipTheme.typography.timerExtraBold,
                         color = sessionState.getTimerFontColor(),
                     )
                 }
             },
-            bottomContent = { mod ->
+            bottomContent = { bottomModifier ->
                 val breadImageRes =
                     if (isReady) {
-                        sharedState.breadImg
+                        readyBreadImg
                     } else {
-                        timerState.breadImg
+                        runningBreadImg
                     }
 
                 BreadWithTriangleIndicator(
-                    modifier = mod,
+                    modifier = bottomModifier,
                     breadImageRes = breadImageRes,
                     showTriangle = isReady,
                     isClickable = isReady,
@@ -76,16 +79,20 @@ fun TimerDisplay(
     }
 }
 
-@Preview(showBackground = true, backgroundColor = 0xFFF8F1E9)
+@Preview(showBackground = true)
 @Composable
 private fun TimerDisplayPreview() {
     BbangZipPreviewWrapper {
+        val previewState = TimerContract.TimerState(
+            timerSessionState = TimerSessionUiState.Ready(totalBreadCount = 5),
+        )
+
         TimerDisplay(
-            timerState =
-                TimerContract.TimerState(
-                    timerSessionState = TimerSessionUiState.Ready(totalBreadCount = 5),
-                ),
-            sharedState = SharedContract.SharedState(),
+            sessionState = previewState.timerSessionState,
+            progress = previewState.progress,
+            formattedTime = previewState.formattedTime,
+            runningBreadImg = previewState.breadImg,
+            readyBreadImg = SharedContract.SharedState().breadImg,
             onBreadIconClick = {},
         )
     }

@@ -84,9 +84,13 @@ fun TimerScreen(
 
         Gap(50.dp)
 
+
         TimerDisplay(
-            timerState = timerState,
-            sharedState = sharedState,
+            sessionState = timerState.timerSessionState,
+            progress = timerState.progress,
+            formattedTime = timerState.formattedTime,
+            runningBreadImg = timerState.breadImg,
+            readyBreadImg = sharedState.breadImg,
             onBreadIconClick = onBreadIconClick,
         )
 
@@ -142,15 +146,16 @@ fun TimerScreen(
                 )
             }
         }
-
-        BreadSelectBottomSheet(
-            currentBreadId = sharedState.breadId,
-            breadList = if (isReady) timerState.timerSessionState.breadList else emptyList(),
-            isBottomSheetVisible = timerState.bottomSheetState.breadSelection,
-            breadCount = timerState.todayBreadCount,
-            onDismiss = onBreadSelectionSheetDismissRequest,
-            onBreadSelect = onBreadSelectionSheetClick,
-        )
+        if (isReady) {
+            BreadSelectBottomSheet(
+                currentBreadId = sharedState.breadId,
+                breadList = timerState.timerSessionState.breadList,
+                isBottomSheetVisible = timerState.bottomSheetState.breadSelection,
+                breadCount = timerState.todayBreadCount,
+                onDismiss = onBreadSelectionSheetDismissRequest,
+                onBreadSelect = onBreadSelectionSheetClick,
+            )
+        }
 
         ResetBottomSheet(
             isBottomSheetVisible = timerState.bottomSheetState.reset,

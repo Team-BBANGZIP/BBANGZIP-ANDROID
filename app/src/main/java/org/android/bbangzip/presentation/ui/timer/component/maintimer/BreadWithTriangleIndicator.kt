@@ -30,7 +30,6 @@ import org.android.bbangzip.presentation.common.component.preview.BbangZipPrevie
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
-@SuppressLint("UseOfNonLambdaOffsetOverload")
 @Composable
 fun BreadWithTriangleIndicator(
     breadImageRes: Int,
@@ -63,7 +62,7 @@ fun BreadWithTriangleIndicator(
         ) {
             Icon(
                 modifier = Modifier.offset(y = (triangleOffset).dp),
-                imageVector = ImageVector.Companion.vectorResource(id = R.drawable.ic_triangle_down_24),
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_triangle_down_24),
                 contentDescription = "moving triangle",
                 tint = BbangZipTheme.color.primaryNormal_897869,
             )
@@ -71,15 +70,15 @@ fun BreadWithTriangleIndicator(
         Image(
             modifier =
                 Modifier
-                    .size(breadSize.width, breadSize.height)
-                    .noRippleClickable(enabled = isClickable) { onClick() },
+                    .size(breadSize)
+                    .noRippleClickable(enabled = isClickable,onClick = onClick) ,
             painter = painterResource(breadImageRes),
             contentDescription = "Timer Icon",
         )
     }
 }
 
-@Preview(name = "Indicator Hidden", showBackground = true, backgroundColor = 0xFFF8F1E9)
+@Preview
 @Composable
 private fun BreadWithTriangleIndicatorPreview_Hidden() {
     BbangZipPreviewWrapper {
