@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import org.android.bbangzip.domain.repository.TimerRepository
 import org.android.bbangzip.domain.usecase.InitializeTimerScreenUseCase
 import org.android.bbangzip.presentation.common.base.BaseViewModel
+import org.android.bbangzip.presentation.common.util.extension.getBbangZipTimerDate
 import org.android.bbangzip.presentation.ui.timer.contract.TimerContract
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerBottomSheetVisibleState
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionUiState
@@ -20,9 +21,6 @@ import org.android.bbangzip.presentation.ui.timer.contract.type.TimeOption
 import org.android.bbangzip.presentation.ui.timer.lifecycle.TimerLifecycleManager
 import org.android.bbangzip.presentation.ui.timer.util.TimerConstants
 import timber.log.Timber
-import java.time.ZoneId
-import java.time.ZonedDateTime
-import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 @HiltViewModel
@@ -326,15 +324,5 @@ class TimerViewModel
             Timber.d("Lifecycle Event: App came to foreground after ${exitDuration}ms")
             isAppActive = true
             cancelIdleTransition()
-        }
-
-        private fun getBbangZipTimerDate(): String {
-            val nowInSeoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"))
-
-            val adjustedDateTime = nowInSeoul.minusHours(5)
-
-            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-
-            return adjustedDateTime.format(formatter)
         }
     }
