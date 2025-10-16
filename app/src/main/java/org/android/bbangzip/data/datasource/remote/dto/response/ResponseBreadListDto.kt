@@ -30,6 +30,8 @@ data class BreadInfoDto(
     val isUnlocked: Boolean,
     @SerialName("requiredCount")
     val requiredCount: Int,
+    @SerialName("imageUrl")
+    val imageUrl: String
 ) {
     fun toBreadInfo() =
         BreadInfo(
@@ -37,5 +39,6 @@ data class BreadInfoDto(
             breadName = breadName,
             isUnlocked = isUnlocked,
             requiredCount = requiredCount,
+            imageUrl = imageUrl,
         )
 }

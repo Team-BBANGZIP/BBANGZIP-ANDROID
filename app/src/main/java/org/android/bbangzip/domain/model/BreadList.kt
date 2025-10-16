@@ -10,4 +10,5 @@ class BreadInfo(
     val breadName: String,
     val isUnlocked: Boolean,
     val requiredCount: Int,
+    val imageUrl: String,
 )

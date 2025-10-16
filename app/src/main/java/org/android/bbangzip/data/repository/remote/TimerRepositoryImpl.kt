@@ -22,7 +22,7 @@ class TimerRepositoryImpl
                         RequestCompleteTimerDto(targetDate = targetDate, count = count),
                     )
 
-                val responseData = response.data ?: throw IllegalStateException(response.message)
+                val responseData = response.data ?: throw IllegalStateException("Data가 존재하지 않습니다.")
 
                 responseData.toBreadCount()
             }
@@ -31,7 +31,7 @@ class TimerRepositoryImpl
             runCatching {
                 val response = timerRemoteDataSource.getTodayBreadCount()
 
-                val responseData = response.data ?: throw IllegalStateException(response.message)
+                val responseData = response.data ?: throw IllegalStateException("Data가 존재하지 않습니다.")
 
                 responseData.toBreadCount()
             }
@@ -40,7 +40,7 @@ class TimerRepositoryImpl
             runCatching {
                 val response = timerRemoteDataSource.getBreadList()
 
-                val responseData = response.data ?: throw IllegalStateException(response.message)
+                val responseData = response.data ?: throw IllegalStateException("Data가 존재하지 않습니다.")
 
                 responseData.toBreadList()
             }
