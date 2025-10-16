@@ -32,10 +32,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.bottomsheet.CategoryColorPickerBottomSheet
+import org.android.bbangzip.presentation.common.component.button.ColorSettingButton
+import org.android.bbangzip.presentation.common.component.row.InteractionRow
 import org.android.bbangzip.presentation.common.component.textfield.BbangZipUnderLinedTextField
 import org.android.bbangzip.presentation.common.type.CategoryColor
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
+import org.android.bbangzip.presentation.ui.addcategory.type.AddCategoryActionType
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
@@ -43,11 +46,11 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
 fun AddCategoryScreen(
     categoryName: String = "",
     isDoneEnable: Boolean = false,
-    isColorPickerVisible: Boolean = false,
+    isColorPickerBottomSheetVisible: Boolean = false,
     selectedColorString: String = "RED1",
     onCategoryNameChange: (String) -> Unit = {},
-    onBackIconClick: () -> Unit = {},
-    onDoneButtonClick: () -> Unit = {},
+    onTopBarLeadingIconClick: () -> Unit = {},
+    onTopBarTrailingIconClick: () -> Unit = {},
     onColorSettingRowActionIconClick: () -> Unit = {},
     onColorPickerBottomSheetDismissRequest: () -> Unit = {},
     onColorItemClick: (String) -> Unit = {},
@@ -62,8 +65,8 @@ fun AddCategoryScreen(
     ){
         AddCategoryHeader(
             isDoneEnable = isDoneEnable,
-            onBackButtonClick = onBackIconClick,
-            onDoneButtonClick = onDoneButtonClick
+            onBackButtonClick = onTopBarLeadingIconClick,
+            onDoneButtonClick = onTopBarTrailingIconClick
         )
 
         Gap(height = 32.dp)
@@ -81,14 +84,24 @@ fun AddCategoryScreen(
 
             Gap(height = 12.dp)
 
-            ColorSettingRow(
-                selectedColorString = selectedColorString,
-                onActionIconClick = onColorSettingRowActionIconClick
-            )
+            AddCategoryActionType.entries.forEach { actionType ->
+                InteractionRow(
+                    interactionIconResId = actionType.interactionIconResId,
+                    actionName = stringResource(actionType.actionName),
+                ){
+                    when(actionType){
+                        AddCategoryActionType.COLOR_SETTING ->
+                            ColorSettingButton(
+                                selectedColorString = selectedColorString,
+                                onColorSettingRowActionIconClick = onColorSettingRowActionIconClick
+                            )
+                    }
+                }
+            }
         }
 
         CategoryColorPickerBottomSheet(
-            isBottomSheetVisible = isColorPickerVisible,
+            isBottomSheetVisible = isColorPickerBottomSheetVisible,
             onDismissRequest = onColorPickerBottomSheetDismissRequest,
             onColorItemClick = onColorItemClick
         )
@@ -210,7 +223,7 @@ private fun AddCategoryScreenPreview(){
                 isDoneEnable = it.isNotEmpty()
             },
             isDoneEnable = isDoneEnable,
-            isColorPickerVisible = isColorPickerVisible,
+            isColorPickerBottomSheetVisible = isColorPickerVisible,
             onColorSettingRowActionIconClick = {isColorPickerVisible = !isColorPickerVisible},
             onColorPickerBottomSheetDismissRequest = {isColorPickerVisible = false},
             onColorItemClick = {

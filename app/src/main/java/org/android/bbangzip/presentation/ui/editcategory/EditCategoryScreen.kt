@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.bottomsheet.CategoryColorPickerBottomSheet
 import org.android.bbangzip.presentation.common.component.button.BbangzipBaseButton
+import org.android.bbangzip.presentation.common.component.button.ColorSettingButton
 import org.android.bbangzip.presentation.common.component.row.InteractionRow
 import org.android.bbangzip.presentation.common.component.textfield.BbangZipUnderLinedTextField
 import org.android.bbangzip.presentation.common.component.toggle.BbangZipSwitch
@@ -138,31 +139,6 @@ fun EditCategoryScreen(
             isBottomSheetVisible = isColorPickerVisible,
             onDismissRequest = onColorPickerBottomSheetDismissRequest,
             onColorItemClick = onColorItemClick
-        )
-    }
-}
-
-@Composable
-private fun ColorSettingButton(
-    selectedColorString: String,
-    onColorSettingRowActionIconClick: () -> Unit
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Box(
-            modifier = Modifier
-                .size(24.dp)
-                .background(color = CategoryColor.fromString(selectedColorString).color, shape = CircleShape)
-        )
-
-        Gap(width = 6.dp)
-
-        Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_right_24),
-            contentDescription = stringResource(R.string.edit_category_show_color_picker_icon_description),
-            modifier = Modifier.noRippleClickable(onClick = onColorSettingRowActionIconClick),
-            tint = BbangZipTheme.color.labelAssistive_C9C7C5,
         )
     }
 }
