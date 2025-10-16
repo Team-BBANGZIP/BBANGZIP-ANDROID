@@ -14,21 +14,7 @@ import org.android.bbangzip.ui.theme.defaultBbangZipColor
 @Parcelize
 sealed interface TimerSessionUiState : Parcelable {
     @Parcelize
-    data class Ready(
-        val breadList: ImmutableList<BreadInfoUiState> =
-            listOf(
-                BreadInfoUiState(1, "소금빵", true, 0),
-                BreadInfoUiState(2, "식빵", true, 5),
-                BreadInfoUiState(3, "바게트", false, 10),
-                BreadInfoUiState(4, "크루아상", false, 15),
-                BreadInfoUiState(5, "모닝빵", false, 20),
-                BreadInfoUiState(6, "바게트", false, 10),
-                BreadInfoUiState(7, "크루아상", false, 15),
-                BreadInfoUiState(8, "모닝빵", false, 20),
-                BreadInfoUiState(9, "모닝빵", false, 20),
-            ).toImmutableList(),
-        val totalBreadCount: Int = 0,
-    ) : TimerSessionUiState
+    data object Ready : TimerSessionUiState
 
     @Parcelize
     data object Running : TimerSessionUiState

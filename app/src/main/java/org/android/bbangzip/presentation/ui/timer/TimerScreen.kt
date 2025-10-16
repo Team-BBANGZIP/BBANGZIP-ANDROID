@@ -149,9 +149,9 @@ fun TimerScreen(
         if (isReady) {
             BreadSelectBottomSheet(
                 currentBreadId = sharedState.breadId,
-                breadList = timerState.timerSessionState.breadList,
+                breadList = timerState.breadList,
                 isBottomSheetVisible = timerState.bottomSheetState.breadSelection,
-                breadCount = timerState.todayBreadCount,
+                breadCount = timerState.totalBreadCount,
                 onDismiss = onBreadSelectionSheetDismissRequest,
                 onBreadSelect = onBreadSelectionSheetClick,
             )

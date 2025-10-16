@@ -3,26 +3,32 @@ package org.android.bbangzip.presentation.ui.timer.contract
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.base.BaseContract
 import org.android.bbangzip.presentation.common.util.extension.formatTime
+import org.android.bbangzip.presentation.ui.timer.contract.model.BreadInfoUiState
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerBottomSheetVisibleState
-import org.android.bbangzip.presentation.ui.timer.contract.model.TimerConstants
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionUiState
 import org.android.bbangzip.presentation.ui.timer.contract.type.TimeOption
+import org.android.bbangzip.presentation.ui.timer.util.TimerConstants
 
 class TimerContract {
+    //TODO 추후에 Room에 breadList 저장해놓기 SB
     @Immutable
     @Parcelize
     data class TimerState(
         val remainingTime: Long = TimerConstants.THIRTY_MINUTES,
         val timerOption: TimeOption = TimeOption.THIRTY,
-        val todayBreadCount: Int = 0,
-        val timerSessionState: TimerSessionUiState = TimerSessionUiState.Ready(),
+        val timerSessionState: TimerSessionUiState = TimerSessionUiState.Ready,
         val bottomSheetState: TimerBottomSheetVisibleState = TimerBottomSheetVisibleState(),
-    ) : BaseContract.State, Parcelable {
+        val breadList: ImmutableList<BreadInfoUiState> = emptyList<BreadInfoUiState>().toImmutableList(),
+        val totalBreadCount: Int = 0,
+        val todayBreadCount: Int = 0,
+        ) : BaseContract.State, Parcelable {
         @IgnoredOnParcel
         val progress: Float by lazy {
             val totalTime = timerOption.totalTime
@@ -91,6 +97,8 @@ class TimerContract {
     }
 
     sealed interface TimerReduce : BaseContract.Reduce {
+        data class UpdateTimerState(val timerState : TimerState) : TimerReduce
+
         data class UpdateRemainingTime(val remainingTime: Long) : TimerReduce
 
         data class UpdateTimerSessionState(val sessionState: TimerSessionUiState) : TimerReduce

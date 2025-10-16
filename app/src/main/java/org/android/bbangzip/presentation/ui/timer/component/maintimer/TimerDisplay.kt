@@ -84,7 +84,7 @@ fun TimerDisplay(
 private fun TimerDisplayPreview() {
     BbangZipPreviewWrapper {
         val previewState = TimerContract.TimerState(
-            timerSessionState = TimerSessionUiState.Ready(totalBreadCount = 5),
+            timerSessionState = TimerSessionUiState.Ready,
         )
 
         TimerDisplay(
