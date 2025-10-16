@@ -10,8 +10,8 @@ import org.android.bbangzip.presentation.ui.addcategory.AddCategoryContract.*
 @Composable
 fun AddCategoryRoute(
     modifier: Modifier = Modifier,
-    viewModel: AddCategoryViewModel = hiltViewModel()
-){
+    viewModel: AddCategoryViewModel = hiltViewModel(),
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     AddCategoryScreen(
@@ -20,7 +20,8 @@ fun AddCategoryRoute(
         isColorPickerBottomSheetVisible = uiState.isColorPickerBottomSheetVisible,
         selectedColorString = uiState.selectedColorString,
         onCategoryNameChange = {
-            viewModel.setEvent(AddCategoryEvent.OnCategoryNameInputChange(it)) },
+            viewModel.setEvent(AddCategoryEvent.OnCategoryNameInputChange(it))
+        },
         onTopBarLeadingIconClick = {
             viewModel.setEvent(AddCategoryEvent.OnTopBarLeadingIconClick)
         },
@@ -35,6 +36,6 @@ fun AddCategoryRoute(
         },
         onColorItemClick = {
             viewModel.setEvent(AddCategoryEvent.OnColorItemClick(it))
-        }
+        },
     )
 }

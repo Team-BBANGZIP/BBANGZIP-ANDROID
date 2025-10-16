@@ -296,13 +296,14 @@ private fun TimerTodoScreenPreview() {
         val flatList =
             exampleCategories.flatMap { category ->
                 val categoryItem = ListItem.CategoryItem(category)
-                val todoItems = category.todos.mapIndexed { index, todo ->
-                    ListItem.TodoItem(
-                        todo = todo,
-                        category = category,
-                        isLastInCategory = index == category.todos.size - 1,
-                    )
-                }
+                val todoItems =
+                    category.todos.mapIndexed { index, todo ->
+                        ListItem.TodoItem(
+                            todo = todo,
+                            category = category,
+                            isLastInCategory = index == category.todos.size - 1,
+                        )
+                    }
                 listOf(categoryItem) + todoItems
             }
 

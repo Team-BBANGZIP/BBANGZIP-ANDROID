@@ -6,15 +6,15 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import org.android.bbangzip.presentation.ui.editcategory.EditCategoryRoute
 
-fun NavController.navigateToEditCategory(navOptions: NavOptions){
+fun NavController.navigateToEditCategory(navOptions: NavOptions) {
     navigate(
         route = EditCategory,
-        navOptions = navOptions
+        navOptions = navOptions,
     )
 }
 
 fun NavGraphBuilder.editCategoryNavGraph() {
-    composable<EditCategory>{
+    composable<EditCategory> {
         EditCategoryRoute()
     }
 }

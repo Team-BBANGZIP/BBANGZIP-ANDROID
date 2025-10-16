@@ -54,7 +54,7 @@ fun InteractionRow(
             Row(
                 modifier = modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
-            ){
+            ) {
                 Gap(width = 32.dp)
 
                 Text(

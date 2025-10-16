@@ -58,29 +58,30 @@ fun EditCategoryScreen(
     onColorItemClick: (String) -> Unit = {},
     onStopRowSwitchClick: () -> Unit = {},
     onDeleteButtonClick: () -> Unit = {},
-){
+) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BbangZipTheme.color.staticWhite_FFFFFF)
-            .statusBarsPadding()
-            .padding(bottom = 12.dp),
-    ){
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(BbangZipTheme.color.staticWhite_FFFFFF)
+                .statusBarsPadding()
+                .padding(bottom = 12.dp),
+    ) {
         EditCategoryHeader(
             isConfirmEnable = isConfirmEnable,
             onBackButtonClick = onBackIconClick,
-            onConfirmButtonClick = onConfirmButtonClick
+            onConfirmButtonClick = onConfirmButtonClick,
         )
 
         Gap(height = 32.dp)
 
         Column(
             modifier = Modifier.padding(horizontal = 20.dp),
-            verticalArrangement = Arrangement.spacedBy(12.dp)
-        ){
+            verticalArrangement = Arrangement.spacedBy(12.dp),
+        ) {
             BbangZipUnderLinedTextField(
                 value = categoryNameInput,
                 onValueChange = onCategoryNameInputChange,
@@ -94,12 +95,12 @@ fun EditCategoryScreen(
                     interactionIconResId = actionType.interactionIconResId,
                     actionName = stringResource(actionType.actionName),
                     description = actionType.description,
-                ){
-                    when(actionType){
+                ) {
+                    when (actionType) {
                         EditCategoryActionType.COLOR_SETTING ->
                             ColorSettingButton(
                                 selectedColorString = selectedColorString,
-                                onColorSettingRowActionIconClick = onColorSettingRowActionIconClick
+                                onColorSettingRowActionIconClick = onColorSettingRowActionIconClick,
                             )
                         EditCategoryActionType.STOP ->
                             BbangZipSwitch(
@@ -132,11 +133,10 @@ fun EditCategoryScreen(
             )
         }
 
-
         CategoryColorPickerBottomSheet(
             isBottomSheetVisible = isColorPickerBottomSheetVisible,
             onDismissRequest = onColorPickerBottomSheetDismissRequest,
-            onColorItemClick = onColorItemClick
+            onColorItemClick = onColorItemClick,
         )
     }
 }
@@ -151,45 +151,49 @@ private fun EditCategoryHeader(
     Row(
         modifier
             .fillMaxWidth()
-            .height(IntrinsicSize.Max), verticalAlignment = Alignment.CenterVertically
+            .height(IntrinsicSize.Max),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .noRippleClickable(onClick = onBackButtonClick),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .noRippleClickable(onClick = onBackButtonClick),
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_left_24),
                 contentDescription = stringResource(R.string.edit_category_back_navigation_icon_description),
                 modifier = Modifier.padding(horizontal = 18.dp),
-                tint = BbangZipTheme.color.labelAssistive_C9C7C5
+                tint = BbangZipTheme.color.labelAssistive_C9C7C5,
             )
         }
 
         Text(
             text = stringResource(R.string.edit_category_screen_title),
-            modifier = Modifier
-                .padding(vertical = 18.dp)
-                .padding(start = 80.dp),
+            modifier =
+                Modifier
+                    .padding(vertical = 18.dp)
+                    .padding(start = 80.dp),
             style = BbangZipTheme.typography.title2Medium,
             color = BbangZipTheme.color.labelNormal_6B6560,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         Gap()
 
         Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .noRippleClickable(onClick = onConfirmButtonClick),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .noRippleClickable(onClick = onConfirmButtonClick),
+            contentAlignment = Alignment.Center,
         ) {
             Text(
                 text = stringResource(R.string.edit_category_confirm_button_label),
                 modifier = Modifier.padding(horizontal = 26.dp),
                 style = BbangZipTheme.typography.body1Medium,
-                color = if(isConfirmEnable) BbangZipTheme.color.labelNormal_6B6560 else BbangZipTheme.color.labelDisable_E4E2E0
+                color = if (isConfirmEnable) BbangZipTheme.color.labelNormal_6B6560 else BbangZipTheme.color.labelDisable_E4E2E0,
             )
         }
     }
@@ -197,7 +201,7 @@ private fun EditCategoryHeader(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun EditCategoryScreenPreview(){
+private fun EditCategoryScreenPreview() {
     var categoryName by remember { mutableStateOf("") }
     var isDoneEnable by remember { mutableStateOf(false) }
     var isColorPickerVisible by remember { mutableStateOf(false) }
@@ -215,13 +219,13 @@ private fun EditCategoryScreenPreview(){
             isConfirmEnable = isDoneEnable,
             isColorPickerBottomSheetVisible = isColorPickerVisible,
             isCategoryStopped = isStopped,
-            onColorSettingRowActionIconClick = {isColorPickerVisible = !isColorPickerVisible},
-            onColorPickerBottomSheetDismissRequest = {isColorPickerVisible = false},
+            onColorSettingRowActionIconClick = { isColorPickerVisible = !isColorPickerVisible },
+            onColorPickerBottomSheetDismissRequest = { isColorPickerVisible = false },
             onColorItemClick = {
                 isColorPickerVisible = false
                 selectedColorString = it
             },
-            onStopRowSwitchClick = {isStopped = !isStopped}
+            onStopRowSwitchClick = { isStopped = !isStopped },
         )
     }
 }

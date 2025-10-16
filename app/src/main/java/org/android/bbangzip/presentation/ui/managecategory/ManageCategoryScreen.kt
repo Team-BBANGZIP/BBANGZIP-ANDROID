@@ -65,7 +65,7 @@ fun ManageCategoryScreen(
     onTopBarLeadingIconClick: () -> Unit = {},
     onCategoryChipClick: () -> Unit = {},
     onCategoryDragEnd: (Int, Int) -> Unit = { _, _ -> },
-){
+) {
     val localDensity = LocalDensity.current
 
     val lazyListState = rememberLazyListState()
@@ -74,120 +74,122 @@ fun ManageCategoryScreen(
     val coroutineScope = rememberCoroutineScope()
     var autoScrollJob by remember { mutableStateOf<Job?>(null) }
     var columnHeight by remember { mutableIntStateOf(0) }
-    val scrollThreshold = remember{ with(localDensity) { AUTO_SCROLL_THRESHOLD.toPx() } }
+    val scrollThreshold = remember { with(localDensity) { AUTO_SCROLL_THRESHOLD.toPx() } }
 
     // 드래그앤 드랍 변수
     var draggingItem by remember { mutableStateOf<Category?>(null) }
     var draggingItemIndex by remember { mutableStateOf<Int?>(null) }
     var fakeOffset by remember { mutableStateOf(Offset.Zero) }
     var targetIndex by remember { mutableStateOf<Int?>(null) }
-    var itemBound by remember {mutableStateOf<Rect?>(null)}
+    var itemBound by remember { mutableStateOf<Rect?>(null) }
     var currentTouchPointY by remember { mutableStateOf(0f) }
     val itemSpacingPx = with(localDensity) { 20.dp.toPx() }
 
     Box(
-        modifier = modifier
-            .fillMaxSize()
-            .background(BbangZipTheme.color.staticWhite_FFFFFF)
-            .statusBarsPadding()
-    ){
-        LazyColumn(
-            modifier = Modifier
+        modifier =
+            modifier
                 .fillMaxSize()
-                .onGloballyPositioned { coordinates ->
-                    columnHeight = coordinates.size.height
-                }
-                .pointerInput(categories){
-                    awaitEachGesture {
-                        val down = awaitFirstDown(requireUnconsumed = false)
-                        val longPress = awaitLongPressOrCancellation(down.id)
+                .background(BbangZipTheme.color.staticWhite_FFFFFF)
+                .statusBarsPadding(),
+    ) {
+        LazyColumn(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .onGloballyPositioned { coordinates ->
+                        columnHeight = coordinates.size.height
+                    }
+                    .pointerInput(categories) {
+                        awaitEachGesture {
+                            val down = awaitFirstDown(requireUnconsumed = false)
+                            val longPress = awaitLongPressOrCancellation(down.id)
 
-                        if(longPress != null){
-                            val pressedLazyColumnItem =
-                                lazyListState.layoutInfo.visibleItemsInfo
-                                    .firstOrNull {
-                                        val itemTopY = it.offset
-                                        val itemBottomY = it.offset + it.size
-                                        down.position.y >= itemTopY && down.position.y <= itemBottomY
-                                    } ?: return@awaitEachGesture
+                            if (longPress != null) {
+                                val pressedLazyColumnItem =
+                                    lazyListState.layoutInfo.visibleItemsInfo
+                                        .firstOrNull {
+                                            val itemTopY = it.offset
+                                            val itemBottomY = it.offset + it.size
+                                            down.position.y >= itemTopY && down.position.y <= itemBottomY
+                                        } ?: return@awaitEachGesture
 
-                            val pressedLazyColumnIndex = pressedLazyColumnItem.index
-                            draggingItemIndex = pressedLazyColumnIndex - LIST_HEADER_COUNT
-                            val pressedItemOfCategories = categories.getOrNull(draggingItemIndex!!)
+                                val pressedLazyColumnIndex = pressedLazyColumnItem.index
+                                draggingItemIndex = pressedLazyColumnIndex - LIST_HEADER_COUNT
+                                val pressedItemOfCategories = categories.getOrNull(draggingItemIndex!!)
 
-                            fakeOffset = Offset(0f, pressedLazyColumnItem.offset.toFloat())
-                            draggingItem = pressedItemOfCategories
+                                fakeOffset = Offset(0f, pressedLazyColumnItem.offset.toFloat())
+                                draggingItem = pressedItemOfCategories
 
-                            try {
-                                drag(pointerId = longPress.id){ change ->
-                                    change.consume()
-                                    currentTouchPointY = change.position.y
-                                    fakeOffset +=
-                                        Offset(
-                                            x = change.position.x - change.previousPosition.x,
-                                            y = change.position.y - change.previousPosition.y,
-                                        )
+                                try {
+                                    drag(pointerId = longPress.id) { change ->
+                                        change.consume()
+                                        currentTouchPointY = change.position.y
+                                        fakeOffset +=
+                                            Offset(
+                                                x = change.position.x - change.previousPosition.x,
+                                                y = change.position.y - change.previousPosition.y,
+                                            )
 
-                                    targetIndex =
-                                        updateTargetIndex(
-                                            lazyListState = lazyListState,
-                                            touchPointY = change.position.y,
-                                            currentTargetIndex = targetIndex,
-                                        )
-                                    val scrollDirection =
-                                        when {
-                                            change.position.y < scrollThreshold -> AutoScrollDirection.UP
-                                            change.position.y > columnHeight - scrollThreshold -> AutoScrollDirection.DOWN
-                                            else -> AutoScrollDirection.NONE
-                                        }
-                                    if (scrollDirection != AutoScrollDirection.NONE) {
-                                        if (autoScrollJob?.isActive != true) {
-                                            autoScrollJob =
-                                                coroutineScope.launch {
-                                                    while (isActive) {
-                                                        val speed =
-                                                            calculateScrollSpeed(
-                                                                direction = scrollDirection,
-                                                                touchPointY = currentTouchPointY,
-                                                                columnHeight = columnHeight,
-                                                                scrollThreshold = scrollThreshold,
-                                                            )
+                                        targetIndex =
+                                            updateTargetIndex(
+                                                lazyListState = lazyListState,
+                                                touchPointY = change.position.y,
+                                                currentTargetIndex = targetIndex,
+                                            )
+                                        val scrollDirection =
+                                            when {
+                                                change.position.y < scrollThreshold -> AutoScrollDirection.UP
+                                                change.position.y > columnHeight - scrollThreshold -> AutoScrollDirection.DOWN
+                                                else -> AutoScrollDirection.NONE
+                                            }
+                                        if (scrollDirection != AutoScrollDirection.NONE) {
+                                            if (autoScrollJob?.isActive != true) {
+                                                autoScrollJob =
+                                                    coroutineScope.launch {
+                                                        while (isActive) {
+                                                            val speed =
+                                                                calculateScrollSpeed(
+                                                                    direction = scrollDirection,
+                                                                    touchPointY = currentTouchPointY,
+                                                                    columnHeight = columnHeight,
+                                                                    scrollThreshold = scrollThreshold,
+                                                                )
 
-                                                        targetIndex =
-                                                            updateTargetIndex(
-                                                                lazyListState = lazyListState,
-                                                                touchPointY = currentTouchPointY,
-                                                                currentTargetIndex = targetIndex,
-                                                            )
+                                                            targetIndex =
+                                                                updateTargetIndex(
+                                                                    lazyListState = lazyListState,
+                                                                    touchPointY = currentTouchPointY,
+                                                                    currentTargetIndex = targetIndex,
+                                                                )
 
-                                                        lazyListState.scrollBy(speed)
+                                                            lazyListState.scrollBy(speed)
 
-                                                        Timber.tag("autoScroll").d("targetIndex: $targetIndex")
+                                                            Timber.tag("autoScroll").d("targetIndex: $targetIndex")
 
-                                                        delay(AUTO_SCROLL_DELAY)
+                                                            delay(AUTO_SCROLL_DELAY)
+                                                        }
                                                     }
-                                                }
+                                            }
+                                        } else {
+                                            autoScrollJob?.cancel()
                                         }
-                                    } else {
-                                        autoScrollJob?.cancel()
                                     }
-                                }
-                            }finally {
-                                autoScrollJob?.cancel()
-                                targetIndex?.let {
-                                    if (draggingItemIndex != it && it in categories.indices) {
-                                        onCategoryDragEnd(
-                                            draggingItemIndex!!,
-                                            it,
-                                        )
+                                } finally {
+                                    autoScrollJob?.cancel()
+                                    targetIndex?.let {
+                                        if (draggingItemIndex != it && it in categories.indices) {
+                                            onCategoryDragEnd(
+                                                draggingItemIndex!!,
+                                                it,
+                                            )
+                                        }
                                     }
+                                    draggingItem = null
+                                    targetIndex = null
                                 }
-                                draggingItem = null
-                                targetIndex = null
                             }
                         }
-                    }
-                },
+                    },
             state = lazyListState,
         ) {
             item {
@@ -202,17 +204,18 @@ fun ManageCategoryScreen(
                 )
             }
 
-            item{ Gap(height = 22.dp) }
+            item { Gap(height = 22.dp) }
 
             items(count = categories.size, key = { index -> categories[index].id }) { index ->
                 val category = categories[index]
-                val animatedShiftTarget = calculateAnimatedShift(
-                    currentItemIndex = index,
-                    currentDraggingItemIndex = draggingItemIndex,
-                    targetIndex = targetIndex,
-                    itemBound = itemBound,
-                    itemSpacing = itemSpacingPx
-                )
+                val animatedShiftTarget =
+                    calculateAnimatedShift(
+                        currentItemIndex = index,
+                        currentDraggingItemIndex = draggingItemIndex,
+                        targetIndex = targetIndex,
+                        itemBound = itemBound,
+                        itemSpacing = itemSpacingPx,
+                    )
 
                 val animatedShiftY =
                     if (draggingItem == null) {
@@ -227,17 +230,18 @@ fun ManageCategoryScreen(
                 BbangZipCategoryChip(
                     categoryColor = CategoryColor.fromString(category.color).color,
                     categoryName = category.name,
-                    modifier = Modifier
-                        .padding(start = 20.dp)
-                        .padding(vertical = 10.dp)
-                        .graphicsLayer(
-                            translationY = animatedShiftY,
-                            alpha = if(category.id == draggingItem?.id) 0f else 1f
-                        )
-                        .onGloballyPositioned{ coordinates ->
-                            itemBound = coordinates.boundsInParent()
-                        },
-                    isTrailingIconVisible = false
+                    modifier =
+                        Modifier
+                            .padding(start = 20.dp)
+                            .padding(vertical = 10.dp)
+                            .graphicsLayer(
+                                translationY = animatedShiftY,
+                                alpha = if (category.id == draggingItem?.id) 0f else 1f,
+                            )
+                            .onGloballyPositioned { coordinates ->
+                                itemBound = coordinates.boundsInParent()
+                            },
+                    isTrailingIconVisible = false,
                 )
             }
         }
@@ -254,13 +258,13 @@ fun ManageCategoryScreen(
                         )
                         .background(
                             color = BbangZipTheme.color.componentStrong_F6F6F5,
-                            shape = RoundedCornerShape(32.dp)
+                            shape = RoundedCornerShape(32.dp),
                         ),
             ) {
                 BbangZipCategoryChip(
                     categoryColor = CategoryColor.fromString(item.color).color,
                     categoryName = item.name,
-                    isTrailingIconVisible = false
+                    isTrailingIconVisible = false,
                 )
             }
         }
@@ -322,40 +326,39 @@ private fun updateTargetIndex(
     return newTargetIndex
 }
 
-
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-fun ManageCategoryScreenPreview(
-){
-    val categories = remember {
-        mutableStateListOf(
-            Category(id = 1, name = "아침 루틴", color = "RED1", isStopped = false),
-            Category(id = 2, name = "SOPT 안드로이드 파트", color = "YELLOW1", isStopped = false),
-            Category(id = 3, name = "운동", color = "BLUE1", isStopped = true),
-            Category(id = 4, name = "취미 생활", color = "GREEN1", isStopped = false),
-            Category(id = 5, name = "사이드 프로젝트", color = "PURPLE1", isStopped = false),
-            Category(id = 9, name = "여행 계획", color = "RED2", isStopped = true),
-            Category(id = 10, name = "블로그 글쓰기", color = "YELLOW2", isStopped = false),
-            Category(id = 11, name = "가족", color = "BLUE2", isStopped = false),
-            Category(id = 12, name = "친구 약속", color = "GREEN2", isStopped = true),
-            Category(id = 13, name = "업무", color = "PURPLE2", isStopped = false),
-            Category(id = 17, name = "대학 과제", color = "RED1", isStopped = false),
-            Category(id = 18, name = "자격증 공부", color = "YELLOW1", isStopped = true),
-            Category(id = 19, name = "새로운 기술 학습", color = "BLUE1", isStopped = false),
-            Category(id = 21, name = "취준", color = "GREEN1", isStopped = false),
-            Category(id = 22, name = "개발", color = "PURPLE1", isStopped = false),
-            Category(id = 23, name = "휴식", color = "RED1", isStopped = false),
-            Category(id = 24, name = "액티비티", color = "YELLOW1", isStopped = false),
-            Category(id = 25, name = "공부", color = "GREEN1", isStopped = false),
-            Category(id = 26, name = "뉴스", color = "BLUE1", isStopped = false),
-        )
-    }
+fun ManageCategoryScreenPreview() {
+    val categories =
+        remember {
+            mutableStateListOf(
+                Category(id = 1, name = "아침 루틴", color = "RED1", isStopped = false),
+                Category(id = 2, name = "SOPT 안드로이드 파트", color = "YELLOW1", isStopped = false),
+                Category(id = 3, name = "운동", color = "BLUE1", isStopped = true),
+                Category(id = 4, name = "취미 생활", color = "GREEN1", isStopped = false),
+                Category(id = 5, name = "사이드 프로젝트", color = "PURPLE1", isStopped = false),
+                Category(id = 9, name = "여행 계획", color = "RED2", isStopped = true),
+                Category(id = 10, name = "블로그 글쓰기", color = "YELLOW2", isStopped = false),
+                Category(id = 11, name = "가족", color = "BLUE2", isStopped = false),
+                Category(id = 12, name = "친구 약속", color = "GREEN2", isStopped = true),
+                Category(id = 13, name = "업무", color = "PURPLE2", isStopped = false),
+                Category(id = 17, name = "대학 과제", color = "RED1", isStopped = false),
+                Category(id = 18, name = "자격증 공부", color = "YELLOW1", isStopped = true),
+                Category(id = 19, name = "새로운 기술 학습", color = "BLUE1", isStopped = false),
+                Category(id = 21, name = "취준", color = "GREEN1", isStopped = false),
+                Category(id = 22, name = "개발", color = "PURPLE1", isStopped = false),
+                Category(id = 23, name = "휴식", color = "RED1", isStopped = false),
+                Category(id = 24, name = "액티비티", color = "YELLOW1", isStopped = false),
+                Category(id = 25, name = "공부", color = "GREEN1", isStopped = false),
+                Category(id = 26, name = "뉴스", color = "BLUE1", isStopped = false),
+            )
+        }
     BBANGZIPANDROIDTheme {
         ManageCategoryScreen(
             categories = categories,
             onCategoryDragEnd = { from, to ->
                 categories.add(to, categories.removeAt(from))
-            }
+            },
         )
     }
 }

@@ -11,23 +11,31 @@ class AddCategoryContract {
         val selectedColorString: String = "RED1",
         val isDoneEnable: Boolean = false,
         val isColorPickerBottomSheetVisible: Boolean = false,
-    ): Parcelable, BaseContract.State
+    ) : Parcelable, BaseContract.State
 
-    sealed interface AddCategoryEvent: BaseContract.Event {
-        data object OnColorSettingRowActionIconClick: AddCategoryEvent
-        data object OnColorPickerBottomSheetDismissRequest: AddCategoryEvent
-        data object OnTopBarLeadingIconClick: AddCategoryEvent
-        data object OnTopBarTrailingIconClick: AddCategoryEvent
-        data class OnCategoryNameInputChange(val categoryNameInput: String): AddCategoryEvent
-        data class OnColorItemClick(val colorString: String): AddCategoryEvent
+    sealed interface AddCategoryEvent : BaseContract.Event {
+        data object OnColorSettingRowActionIconClick : AddCategoryEvent
+
+        data object OnColorPickerBottomSheetDismissRequest : AddCategoryEvent
+
+        data object OnTopBarLeadingIconClick : AddCategoryEvent
+
+        data object OnTopBarTrailingIconClick : AddCategoryEvent
+
+        data class OnCategoryNameInputChange(val categoryNameInput: String) : AddCategoryEvent
+
+        data class OnColorItemClick(val colorString: String) : AddCategoryEvent
     }
 
-    sealed interface AddCategoryReduce: BaseContract.Reduce {
-        data class UpdatedCategoryNameInput(val categoryNameInput: String): AddCategoryReduce
-        data class UpdatedSelectedColorString(val selectedColorString: String): AddCategoryReduce
-        data class UpdatedIsDoneEnable(val isDoneEnable: Boolean): AddCategoryReduce
-        data class UpdatedIsColorPickerBottomSheetVisible(val isColorPickerBottomSheetVisible: Boolean): AddCategoryReduce
+    sealed interface AddCategoryReduce : BaseContract.Reduce {
+        data class UpdatedCategoryNameInput(val categoryNameInput: String) : AddCategoryReduce
+
+        data class UpdatedSelectedColorString(val selectedColorString: String) : AddCategoryReduce
+
+        data class UpdatedIsDoneEnable(val isDoneEnable: Boolean) : AddCategoryReduce
+
+        data class UpdatedIsColorPickerBottomSheetVisible(val isColorPickerBottomSheetVisible: Boolean) : AddCategoryReduce
     }
 
-    sealed interface AddCategoryEffect: BaseContract.SideEffect
+    sealed interface AddCategoryEffect : BaseContract.SideEffect
 }

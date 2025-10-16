@@ -14,8 +14,7 @@ fun NavController.navigateToAddCategory(navOptions: NavOptions) {
     )
 }
 
-fun NavGraphBuilder.addCategoryNavGraph(
-) {
+fun NavGraphBuilder.addCategoryNavGraph() {
     composable<AddCategory> {
         AddCategoryRoute()
     }

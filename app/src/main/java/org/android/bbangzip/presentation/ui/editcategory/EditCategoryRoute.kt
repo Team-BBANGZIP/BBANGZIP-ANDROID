@@ -11,7 +11,7 @@ import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.Ed
 fun EditCategoryRoute(
     modifier: Modifier = Modifier,
     viewModel: EditCategoryViewModel = hiltViewModel(),
-){
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     EditCategoryScreen(
@@ -43,6 +43,6 @@ fun EditCategoryRoute(
         },
         onDeleteButtonClick = {
             viewModel.setEvent(EditCategoryEvent.OnDeleteButtonClick)
-        }
+        },
     )
 }

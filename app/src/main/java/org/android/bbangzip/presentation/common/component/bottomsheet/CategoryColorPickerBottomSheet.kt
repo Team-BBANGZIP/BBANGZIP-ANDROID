@@ -38,7 +38,7 @@ fun CategoryColorPickerBottomSheet(
     isBottomSheetVisible: Boolean,
     onDismissRequest: () -> Unit,
     onColorItemClick: (String) -> Unit,
-){
+) {
     BbangZipBottomSheetSlot(
         isBottomSheetVisible = isBottomSheetVisible,
         onDismissRequest = onDismissRequest,
@@ -59,13 +59,13 @@ fun CategoryColorPickerBottomSheet(
                 CategoryColor.entries.forEach {
                     ColorChip(
                         color = it.color,
-                        onClick = { onColorItemClick(it.name) }
+                        onClick = { onColorItemClick(it.name) },
                     )
                 }
             }
 
             Gap(height = 28.dp)
-        }
+        },
     )
 }
 
@@ -75,20 +75,21 @@ private fun ColorChip(
     color: Color,
     size: Dp = 48.dp,
     onClick: () -> Unit,
-){
+) {
     Box(
-        modifier = modifier
-            .size(size)
-            .background(color = color, shape = CircleShape)
-            .noRippleClickable(onClick = onClick),
+        modifier =
+            modifier
+                .size(size)
+                .background(color = color, shape = CircleShape)
+                .noRippleClickable(onClick = onClick),
     )
 }
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun CategoryColorPickerBottomSheetPreview(){
+private fun CategoryColorPickerBottomSheetPreview() {
     var isBottomSheetVisible by remember { mutableStateOf(false) }
-    var selectedColor by remember {mutableStateOf("")}
+    var selectedColor by remember { mutableStateOf("") }
     BBANGZIPANDROIDTheme {
         Column(
             modifier =
@@ -113,7 +114,7 @@ private fun CategoryColorPickerBottomSheetPreview(){
         CategoryColorPickerBottomSheet(
             isBottomSheetVisible = isBottomSheetVisible,
             onDismissRequest = { isBottomSheetVisible = false },
-            onColorItemClick = { selectedColor = it }
+            onColorItemClick = { selectedColor = it },
         )
     }
 }

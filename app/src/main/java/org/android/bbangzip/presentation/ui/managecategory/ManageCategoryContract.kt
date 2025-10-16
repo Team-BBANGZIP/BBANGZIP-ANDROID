@@ -29,20 +29,24 @@ class ManageCategoryContract {
                 Category(id = 24, name = "액티비티", color = "YELLOW1", isStopped = false),
                 Category(id = 25, name = "공부", color = "GREEN1", isStopped = false),
                 Category(id = 26, name = "뉴스", color = "BLUE1", isStopped = false),
-            )
-    ): Parcelable, BaseContract.State
+            ),
+    ) : Parcelable, BaseContract.State
 
-    sealed interface ManageCategoryEvent: BaseContract.Event {
-        data object Initialize: ManageCategoryEvent
-        data object OnCategoryChipClick: ManageCategoryEvent
-        data object OnTopBarTrailingIconClick: ManageCategoryEvent
-        data object OnTopBarLeadingIconClick: ManageCategoryEvent
-        data class OnCategoryChipDragEnd(val from: Int, val to: Int): ManageCategoryEvent
+    sealed interface ManageCategoryEvent : BaseContract.Event {
+        data object Initialize : ManageCategoryEvent
+
+        data object OnCategoryChipClick : ManageCategoryEvent
+
+        data object OnTopBarTrailingIconClick : ManageCategoryEvent
+
+        data object OnTopBarLeadingIconClick : ManageCategoryEvent
+
+        data class OnCategoryChipDragEnd(val from: Int, val to: Int) : ManageCategoryEvent
     }
 
-    sealed interface ManageCategoryReduce: BaseContract.Reduce{
-        data class UpdateCategories(val categories: List<Category>):ManageCategoryReduce
+    sealed interface ManageCategoryReduce : BaseContract.Reduce {
+        data class UpdateCategories(val categories: List<Category>) : ManageCategoryReduce
     }
 
-    sealed interface ManageCategorySideEffect: BaseContract.SideEffect
+    sealed interface ManageCategorySideEffect : BaseContract.SideEffect
 }

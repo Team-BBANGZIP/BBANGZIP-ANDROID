@@ -87,7 +87,7 @@ fun BbangZipCategoryChip(
             overflow = TextOverflow.Ellipsis,
         )
 
-        if(isTrailingIconVisible){
+        if (isTrailingIconVisible) {
             Icon(
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_plus_bold_24),
                 contentDescription = null,

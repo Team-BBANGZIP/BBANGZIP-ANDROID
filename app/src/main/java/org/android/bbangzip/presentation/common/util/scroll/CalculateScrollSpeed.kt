@@ -8,7 +8,7 @@ fun calculateScrollSpeed(
     columnHeight: Int,
     scrollThreshold: Float,
     minScrollAmount: Float = 5f,
-    maxScrollAmount: Float = 30f
+    maxScrollAmount: Float = 30f,
 ): Float {
     val intensity =
         when (direction) {

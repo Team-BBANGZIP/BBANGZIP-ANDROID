@@ -22,15 +22,16 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
 @Composable
 fun ColorSettingButton(
     selectedColorString: String,
-    onColorSettingRowActionIconClick: () -> Unit
+    onColorSettingRowActionIconClick: () -> Unit,
 ) {
     Row(
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
-            modifier = Modifier
-                .size(24.dp)
-                .background(color = CategoryColor.fromString(selectedColorString).color, shape = CircleShape)
+            modifier =
+                Modifier
+                    .size(24.dp)
+                    .background(color = CategoryColor.fromString(selectedColorString).color, shape = CircleShape),
         )
 
         Gap(width = 6.dp)

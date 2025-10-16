@@ -13,8 +13,7 @@ fun NavController.navigateToManageCategory(navOptions: NavOptions) {
     )
 }
 
-fun NavGraphBuilder.manageCategoryNavGraph(
-) {
+fun NavGraphBuilder.manageCategoryNavGraph() {
     composable<ManageCategory> {
         ManageCategoryRoute()
     }

@@ -54,27 +54,28 @@ fun AddCategoryScreen(
     onColorSettingRowActionIconClick: () -> Unit = {},
     onColorPickerBottomSheetDismissRequest: () -> Unit = {},
     onColorItemClick: (String) -> Unit = {},
-){
+) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BbangZipTheme.color.staticWhite_FFFFFF)
-            .statusBarsPadding(),
-    ){
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(BbangZipTheme.color.staticWhite_FFFFFF)
+                .statusBarsPadding(),
+    ) {
         AddCategoryHeader(
             isDoneEnable = isDoneEnable,
             onBackButtonClick = onTopBarLeadingIconClick,
-            onDoneButtonClick = onTopBarTrailingIconClick
+            onDoneButtonClick = onTopBarTrailingIconClick,
         )
 
         Gap(height = 32.dp)
 
         Column(
             modifier = Modifier.padding(horizontal = 20.dp),
-        ){
+        ) {
             BbangZipUnderLinedTextField(
                 value = categoryName,
                 onValueChange = onCategoryNameChange,
@@ -89,12 +90,12 @@ fun AddCategoryScreen(
                 InteractionRow(
                     interactionIconResId = actionType.interactionIconResId,
                     actionName = stringResource(actionType.actionName),
-                ){
-                    when(actionType){
+                ) {
+                    when (actionType) {
                         AddCategoryActionType.COLOR_SETTING ->
                             ColorSettingButton(
                                 selectedColorString = selectedColorString,
-                                onColorSettingRowActionIconClick = onColorSettingRowActionIconClick
+                                onColorSettingRowActionIconClick = onColorSettingRowActionIconClick,
                             )
                     }
                 }
@@ -104,7 +105,7 @@ fun AddCategoryScreen(
         CategoryColorPickerBottomSheet(
             isBottomSheetVisible = isColorPickerBottomSheetVisible,
             onDismissRequest = onColorPickerBottomSheetDismissRequest,
-            onColorItemClick = onColorItemClick
+            onColorItemClick = onColorItemClick,
         )
     }
 }
@@ -117,7 +118,7 @@ private fun ColorSettingRow(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Icon(
             imageVector = ImageVector.vectorResource(R.drawable.ic_palette_default_24),
@@ -131,15 +132,16 @@ private fun ColorSettingRow(
             text = stringResource(R.string.add_category_color_setting_row_label),
             modifier = Modifier.padding(vertical = 10.dp),
             color = BbangZipTheme.color.labelAlternative_A29D96,
-            style = BbangZipTheme.typography.body2Medium
+            style = BbangZipTheme.typography.body2Medium,
         )
 
         Gap()
 
         Box(
-            modifier = Modifier
-                .size(24.dp)
-                .background(color = CategoryColor.fromString(selectedColorString).color, shape = CircleShape)
+            modifier =
+                Modifier
+                    .size(24.dp)
+                    .background(color = CategoryColor.fromString(selectedColorString).color, shape = CircleShape),
         )
 
         Gap(width = 6.dp)
@@ -163,45 +165,49 @@ private fun AddCategoryHeader(
     Row(
         modifier
             .fillMaxWidth()
-            .height(IntrinsicSize.Max), verticalAlignment = Alignment.CenterVertically
+            .height(IntrinsicSize.Max),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .noRippleClickable(onClick = onBackButtonClick),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .noRippleClickable(onClick = onBackButtonClick),
+            contentAlignment = Alignment.Center,
         ) {
             Icon(
                 imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_left_24),
                 contentDescription = stringResource(R.string.add_category_back_navigation_icon_description),
                 modifier = Modifier.padding(horizontal = 18.dp),
-                tint = BbangZipTheme.color.labelAssistive_C9C7C5
+                tint = BbangZipTheme.color.labelAssistive_C9C7C5,
             )
         }
 
         Text(
             text = stringResource(R.string.add_category_screen_title),
-            modifier = Modifier
-                .padding(vertical = 18.dp)
-                .padding(start = 80.dp),
+            modifier =
+                Modifier
+                    .padding(vertical = 18.dp)
+                    .padding(start = 80.dp),
             style = BbangZipTheme.typography.title2Medium,
             color = BbangZipTheme.color.labelNormal_6B6560,
-            textAlign = TextAlign.Center
+            textAlign = TextAlign.Center,
         )
 
         Gap()
 
         Box(
-            modifier = Modifier
-                .fillMaxHeight()
-                .noRippleClickable(onClick = onDoneButtonClick),
-            contentAlignment = Alignment.Center
+            modifier =
+                Modifier
+                    .fillMaxHeight()
+                    .noRippleClickable(onClick = onDoneButtonClick),
+            contentAlignment = Alignment.Center,
         ) {
             Text(
                 text = stringResource(R.string.add_category_done_button_label),
                 modifier = Modifier.padding(horizontal = 26.dp),
                 style = BbangZipTheme.typography.body1Medium,
-                color = if(isDoneEnable) BbangZipTheme.color.labelNormal_6B6560 else BbangZipTheme.color.labelDisable_E4E2E0
+                color = if (isDoneEnable) BbangZipTheme.color.labelNormal_6B6560 else BbangZipTheme.color.labelDisable_E4E2E0,
             )
         }
     }
@@ -209,7 +215,7 @@ private fun AddCategoryHeader(
 
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
-private fun AddCategoryScreenPreview(){
+private fun AddCategoryScreenPreview() {
     var categoryName by remember { mutableStateOf("") }
     var isDoneEnable by remember { mutableStateOf(false) }
     var isColorPickerVisible by remember { mutableStateOf(false) }
@@ -225,12 +231,12 @@ private fun AddCategoryScreenPreview(){
             },
             isDoneEnable = isDoneEnable,
             isColorPickerBottomSheetVisible = isColorPickerVisible,
-            onColorSettingRowActionIconClick = {isColorPickerVisible = !isColorPickerVisible},
-            onColorPickerBottomSheetDismissRequest = {isColorPickerVisible = false},
+            onColorSettingRowActionIconClick = { isColorPickerVisible = !isColorPickerVisible },
+            onColorPickerBottomSheetDismissRequest = { isColorPickerVisible = false },
             onColorItemClick = {
                 isColorPickerVisible = false
                 selectedColorString = it
-            }
+            },
         )
     }
 }

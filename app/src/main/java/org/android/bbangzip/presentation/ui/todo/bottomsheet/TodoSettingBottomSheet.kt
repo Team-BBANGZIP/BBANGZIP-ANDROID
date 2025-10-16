@@ -194,7 +194,6 @@ private fun InteractionButtons(
     }
 }
 
-
 @Preview
 @Composable
 fun TodoSettingBottomSheetPreview() {

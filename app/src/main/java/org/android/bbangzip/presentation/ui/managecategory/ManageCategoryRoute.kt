@@ -11,14 +11,15 @@ import org.android.bbangzip.presentation.ui.managecategory.ManageCategoryContrac
 fun ManageCategoryRoute(
     modifier: Modifier = Modifier,
     viewModel: ManageCategoryViewModel = hiltViewModel(),
-){
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     ManageCategoryScreen(
         categories = uiState.categories,
         modifier = modifier,
         onTopBarTrailingIconClick = {
-            viewModel.setEvent(ManageCategoryEvent.OnTopBarTrailingIconClick) },
+            viewModel.setEvent(ManageCategoryEvent.OnTopBarTrailingIconClick)
+        },
         onTopBarLeadingIconClick = {
             viewModel.setEvent(ManageCategoryEvent.OnTopBarLeadingIconClick)
         },
