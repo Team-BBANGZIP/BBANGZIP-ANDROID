@@ -8,27 +8,26 @@ import org.android.bbangzip.domain.repository.TimerRepository
 import javax.inject.Inject
 
 class InitializeTimerScreenUseCase
-@Inject
-constructor(
-    private val timerRepository: TimerRepository,
-) {
-    suspend operator fun invoke(): Result<TimerInitialData> =
-        coroutineScope {
-            runCatching {
-                val breadCountDeferred = async { timerRepository.fetchTodayBreadCount().getOrThrow() }
-                val breadListDeferred = async { timerRepository.fetchBreadList().getOrThrow() }
+    @Inject
+    constructor(
+        private val timerRepository: TimerRepository,
+    ) {
+        suspend operator fun invoke(): Result<TimerInitialData> =
+            coroutineScope {
+                runCatching {
+                    val breadCountDeferred = async { timerRepository.fetchTodayBreadCount().getOrThrow() }
+                    val breadListDeferred = async { timerRepository.fetchBreadList().getOrThrow() }
 
-                val breadCount = breadCountDeferred.await()
-                val breadList = breadListDeferred.await()
+                    val breadCount = breadCountDeferred.await()
+                    val breadList = breadListDeferred.await()
 
-
-                TimerInitialData(
-                    todayBreadCount = breadCount,
-                    breadList = breadList,
-                )
+                    TimerInitialData(
+                        todayBreadCount = breadCount,
+                        breadList = breadList,
+                    )
+                }
             }
-        }
-}
+    }
 
 data class TimerInitialData(
     val todayBreadCount: BreadCount,

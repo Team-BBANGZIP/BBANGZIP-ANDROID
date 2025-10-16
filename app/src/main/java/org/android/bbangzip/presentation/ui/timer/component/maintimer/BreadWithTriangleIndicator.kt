@@ -2,7 +2,6 @@ package org.android.bbangzip.presentation.ui.timer.component.maintimer
 
 import android.R.attr.contentDescription
 import android.R.attr.y
-import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.RepeatMode
@@ -14,8 +13,6 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -57,30 +54,28 @@ fun BreadWithTriangleIndicator(
         label = "triangle offset",
     )
 
-    Box (
+    Box(
         modifier = modifier,
     ) {
-            AnimatedVisibility(
-                visible = showTriangle,
-                enter = fadeIn(animationSpec = tween(300)),
-                exit = fadeOut(animationSpec = tween(300)),
-            ) {
-                Icon(
-                    modifier = Modifier.width(breadSize.width).align(Alignment.TopCenter).offset(y = (triangleOffset).dp),
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ic_triangle_down_24),
-                    contentDescription = "moving triangle",
-                    tint = BbangZipTheme.color.primaryNormal_897869,
-                )
-            }
-
-
+        AnimatedVisibility(
+            visible = showTriangle,
+            enter = fadeIn(animationSpec = tween(300)),
+            exit = fadeOut(animationSpec = tween(300)),
+        ) {
+            Icon(
+                modifier = Modifier.width(breadSize.width).align(Alignment.TopCenter).offset(y = (triangleOffset).dp),
+                imageVector = ImageVector.vectorResource(id = R.drawable.ic_triangle_down_24),
+                contentDescription = "moving triangle",
+                tint = BbangZipTheme.color.primaryNormal_897869,
+            )
+        }
 
         Image(
             modifier =
                 Modifier
                     .padding(top = 15.dp)
                     .size(breadSize)
-                    .noRippleClickable(enabled = isClickable,onClick = onClick) ,
+                    .noRippleClickable(enabled = isClickable, onClick = onClick),
             painter = painterResource(breadImageRes),
             contentDescription = "Timer Icon",
         )

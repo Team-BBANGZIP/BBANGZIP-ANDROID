@@ -3,7 +3,7 @@ package org.android.bbangzip.presentation.ui.timer.contract.type
 import android.os.Parcelable
 import androidx.compose.runtime.Immutable
 import kotlinx.parcelize.Parcelize
-import org.android.bbangzip.presentation.ui.timer.contract.model.TimerConstants
+import org.android.bbangzip.presentation.ui.timer.util.TimerConstants
 
 @Immutable
 @Parcelize

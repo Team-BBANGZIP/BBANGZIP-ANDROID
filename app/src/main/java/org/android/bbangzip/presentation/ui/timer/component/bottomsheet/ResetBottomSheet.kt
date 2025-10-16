@@ -10,7 +10,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
-import org.android.bbangzip.presentation.ui.timer.contract.model.TimerConstants
+import org.android.bbangzip.presentation.ui.timer.util.TimerConstants
 import java.util.concurrent.TimeUnit
 
 private data class ResetBottomSheetInfo(

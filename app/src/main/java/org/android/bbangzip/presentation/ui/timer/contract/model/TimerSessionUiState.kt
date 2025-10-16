@@ -4,8 +4,6 @@ import android.os.Parcelable
 import androidx.annotation.StringRes
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.graphics.Color
-import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.R
 import org.android.bbangzip.ui.theme.defaultBbangZipColor

@@ -84,7 +84,6 @@ fun TimerScreen(
 
         Gap(50.dp)
 
-
         TimerDisplay(
             sessionState = timerState.timerSessionState,
             progress = timerState.progress,

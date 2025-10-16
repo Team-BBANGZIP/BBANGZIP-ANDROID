@@ -1,9 +1,17 @@
 package org.android.bbangzip.presentation.ui.timer
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.systemBars
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
@@ -14,6 +22,7 @@ import org.android.bbangzip.presentation.ui.shared.SharedContract
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 import org.android.bbangzip.presentation.ui.timer.contract.TimerContract
 import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionUiState
+import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @Composable
 fun TimerRoute(
@@ -81,7 +90,17 @@ fun TimerRoute(
         }
 
         false -> {
-            CircularProgressIndicator()
+            Column(
+                modifier =
+                    modifier
+                        .fillMaxSize()
+                        .background(BbangZipTheme.brush.backgroundAccentGradient)
+                        .windowInsetsPadding(WindowInsets.systemBars),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
+            ) {
+                CircularProgressIndicator()
+            }
         }
     }
 }

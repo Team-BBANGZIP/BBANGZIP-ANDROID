@@ -83,9 +83,10 @@ fun TimerDisplay(
 @Composable
 private fun TimerDisplayPreview() {
     BbangZipPreviewWrapper {
-        val previewState = TimerContract.TimerState(
-            timerSessionState = TimerSessionUiState.Ready,
-        )
+        val previewState =
+            TimerContract.TimerState(
+                timerSessionState = TimerSessionUiState.Ready,
+            )
 
         TimerDisplay(
             sessionState = previewState.timerSessionState,

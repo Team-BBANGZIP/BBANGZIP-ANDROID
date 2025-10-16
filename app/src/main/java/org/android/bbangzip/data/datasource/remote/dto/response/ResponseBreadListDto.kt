@@ -31,7 +31,7 @@ data class BreadInfoDto(
     @SerialName("requiredCount")
     val requiredCount: Int,
     @SerialName("imageUrl")
-    val imageUrl: String
+    val imageUrl: String,
 ) {
     fun toBreadInfo() =
         BreadInfo(

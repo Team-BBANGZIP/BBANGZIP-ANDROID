@@ -17,7 +17,7 @@ import org.android.bbangzip.presentation.ui.timer.contract.type.TimeOption
 import org.android.bbangzip.presentation.ui.timer.util.TimerConstants
 
 class TimerContract {
-    //TODO 추후에 Room에 breadList 저장해놓기 SB
+    // TODO 추후에 Room에 breadList 저장해놓기 SB
     @Immutable
     @Parcelize
     data class TimerState(
@@ -28,7 +28,7 @@ class TimerContract {
         val breadList: ImmutableList<BreadInfoUiState> = emptyList<BreadInfoUiState>().toImmutableList(),
         val totalBreadCount: Int = 0,
         val todayBreadCount: Int = 0,
-        ) : BaseContract.State, Parcelable {
+    ) : BaseContract.State, Parcelable {
         @IgnoredOnParcel
         val progress: Float by lazy {
             val totalTime = timerOption.totalTime
@@ -97,7 +97,7 @@ class TimerContract {
     }
 
     sealed interface TimerReduce : BaseContract.Reduce {
-        data class UpdateTimerState(val timerState : TimerState) : TimerReduce
+        data class UpdateTimerState(val timerState: TimerState) : TimerReduce
 
         data class UpdateRemainingTime(val remainingTime: Long) : TimerReduce
 
