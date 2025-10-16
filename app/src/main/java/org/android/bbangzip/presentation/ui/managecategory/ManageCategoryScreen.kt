@@ -11,7 +11,6 @@ import androidx.compose.foundation.gestures.drag
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -65,7 +64,7 @@ fun ManageCategoryScreen(
     onTopBarTrailingIconClick: () -> Unit = {},
     onTopBarLeadingIconClick: () -> Unit = {},
     onCategoryChipClick: () -> Unit = {},
-    onCategoryMove: (Int, Int) -> Unit = { _, _ -> },
+    onCategoryDragEnd: (Int, Int) -> Unit = { _, _ -> },
 ){
     val localDensity = LocalDensity.current
 
@@ -91,7 +90,6 @@ fun ManageCategoryScreen(
             .fillMaxSize()
             .background(BbangZipTheme.color.staticWhite_FFFFFF)
             .statusBarsPadding()
-            .navigationBarsPadding()
     ){
         LazyColumn(
             modifier = Modifier
@@ -178,7 +176,7 @@ fun ManageCategoryScreen(
                                 autoScrollJob?.cancel()
                                 targetIndex?.let {
                                     if (draggingItemIndex != it && it in categories.indices) {
-                                        onCategoryMove(
+                                        onCategoryDragEnd(
                                             draggingItemIndex!!,
                                             it,
                                         )
@@ -355,7 +353,7 @@ fun ManageCategoryScreenPreview(
     BBANGZIPANDROIDTheme {
         ManageCategoryScreen(
             categories = categories,
-            onCategoryMove = { from, to ->
+            onCategoryDragEnd = { from, to ->
                 categories.add(to, categories.removeAt(from))
             }
         )

@@ -6,6 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import org.android.bbangzip.presentation.ui.friend.navigation.friendNavGraph
 import org.android.bbangzip.presentation.ui.main.MainNavigator
+import org.android.bbangzip.presentation.ui.managecategory.navigation.manageCategoryNavGraph
 import org.android.bbangzip.presentation.ui.my.navigation.myNavGraph
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 import org.android.bbangzip.presentation.ui.timer.navigation.timerNavGraph
@@ -40,5 +41,7 @@ fun MainNavHost(
         myNavGraph()
 
         friendNavGraph()
+
+        manageCategoryNavGraph()
     }
 }
