@@ -106,5 +106,9 @@ class TodoContract {
         data class UpdateIsCommitmentBottomSheetVisible(val isVisible: Boolean) : TodoReduce
     }
 
-    sealed interface TodoSideEffect : BaseContract.SideEffect
+    sealed interface TodoSideEffect : BaseContract.SideEffect{
+        data object NavigateToManageCategory : TodoSideEffect
+
+        data object NavigateToAddCategory : TodoSideEffect
+    }
 }

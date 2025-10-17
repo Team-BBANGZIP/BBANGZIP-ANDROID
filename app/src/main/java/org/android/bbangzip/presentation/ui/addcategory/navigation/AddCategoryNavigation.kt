@@ -7,10 +7,9 @@ import androidx.navigation.compose.composable
 import org.android.bbangzip.presentation.ui.addcategory.AddCategoryRoute
 import org.android.bbangzip.presentation.ui.managecategory.navigation.ManageCategory
 
-fun NavController.navigateToAddCategory(navOptions: NavOptions) {
+fun NavController.navigateToAddCategory() {
     navigate(
         route = ManageCategory,
-        navOptions = navOptions,
     )
 }
 

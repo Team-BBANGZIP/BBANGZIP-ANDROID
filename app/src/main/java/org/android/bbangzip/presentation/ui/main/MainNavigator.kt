@@ -12,7 +12,10 @@ import androidx.navigation.navOptions
 import org.android.bbangzip.presentation.common.model.BottomNavigationRoute
 import org.android.bbangzip.presentation.common.model.BottomNavigationRoute.Companion.routeName
 import org.android.bbangzip.presentation.common.model.Route
+import org.android.bbangzip.presentation.ui.addcategory.navigation.navigateToAddCategory
+import org.android.bbangzip.presentation.ui.editcategory.navigation.navigateToEditCategory
 import org.android.bbangzip.presentation.ui.friend.navigation.navigateToFriend
+import org.android.bbangzip.presentation.ui.managecategory.navigation.navigateToManageCategory
 import org.android.bbangzip.presentation.ui.my.navigation.navigateToMy
 import org.android.bbangzip.presentation.ui.timer.navigation.navigateTimerTodo
 import org.android.bbangzip.presentation.ui.timer.navigation.navigateToTimer
@@ -88,6 +91,14 @@ class MainNavigator(
     fun navigateToTimerTodo(timeOptionIndex: Int) {
         navHostController.navigateTimerTodo(timeOptionIndex = timeOptionIndex)
     }
+
+    fun navigateToManageCategory() = navHostController.navigateToManageCategory()
+
+    fun navigateToEditCategory(navOptions: NavOptions){
+        navHostController.navigateToEditCategory(navOptions)
+    }
+
+    fun navigateToAddCategory() = navHostController.navigateToAddCategory()
 
     fun popBackStack() {
         navHostController.popBackStack()

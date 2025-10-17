@@ -38,6 +38,8 @@ fun MainNavHost(
 
         todoNavGraph(
             padding = padding,
+            navigateToManageCategory = navigator::navigateToManageCategory,
+            navigateToAddCategory = navigator::navigateToAddCategory,
         )
 
         myNavGraph()
