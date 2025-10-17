@@ -9,7 +9,7 @@ import org.android.bbangzip.presentation.ui.managecategory.navigation.ManageCate
 
 fun NavController.navigateToAddCategory() {
     navigate(
-        route = ManageCategory,
+        route = AddCategory,
     )
 }
 
