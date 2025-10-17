@@ -44,5 +44,7 @@ class EditCategoryContract {
         data class UpdateIsCategoryStopped(val isCategoryStopped: Boolean) : EditCategoryReduce
     }
 
-    sealed interface EditCategorySideEffect : BaseContract.SideEffect
+    sealed interface EditCategorySideEffect : BaseContract.SideEffect{
+        data object PopBackStack : EditCategorySideEffect
+    }
 }

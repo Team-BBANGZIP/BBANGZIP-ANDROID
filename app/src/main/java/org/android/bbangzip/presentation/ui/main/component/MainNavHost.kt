@@ -56,6 +56,8 @@ fun MainNavHost(
             popBackStack = navigator::popBackStack
         )
 
-        editCategoryNavGraph()
+        editCategoryNavGraph(
+            popBackStack = navigator::popBackStack
+        )
     }
 }

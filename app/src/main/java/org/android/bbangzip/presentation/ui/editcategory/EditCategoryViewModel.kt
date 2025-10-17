@@ -16,7 +16,7 @@ class EditCategoryViewModel
         override fun handleEvent(event: EditCategoryEvent) {
             when (event) {
                 EditCategoryEvent.OnBackIconClick -> {
-                    // 뒤로 가기
+                    setSideEffect(EditCategorySideEffect.PopBackStack)
                 }
                 is EditCategoryEvent.OnCategoryNameInputChange -> {
                     updateState(EditCategoryReduce.UpdateCategoryNameInput(event.categoryNameInput))
@@ -33,6 +33,7 @@ class EditCategoryViewModel
                     updateState(EditCategoryReduce.UpdateIsColorPickerBottomSheetVisible(true))
                 }
                 EditCategoryEvent.OnConfirmButtonClick -> {
+                    setSideEffect(EditCategorySideEffect.PopBackStack)
                     // 수정 api
                 }
                 EditCategoryEvent.OnDeleteButtonClick -> {

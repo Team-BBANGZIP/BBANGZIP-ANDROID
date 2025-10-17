@@ -12,8 +12,12 @@ fun NavController.navigateToEditCategory() {
     )
 }
 
-fun NavGraphBuilder.editCategoryNavGraph() {
+fun NavGraphBuilder.editCategoryNavGraph(
+    popBackStack: () -> Unit,
+) {
     composable<EditCategory> {
-        EditCategoryRoute()
+        EditCategoryRoute(
+            popBackStack = popBackStack,
+        )
     }
 }
