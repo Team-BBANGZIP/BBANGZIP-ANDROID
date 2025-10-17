@@ -2,56 +2,56 @@ package org.android.bbangzip.presentation.ui.timer.contract
 
 import android.os.Parcelable
 import androidx.annotation.DrawableRes
+import androidx.compose.runtime.Immutable
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.base.BaseContract
-import org.android.bbangzip.presentation.common.util.constant.TimerConstants
 import org.android.bbangzip.presentation.common.util.extension.formatTime
-import org.android.bbangzip.presentation.ui.timer.contract.model.BreadInfo
-import org.android.bbangzip.presentation.ui.timer.contract.model.TimerStatus
+import org.android.bbangzip.presentation.ui.timer.contract.model.BreadInfoUiState
+import org.android.bbangzip.presentation.ui.timer.contract.model.TimerBottomSheetVisibleState
+import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionUiState
+import org.android.bbangzip.presentation.ui.timer.contract.type.TimeOption
+import org.android.bbangzip.presentation.ui.timer.util.TimerConstants
 
 class TimerContract {
+    // TODO 추후에 Room에 breadList 저장해놓기 SB
+    @Immutable
     @Parcelize
     data class TimerState(
         val remainingTime: Long = TimerConstants.THIRTY_MINUTES,
-        val totalTime: Long = TimerConstants.THIRTY_MINUTES,
-        val pausedTime: Long = 0L,
-        val timerStatus: TimerStatus = TimerStatus.Idle,
-        val breadLevel: Int = 1,
-        val todayBreadCount: Int = 6,
-        val selectedTimeOptionIndex: Int = 0,
-        val breadList: List<BreadInfo> =
-            listOf(
-                BreadInfo(1, "소금빵", false, 0),
-                BreadInfo(2, "식빵", false, 5),
-                BreadInfo(3, "바게트", true, 10),
-                BreadInfo(4, "크루아상", true, 15),
-                BreadInfo(5, "모닝빵", true, 20),
-                BreadInfo(6, "바게트", true, 10),
-                BreadInfo(7, "크루아상", true, 15),
-                BreadInfo(8, "모닝빵", true, 20),
-                BreadInfo(9, "모닝빵", true, 20),
-            ),
-        val isBreadSelectionSheetVisible: Boolean = false,
-        val isRestartSheetVisible: Boolean = false,
-        val isResetSheetVisible: Boolean = false,
-        val isCompleteSheetVisible: Boolean = false,
-        // Lifecycle State
-        val isScreenOn: Boolean = true,
-        val isAppActive: Boolean = true,
-        val backgroundStartTime: Long = 0L,
+        val timerOption: TimeOption = TimeOption.THIRTY,
+        val timerSessionState: TimerSessionUiState = TimerSessionUiState.Ready,
+        val bottomSheetState: TimerBottomSheetVisibleState = TimerBottomSheetVisibleState(),
+        val breadList: ImmutableList<BreadInfoUiState> = emptyList<BreadInfoUiState>().toImmutableList(),
+        val totalBreadCount: Int = 0,
+        val todayBreadCount: Int = 0,
     ) : BaseContract.State, Parcelable {
-        val formattedTime: String get() = remainingTime.formatTime()
-        val progress: Float get() = ((totalTime - remainingTime).toFloat() / totalTime.toFloat()) * 100f
+        @IgnoredOnParcel
+        val progress: Float by lazy {
+            val totalTime = timerOption.totalTime
+            if (totalTime > 0 && totalTime - remainingTime > 0) {
+                ((totalTime - remainingTime).toFloat() / totalTime.toFloat())
+            } else {
+                0f
+            }
+        }
+
+        @IgnoredOnParcel
+        @get:DrawableRes
         val breadImg: Int
-            @DrawableRes get() =
-                when (breadLevel) {
-                    1 -> R.drawable.img_baking_bread_level1
-                    2 -> R.drawable.img_baking_bread_level2
-                    3 -> R.drawable.img_baking_bread_level3
-                    4 -> R.drawable.img_baking_bread_level4
-                    else -> R.drawable.img_salt_bread
+            get() =
+                when {
+                    progress >= 0.75f -> R.drawable.img_baking_bread_level4
+                    progress >= 0.5f -> R.drawable.img_baking_bread_level3
+                    progress >= 0.25f -> R.drawable.img_baking_bread_level2
+                    else -> R.drawable.img_baking_bread_level1
                 }
+
+        @IgnoredOnParcel
+        val formattedTime: String get() = remainingTime.formatTime()
 
         override fun toParcelable(): Parcelable = this
     }
@@ -63,106 +63,51 @@ class TimerContract {
 
         data object OnStopBtnClick : TimerEvent
 
+        // Restart
         data object OnRestartBtnClick : TimerEvent
 
         data object OnRestartSheetDismissBtnClick : TimerEvent
 
         data object OnRestartSheetApproveBtnClick : TimerEvent
 
+        // Reset
         data object OnResetBtnClick : TimerEvent
 
         data object OnResetSheetDismissBtnClick : TimerEvent
 
         data object OnResetSheetApproveBtnClick : TimerEvent
 
+        // BreadSelection
         data object OnBreadIconClick : TimerEvent
+
+        data object OnBreadSelectionSheetClick : TimerEvent
 
         data object OnBreadSelectionSheetDismissRequest : TimerEvent
 
-        data object OnTimerCompleted : TimerEvent
-
+        // complete
         data object OnCompleteSheetRestartBtnClick : TimerEvent
 
         data object OnCompleteSheetCheckBtnClick : TimerEvent
 
         data object OnCompleteSheetDismissRequest : TimerEvent
 
-        data object OnTimerTick : TimerEvent
-
         data class OnTimeOptionToggleClick(
             val selectedTimeOptionIndex: Int,
         ) : TimerEvent
-
-        data object OnBreadSelectionSheetClick : TimerEvent
-
-        // Lifecycle events
-        data object OnScreenTimeOut : TimerEvent
-
-        data object OnLockButtonPressed : TimerEvent
-
-        data object OnScreenTurnedOn : TimerEvent
-
-        data object OnAppBackground : TimerEvent
-
-        data class OnAppForeground(val exitDuration: Long) : TimerEvent
     }
 
     sealed interface TimerReduce : BaseContract.Reduce {
-        data class UpdateTimerStatus(
-            val timerStatus: TimerStatus,
-        ) : TimerReduce
+        data class UpdateTimerState(val timerState: TimerState) : TimerReduce
 
-        data class UpdateRemainingTime(
-            val remainingTime: Long,
-        ) : TimerReduce
+        data class UpdateRemainingTime(val remainingTime: Long) : TimerReduce
 
-        data class UpdateBreadLevel(
-            val breadLevel: Int,
-        ) : TimerReduce
+        data class UpdateTimerSessionState(val sessionState: TimerSessionUiState) : TimerReduce
 
-        data class UpdateTodayBreadCount(
-            val todayBreadCount: Int,
-        ) : TimerReduce
+        data class UpdateBottomSheetState(val bottomSheetState: TimerBottomSheetVisibleState) : TimerReduce
 
-        data class UpdateSelectedTimeOptionIndex(
-            val selectedTimeOptionIndex: Int,
-        ) : TimerReduce
+        data class UpdateTimeOption(val option: TimeOption) : TimerReduce
 
-        data class UpdateBreadSelectionSheetState(
-            val isBreadSelectionSheetVisible: Boolean,
-        ) : TimerReduce
-
-        data class UpdateRestartSheetState(
-            val isRestartSheetVisible: Boolean,
-        ) : TimerReduce
-
-        data class UpdateResetSheetState(
-            val isResetSheetVisible: Boolean,
-        ) : TimerReduce
-
-        data class UpdateCompleteSheetState(
-            val isCompleteSheetVisible: Boolean,
-        ) : TimerReduce
-
-        data class UpdateTotalTime(
-            val totalTime: Long,
-        ) : TimerReduce
-
-        data class UpdateBreadList(
-            val breadList: List<BreadInfo>,
-        ) : TimerReduce
-
-        data class UpdateIsScreenOn(
-            val isScreenOn: Boolean,
-        ) : TimerReduce
-
-        data class UpdateIsAppActive(
-            val isActive: Boolean,
-        ) : TimerReduce
-
-        data class UpdateBackgroundStartTime(
-            val time: Long,
-        ) : TimerReduce
+        data class UpdateTodayBreadCount(val breadCount: Int) : TimerReduce
     }
 
     sealed interface TimerSideEffect : BaseContract.SideEffect {

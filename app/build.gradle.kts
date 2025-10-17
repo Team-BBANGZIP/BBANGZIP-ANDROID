@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.bundles.androidx)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.core.splashscreen)
+    implementation(libs.kotlinx.collections.immutable)
 
     // Test
     testImplementation(libs.junit)

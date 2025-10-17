@@ -16,12 +16,14 @@ class AuthInterceptor
         override fun intercept(chain: Interceptor.Chain): Response {
             val originalRequest = chain.request()
 
+            // TODO 로그인 구현 이전까지 임시토큰 사용
             val accessToken =
                 runBlocking {
                     userRepository.userPreferenceFlow
                         .map { it.accessToken }
                         .firstOrNull()
                 }
+            // TODO 로그인 구현 이전까지 true로 test
             val isLogin =
                 runBlocking {
                     userRepository.userPreferenceFlow

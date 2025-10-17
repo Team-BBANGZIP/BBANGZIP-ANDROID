@@ -18,7 +18,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextFieldDefaults.contentPadding
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -27,29 +29,31 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.bottomsheet.BbangZipBottomSheetSlot
+import org.android.bbangzip.presentation.common.component.preview.BbangZipPreviewWrapper
+import org.android.bbangzip.presentation.common.type.BreadType
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
-import org.android.bbangzip.presentation.ui.timer.contract.model.BreadInfo
-import org.android.bbangzip.presentation.ui.timer.contract.type.BreadType
+import org.android.bbangzip.presentation.ui.timer.contract.model.BreadInfoUiState
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BreadSelectBottomSheet(
     currentBreadId: Int,
-    breadList: List<BreadInfo>,
+    breadList: List<BreadInfoUiState>,
     isBottomSheetVisible: Boolean,
     breadCount: Int,
-    onDismissRequest: () -> Unit,
+    onDismiss: () -> Unit,
     onBreadSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BbangZipBottomSheetSlot(
         isBottomSheetVisible = isBottomSheetVisible,
-        onDismissRequest = onDismissRequest,
+        onDismissRequest = onDismiss,
         modifier = modifier,
         contentPadding = contentPadding(top = 40.dp, start = 32.dp, end = 32.dp, bottom = 40.dp),
         title = {
@@ -115,7 +119,7 @@ private fun BreadSelectHeader(
 @Composable
 private fun BreadSelectionGrid(
     currentBreadId: Int,
-    breadList: List<BreadInfo>,
+    breadList: List<BreadInfoUiState>,
     onBreadSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -141,7 +145,7 @@ private fun BreadSelectionGrid(
 
 @Composable
 private fun BreadItem(
-    breadInfo: BreadInfo,
+    breadInfo: BreadInfoUiState,
     isSelected: Boolean,
     onBreadSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -167,7 +171,7 @@ private fun BreadItem(
 
 @Composable
 private fun BreadItemImage(
-    breadInfo: BreadInfo,
+    breadInfo: BreadInfoUiState,
     isSelected: Boolean,
     onBreadSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -176,9 +180,7 @@ private fun BreadItemImage(
         modifier = modifier.aspectRatio(1f),
         contentAlignment = Alignment.Center,
     ) {
-        if (breadInfo.isLocked) {
-            LockedBreadImage()
-        } else {
+        if (breadInfo.isUnLocked) {
             UnlockedBreadImage(
                 breadInfo = breadInfo,
                 onBreadSelect = onBreadSelect,
@@ -187,6 +189,8 @@ private fun BreadItemImage(
             if (isSelected) {
                 CheckBox(modifier = Modifier.align(Alignment.TopStart))
             }
+        } else {
+            LockedBreadImage()
         }
     }
 }
@@ -204,7 +208,7 @@ private fun LockedBreadImage(
 
 @Composable
 private fun UnlockedBreadImage(
-    breadInfo: BreadInfo,
+    breadInfo: BreadInfoUiState,
     onBreadSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -223,11 +227,11 @@ private fun UnlockedBreadImage(
 
 @Composable
 private fun BreadItemLabel(
-    breadInfo: BreadInfo,
+    breadInfo: BreadInfoUiState,
     modifier: Modifier = Modifier,
 ) {
     Text(
-        text = if (breadInfo.isLocked) "???" else breadInfo.name,
+        text = if (breadInfo.isUnLocked) breadInfo.name else "???",
         color = BbangZipTheme.color.labelNormal_6B6560,
         style = BbangZipTheme.typography.body2Medium,
         modifier = modifier,
@@ -251,6 +255,48 @@ fun CheckBox(modifier: Modifier = Modifier) {
             modifier =
                 Modifier
                     .align(Alignment.Center),
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview
+@Composable
+private fun BreadSelectionSheetPreview() {
+    BbangZipPreviewWrapper {
+        val sheetState =
+            rememberStandardBottomSheetState(
+                initialValue = SheetValue.Expanded,
+            )
+        val mockBreadList =
+            listOf(
+                BreadInfoUiState(1, "소금빵", isUnLocked = true, 0),
+                BreadInfoUiState(2, "식빵", isUnLocked = true, 5),
+                BreadInfoUiState(3, "바게트", isUnLocked = false, 10),
+                BreadInfoUiState(4, "크루아상", isUnLocked = true, 15),
+                BreadInfoUiState(5, "모닝빵", isUnLocked = true, 20),
+                BreadInfoUiState(6, "도넛", isUnLocked = false, 10),
+                BreadInfoUiState(7, "크루아상", isUnLocked = true, 15),
+                BreadInfoUiState(8, "모닝빵", isUnLocked = true, 20),
+                BreadInfoUiState(9, "도넛", isUnLocked = false, 10),
+            )
+        val breadCount = 12
+
+        BbangZipBottomSheetSlot(
+            isBottomSheetVisible = true,
+            sheetState = sheetState,
+            onDismissRequest = { },
+            title = {
+                BreadSelectHeader(breadCount = breadCount)
+            },
+            content = {
+                BreadSelectionGrid(
+                    currentBreadId = 1,
+                    breadList = mockBreadList,
+                    onBreadSelect = { },
+                    modifier = Modifier,
+                )
+            },
         )
     }
 }

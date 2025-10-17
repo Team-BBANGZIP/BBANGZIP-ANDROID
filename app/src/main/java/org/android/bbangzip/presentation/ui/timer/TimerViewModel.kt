@@ -2,15 +2,24 @@ package org.android.bbangzip.presentation.ui.timer
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import org.android.bbangzip.domain.repository.TimerRepository
+import org.android.bbangzip.domain.usecase.InitializeTimerScreenUseCase
 import org.android.bbangzip.presentation.common.base.BaseViewModel
-import org.android.bbangzip.presentation.common.util.constant.TimerConstants
+import org.android.bbangzip.presentation.common.util.extension.getBbangZipTimerDate
 import org.android.bbangzip.presentation.ui.timer.contract.TimerContract
-import org.android.bbangzip.presentation.ui.timer.contract.model.TimerStatus
+import org.android.bbangzip.presentation.ui.timer.contract.model.TimerBottomSheetVisibleState
+import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionUiState
+import org.android.bbangzip.presentation.ui.timer.contract.model.toUiState
+import org.android.bbangzip.presentation.ui.timer.contract.type.TimeOption
 import org.android.bbangzip.presentation.ui.timer.lifecycle.TimerLifecycleManager
+import org.android.bbangzip.presentation.ui.timer.util.TimerConstants
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -21,6 +30,7 @@ class TimerViewModel
         savedStateHandle: SavedStateHandle,
         private val lifecycleManagerFactory: TimerLifecycleManager.Factory,
         private val timerRepository: TimerRepository,
+        private val initializeUseCase: InitializeTimerScreenUseCase,
     ) : BaseViewModel<TimerContract.TimerEvent, TimerContract.TimerState, TimerContract.TimerReduce, TimerContract.TimerSideEffect>(
             savedStateHandle = savedStateHandle,
         ) {
@@ -28,181 +38,93 @@ class TimerViewModel
             return savedState as? TimerContract.TimerState ?: TimerContract.TimerState()
         }
 
+        private var isAppActive: Boolean = true
+        private var isScreenLocked: Boolean = false
         private var timerJob: Job? = null
-        private lateinit var lifecycleManager: TimerLifecycleManager
         private var appExitCheckJob: Job? = null
+        private lateinit var lifecycleManager: TimerLifecycleManager
 
         init {
-            setEvent(TimerContract.TimerEvent.Initialize)
             setupLifecycleManager()
-        }
-
-        private fun setupLifecycleManager() {
-            lifecycleManager =
-                lifecycleManagerFactory.create { event ->
-                    setEvent(event)
-                }
         }
 
         override fun handleEvent(event: TimerContract.TimerEvent) {
             when (event) {
-                is TimerContract.TimerEvent.Initialize ->
-                    launch {
-                        updateState(TimerContract.TimerReduce.UpdateTodayBreadCount(5))
-                    }
+                is TimerContract.TimerEvent.Initialize -> initialize()
 
                 // Start
-                is TimerContract.TimerEvent.OnStartBtnClick -> {
-                    if (currentUiState.timerStatus == TimerStatus.Idle) {
-                        updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Running))
-                        startTimer(currentUiState.totalTime)
-                    } else if (currentUiState.timerStatus == TimerStatus.Paused) {
-                        resumeTimer()
-                        updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Running))
-                    }
-                }
+                is TimerContract.TimerEvent.OnStartBtnClick -> handleStartOrResumeTimer()
 
                 // Reset
                 is TimerContract.TimerEvent.OnResetBtnClick -> {
                     stopTimer()
-                    updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Paused))
-                    updateState(TimerContract.TimerReduce.UpdateResetSheetState(true))
+                    updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Paused))
+                    updateState(TimerContract.TimerReduce.UpdateBottomSheetState(TimerBottomSheetVisibleState(reset = true)))
                 }
 
                 is TimerContract.TimerEvent.OnResetSheetApproveBtnClick -> {
-                    resetTimer()
-                    updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle))
-                    updateState(TimerContract.TimerReduce.UpdateResetSheetState(false))
+                    resetTimer(moveToReady = true)
+                    updateState(TimerContract.TimerReduce.UpdateBottomSheetState(TimerBottomSheetVisibleState(reset = false)))
                 }
 
                 is TimerContract.TimerEvent.OnResetSheetDismissBtnClick -> {
-                    updateState(TimerContract.TimerReduce.UpdateResetSheetState(false))
+                    updateState(TimerContract.TimerReduce.UpdateBottomSheetState(TimerBottomSheetVisibleState(reset = false)))
                 }
 
                 // Restart
                 is TimerContract.TimerEvent.OnRestartBtnClick -> {
-                    stopTimer()
-                    updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Paused))
-                    updateState(TimerContract.TimerReduce.UpdateRestartSheetState(true))
+                    if (currentUiState.timerSessionState is TimerSessionUiState.Running) {
+                        handleStopTimer()
+                    }
+                    updateState(TimerContract.TimerReduce.UpdateBottomSheetState(TimerBottomSheetVisibleState(restart = true)))
                 }
 
                 is TimerContract.TimerEvent.OnRestartSheetApproveBtnClick -> {
                     resetTimer()
-                    updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Running))
-                    startTimer(currentUiState.totalTime)
-                    updateState(TimerContract.TimerReduce.UpdateRestartSheetState(false))
+                    updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Running))
+                    startTimer(currentUiState.timerOption.totalTime)
+                    updateState(TimerContract.TimerReduce.UpdateBottomSheetState(TimerBottomSheetVisibleState(restart = false)))
                 }
 
                 is TimerContract.TimerEvent.OnRestartSheetDismissBtnClick -> {
-                    updateState(TimerContract.TimerReduce.UpdateRestartSheetState(false))
+                    updateState(TimerContract.TimerReduce.UpdateBottomSheetState(TimerBottomSheetVisibleState(restart = false)))
                 }
 
                 // Stop
-                is TimerContract.TimerEvent.OnStopBtnClick -> {
-                    stopTimer()
-                    updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Paused))
-                }
+                is TimerContract.TimerEvent.OnStopBtnClick -> handleStopTimer()
 
                 // Complete
-                is TimerContract.TimerEvent.OnTimerCompleted -> {
-                    stopTimer()
-                    updateState(TimerContract.TimerReduce.UpdateRemainingTime(0L))
-                    updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Complete))
-                    updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(true))
-                    // Todo: 완료시 오늘 구운 빵 개수 증가 -> Index 개수로 판단
-                }
-
                 is TimerContract.TimerEvent.OnCompleteSheetCheckBtnClick -> {
-                    updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(false))
+                    updateState(TimerContract.TimerReduce.UpdateBottomSheetState(TimerBottomSheetVisibleState(complete = false)))
                     launch {
-                        // 자연스러운 화면전환을 위해 추가
                         delay(200L)
-                        setSideEffect(TimerContract.TimerSideEffect.NavigateToTimerTodo(currentUiState.selectedTimeOptionIndex))
-                        updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle))
-                        resetTimer()
+                        setSideEffect(TimerContract.TimerSideEffect.NavigateToTimerTodo(currentUiState.timerOption.timeOptionIndex))
+                        resetTimer(moveToReady = true)
                     }
                 }
 
                 is TimerContract.TimerEvent.OnCompleteSheetRestartBtnClick -> {
-                    updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(false))
-                    updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Running))
+                    updateState(TimerContract.TimerReduce.UpdateBottomSheetState(TimerBottomSheetVisibleState(complete = false)))
                     restartTimer()
                 }
 
                 is TimerContract.TimerEvent.OnCompleteSheetDismissRequest -> {
-                    resetTimer()
-                    updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle))
-                    updateState(TimerContract.TimerReduce.UpdateCompleteSheetState(false))
+                    resetTimer(moveToReady = true)
+                    updateState(TimerContract.TimerReduce.UpdateBottomSheetState(TimerBottomSheetVisibleState(complete = false)))
                 }
 
-                is TimerContract.TimerEvent.OnTimeOptionToggleClick -> {
-                    updateState(TimerContract.TimerReduce.UpdateSelectedTimeOptionIndex(event.selectedTimeOptionIndex))
-                    getStartTimeForOption(event.selectedTimeOptionIndex)
-                }
+                is TimerContract.TimerEvent.OnTimeOptionToggleClick -> handleTimeOptionChange(event.selectedTimeOptionIndex)
 
                 is TimerContract.TimerEvent.OnBreadIconClick -> {
-                    updateState(TimerContract.TimerReduce.UpdateBreadSelectionSheetState(true))
+                    updateState(TimerContract.TimerReduce.UpdateBottomSheetState(TimerBottomSheetVisibleState(breadSelection = true)))
                 }
 
                 is TimerContract.TimerEvent.OnBreadSelectionSheetClick -> {
-                    updateState(TimerContract.TimerReduce.UpdateBreadSelectionSheetState(false))
+                    updateState(TimerContract.TimerReduce.UpdateBottomSheetState(TimerBottomSheetVisibleState(breadSelection = false)))
                 }
 
                 is TimerContract.TimerEvent.OnBreadSelectionSheetDismissRequest -> {
-                    updateState(TimerContract.TimerReduce.UpdateBreadSelectionSheetState(false))
-                }
-
-                is TimerContract.TimerEvent.OnTimerTick -> {
-                    val newRemainingTime = currentUiState.remainingTime - 1000L
-
-                    if (newRemainingTime <= 0) {
-                        updateState(TimerContract.TimerReduce.UpdateRemainingTime(0L))
-                        setEvent(TimerContract.TimerEvent.OnTimerCompleted)
-                    } else {
-                        updateState(TimerContract.TimerReduce.UpdateRemainingTime(newRemainingTime))
-                        updateBreadLevelByRemainingTime()
-                    }
-                }
-
-                is TimerContract.TimerEvent.OnScreenTimeOut -> {
-                    updateState(TimerContract.TimerReduce.UpdateIsScreenOn(false))
-                }
-
-                is TimerContract.TimerEvent.OnLockButtonPressed -> {
-                    updateState(TimerContract.TimerReduce.UpdateIsScreenOn(false))
-                    if (currentUiState.timerStatus == TimerStatus.Running) {
-                        stopTimer()
-                        updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Paused))
-                    }
-                }
-
-                is TimerContract.TimerEvent.OnScreenTurnedOn -> {
-                    updateState(TimerContract.TimerReduce.UpdateIsScreenOn(true))
-                }
-
-                TimerContract.TimerEvent.OnAppBackground -> {
-                    updateState(TimerContract.TimerReduce.UpdateIsAppActive(false))
-                    updateState(TimerContract.TimerReduce.UpdateBackgroundStartTime(System.currentTimeMillis()))
-
-                    if (currentUiState.timerStatus == TimerStatus.Running) {
-                        stopTimer()
-                        updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Paused))
-
-                        scheduleIdleTransition()
-
-                        Timber.tag("TimerViewModel").d("App exited - timer paused, 1min countdown started")
-                    }
-                }
-
-                is TimerContract.TimerEvent.OnAppForeground -> {
-                    updateState(TimerContract.TimerReduce.UpdateIsAppActive(true))
-                    cancelIdleTransition()
-
-                    if (event.exitDuration >= 60 * 1000L) {
-                        Timber.tag("TimerViewModel").d("App returned after 1+ min - already idle")
-                    } else {
-                        Timber.tag("TimerViewModel").d("App returned within 1min - remains paused")
-                    }
+                    updateState(TimerContract.TimerReduce.UpdateBottomSheetState(TimerBottomSheetVisibleState(breadSelection = false)))
                 }
             }
         }
@@ -212,66 +134,71 @@ class TimerViewModel
             reduce: TimerContract.TimerReduce,
         ): TimerContract.TimerState {
             return when (reduce) {
-                is TimerContract.TimerReduce.UpdateTimerStatus -> state.copy(timerStatus = reduce.timerStatus)
                 is TimerContract.TimerReduce.UpdateRemainingTime -> state.copy(remainingTime = reduce.remainingTime)
-                is TimerContract.TimerReduce.UpdateBreadLevel -> state.copy(breadLevel = reduce.breadLevel)
-                is TimerContract.TimerReduce.UpdateTodayBreadCount -> state.copy(todayBreadCount = reduce.todayBreadCount)
-                is TimerContract.TimerReduce.UpdateSelectedTimeOptionIndex -> state.copy(selectedTimeOptionIndex = reduce.selectedTimeOptionIndex)
-                is TimerContract.TimerReduce.UpdateBreadSelectionSheetState ->
+                is TimerContract.TimerReduce.UpdateTimerSessionState -> state.copy(timerSessionState = reduce.sessionState)
+                is TimerContract.TimerReduce.UpdateBottomSheetState -> state.copy(bottomSheetState = reduce.bottomSheetState)
+                is TimerContract.TimerReduce.UpdateTimeOption ->
                     state.copy(
-                        isBreadSelectionSheetVisible = reduce.isBreadSelectionSheetVisible,
+                        timerOption = reduce.option,
+                        remainingTime = reduce.option.totalTime,
                     )
 
-                is TimerContract.TimerReduce.UpdateCompleteSheetState ->
+                is TimerContract.TimerReduce.UpdateTodayBreadCount ->
                     state.copy(
-                        isCompleteSheetVisible = reduce.isCompleteSheetVisible,
+                        todayBreadCount = reduce.breadCount,
                     )
 
-                is TimerContract.TimerReduce.UpdateResetSheetState ->
-                    state.copy(
-                        isResetSheetVisible = reduce.isResetSheetVisible,
-                    )
-
-                is TimerContract.TimerReduce.UpdateRestartSheetState ->
-                    state.copy(
-                        isRestartSheetVisible = reduce.isRestartSheetVisible,
-                    )
-
-                is TimerContract.TimerReduce.UpdateTotalTime -> state.copy(totalTime = reduce.totalTime)
-
-                is TimerContract.TimerReduce.UpdateBreadList -> state.copy(breadList = reduce.breadList)
-                is TimerContract.TimerReduce.UpdateBackgroundStartTime -> state.copy(backgroundStartTime = reduce.time)
-                is TimerContract.TimerReduce.UpdateIsAppActive -> state.copy(isAppActive = reduce.isActive)
-                is TimerContract.TimerReduce.UpdateIsScreenOn -> state.copy(isScreenOn = reduce.isScreenOn)
+                is TimerContract.TimerReduce.UpdateTimerState -> reduce.timerState
             }
         }
 
-        private fun getStartTimeForOption(index: Int) {
-            when (index) {
-                0 -> {
-                    updateState(TimerContract.TimerReduce.UpdateTotalTime(TimerConstants.THIRTY_MINUTES))
-                    updateState(TimerContract.TimerReduce.UpdateRemainingTime(TimerConstants.THIRTY_MINUTES))
-                }
+        private fun handleTimeOptionChange(index: Int) {
+            val newOption = TimeOption.fromIndex(index)
+            updateState(TimerContract.TimerReduce.UpdateTimeOption(newOption))
+        }
 
-                1 -> {
-                    updateState(TimerContract.TimerReduce.UpdateTotalTime(TimerConstants.SIXTY_MINUTES))
-                    updateState(TimerContract.TimerReduce.UpdateRemainingTime(TimerConstants.SIXTY_MINUTES))
-                }
+        private fun handleStartOrResumeTimer() {
+            val sessionState = currentUiState.timerSessionState
+            if (sessionState is TimerSessionUiState.Ready || sessionState is TimerSessionUiState.Paused) {
+                updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Running))
+                startTimer(currentUiState.remainingTime)
+            }
+        }
 
-                else -> throw IllegalArgumentException("Invalid time option index")
+        private fun handleStopTimer() {
+            stopTimer()
+            updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Paused))
+        }
+
+        private fun handleTimerTick() {
+            val newTime = currentUiState.remainingTime - 1000L
+            if (newTime <= 0) {
+                handleTimerCompleted()
+            } else {
+                updateState(TimerContract.TimerReduce.UpdateRemainingTime(newTime))
+            }
+        }
+
+        private fun handleTimerCompleted() {
+            stopTimer()
+            updateState(TimerContract.TimerReduce.UpdateRemainingTime(0L))
+            updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Complete))
+            updateState(TimerContract.TimerReduce.UpdateBottomSheetState(TimerBottomSheetVisibleState(complete = true)))
+
+            viewModelScope.launch {
+                val breadCount = currentUiState.timerOption.timeOptionIndex + 1
+                timerRepository.postTimerCompleted(targetDate = getBbangZipTimerDate(), count = breadCount)
             }
         }
 
         private fun startTimer(duration: Long) {
             stopTimer()
-
             updateState(TimerContract.TimerReduce.UpdateRemainingTime(duration))
-
             timerJob =
-                launch {
-                    while (currentUiState.remainingTime > 0) {
+                viewModelScope.launch {
+                    while (isActive && currentUiState.remainingTime > 0) {
                         delay(1000L)
-                        setEvent(TimerContract.TimerEvent.OnTimerTick)
+                        handleTimerTick()
                     }
                 }
         }
@@ -280,50 +207,66 @@ class TimerViewModel
             timerJob?.cancel()
         }
 
-        private fun resumeTimer() {
-            startTimer(currentUiState.remainingTime)
-        }
-
         private fun restartTimer() {
             stopTimer()
 
             launch {
                 delay(1000L)
-                startTimer(currentUiState.totalTime)
+                startTimer(currentUiState.timerOption.totalTime)
             }
         }
 
-        private fun resetTimer() {
+        private fun resetTimer(moveToReady: Boolean = false) {
             stopTimer()
-
-            updateState(TimerContract.TimerReduce.UpdateRemainingTime(currentUiState.totalTime))
+            updateState(TimerContract.TimerReduce.UpdateRemainingTime(currentUiState.timerOption.totalTime))
+            if (moveToReady) {
+                viewModelScope.launch {
+                    initialize()
+                }
+                updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Ready))
+            }
         }
 
-        private fun updateBreadLevelByRemainingTime() {
-            updateState(
-                TimerContract.TimerReduce.UpdateBreadLevel(
-                    when (currentUiState.progress) {
-                        in 0f..25f -> 1
-                        in 25f..50f -> 2
-                        in 50f..75f -> 3
-                        in 75f..<100f -> 4
-                        else -> 5
-                    },
-                ),
-            )
+        private fun initialize() {
+            launch {
+                Timber.d("TimerViewmodel : initialize 시작 / UseCase 호출")
+                initializeUseCase()
+                    .onSuccess { data ->
+                        val todayBreadCount = data.todayBreadCount.count
+                        val breadList = data.breadList.breadList.map { it.toUiState() }.toImmutableList()
+                        val totalBreadCount = data.breadList.totalCount
+                        val currentState = currentUiState.timerSessionState
+
+                        if (currentState is TimerSessionUiState.Ready) {
+                            updateState(
+                                TimerContract.TimerReduce.UpdateTimerState(
+                                    currentUiState.copy(
+                                        todayBreadCount = todayBreadCount,
+                                        breadList = breadList,
+                                        totalBreadCount = totalBreadCount,
+                                    ),
+                                ),
+                            )
+                        }
+                    }.onFailure { throwable ->
+                        Timber.d("TimerViewmodel 초기화 실패 $throwable")
+                        updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Ready))
+                    }
+            }
         }
 
         private fun scheduleIdleTransition() {
             appExitCheckJob?.cancel()
-
             appExitCheckJob =
-                launch {
+                viewModelScope.launch {
                     delay(60 * 1000L)
-
-                    if (!currentUiState.isAppActive && currentUiState.timerStatus == TimerStatus.Paused) {
-                        updateState(TimerContract.TimerReduce.UpdateTimerStatus(TimerStatus.Idle))
-                        resetTimer()
-                        Timber.tag("TimerViewModel").d("Auto transition to idle after 1min exit")
+                    if (!isAppActive && currentUiState.timerSessionState !is TimerSessionUiState.Ready) {
+                        Timber.d("Lifecycle Event: App background timed out - reset Ready State")
+                        val elapsedTime = currentUiState.timerOption.totalTime - currentUiState.remainingTime
+                        if (elapsedTime > TimerConstants.THIRTY_MINUTES) {
+                            timerRepository.postTimerCompleted(targetDate = getBbangZipTimerDate(), count = 1)
+                        }
+                        resetTimer(moveToReady = true)
                     }
                 }
         }
@@ -337,5 +280,49 @@ class TimerViewModel
             timerJob?.cancel()
             appExitCheckJob?.cancel()
             lifecycleManager.cleanup()
+        }
+
+        private fun setupLifecycleManager() {
+            lifecycleManager =
+                lifecycleManagerFactory.create(
+                    onScreenOn = ::onScreenTurnedOn,
+                    onScreenOffByTimeout = ::onScreenTimeOut,
+                    onScreenOffByLock = ::onLockButtonPressed,
+                    onAppForeground = ::onAppForeground,
+                    onAppBackground = ::onAppBackground,
+                )
+        }
+
+        private fun onScreenTimeOut() {
+            Timber.d("Lifecycle Event: Screen timed out — timer continues running")
+            isScreenLocked = true
+        }
+
+        private fun onLockButtonPressed() {
+            Timber.d("Lifecycle Event: Lock button pressed")
+            isScreenLocked = true
+            if (currentUiState.timerSessionState is TimerSessionUiState.Running) {
+                handleStopTimer()
+            }
+        }
+
+        private fun onScreenTurnedOn() {
+            Timber.d("Lifecycle Event: Screen turned on")
+            isScreenLocked = false
+        }
+
+        private fun onAppBackground() {
+            Timber.d("Lifecycle Event: App went to background")
+            isAppActive = false
+            if (!isScreenLocked && currentUiState.timerSessionState is TimerSessionUiState.Running) {
+                handleStopTimer()
+                scheduleIdleTransition()
+            }
+        }
+
+        private fun onAppForeground(exitDuration: Long) {
+            Timber.d("Lifecycle Event: App came to foreground after ${exitDuration}ms")
+            isAppActive = true
+            cancelIdleTransition()
         }
     }

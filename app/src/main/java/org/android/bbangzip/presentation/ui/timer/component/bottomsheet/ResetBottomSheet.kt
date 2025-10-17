@@ -10,7 +10,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
-import org.android.bbangzip.presentation.common.util.constant.TimerConstants
+import org.android.bbangzip.presentation.ui.timer.util.TimerConstants
 import java.util.concurrent.TimeUnit
 
 private data class ResetBottomSheetInfo(
@@ -22,10 +22,10 @@ private data class ResetBottomSheetInfo(
 fun ResetBottomSheet(
     isBottomSheetVisible: Boolean,
     remainingTime: Long,
+    timeOptionIndex: Int,
     onReturnBtnClick: () -> Unit,
     onResetBtnClick: () -> Unit,
-    onDismissRequest: () -> Unit,
-    timeOptionIndex: Int,
+    onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val sheetInfo = getBottomSheetState(timeOptionIndex, remainingTime)
@@ -48,9 +48,9 @@ fun ResetBottomSheet(
                         .fillMaxWidth(),
             )
         },
-        onLeftClick = { onReturnBtnClick() },
-        onRightClick = { onResetBtnClick() },
-        onDismissRequest = { onDismissRequest() },
+        onLeftClick = onReturnBtnClick,
+        onRightClick = onResetBtnClick,
+        onDismissRequest = onDismiss,
         modifier = modifier,
     )
 }
