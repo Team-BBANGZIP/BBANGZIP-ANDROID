@@ -12,8 +12,16 @@ fun NavController.navigateToManageCategory() {
     )
 }
 
-fun NavGraphBuilder.manageCategoryNavGraph() {
+fun NavGraphBuilder.manageCategoryNavGraph(
+    navigateToAddCategory: () -> Unit,
+    navigateToEditCategory: () -> Unit,
+    popBackStack: () -> Unit,
+) {
     composable<ManageCategory> {
-        ManageCategoryRoute()
+        ManageCategoryRoute(
+            navigateToAddCategory = navigateToAddCategory,
+            navigateToEditCategory = navigateToEditCategory,
+            popBackStack = popBackStack
+        )
     }
 }

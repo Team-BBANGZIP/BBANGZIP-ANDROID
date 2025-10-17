@@ -46,7 +46,11 @@ fun MainNavHost(
 
         friendNavGraph()
 
-        manageCategoryNavGraph()
+        manageCategoryNavGraph(
+            popBackStack = navigator::popBackStack,
+            navigateToAddCategory = navigator::navigateToAddCategory,
+            navigateToEditCategory = navigator::navigateToEditCategory,
+        )
 
         addCategoryNavGraph(
             popBackStack = navigator::popBackStack

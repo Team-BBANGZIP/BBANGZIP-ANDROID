@@ -48,5 +48,11 @@ class ManageCategoryContract {
         data class UpdateCategories(val categories: List<Category>) : ManageCategoryReduce
     }
 
-    sealed interface ManageCategorySideEffect : BaseContract.SideEffect
+    sealed interface ManageCategorySideEffect : BaseContract.SideEffect{
+        data object PopBackStack : ManageCategorySideEffect
+
+        data object NavigateToAddCategory : ManageCategorySideEffect
+
+        data object NavigateToEditCategory : ManageCategorySideEffect
+    }
 }

@@ -94,8 +94,8 @@ class MainNavigator(
 
     fun navigateToManageCategory() = navHostController.navigateToManageCategory()
 
-    fun navigateToEditCategory(navOptions: NavOptions){
-        navHostController.navigateToEditCategory(navOptions)
+    fun navigateToEditCategory(){
+        navHostController.navigateToEditCategory()
     }
 
     fun navigateToAddCategory() = navHostController.navigateToAddCategory()

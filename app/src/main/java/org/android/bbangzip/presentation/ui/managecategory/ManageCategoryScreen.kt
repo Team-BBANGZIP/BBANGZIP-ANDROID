@@ -48,6 +48,7 @@ import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.type.AutoScrollDirection
 import org.android.bbangzip.presentation.common.type.CategoryColor
 import org.android.bbangzip.presentation.common.util.extension.Gap
+import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.presentation.common.util.scroll.calculateScrollSpeed
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
@@ -201,6 +202,8 @@ fun ManageCategoryScreen(
                     leadingIconColor = BbangZipTheme.color.labelAssistive_C9C7C5,
                     trailingIcon = R.drawable.ic_plus_bold_24,
                     trailingIconColor = BbangZipTheme.color.labelAssistive_C9C7C5,
+                    onLeadingIconClick = onTopBarLeadingIconClick,
+                    onTrailingIconClick = onTopBarTrailingIconClick,
                 )
             }
 
@@ -234,6 +237,7 @@ fun ManageCategoryScreen(
                         Modifier
                             .padding(start = 20.dp)
                             .padding(vertical = 10.dp)
+                            .noRippleClickable(onClick = onCategoryChipClick)
                             .graphicsLayer(
                                 translationY = animatedShiftY,
                                 alpha = if (category.id == draggingItem?.id) 0f else 1f,

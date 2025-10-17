@@ -6,10 +6,9 @@ import androidx.navigation.NavOptions
 import androidx.navigation.compose.composable
 import org.android.bbangzip.presentation.ui.editcategory.EditCategoryRoute
 
-fun NavController.navigateToEditCategory(navOptions: NavOptions) {
+fun NavController.navigateToEditCategory() {
     navigate(
         route = EditCategory,
-        navOptions = navOptions,
     )
 }
 

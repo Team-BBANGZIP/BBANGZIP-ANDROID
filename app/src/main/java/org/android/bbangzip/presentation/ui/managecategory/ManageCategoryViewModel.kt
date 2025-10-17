@@ -32,15 +32,17 @@ class ManageCategoryViewModel
                 }
                 ManageCategoryEvent.OnCategoryChipClick -> {
                     // 카테고리 수정 화면으로 이동
+                    setSideEffect(ManageCategorySideEffect.NavigateToEditCategory)
                 }
                 is ManageCategoryEvent.OnCategoryChipDragEnd -> {
                     val reorderedList = reorderList(event.from, event.to)
                     updateState(ManageCategoryReduce.UpdateCategories(categories = reorderedList))
                 }
                 ManageCategoryEvent.OnTopBarLeadingIconClick -> {
-                    // 뒤로 가기 로직
+                    setSideEffect(ManageCategorySideEffect.PopBackStack)
                 }
                 ManageCategoryEvent.OnTopBarTrailingIconClick -> {
+                    setSideEffect(ManageCategorySideEffect.NavigateToAddCategory)
                     // 카테고리 추가 화면으로 이동
                 }
             }
