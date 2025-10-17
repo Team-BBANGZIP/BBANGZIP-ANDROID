@@ -1,4 +1,4 @@
-package org.android.bbangzip.presentation.ui.timer.contract.type
+package org.android.bbangzip.presentation.common.type
 
 import androidx.annotation.DrawableRes
 import org.android.bbangzip.R

@@ -12,14 +12,9 @@ class AppLifecycleObserver : DefaultLifecycleObserver {
 
     private var listener: AppLifecycleListener? = null
     private var backgroundStartTime = 0L
-    private var isScreenOn = true
 
     fun setListener(listener: AppLifecycleListener) {
         this.listener = listener
-    }
-
-    fun updateScreenState(isScreenOn: Boolean) {
-        this.isScreenOn = isScreenOn
     }
 
     override fun onStart(owner: LifecycleOwner) {
@@ -29,10 +24,8 @@ class AppLifecycleObserver : DefaultLifecycleObserver {
 
     override fun onStop(owner: LifecycleOwner) {
         super.onStop(owner)
-        if (isScreenOn) {
-            backgroundStartTime = System.currentTimeMillis()
-            listener?.onAppBackground()
-        }
+        backgroundStartTime = System.currentTimeMillis()
+        listener?.onAppBackground()
     }
 
     fun getBackgroundDuration(): Long {

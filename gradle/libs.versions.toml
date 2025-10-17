@@ -5,6 +5,7 @@ kotlin = "2.0.0"
 
 # Androidx
 coreKtx = "1.16.0"
+kotlinxCollectionsImmutable = "0.4.0"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
 composeBom = "2025.04.01"
@@ -69,6 +70,7 @@ hilt-plugin = { group = "com.google.dagger", name = "hilt-android-gradle-plugin"
 # Third Party
 coil3 = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coil" }
 coil3-network = { group = "io.coil-kt.coil3", name = "coil-network-okhttp", version.ref = "coil" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable", version.ref = "kotlinxCollectionsImmutable" }
 protobuf-javalite = { module = "com.google.protobuf:protobuf-javalite", version.ref = "protobufJavalite" }
 protobuf-kotlin-lite = { module = "com.google.protobuf:protobuf-kotlin-lite", version.ref = "protobufKotlinLite" }
 timber = { group = "com.jakewharton.timber", name = "timber", version.ref = "timber" }
