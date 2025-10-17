@@ -59,9 +59,12 @@ fun BbangZipCategoryChip(
         modifier =
             modifier
                 .clip(BbangZipCategoryChipDefaults.CHIP_SHAPE)
-                .noRippleClickable(
-                    enabled = isClickable,
-                    onClick = onClick,
+                .then(
+                    if (isClickable) {
+                        Modifier.noRippleClickable(onClick = onClick)
+                    } else {
+                        Modifier // isClickable이 false이면 아무 효과 없는 Modifier를 적용
+                    }
                 )
                 .background(
                     color = BbangZipCategoryChipDefaults.containerColor(),

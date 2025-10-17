@@ -9,6 +9,7 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.awaitLongPressOrCancellation
 import androidx.compose.foundation.gestures.drag
 import androidx.compose.foundation.gestures.scrollBy
+import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
@@ -188,6 +189,8 @@ fun ManageCategoryScreen(
                                     draggingItem = null
                                     targetIndex = null
                                 }
+                            }else {
+                                onCategoryChipClick()
                             }
                         }
                     },
@@ -233,11 +236,11 @@ fun ManageCategoryScreen(
                 BbangZipCategoryChip(
                     categoryColor = CategoryColor.fromString(category.color).color,
                     categoryName = category.name,
+                    isClickable = false,
                     modifier =
                         Modifier
                             .padding(start = 20.dp)
                             .padding(vertical = 10.dp)
-                            .noRippleClickable(onClick = onCategoryChipClick)
                             .graphicsLayer(
                                 translationY = animatedShiftY,
                                 alpha = if (category.id == draggingItem?.id) 0f else 1f,
