@@ -10,7 +10,7 @@ import javax.inject.Inject
 @HiltViewModel
 class AddCategoryViewModel
     @Inject
-    constructor(savedStateHandle: SavedStateHandle) : BaseViewModel<AddCategoryEvent, AddCategoryState, AddCategoryReduce, AddCategoryEffect>(savedStateHandle) {
+    constructor(savedStateHandle: SavedStateHandle) : BaseViewModel<AddCategoryEvent, AddCategoryState, AddCategoryReduce, AddCategorySideEffect>(savedStateHandle) {
         override fun createInitialState(savedState: Parcelable?): AddCategoryState {
             return savedState as? AddCategoryState ?: AddCategoryState()
         }
@@ -32,9 +32,10 @@ class AddCategoryViewModel
                     updateState(AddCategoryReduce.UpdatedIsColorPickerBottomSheetVisible(true))
                 }
                 AddCategoryEvent.OnTopBarLeadingIconClick -> {
-                    // 뒤로가기
+                    setSideEffect(AddCategorySideEffect.PopBackStack)
                 }
                 AddCategoryEvent.OnTopBarTrailingIconClick -> {
+                    setSideEffect(AddCategorySideEffect.PopBackStack)
                     // 정보 저장 후 원래 화면
                 }
             }

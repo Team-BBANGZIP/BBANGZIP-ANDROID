@@ -37,5 +37,7 @@ class AddCategoryContract {
         data class UpdatedIsColorPickerBottomSheetVisible(val isColorPickerBottomSheetVisible: Boolean) : AddCategoryReduce
     }
 
-    sealed interface AddCategoryEffect : BaseContract.SideEffect
+    sealed interface AddCategorySideEffect : BaseContract.SideEffect{
+        data object PopBackStack : AddCategorySideEffect
+    }
 }

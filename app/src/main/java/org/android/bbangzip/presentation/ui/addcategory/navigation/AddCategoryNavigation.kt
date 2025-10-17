@@ -13,8 +13,12 @@ fun NavController.navigateToAddCategory() {
     )
 }
 
-fun NavGraphBuilder.addCategoryNavGraph() {
+fun NavGraphBuilder.addCategoryNavGraph(
+    popBackStack: () -> Unit,
+) {
     composable<AddCategory> {
-        AddCategoryRoute()
+        AddCategoryRoute(
+            popBackStack = popBackStack,
+        )
     }
 }
