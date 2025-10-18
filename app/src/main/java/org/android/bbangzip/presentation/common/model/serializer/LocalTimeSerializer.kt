@@ -12,7 +12,10 @@ import java.time.format.DateTimeFormatter
 object LocalTimeSerializer : KSerializer<LocalTime> {
     override val descriptor: SerialDescriptor = PrimitiveSerialDescriptor("LocalTime", PrimitiveKind.STRING)
 
-    override fun serialize(encoder: Encoder, value: LocalTime) {
+    override fun serialize(
+        encoder: Encoder,
+        value: LocalTime,
+    ) {
         encoder.encodeString(value.format(DateTimeFormatter.ISO_LOCAL_TIME))
     }
 

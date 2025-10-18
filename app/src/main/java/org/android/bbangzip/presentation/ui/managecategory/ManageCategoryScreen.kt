@@ -10,7 +10,6 @@ import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.awaitLongPressOrCancellation
 import androidx.compose.foundation.gestures.drag
 import androidx.compose.foundation.gestures.scrollBy
-import androidx.compose.foundation.gestures.waitForUpOrCancellation
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
@@ -22,6 +21,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -50,7 +50,6 @@ import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.type.AutoScrollDirection
 import org.android.bbangzip.presentation.common.type.CategoryColor
 import org.android.bbangzip.presentation.common.util.extension.Gap
-import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.presentation.common.util.scroll.calculateScrollSpeed
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
@@ -85,7 +84,7 @@ fun ManageCategoryScreen(
     var fakeOffset by remember { mutableStateOf(Offset.Zero) }
     var targetIndex by remember { mutableStateOf<Int?>(null) }
     var itemBound by remember { mutableStateOf<Rect?>(null) }
-    var currentTouchPointY by remember { mutableStateOf(0f) }
+    var currentTouchPointY by remember { mutableFloatStateOf(0f) }
     val itemSpacingPx = with(localDensity) { 20.dp.toPx() }
 
     Box(
@@ -189,7 +188,7 @@ fun ManageCategoryScreen(
                                     draggingItem = null
                                     targetIndex = null
                                 }
-                            }else {
+                            } else {
                                 // move 이벤트를 소비해주기 위한 코드
                                 awaitDragOrCancellation(down.id)
 

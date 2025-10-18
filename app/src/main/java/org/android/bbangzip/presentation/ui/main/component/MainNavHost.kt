@@ -53,11 +53,11 @@ fun MainNavHost(
         )
 
         addCategoryNavGraph(
-            popBackStack = navigator::popBackStack
+            popBackStack = navigator::popBackStack,
         )
 
         editCategoryNavGraph(
-            popBackStack = navigator::popBackStack
+            popBackStack = navigator::popBackStack,
         )
     }
 }

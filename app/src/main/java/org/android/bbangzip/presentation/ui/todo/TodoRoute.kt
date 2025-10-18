@@ -91,6 +91,6 @@ fun TodoRoute(
         },
         onManageCategoryClick = {
             viewModel.setEvent(TodoEvent.OnManageCategoryClick)
-        }
+        },
     )
 }

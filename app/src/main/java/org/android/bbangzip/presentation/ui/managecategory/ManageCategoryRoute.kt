@@ -20,9 +20,9 @@ fun ManageCategoryRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(viewModel.uiSideEffect){
-        viewModel.uiSideEffect.collectLatest{ sideEffect ->
-            when(sideEffect){
+    LaunchedEffect(viewModel.uiSideEffect) {
+        viewModel.uiSideEffect.collectLatest { sideEffect ->
+            when (sideEffect) {
                 is ManageCategorySideEffect.PopBackStack -> popBackStack()
                 is ManageCategorySideEffect.NavigateToAddCategory -> navigateToAddCategory()
                 is ManageCategorySideEffect.NavigateToEditCategory -> navigateToEditCategory(sideEffect.category)
