@@ -190,8 +190,10 @@ fun ManageCategoryScreen(
                                     targetIndex = null
                                 }
                             }else {
-                                val drag = awaitDragOrCancellation(down.id)
-                                if (drag == null && !lazyListState.isScrollInProgress) {
+                                // move 이벤트를 소비해주기 위한 코드
+                                awaitDragOrCancellation(down.id)
+
+                                if (!lazyListState.isScrollInProgress) {
                                     pressedItemOfCategories?.let { onCategoryChipClick(it) }
                                 }
                             }
