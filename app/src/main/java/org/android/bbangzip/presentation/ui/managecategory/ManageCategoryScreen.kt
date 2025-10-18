@@ -4,6 +4,7 @@ import androidx.compose.animation.core.EaseInOutCubic
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.awaitDragOrCancellation
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.awaitLongPressOrCancellation
@@ -189,7 +190,10 @@ fun ManageCategoryScreen(
                                     targetIndex = null
                                 }
                             }else {
-                                pressedItemOfCategories?.let{onCategoryChipClick(it)}
+                                val drag = awaitDragOrCancellation(down.id)
+                                if (drag == null && !lazyListState.isScrollInProgress) {
+                                    pressedItemOfCategories?.let { onCategoryChipClick(it) }
+                                }
                             }
                         }
                     },
