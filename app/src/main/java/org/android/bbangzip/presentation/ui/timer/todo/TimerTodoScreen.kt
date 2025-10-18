@@ -48,7 +48,7 @@ fun TimerTodoScreen(
     onBackIconClick: () -> Unit = {},
     onExitBtnClick: () -> Unit = {},
     onRestartTimerBtnClick: () -> Unit = {},
-    onTodoCheckBoxClick: (categoryId: Int, todoId: Int, isChecked: Boolean) -> Unit = { _, _, _ -> },
+    onTodoCheckBoxClick: (id: Int, todoId: Int, isChecked: Boolean) -> Unit = { _, _, _ -> },
     onCategoryChipClick: (Category) -> Unit = {},
     onAddTodoBottomSheetDismissRequest: () -> Unit = {},
     onAddTodoDone: (String, Category?, LocalTime?) -> Unit = { _, _, _ -> },
@@ -156,7 +156,7 @@ fun TodoTitle(modifier: Modifier = Modifier) {
 private fun TodoListItem(
     item: ListItem,
     itemIndex: Int,
-    onTodoCheckBoxClick: (categoryId: Int, todoId: Int, isChecked: Boolean) -> Unit,
+    onTodoCheckBoxClick: (id: Int, todoId: Int, isChecked: Boolean) -> Unit,
     onCategoryChipClick: (category: Category) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -166,8 +166,8 @@ private fun TodoListItem(
                 Column {
                     Gap(height = if (itemIndex == 0) 4.dp else 16.dp)
                     BbangZipCategoryChip(
-                        categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
-                        categoryName = item.category.categoryName,
+                        categoryColor = CategoryColor.fromString(item.category.color).color,
+                        categoryName = item.category.name,
                         onClick = { onCategoryChipClick(item.category) },
                     )
                 }
@@ -178,11 +178,11 @@ private fun TodoListItem(
                     task = item.todo.content,
                     isCompleted = item.todo.isCompleted,
                     onCheckBoxClick = { isChecked ->
-                        onTodoCheckBoxClick(item.category.categoryId, item.todo.todoId, isChecked)
+                        onTodoCheckBoxClick(item.category.id, item.todo.todoId, isChecked)
                     },
                     isLast = item.isLastInCategory,
                     startTime = item.todo.startTime,
-                    categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
+                    categoryColor = CategoryColor.fromString(item.category.color).color,
                 )
             }
         }
@@ -258,9 +258,9 @@ private fun TimerTodoScreenPreview() {
         val exampleCategories =
             listOf(
                 Category(
-                    categoryId = 1,
-                    categoryName = "제과제빵점",
-                    categoryColor = "BbangZipTheme.color.todoRed1_EA7152",
+                    id = 1,
+                    name = "제과제빵점",
+                    color = "RED1",
                     todos =
                         listOf(
                             Todo(
@@ -278,9 +278,9 @@ private fun TimerTodoScreenPreview() {
                         ),
                 ),
                 Category(
-                    categoryId = 2,
-                    categoryName = "경제학개론",
-                    categoryColor = "BbangZipTheme.color.todoBlue1_5C62AC",
+                    id = 2,
+                    name = "경제학개론",
+                    color = "BLUE2",
                     todos =
                         listOf(
                             Todo(

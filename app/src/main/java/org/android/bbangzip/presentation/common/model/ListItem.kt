@@ -11,7 +11,7 @@ sealed interface ListItem : Parcelable {
     data class CategoryItem(
         val category: Category,
     ) : ListItem {
-        override val id: String = "category_${category.categoryId}"
+        override val id: String = "category_${category.id}"
     }
 
     @Parcelize

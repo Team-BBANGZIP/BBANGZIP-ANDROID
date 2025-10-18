@@ -74,27 +74,20 @@ import org.android.bbangzip.presentation.common.component.taskbox.BbangZipTaskBo
 import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.model.ListItem
 import org.android.bbangzip.presentation.common.model.Todo
+import org.android.bbangzip.presentation.common.type.AutoScrollDirection
 import org.android.bbangzip.presentation.common.type.CategoryColor
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.dropShadow
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
+import org.android.bbangzip.presentation.common.util.scroll.calculateScrollSpeed
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.CommitmentBottomSheet
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
 
 private const val LIST_HEADER_COUNT = 1
-private const val MIN_SCROLL_VALUE = 5f
-private const val MAX_SCROLL_VALUE = 30f
 private const val AUTO_SCROLL_DELAY = 8L
 private val AUTO_SCROLL_THRESHOLD = 50.dp
 private val ITEM_SPACING = 4.dp
-
-// 스크롤 방향을 명확한 상태로 정의
-private enum class AutoScrollDirection {
-    UP,
-    DOWN,
-    NONE,
-}
 
 @Composable
 fun TodoScreen(
@@ -222,7 +215,9 @@ fun TodoScreen(
                                                                     columnHeight = columnHeight,
                                                                     scrollThreshold = scrollThreshold,
                                                                 )
+
                                                             lazyListState.scrollBy(speed)
+
                                                             targetIndex =
                                                                 updateTargetIndex(
                                                                     lazyListState = lazyListState,
@@ -311,7 +306,7 @@ fun TodoScreen(
                     onCheckBoxClick = {},
                     isLast = item.isLastInCategory,
                     startTime = item.todo.startTime,
-                    categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
+                    categoryColor = CategoryColor.fromString(item.category.color).color,
                 )
             }
         }
@@ -343,24 +338,6 @@ fun TodoScreen(
             onDoneAction = onCommitmentDone,
         )
     }
-}
-
-private fun calculateScrollSpeed(
-    direction: AutoScrollDirection,
-    touchPointY: Float,
-    columnHeight: Int,
-    scrollThreshold: Float,
-): Float {
-    val intensity =
-        when (direction) {
-            AutoScrollDirection.UP -> (scrollThreshold - touchPointY) / scrollThreshold
-            AutoScrollDirection.DOWN -> (touchPointY - (columnHeight - scrollThreshold)) / scrollThreshold
-            AutoScrollDirection.NONE -> 0f
-        }.coerceIn(0f, 1f)
-
-    val speed = MIN_SCROLL_VALUE + (MAX_SCROLL_VALUE - MIN_SCROLL_VALUE) * intensity
-
-    return if (direction == AutoScrollDirection.UP) -speed else speed
 }
 
 private fun updateTargetIndex(
@@ -480,8 +457,8 @@ private fun DraggableListItem(
                 Column {
                     Gap(height = if (itemIndex == 0) 4.dp else 16.dp)
                     BbangZipCategoryChip(
-                        categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
-                        categoryName = item.category.categoryName,
+                        categoryColor = CategoryColor.fromString(item.category.color).color,
+                        categoryName = item.category.name,
                         onClick = { onCategoryClick(item.category) },
                     )
                 }
@@ -492,11 +469,11 @@ private fun DraggableListItem(
                     task = item.todo.content,
                     isCompleted = item.todo.isCompleted,
                     onCheckBoxClick = { isChecked ->
-                        onTodoCheckBoxClick(item.todo.todoId, item.category.categoryId, isChecked)
+                        onTodoCheckBoxClick(item.todo.todoId, item.category.id, isChecked)
                     },
                     isLast = item.isLastInCategory,
                     startTime = item.todo.startTime,
-                    categoryColor = CategoryColor.fromString(item.category.categoryColor).color,
+                    categoryColor = CategoryColor.fromString(item.category.color).color,
                 )
             }
         }
@@ -711,9 +688,9 @@ fun TodoScreenPreview() {
     val exampleCategories =
         listOf(
             Category(
-                categoryId = 1,
-                categoryName = "제과제빵점",
-                categoryColor = "BbangZipTheme.color.todoRed1_EA7152",
+                id = 1,
+                name = "제과제빵점",
+                color = "RED1",
                 todos =
                     listOf(
                         Todo(
@@ -731,9 +708,9 @@ fun TodoScreenPreview() {
                     ),
             ),
             Category(
-                categoryId = 2,
-                categoryName = "경제학개론",
-                categoryColor = "BbangZipTheme.color.todoBlue1_5C62AC",
+                id = 2,
+                name = "경제학개론",
+                color = "BLUE1",
                 todos =
                     listOf(
                         Todo(

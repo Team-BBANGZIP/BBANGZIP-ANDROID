@@ -49,7 +49,7 @@ class TimerTodoViewModel
                 is TimerTodoEvent.OnTodoCheckBoxClick -> {
                     val updatedCategories =
                         currentUiState.categories.map { category ->
-                            if (category.categoryId == event.categoryId) {
+                            if (category.id == event.categoryId) {
                                 category.copy(
                                     todos =
                                         category.todos.map { todo ->
@@ -92,7 +92,7 @@ class TimerTodoViewModel
                 }
                 is TimerTodoEvent.OnAddTodoDone -> {
                     if (event.todoContent.isNotBlank() && event.category != null) {
-                        onTodoAdd(event.category.categoryId, event.todoContent, event.startTime)
+                        onTodoAdd(event.category.id, event.todoContent, event.startTime)
                         updateState(ClearAddTodoState)
                         updateState(UpdateAddTodoBottomSheetState(false))
                     }
@@ -157,9 +157,9 @@ class TimerTodoViewModel
         private fun getExampleList(): List<Category> {
             return listOf(
                 Category(
-                    categoryId = 1,
-                    categoryName = "제과제빵점",
-                    categoryColor = "RED1",
+                    id = 1,
+                    name = "제과제빵점",
+                    color = "RED1",
                     todos =
                         listOf(
                             Todo(
@@ -183,9 +183,9 @@ class TimerTodoViewModel
                         ),
                 ),
                 Category(
-                    categoryId = 2,
-                    categoryName = "경제학개론",
-                    categoryColor = "YELLOW1",
+                    id = 2,
+                    name = "경제학개론",
+                    color = "YELLOW1",
                     todos =
                         listOf(
                             Todo(
@@ -203,9 +203,9 @@ class TimerTodoViewModel
                         ),
                 ),
                 Category(
-                    categoryId = 3,
-                    categoryName = "운동",
-                    categoryColor = "GREEN1",
+                    id = 3,
+                    name = "운동",
+                    color = "GREEN1",
                     todos =
                         listOf(
                             Todo(
@@ -223,9 +223,9 @@ class TimerTodoViewModel
                         ),
                 ),
                 Category(
-                    categoryId = 4,
-                    categoryName = "스터디",
-                    categoryColor = "BLUE1",
+                    id = 4,
+                    name = "스터디",
+                    color = "BLUE1",
                     todos =
                         listOf(
                             Todo(
@@ -249,9 +249,9 @@ class TimerTodoViewModel
                         ),
                 ),
                 Category(
-                    categoryId = 5,
-                    categoryName = "개인 프로젝트",
-                    categoryColor = "PURPLE1",
+                    id = 5,
+                    name = "개인 프로젝트",
+                    color = "PURPLE1",
                     todos =
                         listOf(
                             Todo(
@@ -269,9 +269,9 @@ class TimerTodoViewModel
                         ),
                 ),
                 Category(
-                    categoryId = 6,
-                    categoryName = "새로운 카테고리",
-                    categoryColor = "RED2",
+                    id = 6,
+                    name = "새로운 카테고리",
+                    color = "RED2",
                     todos =
                         listOf(
                             Todo(
@@ -289,9 +289,9 @@ class TimerTodoViewModel
                         ),
                 ),
                 Category(
-                    categoryId = 7,
-                    categoryName = "영화",
-                    categoryColor = "YELLOW2",
+                    id = 7,
+                    name = "영화",
+                    color = "YELLOW2",
                     todos =
                         listOf(
                             Todo(
@@ -333,7 +333,7 @@ class TimerTodoViewModel
 
             val updatedCategories =
                 currentUiState.categories.map { category ->
-                    if (category.categoryId == categoryId) {
+                    if (category.id == categoryId) {
                         category.copy(todos = category.todos + newTodo)
                     } else {
                         category
