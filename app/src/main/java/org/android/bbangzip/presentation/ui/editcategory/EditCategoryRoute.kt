@@ -7,15 +7,21 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
+import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.EditCategoryEvent
 
 @Composable
 fun EditCategoryRoute(
     popBackStack: () -> Unit,
+    category: Category,
     modifier: Modifier = Modifier,
     viewModel: EditCategoryViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(Unit) {
+        viewModel.setEvent(EditCategoryEvent.Initialize(category))
+    }
 
     LaunchedEffect(viewModel.uiSideEffect) {
         viewModel.uiSideEffect.collectLatest { sideEffect ->

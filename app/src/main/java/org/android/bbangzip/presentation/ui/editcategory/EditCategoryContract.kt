@@ -3,10 +3,12 @@ package org.android.bbangzip.presentation.ui.editcategory
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.presentation.common.base.BaseContract
+import org.android.bbangzip.presentation.common.model.Category
 
 class EditCategoryContract {
     @Parcelize
     data class EditCategoryState(
+        val categoryId: Int = 0,
         val categoryNameInput: String = "",
         val isConfirmEnable: Boolean = false,
         val isColorPickerBottomSheetVisible: Boolean = false,
@@ -15,6 +17,8 @@ class EditCategoryContract {
     ) : Parcelable, BaseContract.State
 
     sealed interface EditCategoryEvent : BaseContract.Event {
+        data class Initialize(val category: Category) : EditCategoryEvent
+
         data object OnBackIconClick : EditCategoryEvent
 
         data object OnConfirmButtonClick : EditCategoryEvent
@@ -33,6 +37,8 @@ class EditCategoryContract {
     }
 
     sealed interface EditCategoryReduce : BaseContract.Reduce {
+        data class UpdateEditCategoryState(val editCategoryState: EditCategoryState) : EditCategoryReduce
+
         data class UpdateCategoryNameInput(val categoryNameInput: String) : EditCategoryReduce
 
         data class UpdateIsConfirmEnable(val isConfirmEnable: Boolean) : EditCategoryReduce

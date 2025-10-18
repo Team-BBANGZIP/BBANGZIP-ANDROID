@@ -30,9 +30,9 @@ class ManageCategoryViewModel
                 ManageCategoryEvent.Initialize -> {
                     // 서버에서 카테고리 리스트 받아옴
                 }
-                ManageCategoryEvent.OnCategoryChipClick -> {
+                is ManageCategoryEvent.OnCategoryChipClick -> {
                     // 카테고리 수정 화면으로 이동
-                    setSideEffect(ManageCategorySideEffect.NavigateToEditCategory)
+                    setSideEffect(ManageCategorySideEffect.NavigateToEditCategory(event.category))
                 }
                 is ManageCategoryEvent.OnCategoryChipDragEnd -> {
                     val reorderedList = reorderList(event.from, event.to)

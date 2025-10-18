@@ -65,7 +65,7 @@ fun ManageCategoryScreen(
     modifier: Modifier = Modifier,
     onTopBarTrailingIconClick: () -> Unit = {},
     onTopBarLeadingIconClick: () -> Unit = {},
-    onCategoryChipClick: () -> Unit = {},
+    onCategoryChipClick: (Category) -> Unit = {},
     onCategoryDragEnd: (Int, Int) -> Unit = { _, _ -> },
 ) {
     val localDensity = LocalDensity.current
@@ -106,19 +106,18 @@ fun ManageCategoryScreen(
                             val down = awaitFirstDown(requireUnconsumed = false)
                             val longPress = awaitLongPressOrCancellation(down.id)
 
+                            val pressedLazyColumnItem =
+                                lazyListState.layoutInfo.visibleItemsInfo
+                                    .firstOrNull {
+                                        val itemTopY = it.offset
+                                        val itemBottomY = it.offset + it.size
+                                        down.position.y >= itemTopY && down.position.y <= itemBottomY
+                                    } ?: return@awaitEachGesture
+                            val pressedLazyColumnIndex = pressedLazyColumnItem.index
+                            draggingItemIndex = pressedLazyColumnIndex - LIST_HEADER_COUNT
+                            val pressedItemOfCategories = categories.getOrNull(draggingItemIndex!!)
+
                             if (longPress != null) {
-                                val pressedLazyColumnItem =
-                                    lazyListState.layoutInfo.visibleItemsInfo
-                                        .firstOrNull {
-                                            val itemTopY = it.offset
-                                            val itemBottomY = it.offset + it.size
-                                            down.position.y >= itemTopY && down.position.y <= itemBottomY
-                                        } ?: return@awaitEachGesture
-
-                                val pressedLazyColumnIndex = pressedLazyColumnItem.index
-                                draggingItemIndex = pressedLazyColumnIndex - LIST_HEADER_COUNT
-                                val pressedItemOfCategories = categories.getOrNull(draggingItemIndex!!)
-
                                 fakeOffset = Offset(0f, pressedLazyColumnItem.offset.toFloat())
                                 draggingItem = pressedItemOfCategories
 
@@ -190,7 +189,7 @@ fun ManageCategoryScreen(
                                     targetIndex = null
                                 }
                             }else {
-                                onCategoryChipClick()
+                                pressedItemOfCategories?.let{onCategoryChipClick(it)}
                             }
                         }
                     },

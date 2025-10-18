@@ -6,22 +6,30 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavOptions
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.toRoute
+import com.google.gson.Gson
 import kotlinx.serialization.json.Json
 import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.ui.editcategory.EditCategoryRoute
+import kotlin.reflect.typeOf
 
-fun NavController.navigateToEditCategory() {
+fun NavController.navigateToEditCategory(
+    category: Category
+) {
     navigate(
-        route = EditCategory,
+        route = EditCategory(category),
     )
 }
 
 fun NavGraphBuilder.editCategoryNavGraph(
     popBackStack: () -> Unit,
 ) {
-    composable<EditCategory> {
+    composable<EditCategory>(
+        typeMap = mapOf(typeOf<Category>() to CategoryNavType)
+    ) { backStackEntry ->
         EditCategoryRoute(
             popBackStack = popBackStack,
+            category = backStackEntry.toRoute<EditCategory>().category
         )
     }
 }

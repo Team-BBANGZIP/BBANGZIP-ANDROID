@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navOptions
 import org.android.bbangzip.presentation.common.model.BottomNavigationRoute
 import org.android.bbangzip.presentation.common.model.BottomNavigationRoute.Companion.routeName
+import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.model.Route
 import org.android.bbangzip.presentation.ui.addcategory.navigation.navigateToAddCategory
 import org.android.bbangzip.presentation.ui.editcategory.navigation.navigateToEditCategory
@@ -94,8 +95,8 @@ class MainNavigator(
 
     fun navigateToManageCategory() = navHostController.navigateToManageCategory()
 
-    fun navigateToEditCategory(){
-        navHostController.navigateToEditCategory()
+    fun navigateToEditCategory(category: Category){
+        navHostController.navigateToEditCategory(category)
     }
 
     fun navigateToAddCategory() = navHostController.navigateToAddCategory()

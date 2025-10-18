@@ -15,6 +15,17 @@ class EditCategoryViewModel
 
         override fun handleEvent(event: EditCategoryEvent) {
             when (event) {
+                is EditCategoryEvent.Initialize -> {
+                    updateState(EditCategoryReduce.UpdateEditCategoryState(
+                        currentUiState.copy(
+                            categoryId = event.category.id,
+                            categoryNameInput = event.category.name,
+                            selectedColorString = event.category.color,
+                            isConfirmEnable = true,
+                            isCategoryStopped = event.category.isStopped,
+                        )
+                    ))
+                }
                 EditCategoryEvent.OnBackIconClick -> {
                     setSideEffect(EditCategorySideEffect.PopBackStack)
                 }
@@ -50,6 +61,9 @@ class EditCategoryViewModel
             reduce: EditCategoryReduce,
         ): EditCategoryState {
             when (reduce) {
+                is EditCategoryReduce.UpdateEditCategoryState -> {
+                    return reduce.editCategoryState
+                }
                 is EditCategoryReduce.UpdateCategoryNameInput -> {
                     return state.copy(categoryNameInput = reduce.categoryNameInput)
                 }

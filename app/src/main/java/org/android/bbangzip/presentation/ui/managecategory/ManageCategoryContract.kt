@@ -35,7 +35,7 @@ class ManageCategoryContract {
     sealed interface ManageCategoryEvent : BaseContract.Event {
         data object Initialize : ManageCategoryEvent
 
-        data object OnCategoryChipClick : ManageCategoryEvent
+        data class OnCategoryChipClick(val category: Category) : ManageCategoryEvent
 
         data object OnTopBarTrailingIconClick : ManageCategoryEvent
 
@@ -53,6 +53,6 @@ class ManageCategoryContract {
 
         data object NavigateToAddCategory : ManageCategorySideEffect
 
-        data object NavigateToEditCategory : ManageCategorySideEffect
+        data class NavigateToEditCategory(val category: Category) : ManageCategorySideEffect
     }
 }

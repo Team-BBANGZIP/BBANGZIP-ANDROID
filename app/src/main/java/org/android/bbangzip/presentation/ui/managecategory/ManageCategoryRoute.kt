@@ -7,13 +7,14 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
+import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.ui.managecategory.ManageCategoryContract.*
 
 @Composable
 fun ManageCategoryRoute(
     popBackStack: () -> Unit,
     navigateToAddCategory: () -> Unit,
-    navigateToEditCategory: () -> Unit,
+    navigateToEditCategory: (Category) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: ManageCategoryViewModel = hiltViewModel(),
 ) {
@@ -24,7 +25,7 @@ fun ManageCategoryRoute(
             when(sideEffect){
                 is ManageCategorySideEffect.PopBackStack -> popBackStack()
                 is ManageCategorySideEffect.NavigateToAddCategory -> navigateToAddCategory()
-                is ManageCategorySideEffect.NavigateToEditCategory -> navigateToEditCategory()
+                is ManageCategorySideEffect.NavigateToEditCategory -> navigateToEditCategory(sideEffect.category)
             }
         }
     }
@@ -39,7 +40,7 @@ fun ManageCategoryRoute(
             viewModel.setEvent(ManageCategoryEvent.OnTopBarLeadingIconClick)
         },
         onCategoryChipClick = {
-            viewModel.setEvent(ManageCategoryEvent.OnCategoryChipClick)
+            viewModel.setEvent(ManageCategoryEvent.OnCategoryChipClick(it))
         },
         onCategoryDragEnd = { from, to ->
             viewModel.setEvent(ManageCategoryEvent.OnCategoryChipDragEnd(from, to))
