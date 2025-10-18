@@ -10,9 +10,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -35,7 +33,6 @@ import org.android.bbangzip.presentation.common.component.bottomsheet.CategoryCo
 import org.android.bbangzip.presentation.common.component.button.ColorSettingButton
 import org.android.bbangzip.presentation.common.component.row.InteractionRow
 import org.android.bbangzip.presentation.common.component.textfield.BbangZipUnderLinedTextField
-import org.android.bbangzip.presentation.common.type.CategoryColor
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.presentation.ui.addcategory.type.AddCategoryActionType
@@ -111,51 +108,6 @@ fun AddCategoryScreen(
 }
 
 @Composable
-private fun ColorSettingRow(
-    modifier: Modifier = Modifier,
-    selectedColorString: String,
-    onActionIconClick: () -> Unit,
-) {
-    Row(
-        modifier = modifier.fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.ic_palette_default_24),
-            tint = BbangZipTheme.color.labelAlternative_A29D96,
-            contentDescription = null,
-        )
-
-        Gap(width = 8.dp)
-
-        Text(
-            text = stringResource(R.string.add_category_color_setting_row_label),
-            modifier = Modifier.padding(vertical = 10.dp),
-            color = BbangZipTheme.color.labelAlternative_A29D96,
-            style = BbangZipTheme.typography.body2Medium,
-        )
-
-        Gap()
-
-        Box(
-            modifier =
-                Modifier
-                    .size(24.dp)
-                    .background(color = CategoryColor.fromString(selectedColorString).color, shape = CircleShape),
-        )
-
-        Gap(width = 6.dp)
-
-        Icon(
-            imageVector = ImageVector.vectorResource(R.drawable.ic_arrow_right_24),
-            contentDescription = stringResource(R.string.add_category_show_color_picker_icon_description),
-            modifier = Modifier.noRippleClickable(onClick = onActionIconClick),
-            tint = BbangZipTheme.color.labelAssistive_C9C7C5,
-        )
-    }
-}
-
-@Composable
 private fun AddCategoryHeader(
     modifier: Modifier = Modifier,
     isDoneEnable: Boolean = false,
@@ -200,7 +152,7 @@ private fun AddCategoryHeader(
             modifier =
                 Modifier
                     .fillMaxHeight()
-                    .noRippleClickable(onClick = onDoneButtonClick),
+                    .noRippleClickable(enabled = isDoneEnable, onClick = onDoneButtonClick),
             contentAlignment = Alignment.Center,
         ) {
             Text(
