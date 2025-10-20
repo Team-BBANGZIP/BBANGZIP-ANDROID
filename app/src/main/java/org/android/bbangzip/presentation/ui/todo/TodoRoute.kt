@@ -3,19 +3,32 @@ package org.android.bbangzip.presentation.ui.todo
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.collectLatest
 import org.android.bbangzip.presentation.ui.todo.TodoContract.*
 
 @Composable
 fun TodoRoute(
+    navigateToManageCategory: () -> Unit,
+    navigateToAddCategory: () -> Unit,
     padding: PaddingValues,
     modifier: Modifier = Modifier,
     viewModel: TodoViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(viewModel.uiSideEffect) {
+        viewModel.uiSideEffect.collectLatest { effect ->
+            when (effect) {
+                is TodoSideEffect.NavigateToManageCategory -> navigateToManageCategory()
+                is TodoSideEffect.NavigateToAddCategory -> navigateToAddCategory()
+            }
+        }
+    }
 
     TodoScreen(
         modifier = modifier.padding(bottom = padding.calculateBottomPadding()),
@@ -72,6 +85,12 @@ fun TodoRoute(
         },
         onCommitmentBottomSheetDismissRequest = {
             viewModel.setEvent(TodoEvent.OnCommitmentBottomSheetDismissRequest)
+        },
+        onAddCategoryClick = {
+            viewModel.setEvent(TodoEvent.OnAddCategoryClick)
+        },
+        onManageCategoryClick = {
+            viewModel.setEvent(TodoEvent.OnManageCategoryClick)
         },
     )
 }

@@ -4,6 +4,7 @@ import androidx.compose.animation.core.EaseInOutCubic
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.gestures.awaitDragOrCancellation
 import androidx.compose.foundation.gestures.awaitEachGesture
 import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.gestures.awaitLongPressOrCancellation
@@ -20,6 +21,7 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
@@ -63,7 +65,7 @@ fun ManageCategoryScreen(
     modifier: Modifier = Modifier,
     onTopBarTrailingIconClick: () -> Unit = {},
     onTopBarLeadingIconClick: () -> Unit = {},
-    onCategoryChipClick: () -> Unit = {},
+    onCategoryChipClick: (Category) -> Unit = {},
     onCategoryDragEnd: (Int, Int) -> Unit = { _, _ -> },
 ) {
     val localDensity = LocalDensity.current
@@ -82,7 +84,7 @@ fun ManageCategoryScreen(
     var fakeOffset by remember { mutableStateOf(Offset.Zero) }
     var targetIndex by remember { mutableStateOf<Int?>(null) }
     var itemBound by remember { mutableStateOf<Rect?>(null) }
-    var currentTouchPointY by remember { mutableStateOf(0f) }
+    var currentTouchPointY by remember { mutableFloatStateOf(0f) }
     val itemSpacingPx = with(localDensity) { 20.dp.toPx() }
 
     Box(
@@ -104,19 +106,18 @@ fun ManageCategoryScreen(
                             val down = awaitFirstDown(requireUnconsumed = false)
                             val longPress = awaitLongPressOrCancellation(down.id)
 
+                            val pressedLazyColumnItem =
+                                lazyListState.layoutInfo.visibleItemsInfo
+                                    .firstOrNull {
+                                        val itemTopY = it.offset
+                                        val itemBottomY = it.offset + it.size
+                                        down.position.y >= itemTopY && down.position.y <= itemBottomY
+                                    } ?: return@awaitEachGesture
+                            val pressedLazyColumnIndex = pressedLazyColumnItem.index
+                            draggingItemIndex = pressedLazyColumnIndex - LIST_HEADER_COUNT
+                            val pressedItemOfCategories = categories.getOrNull(draggingItemIndex!!)
+
                             if (longPress != null) {
-                                val pressedLazyColumnItem =
-                                    lazyListState.layoutInfo.visibleItemsInfo
-                                        .firstOrNull {
-                                            val itemTopY = it.offset
-                                            val itemBottomY = it.offset + it.size
-                                            down.position.y >= itemTopY && down.position.y <= itemBottomY
-                                        } ?: return@awaitEachGesture
-
-                                val pressedLazyColumnIndex = pressedLazyColumnItem.index
-                                draggingItemIndex = pressedLazyColumnIndex - LIST_HEADER_COUNT
-                                val pressedItemOfCategories = categories.getOrNull(draggingItemIndex!!)
-
                                 fakeOffset = Offset(0f, pressedLazyColumnItem.offset.toFloat())
                                 draggingItem = pressedItemOfCategories
 
@@ -187,6 +188,13 @@ fun ManageCategoryScreen(
                                     draggingItem = null
                                     targetIndex = null
                                 }
+                            } else {
+                                // move 이벤트를 소비해주기 위한 코드
+                                awaitDragOrCancellation(down.id)
+
+                                if (!lazyListState.isScrollInProgress) {
+                                    pressedItemOfCategories?.let { onCategoryChipClick(it) }
+                                }
                             }
                         }
                     },
@@ -201,6 +209,8 @@ fun ManageCategoryScreen(
                     leadingIconColor = BbangZipTheme.color.labelAssistive_C9C7C5,
                     trailingIcon = R.drawable.ic_plus_bold_24,
                     trailingIconColor = BbangZipTheme.color.labelAssistive_C9C7C5,
+                    onLeadingIconClick = onTopBarLeadingIconClick,
+                    onTrailingIconClick = onTopBarTrailingIconClick,
                 )
             }
 
@@ -230,6 +240,7 @@ fun ManageCategoryScreen(
                 BbangZipCategoryChip(
                     categoryColor = CategoryColor.fromString(category.color).color,
                     categoryName = category.name,
+                    isClickable = false,
                     modifier =
                         Modifier
                             .padding(start = 20.dp)

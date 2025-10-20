@@ -17,10 +17,14 @@ fun NavController.navigateToTodo(navOptions: NavOptions) {
 
 fun NavGraphBuilder.todoNavGraph(
     padding: PaddingValues,
+    navigateToManageCategory: () -> Unit,
+    navigateToAddCategory: () -> Unit,
 ) {
     composable<BottomNavigationRoute.Todo> {
         TodoRoute(
             padding = padding,
+            navigateToManageCategory = navigateToManageCategory,
+            navigateToAddCategory = navigateToAddCategory,
         )
     }
 }

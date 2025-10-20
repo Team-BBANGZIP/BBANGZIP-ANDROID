@@ -38,16 +38,26 @@ fun MainNavHost(
 
         todoNavGraph(
             padding = padding,
+            navigateToManageCategory = navigator::navigateToManageCategory,
+            navigateToAddCategory = navigator::navigateToAddCategory,
         )
 
         myNavGraph()
 
         friendNavGraph()
 
-        manageCategoryNavGraph()
+        manageCategoryNavGraph(
+            popBackStack = navigator::popBackStack,
+            navigateToAddCategory = navigator::navigateToAddCategory,
+            navigateToEditCategory = navigator::navigateToEditCategory,
+        )
 
-        addCategoryNavGraph()
+        addCategoryNavGraph(
+            popBackStack = navigator::popBackStack,
+        )
 
-        editCategoryNavGraph()
+        editCategoryNavGraph(
+            popBackStack = navigator::popBackStack,
+        )
     }
 }

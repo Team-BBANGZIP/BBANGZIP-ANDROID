@@ -121,9 +121,15 @@ class TodoViewModel
                     updateState(TodoReduce.UpdateSelectedCategory(event.category))
                     updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(true))
                 }
-                TodoEvent.OnAddCategoryClick -> TODO()
+                TodoEvent.OnAddCategoryClick -> {
+                    updateState(TodoReduce.UpdateIsMenuOpen(false))
+                    setSideEffect(TodoSideEffect.NavigateToAddCategory)
+                }
                 TodoEvent.OnDateChanged -> TODO()
-                TodoEvent.OnManageCategoryClick -> TODO()
+                TodoEvent.OnManageCategoryClick -> {
+                    updateState(TodoReduce.UpdateIsMenuOpen(false))
+                    setSideEffect(TodoSideEffect.NavigateToManageCategory)
+                }
                 TodoEvent.OnCommitmentAreaClick -> {
                     updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(true))
                 }

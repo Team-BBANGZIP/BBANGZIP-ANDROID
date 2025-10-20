@@ -118,6 +118,8 @@ fun TodoScreen(
     onCommitmentDone: () -> Unit,
     onTextFieldCommitmentMessageChange: (String) -> Unit,
     onCommitmentBottomSheetDismissRequest: () -> Unit,
+    onManageCategoryClick: () -> Unit = {},
+    onAddCategoryClick: () -> Unit = {},
 ) {
     val localDensity = LocalDensity.current
     val itemSpacingPx = with(localDensity) { ITEM_SPACING.toPx() }
@@ -258,6 +260,8 @@ fun TodoScreen(
                     onCommitmentAreaClick = onCommitmentAreaClick,
                     completedTodoCount = completedTodoCount,
                     totalTodoCount = totalTodoCount,
+                    onManageCategoryClick = onManageCategoryClick,
+                    onAddCategoryClick = onAddCategoryClick,
                 )
             }
 
@@ -488,6 +492,8 @@ private fun ListHeader(
     onCommitmentAreaClick: () -> Unit,
     completedTodoCount: Int,
     totalTodoCount: Int,
+    onManageCategoryClick: () -> Unit,
+    onAddCategoryClick: () -> Unit,
 ) {
     Column {
         CommitmentMessageBox(
@@ -503,6 +509,8 @@ private fun ListHeader(
                         Modifier
                             .offset(x = (-20).dp, y = 9.dp),
                     onDismissRequest = onMenuClick,
+                    onManageCategoryClick = onManageCategoryClick,
+                    onAddCategoryClick = onAddCategoryClick,
                 )
             }
         }
@@ -598,6 +606,8 @@ private fun CompleteTodoCounter(
 private fun MenuPopup(
     modifier: Modifier = Modifier,
     onDismissRequest: () -> Unit = {},
+    onManageCategoryClick: () -> Unit = {},
+    onAddCategoryClick: () -> Unit = {},
 ) {
     Popup(
         alignment = Alignment.BottomEnd,
@@ -630,6 +640,7 @@ private fun MenuPopup(
                     Row(
                         modifier =
                             Modifier
+                                .noRippleClickable(onClick = onAddCategoryClick)
                                 .padding(horizontal = 8.dp)
                                 .padding(top = 7.dp, bottom = 13.dp),
                         verticalAlignment = Alignment.CenterVertically,
@@ -657,6 +668,7 @@ private fun MenuPopup(
                     Row(
                         modifier =
                             Modifier
+                                .noRippleClickable(onClick = onManageCategoryClick)
                                 .padding(horizontal = 8.dp)
                                 .padding(top = 13.dp, bottom = 7.dp),
                         verticalAlignment = Alignment.CenterVertically,

@@ -186,7 +186,7 @@ private fun EditCategoryHeader(
             modifier =
                 Modifier
                     .fillMaxHeight()
-                    .noRippleClickable(onClick = onConfirmButtonClick),
+                    .noRippleClickable(enabled = isConfirmEnable, onClick = onConfirmButtonClick),
             contentAlignment = Alignment.Center,
         ) {
             Text(
