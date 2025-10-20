@@ -1,5 +1,6 @@
 package org.android.bbangzip.data.network
 
+import com.google.gson.GsonBuilder
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -15,7 +16,12 @@ import org.android.bbangzip.BuildConfig
 import org.android.bbangzip.data.auth.interceptor.AuthInterceptor
 import org.android.bbangzip.data.auth.qualifier.Auth
 import org.android.bbangzip.data.auth.qualifier.BbangZip
+import org.android.bbangzip.data.datasource.remote.util.adapter.LocalDateAdapter
+import org.android.bbangzip.data.datasource.remote.util.adapter.LocalTimeAdapter
 import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
+import java.time.LocalDate
+import java.time.LocalTime
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
@@ -66,12 +72,21 @@ object RetrofitModule {
     fun providesBbangZipRetrofit(
         okHttpClient: OkHttpClient,
         json: Json,
-    ): Retrofit =
-        Retrofit.Builder()
+    ): Retrofit {
+        val gson = GsonBuilder()
+            .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
+            .registerTypeAdapter(LocalTime::class.java, LocalTimeAdapter())
+            .create()
+
+        return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
+            .addConverterFactory(
+                GsonConverterFactory.create(gson)
+            )
             .addConverterFactory(
                 json.asConverterFactory(requireNotNull("application/json".toMediaTypeOrNull())),
             )
             .build()
+    }
 }
