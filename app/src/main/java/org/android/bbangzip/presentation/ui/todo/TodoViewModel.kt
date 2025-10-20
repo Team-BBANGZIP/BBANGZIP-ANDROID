@@ -2,11 +2,17 @@ package org.android.bbangzip.presentation.ui.todo
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import org.android.bbangzip.domain.repository.TodoRepository
 import org.android.bbangzip.presentation.common.base.BaseViewModel
 import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.model.ListItem
 import org.android.bbangzip.presentation.common.model.Todo
+import org.android.bbangzip.presentation.common.util.extension.toYyyyMmDdString
+import org.android.bbangzip.presentation.ui.timer.contract.TimerContract
+import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionUiState
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoEvent
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategories
@@ -16,8 +22,11 @@ import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateI
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateSelectedDate
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoSideEffect
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoState
+import timber.log.Timber
+import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
+import kotlin.onFailure
 
 @HiltViewModel
 class TodoViewModel
@@ -123,7 +132,10 @@ class TodoViewModel
                     updateState(TodoReduce.UpdateIsMenuOpen(false))
                     setSideEffect(TodoSideEffect.NavigateToAddCategory)
                 }
-                TodoEvent.OnDateChanged -> TODO()
+                is TodoEvent.OnDateSelect -> {
+                    updateState(UpdateSelectedDate(event.date))
+                    getTodoList(event.date)
+                }
                 TodoEvent.OnManageCategoryClick -> {
                     updateState(TodoReduce.UpdateIsMenuOpen(false))
                     setSideEffect(TodoSideEffect.NavigateToManageCategory)
@@ -184,7 +196,7 @@ class TodoViewModel
         }
     }
 
-        override fun reduceState(
+    override fun reduceState(
             state: TodoState,
             reduce: TodoReduce,
         ): TodoState {

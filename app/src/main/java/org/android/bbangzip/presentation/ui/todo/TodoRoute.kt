@@ -92,5 +92,8 @@ fun TodoRoute(
         onManageCategoryClick = {
             viewModel.setEvent(TodoEvent.OnManageCategoryClick)
         },
+        onDateSelect = {
+            viewModel.setEvent(TodoEvent.OnDateSelect(it))
+        }
     )
 }

@@ -42,7 +42,7 @@ class TodoContract {
 
         data class OnTodoCheckBoxClick(val todoId: Int, val categoryId: Int, val isChecked: Boolean) : TodoEvent
 
-        data object OnDateChanged : TodoEvent
+        data class OnDateSelect(val date: LocalDate) : TodoEvent
 
         data object OnAddCategoryClick : TodoEvent
 

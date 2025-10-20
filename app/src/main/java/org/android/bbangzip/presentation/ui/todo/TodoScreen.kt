@@ -82,6 +82,7 @@ import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.presentation.common.util.scroll.calculateScrollSpeed
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.CommitmentBottomSheet
 import org.android.bbangzip.ui.theme.BbangZipTheme
+import java.time.LocalDate
 import java.time.LocalTime
 
 private const val LIST_HEADER_COUNT = 1
@@ -120,6 +121,7 @@ fun TodoScreen(
     onCommitmentBottomSheetDismissRequest: () -> Unit,
     onManageCategoryClick: () -> Unit = {},
     onAddCategoryClick: () -> Unit = {},
+    onDateSelect: (LocalDate) -> Unit = {},
 ) {
     val localDensity = LocalDensity.current
     val itemSpacingPx = with(localDensity) { ITEM_SPACING.toPx() }
@@ -262,6 +264,7 @@ fun TodoScreen(
                     totalTodoCount = totalTodoCount,
                     onManageCategoryClick = onManageCategoryClick,
                     onAddCategoryClick = onAddCategoryClick,
+                    onDateSelect = onDateSelect,
                 )
             }
 
@@ -494,6 +497,7 @@ private fun ListHeader(
     totalTodoCount: Int,
     onManageCategoryClick: () -> Unit,
     onAddCategoryClick: () -> Unit,
+    onDateSelect: (LocalDate) -> Unit,
 ) {
     Column {
         CommitmentMessageBox(
@@ -502,7 +506,10 @@ private fun ListHeader(
         )
 
         Box(modifier = Modifier.fillMaxWidth()) {
-            BbangZipWeeklyCalendar(onMenuClick = onMenuClick)
+            BbangZipWeeklyCalendar(
+                onDateSelected = onDateSelect,
+                onMenuClick = onMenuClick
+            )
             if (isMenuOpen) {
                 MenuPopup(
                     modifier =
