@@ -24,6 +24,7 @@ class TodoViewModel
     @Inject
     constructor(
         savedStateHandle: SavedStateHandle,
+        private val todoRepository: TodoRepository,
     ) : BaseViewModel<TodoEvent, TodoState, TodoReduce, TodoSideEffect>(savedStateHandle) {
         override fun createInitialState(savedState: Parcelable?): TodoState {
             return savedState as? TodoState ?: TodoState()
@@ -36,10 +37,7 @@ class TodoViewModel
         override fun handleEvent(event: TodoEvent) {
             when (event) {
                 is TodoEvent.Initialize -> {
-                    launch {
-                        val exampleCategories = getExampleList()
-                        updateCategoriesAndFlatList(exampleCategories)
-                    }
+                    getTodoList()
                 }
 
                 is TodoEvent.OnTodoCheckBoxClick -> {
@@ -146,6 +144,46 @@ class TodoViewModel
             }
         }
 
+    private fun getTodoList(
+        date: LocalDate = currentUiState.selectedDate,
+    ) {
+        viewModelScope.launch {
+            todoRepository
+                .getTodoList(
+                    date = date.toYyyyMmDdString()
+                )
+                .onSuccess { data ->
+                    val categoryList = data.categories.map { category ->
+                        Category(
+                            id = category.categoryId,
+                            name = category.categoryName,
+                            color = category.categoryColor,
+                            todos = category.todos.map { todo ->
+                                Todo(
+                                    todoId = todo.todoId,
+                                    content = todo.content,
+                                    isCompleted = todo.isCompleted,
+                                    startTime = todo.startTime
+                                )
+                            }
+                        )
+                    }
+
+                    updateState(
+                        TodoReduce.UpdateTodoState(
+                            currentUiState.copy(
+                                categories = categoryList,
+                                flatList = categoryList.toFlatList(),
+                                confirmedCommitmentMessage = data.commitmentMessage
+                            )
+                        )
+                    )
+                }.onFailure { throwable ->
+                    Timber.d("TimerViewmodel 초기화 실패 $throwable")
+                }
+        }
+    }
+
         override fun reduceState(
             state: TodoState,
             reduce: TodoReduce,
@@ -196,6 +234,10 @@ class TodoViewModel
                 }
                 is TodoReduce.UpdateConfirmedCommitmentMessage -> {
                     state.copy(confirmedCommitmentMessage = reduce.commitmentMessage)
+                }
+
+                is TodoReduce.UpdateTodoState -> {
+                    reduce.todoState
                 }
             }
         }
@@ -281,169 +323,6 @@ class TodoViewModel
             }
 
             return newCategories
-        }
-
-        private fun getExampleList(): List<Category> {
-            return listOf(
-                Category(
-                    id = 1,
-                    name = "제과제빵점",
-                    color = "RED1",
-                    todos =
-                        listOf(
-                            Todo(
-                                todoId = 11,
-                                content = "두줄 \n 두줄",
-                                isCompleted = true,
-                                startTime = LocalTime.of(11, 0),
-                            ),
-                            Todo(
-                                todoId = 12,
-                                content = "제과제빵점_한줄_실패",
-                                isCompleted = false,
-                                startTime = null,
-                            ),
-                            Todo(
-                                todoId = 13,
-                                content = "제과제빵점_한줄_완료",
-                                isCompleted = true,
-                                startTime = null,
-                            ),
-                        ),
-                ),
-                Category(
-                    id = 2,
-                    name = "경제학개론",
-                    color = "YELLOW1",
-                    todos =
-                        listOf(
-                            Todo(
-                                todoId = 21,
-                                content = "경제학개론_한줄_완료",
-                                isCompleted = true,
-                                startTime = null,
-                            ),
-                            Todo(
-                                todoId = 22,
-                                content = "경제학개론 \n 두줄_실패",
-                                isCompleted = false,
-                                startTime = LocalTime.of(11, 0),
-                            ),
-                        ),
-                ),
-                Category(
-                    id = 3,
-                    name = "운동",
-                    color = "GREEN1",
-                    todos =
-                        listOf(
-                            Todo(
-                                todoId = 31,
-                                content = "헬스장 가기",
-                                isCompleted = false,
-                                startTime = LocalTime.of(18, 0),
-                            ),
-                            Todo(
-                                todoId = 32,
-                                content = "저녁 유산소 30분",
-                                isCompleted = true,
-                                startTime = LocalTime.of(19, 30),
-                            ),
-                        ),
-                ),
-                Category(
-                    id = 4,
-                    name = "스터디",
-                    color = "BLUE1",
-                    todos =
-                        listOf(
-                            Todo(
-                                todoId = 41,
-                                content = "알고리즘 문제 풀이",
-                                isCompleted = true,
-                                startTime = LocalTime.of(20, 0),
-                            ),
-                            Todo(
-                                todoId = 42,
-                                content = "코틀린 스터디 준비",
-                                isCompleted = false,
-                                startTime = null,
-                            ),
-                            Todo(
-                                todoId = 43,
-                                content = "CS 스터디 복습",
-                                isCompleted = true,
-                                startTime = LocalTime.of(10, 0),
-                            ),
-                        ),
-                ),
-                Category(
-                    id = 5,
-                    name = "개인 프로젝트",
-                    color = "PURPLE1",
-                    todos =
-                        listOf(
-                            Todo(
-                                todoId = 51,
-                                content = "UI 디자인 검토",
-                                isCompleted = false,
-                                startTime = null,
-                            ),
-                            Todo(
-                                todoId = 52,
-                                content = "백엔드 API 연동",
-                                isCompleted = false,
-                                startTime = LocalTime.of(14, 0),
-                            ),
-                        ),
-                ),
-                Category(
-                    id = 6,
-                    name = "새로운 카테고리",
-                    color = "RED2",
-                    todos =
-                        listOf(
-                            Todo(
-                                todoId = 61,
-                                content = "새로운 할 일 1",
-                                isCompleted = false,
-                                startTime = LocalTime.of(9, 0),
-                            ),
-                            Todo(
-                                todoId = 62,
-                                content = "새로운 할 일 2",
-                                isCompleted = true,
-                                startTime = LocalTime.of(10, 30),
-                            ),
-                        ),
-                ),
-                Category(
-                    id = 7,
-                    name = "영화",
-                    color = "YELLOW2",
-                    todos =
-                        listOf(
-                            Todo(
-                                todoId = 71,
-                                content = "귀멸의 칼날",
-                                isCompleted = false,
-                                startTime = LocalTime.of(9, 0),
-                            ),
-                            Todo(
-                                todoId = 72,
-                                content = "좀비딸",
-                                isCompleted = true,
-                                startTime = LocalTime.of(10, 30),
-                            ),
-                            Todo(
-                                todoId = 73,
-                                content = "F1",
-                                isCompleted = true,
-                                startTime = LocalTime.of(10, 30),
-                            ),
-                        ),
-                ),
-            )
         }
 
         fun onTodoAdd(

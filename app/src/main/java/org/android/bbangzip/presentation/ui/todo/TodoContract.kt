@@ -74,6 +74,8 @@ class TodoContract {
     }
 
     sealed interface TodoReduce : BaseContract.Reduce {
+        data class UpdateTodoState(val todoState: TodoState) : TodoReduce
+
         data class UpdateCategories(val categories: List<Category>) : TodoReduce
 
         data class UpdateFlatList(val flatList: List<ListItem>) : TodoReduce
