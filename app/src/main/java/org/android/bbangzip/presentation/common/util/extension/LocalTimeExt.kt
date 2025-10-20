@@ -26,3 +26,10 @@ fun LocalTime.toAmPmText(): String = if (this.hour < 12) AmPm.AM.displayText els
 fun LocalDate.startOfWeek(startDayOfWeek: DayOfWeek): LocalDate {
     return this.with(startDayOfWeek)
 }
+
+/**
+ * LocalDate를 "yyyy-MM-dd" 형식의 표준 ISO 문자열로 변환합니다.
+ */
+fun LocalDate.toYyyyMmDdString(): String {
+    return this.format(DateTimeFormatter.ISO_LOCAL_DATE)
+}
