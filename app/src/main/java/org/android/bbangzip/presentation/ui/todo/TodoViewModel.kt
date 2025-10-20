@@ -50,24 +50,11 @@ class TodoViewModel
                 }
 
                 is TodoEvent.OnTodoCheckBoxClick -> {
-                    val updatedCategories =
-                        currentUiState.categories.map { category ->
-                            if (category.id == event.categoryId) {
-                                category.copy(
-                                    todos =
-                                        category.todos.map { todo ->
-                                            if (todo.todoId == event.todoId) {
-                                                todo.copy(isCompleted = event.isChecked)
-                                            } else {
-                                                todo
-                                            }
-                                        },
-                                )
-                            } else {
-                                category
-                            }
-                        }
-                    updateCategoriesAndFlatList(updatedCategories)
+                    patchTodoCompletion(
+                        categoryId = event.categoryId,
+                        todoId = event.todoId,
+                        isChecked = event.isChecked
+                    )
                 }
 
                 is TodoEvent.OnListItemMove -> {
@@ -129,7 +116,7 @@ class TodoViewModel
                     updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(true))
                 }
                 TodoEvent.OnAddCategoryClick -> {
-                    updateState(TodoReduce.UpdateIsMenuOpen(false))
+                    updateState(UpdateIsMenuOpen(false))
                     setSideEffect(TodoSideEffect.NavigateToAddCategory)
                 }
                 is TodoEvent.OnDateSelect -> {
@@ -137,7 +124,7 @@ class TodoViewModel
                     getTodoList(event.date)
                 }
                 TodoEvent.OnManageCategoryClick -> {
-                    updateState(TodoReduce.UpdateIsMenuOpen(false))
+                    updateState(UpdateIsMenuOpen(false))
                     setSideEffect(TodoSideEffect.NavigateToManageCategory)
                 }
                 TodoEvent.OnCommitmentAreaClick -> {
@@ -155,6 +142,54 @@ class TodoViewModel
                 }
             }
         }
+
+    private fun patchTodoCompletion(
+        categoryId: Int,
+        todoId: Int,
+        isChecked: Boolean,
+    ) {
+        toggleCheckBox(
+            categoryList = currentUiState.categories,
+            categoryId = categoryId,
+            todoId = todoId,
+            isChecked = isChecked
+        )
+        viewModelScope.launch {
+            todoRepository
+                .patchTodoCompletion(todoId.toLong(), isChecked)
+                .onSuccess { data ->
+                }.onFailure {
+                    Timber.d("투두 체크 변경 실패")
+                    toggleCheckBox(
+                        categoryList = currentUiState.categories,
+                        categoryId = categoryId,
+                        todoId = todoId,
+                        isChecked = !isChecked
+                    )
+                }
+        }
+    }
+
+    private fun toggleCheckBox(categoryList: List<Category>, categoryId: Int, todoId: Int, isChecked: Boolean) {
+        val updatedCategories =
+            categoryList.map { category ->
+                if (category.id == categoryId) {
+                    category.copy(
+                        todos =
+                            category.todos.map { todo ->
+                                if (todo.todoId == todoId) {
+                                    todo.copy(isCompleted = isChecked)
+                                } else {
+                                    todo
+                                }
+                            },
+                    )
+                } else {
+                    category
+                }
+            }
+        updateCategoriesAndFlatList(updatedCategories)
+    }
 
     private fun getTodoList(
         date: LocalDate = currentUiState.selectedDate,

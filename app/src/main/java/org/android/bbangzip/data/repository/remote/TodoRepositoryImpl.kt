@@ -1,6 +1,7 @@
 package org.android.bbangzip.data.repository.remote
 
 import org.android.bbangzip.data.datasource.remote.TodoRemoteDataSource
+import org.android.bbangzip.domain.model.TodoCompletionInfo
 import org.android.bbangzip.domain.model.TodoListInfo
 import org.android.bbangzip.domain.repository.TodoRepository
 import javax.inject.Inject
@@ -18,4 +19,14 @@ class TodoRepositoryImpl
 
             responseData.toTodoListInfo()
         }
+
+    override suspend fun patchTodoCompletion(todoId: Long, isCompleted: Boolean): Result<TodoCompletionInfo> =
+       runCatching {
+           val response =
+               todoRemoteDataSource.patchTodoCompletion(todoId, isCompleted)
+
+           val responseData = response.data ?: throw IllegalStateException("Data가 존재하지 않습니다.")
+
+           responseData.toTodoCompletionInfo()
+       }
     }
