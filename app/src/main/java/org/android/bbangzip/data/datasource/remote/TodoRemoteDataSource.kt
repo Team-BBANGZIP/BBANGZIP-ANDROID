@@ -2,10 +2,14 @@ package org.android.bbangzip.data.datasource.remote
 
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoCompletionDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoOrderDto
+import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostTodoDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseGetTodoListDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePatchTodoCompletionDto
+import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePostTodoDto
 import org.android.bbangzip.data.datasource.remote.service.TodoService
 import org.android.bbangzip.data.datasource.remote.util.base.BaseResponse
+import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 
 class TodoRemoteDataSource
@@ -40,4 +44,18 @@ class TodoRemoteDataSource
                 isCompleted = isCompleted,
             ),
         )
+
+    suspend fun postTodo(
+        categoryId: Long,
+        content: String,
+        targetDate: LocalDate,
+        startTime: LocalTime?,
+    ): BaseResponse<ResponsePostTodoDto> = todoService.postTodo(
+        requestTodoAddDto = RequestPostTodoDto(
+            categoryId = categoryId,
+            content = content,
+            targetDate = targetDate,
+            startTime = startTime
+        )
+    )
 }

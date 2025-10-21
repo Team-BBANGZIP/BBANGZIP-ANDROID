@@ -1,9 +1,12 @@
 package org.android.bbangzip.data.repository.remote
 
 import org.android.bbangzip.data.datasource.remote.TodoRemoteDataSource
+import org.android.bbangzip.domain.model.NewTodo
 import org.android.bbangzip.domain.model.TodoCompletionInfo
 import org.android.bbangzip.domain.model.TodoListInfo
 import org.android.bbangzip.domain.repository.TodoRepository
+import java.time.LocalDate
+import java.time.LocalTime
 import javax.inject.Inject
 
 class TodoRepositoryImpl
@@ -38,11 +41,29 @@ class TodoRepositoryImpl
         todoOrderList: List<Long>
     ): Result<Any> = runCatching {
         todoRemoteDataSource.patchTodoOrder(
-            todoId,
-            originCategoryId,
-            targetCategoryId,
-            targetCategoryColor,
-            todoOrderList
+            todoId = todoId,
+            originCategoryId = originCategoryId,
+            targetCategoryId = targetCategoryId,
+            targetCategoryColor = targetCategoryColor,
+            todoOrderList = todoOrderList
         )
+    }
+
+    override suspend fun addTodo(
+        categoryId: Long,
+        content: String,
+        targetDate: LocalDate,
+        startTime: LocalTime?
+    ): Result<NewTodo> = runCatching {
+        val response = todoRemoteDataSource.postTodo(
+            categoryId = categoryId,
+            content = content,
+            targetDate = targetDate,
+            startTime = startTime
+        )
+
+        val data = response.data ?: throw IllegalStateException("Todo Data가 존재하지 않습니다.")
+
+        data.toNewTodo()
     }
 }

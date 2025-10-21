@@ -86,10 +86,13 @@ class TodoViewModel
                 }
 
                 is TodoEvent.OnAddTodoDone -> {
-                    if (event.todoContent.isNotBlank() && event.category != null) {
-                        onTodoAdd(event.category.id, event.todoContent, event.startTime)
-                        updateState(TodoReduce.ClearAddTodoState)
-                        updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(false))
+                    if (currentUiState.selectedCategory != null && currentUiState.todoText.isNotBlank()) {
+                        onTodoAdd(
+                            categoryId = currentUiState.selectedCategory!!.id,
+                            todoContent = currentUiState.todoText,
+                            targetDate = currentUiState.selectedDate,
+                            startTime = currentUiState.selectedStartTime
+                        )
                     }
                 }
 
@@ -105,10 +108,13 @@ class TodoViewModel
                 }
                 TodoEvent.OnAddTodoBottomSheetDismissRequest -> {
                     if (currentUiState.selectedCategory != null && currentUiState.todoText.isNotBlank()) {
-                        onTodoAdd(categoryId = currentUiState.selectedCategory!!.id, todoContent = currentUiState.todoText, startTime = currentUiState.selectedStartTime)
+                        onTodoAdd(
+                            categoryId = currentUiState.selectedCategory!!.id,
+                            todoContent = currentUiState.todoText,
+                            targetDate = currentUiState.selectedDate,
+                            startTime = currentUiState.selectedStartTime
+                        )
                     }
-                    updateState(TodoReduce.ClearAddTodoState)
-                    updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(false))
                 }
 
                 TodoEvent.OnTimePickerBottomSheetShowRequest -> {
@@ -394,25 +400,38 @@ class TodoViewModel
         fun onTodoAdd(
             categoryId: Int,
             todoContent: String,
+            targetDate: LocalDate,
             startTime: LocalTime?,
         ) {
-            val newTodoId = (currentUiState.categories.flatMap { it.todos }.maxOfOrNull { it.todoId } ?: 0) + 1
-            val newTodo =
-                Todo(
-                    todoId = newTodoId,
-                    content = todoContent,
-                    isCompleted = false,
-                    startTime = startTime,
-                )
-
-            val updatedCategories =
-                currentUiState.categories.map { category ->
-                    if (category.id == categoryId) {
-                        category.copy(todos = category.todos + newTodo)
-                    } else {
-                        category
+            viewModelScope.launch{
+                todoRepository
+                    .addTodo(
+                        categoryId = categoryId.toLong(),
+                        content = todoContent,
+                        targetDate = targetDate,
+                        startTime = startTime
+                    )
+                    .onSuccess { data ->
+                        val newTodo = Todo(
+                            todoId = data.todoId.toInt(),
+                            content = data.content,
+                            isCompleted = data.isCompleted,
+                            startTime = data.startTime
+                        )
+                        val updatedCategories =
+                            currentUiState.categories.map { category ->
+                                if (category.id == categoryId) {
+                                    category.copy(todos = category.todos + newTodo)
+                                } else {
+                                    category
+                                }
+                            }
+                        updateCategoriesAndFlatList(updatedCategories)
+                        updateState(TodoReduce.ClearAddTodoState)
+                        updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(false))
+                    }.onFailure {
+                        Timber.d("Todo 생성 싪패!")
                     }
-                }
-            updateCategoriesAndFlatList(updatedCategories)
+            }
         }
     }

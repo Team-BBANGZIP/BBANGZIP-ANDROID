@@ -50,7 +50,7 @@ class TodoContract {
 
         data class OnListItemMove(val from: Int, val to: Int) : TodoEvent
 
-        data class OnAddTodoDone(val category: Category?, val todoContent: String, val startTime: LocalTime?) : TodoEvent
+        data object OnAddTodoDone : TodoEvent
 
         data class OnTimeConfirmButtonClick(val startTime: LocalTime?) : TodoEvent
 

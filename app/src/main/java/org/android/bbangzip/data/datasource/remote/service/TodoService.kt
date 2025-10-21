@@ -35,4 +35,9 @@ interface TodoService {
     suspend fun patchTodoOrder(
         @Body requestTodoOrderDto: RequestPatchTodoOrderDto,
     ): BaseResponse<Any>
+
+    @POST("$API/$VERSIONS/$TODO")
+    suspend fun postTodo(
+        @Body requestTodoAddDto: RequestPostTodoDto,
+    ): BaseResponse<ResponsePostTodoDto>
 }

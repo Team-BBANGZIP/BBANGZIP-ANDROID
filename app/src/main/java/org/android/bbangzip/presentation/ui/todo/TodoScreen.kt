@@ -103,12 +103,11 @@ fun TodoScreen(
     isTimePickerBottomSheetVisible: Boolean,
     isAddTodoBottomSheetVisible: Boolean,
     todoText: String,
-    selectedCategory: Category?,
     selectedStartTime: LocalTime?,
     onMenuClick: () -> Unit,
     onListItemMove: (from: Int, to: Int) -> Unit,
     onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit,
-    onAddTodoDone: (category: Category?, todoContent: String, startTime: LocalTime?) -> Unit,
+    onAddTodoDone: () -> Unit,
     onTimeConfirmButtonClick: (startTime: LocalTime) -> Unit,
     onTimePickerBottomSheetDismissRequest: () -> Unit,
     onAddTodoBottomSheetDismissRequest: () -> Unit,
@@ -326,7 +325,7 @@ fun TodoScreen(
             onSettingTimeClick = onTimePickerBottomSheetShowRequest,
             startTime = selectedStartTime,
             onDoneAction = {
-                onAddTodoDone(selectedCategory, todoText, selectedStartTime)
+                onAddTodoDone()
             },
         )
         TimePickerBottomSheet(
@@ -763,12 +762,11 @@ fun TodoScreenPreview() {
         isTimePickerBottomSheetVisible = false,
         isAddTodoBottomSheetVisible = false,
         todoText = "새로운 할 일",
-        selectedCategory = exampleCategories[0],
         selectedStartTime = LocalTime.NOON,
         onMenuClick = {},
         onListItemMove = { _, _ -> },
         onTodoCheckBoxClick = { _, _, _ -> },
-        onAddTodoDone = { _, _, _ -> },
+        onAddTodoDone = {},
         onTimeConfirmButtonClick = {},
         onTimePickerBottomSheetDismissRequest = {},
         onAddTodoBottomSheetDismissRequest = {},
