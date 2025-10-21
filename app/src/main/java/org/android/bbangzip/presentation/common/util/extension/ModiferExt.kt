@@ -11,7 +11,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.composed
 import androidx.compose.ui.draw.clip
@@ -35,16 +37,27 @@ fun Modifier.noRippleClickable(
     enabled: Boolean = true,
     onClickLabel: String? = null,
     role: Role? = null,
+    isRunOnce: Boolean = false,
     onClick: () -> Unit,
-): Modifier =
+): Modifier = composed {
+    var hasClicked by remember { mutableStateOf(false) }
+
     this.clickable(
         indication = null,
         interactionSource = remember { MutableInteractionSource() },
-        onClick = onClick,
         enabled = enabled,
         onClickLabel = onClickLabel,
         role = role,
+        onClick = if(isRunOnce) {
+            {
+                if(!hasClicked) {
+                    hasClicked = true
+                    onClick()
+                }
+            }
+        } else onClick,
     )
+}
 
 @Composable
 fun Modifier.applyFilterOnClick(

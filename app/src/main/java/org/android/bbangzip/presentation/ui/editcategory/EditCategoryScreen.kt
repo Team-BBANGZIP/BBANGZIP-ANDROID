@@ -158,7 +158,10 @@ private fun EditCategoryHeader(
             modifier =
                 Modifier
                     .fillMaxHeight()
-                    .noRippleClickable(onClick = onBackButtonClick),
+                    .noRippleClickable(
+                        isRunOnce = true,
+                        onClick = onBackButtonClick
+                    ),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
@@ -186,7 +189,11 @@ private fun EditCategoryHeader(
             modifier =
                 Modifier
                     .fillMaxHeight()
-                    .noRippleClickable(enabled = isConfirmEnable, onClick = onConfirmButtonClick),
+                    .noRippleClickable(
+                        enabled = isConfirmEnable,
+                        isRunOnce = true,
+                        onClick = onConfirmButtonClick
+                    ),
             contentAlignment = Alignment.Center,
         ) {
             Text(
