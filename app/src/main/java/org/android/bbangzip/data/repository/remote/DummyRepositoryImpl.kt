@@ -12,6 +12,6 @@ class DummyRepositoryImpl
     ) : DummyRepository {
         override suspend fun fetchDummy(dummyId: Long): Result<Dummy> =
             runCatching {
-                dummyRemoteDataSource.getDummy(dummyId = dummyId).data.toDummyEntity()
+                dummyRemoteDataSource.getDummy(dummyId = dummyId).data?.toDummyEntity() ?: throw Exception()
             }
     }
