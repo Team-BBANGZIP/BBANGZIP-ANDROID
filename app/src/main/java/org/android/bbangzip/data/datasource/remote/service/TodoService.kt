@@ -30,5 +30,5 @@ interface TodoService {
     @PATCH("$API/$VERSIONS/$TODO/order")
     suspend fun patchTodoOrder(
         @Body requestTodoOrderDto: RequestTodoOrderDto,
-    ): BaseResponse<ResponseDummyDto>
+    ): BaseResponse<Any>
 }

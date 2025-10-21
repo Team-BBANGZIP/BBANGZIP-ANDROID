@@ -11,8 +11,6 @@ import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.model.ListItem
 import org.android.bbangzip.presentation.common.model.Todo
 import org.android.bbangzip.presentation.common.util.extension.toYyyyMmDdString
-import org.android.bbangzip.presentation.ui.timer.contract.TimerContract
-import org.android.bbangzip.presentation.ui.timer.contract.model.TimerSessionUiState
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoEvent
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategories
@@ -26,7 +24,6 @@ import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
-import kotlin.onFailure
 
 @HiltViewModel
 class TodoViewModel
@@ -71,6 +68,15 @@ class TodoViewModel
                     val newCategories = reconstructCategoriesFromFlatList(currentFlatList)
 
                     updateState(UpdateCategoriesAndFlatList(newCategories, currentFlatList.toList()))
+//                    viewModelScope.launch{
+//                        todoRepository.patchTodoOrder(
+//                            todoId = TODO(),
+//                            originCategoryId = TODO(),
+//                            targetCategoryId = TODO(),
+//                            targetCategoryColor = TODO(),
+//                            todoOrderList = TODO()
+//                        )
+//                    }
                 }
 
                 is TodoEvent.OnMenuClick -> {

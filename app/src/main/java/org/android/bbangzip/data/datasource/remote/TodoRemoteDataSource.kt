@@ -15,7 +15,21 @@ class TodoRemoteDataSource
     ) {
         suspend fun getTodoList(date: String): BaseResponse<ResponseTodoListDto> = todoService.getTodoList(date)
 
-        suspend fun patchTodoOrder(request: RequestTodoOrderDto): BaseResponse<Any?> = todoService.patchTodoOrder(request)
+        suspend fun patchTodoOrder(
+            todoId: Long,
+            originCategoryId: Long,
+            targetCategoryId: Long,
+            targetCategoryColor: String,
+            todoOrderList: List<Long>,
+        ): BaseResponse<Any> = todoService.patchTodoOrder(
+            requestTodoOrderDto = RequestTodoOrderDto(
+                todoId = todoId,
+                originCategoryId = originCategoryId,
+                targetCategoryId = targetCategoryId,
+                targetCategoryColor = targetCategoryColor,
+                todoList = todoOrderList,
+            )
+        )
 
         suspend fun patchTodoCompletion(
             todoId: Long,
