@@ -63,7 +63,10 @@ fun BbangZipBaseTopBar(
                         tint = leadingIconColor,
                         modifier =
                             Modifier
-                                .noRippleClickable { onLeadingIconClick() }
+                                .noRippleClickable(
+                                    isRunOnce = true,
+                                    onClick = onLeadingIconClick,
+                                )
                                 .padding(8.dp),
                     )
                 }
@@ -91,7 +94,10 @@ fun BbangZipBaseTopBar(
                         tint = trailingIconColor,
                         modifier =
                             Modifier
-                                .noRippleClickable { onTrailingIconClick() }
+                                .noRippleClickable(
+                                    isRunOnce = true,
+                                    onClick = onTrailingIconClick,
+                                )
                                 .padding(8.dp),
                     )
                 }

@@ -82,6 +82,7 @@ import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.presentation.common.util.scroll.calculateScrollSpeed
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.CommitmentBottomSheet
 import org.android.bbangzip.ui.theme.BbangZipTheme
+import java.time.LocalDate
 import java.time.LocalTime
 
 private const val LIST_HEADER_COUNT = 1
@@ -102,12 +103,11 @@ fun TodoScreen(
     isTimePickerBottomSheetVisible: Boolean,
     isAddTodoBottomSheetVisible: Boolean,
     todoText: String,
-    selectedCategory: Category?,
     selectedStartTime: LocalTime?,
     onMenuClick: () -> Unit,
     onListItemMove: (from: Int, to: Int) -> Unit,
     onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit,
-    onAddTodoDone: (category: Category?, todoContent: String, startTime: LocalTime?) -> Unit,
+    onAddTodoDone: () -> Unit,
     onTimeConfirmButtonClick: (startTime: LocalTime) -> Unit,
     onTimePickerBottomSheetDismissRequest: () -> Unit,
     onAddTodoBottomSheetDismissRequest: () -> Unit,
@@ -120,6 +120,7 @@ fun TodoScreen(
     onCommitmentBottomSheetDismissRequest: () -> Unit,
     onManageCategoryClick: () -> Unit = {},
     onAddCategoryClick: () -> Unit = {},
+    onDateSelect: (LocalDate) -> Unit = {},
 ) {
     val localDensity = LocalDensity.current
     val itemSpacingPx = with(localDensity) { ITEM_SPACING.toPx() }
@@ -262,6 +263,7 @@ fun TodoScreen(
                     totalTodoCount = totalTodoCount,
                     onManageCategoryClick = onManageCategoryClick,
                     onAddCategoryClick = onAddCategoryClick,
+                    onDateSelect = onDateSelect,
                 )
             }
 
@@ -323,7 +325,7 @@ fun TodoScreen(
             onSettingTimeClick = onTimePickerBottomSheetShowRequest,
             startTime = selectedStartTime,
             onDoneAction = {
-                onAddTodoDone(selectedCategory, todoText, selectedStartTime)
+                onAddTodoDone()
             },
         )
         TimePickerBottomSheet(
@@ -494,6 +496,7 @@ private fun ListHeader(
     totalTodoCount: Int,
     onManageCategoryClick: () -> Unit,
     onAddCategoryClick: () -> Unit,
+    onDateSelect: (LocalDate) -> Unit,
 ) {
     Column {
         CommitmentMessageBox(
@@ -502,7 +505,10 @@ private fun ListHeader(
         )
 
         Box(modifier = Modifier.fillMaxWidth()) {
-            BbangZipWeeklyCalendar(onMenuClick = onMenuClick)
+            BbangZipWeeklyCalendar(
+                onDateSelected = onDateSelect,
+                onMenuClick = onMenuClick,
+            )
             if (isMenuOpen) {
                 MenuPopup(
                     modifier =
@@ -756,12 +762,11 @@ fun TodoScreenPreview() {
         isTimePickerBottomSheetVisible = false,
         isAddTodoBottomSheetVisible = false,
         todoText = "새로운 할 일",
-        selectedCategory = exampleCategories[0],
         selectedStartTime = LocalTime.NOON,
         onMenuClick = {},
         onListItemMove = { _, _ -> },
         onTodoCheckBoxClick = { _, _, _ -> },
-        onAddTodoDone = { _, _, _ -> },
+        onAddTodoDone = {},
         onTimeConfirmButtonClick = {},
         onTimePickerBottomSheetDismissRequest = {},
         onAddTodoBottomSheetDismissRequest = {},

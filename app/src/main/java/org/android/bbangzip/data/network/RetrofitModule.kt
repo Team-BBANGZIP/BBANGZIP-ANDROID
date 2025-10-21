@@ -66,12 +66,13 @@ object RetrofitModule {
     fun providesBbangZipRetrofit(
         okHttpClient: OkHttpClient,
         json: Json,
-    ): Retrofit =
-        Retrofit.Builder()
+    ): Retrofit {
+        return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(
                 json.asConverterFactory(requireNotNull("application/json".toMediaTypeOrNull())),
             )
             .build()
+    }
 }

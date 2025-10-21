@@ -2,11 +2,16 @@ package org.android.bbangzip.presentation.ui.todo
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import org.android.bbangzip.domain.repository.CommitmentRepository
+import org.android.bbangzip.domain.repository.TodoRepository
 import org.android.bbangzip.presentation.common.base.BaseViewModel
 import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.model.ListItem
 import org.android.bbangzip.presentation.common.model.Todo
+import org.android.bbangzip.presentation.common.util.extension.toYyyyMmDdString
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoEvent
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategories
@@ -16,6 +21,8 @@ import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateI
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateSelectedDate
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoSideEffect
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoState
+import timber.log.Timber
+import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
 
@@ -24,6 +31,8 @@ class TodoViewModel
     @Inject
     constructor(
         savedStateHandle: SavedStateHandle,
+        private val todoRepository: TodoRepository,
+        private val commitmentRepository: CommitmentRepository,
     ) : BaseViewModel<TodoEvent, TodoState, TodoReduce, TodoSideEffect>(savedStateHandle) {
         override fun createInitialState(savedState: Parcelable?): TodoState {
             return savedState as? TodoState ?: TodoState()
@@ -36,31 +45,15 @@ class TodoViewModel
         override fun handleEvent(event: TodoEvent) {
             when (event) {
                 is TodoEvent.Initialize -> {
-                    launch {
-                        val exampleCategories = getExampleList()
-                        updateCategoriesAndFlatList(exampleCategories)
-                    }
+                    getTodoList()
                 }
 
                 is TodoEvent.OnTodoCheckBoxClick -> {
-                    val updatedCategories =
-                        currentUiState.categories.map { category ->
-                            if (category.id == event.categoryId) {
-                                category.copy(
-                                    todos =
-                                        category.todos.map { todo ->
-                                            if (todo.todoId == event.todoId) {
-                                                todo.copy(isCompleted = event.isChecked)
-                                            } else {
-                                                todo
-                                            }
-                                        },
-                                )
-                            } else {
-                                category
-                            }
-                        }
-                    updateCategoriesAndFlatList(updatedCategories)
+                    patchTodoCompletion(
+                        categoryId = event.categoryId,
+                        todoId = event.todoId,
+                        isChecked = event.isChecked,
+                    )
                 }
 
                 is TodoEvent.OnListItemMove -> {
@@ -77,6 +70,15 @@ class TodoViewModel
                     val newCategories = reconstructCategoriesFromFlatList(currentFlatList)
 
                     updateState(UpdateCategoriesAndFlatList(newCategories, currentFlatList.toList()))
+//                    viewModelScope.launch{
+//                        todoRepository.reorderTodo(
+//                            todoId = TODO(),
+//                            originCategoryId = TODO(),
+//                            targetCategoryId = TODO(),
+//                            targetCategoryColor = TODO(),
+//                            todoOrderList = TODO()
+//                        )
+//                    }
                 }
 
                 is TodoEvent.OnMenuClick -> {
@@ -84,10 +86,13 @@ class TodoViewModel
                 }
 
                 is TodoEvent.OnAddTodoDone -> {
-                    if (event.todoContent.isNotBlank() && event.category != null) {
-                        onTodoAdd(event.category.id, event.todoContent, event.startTime)
-                        updateState(TodoReduce.ClearAddTodoState)
-                        updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(false))
+                    if (currentUiState.selectedCategory != null && currentUiState.todoText.isNotBlank()) {
+                        onTodoAdd(
+                            categoryId = currentUiState.selectedCategory!!.id,
+                            todoContent = currentUiState.todoText,
+                            targetDate = currentUiState.selectedDate,
+                            startTime = currentUiState.selectedStartTime,
+                        )
                     }
                 }
 
@@ -103,10 +108,13 @@ class TodoViewModel
                 }
                 TodoEvent.OnAddTodoBottomSheetDismissRequest -> {
                     if (currentUiState.selectedCategory != null && currentUiState.todoText.isNotBlank()) {
-                        onTodoAdd(categoryId = currentUiState.selectedCategory!!.id, todoContent = currentUiState.todoText, startTime = currentUiState.selectedStartTime)
+                        onTodoAdd(
+                            categoryId = currentUiState.selectedCategory!!.id,
+                            todoContent = currentUiState.todoText,
+                            targetDate = currentUiState.selectedDate,
+                            startTime = currentUiState.selectedStartTime,
+                        )
                     }
-                    updateState(TodoReduce.ClearAddTodoState)
-                    updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(false))
                 }
 
                 TodoEvent.OnTimePickerBottomSheetShowRequest -> {
@@ -122,20 +130,33 @@ class TodoViewModel
                     updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(true))
                 }
                 TodoEvent.OnAddCategoryClick -> {
-                    updateState(TodoReduce.UpdateIsMenuOpen(false))
+                    updateState(UpdateIsMenuOpen(false))
                     setSideEffect(TodoSideEffect.NavigateToAddCategory)
                 }
-                TodoEvent.OnDateChanged -> TODO()
+                is TodoEvent.OnDateSelect -> {
+                    updateState(UpdateSelectedDate(event.date))
+                    getTodoList(event.date)
+                }
                 TodoEvent.OnManageCategoryClick -> {
-                    updateState(TodoReduce.UpdateIsMenuOpen(false))
+                    updateState(UpdateIsMenuOpen(false))
                     setSideEffect(TodoSideEffect.NavigateToManageCategory)
                 }
                 TodoEvent.OnCommitmentAreaClick -> {
                     updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(true))
                 }
                 TodoEvent.OnCommitmentDone -> {
+                    val prevCommitment = currentUiState.confirmedCommitmentMessage
                     updateState(TodoReduce.UpdateConfirmedCommitmentMessage(commitmentMessage = currentUiState.textFieldCommitmentMessage))
                     updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(false))
+                    viewModelScope.launch {
+                        commitmentRepository
+                            .submitCommitmentMessage(commitmentMessage = currentUiState.textFieldCommitmentMessage)
+                            .onSuccess { data ->
+                            }.onFailure {
+                                Timber.d("다짐 메세지 작성 실패")
+                                updateState(TodoReduce.UpdateConfirmedCommitmentMessage(commitmentMessage = prevCommitment))
+                            }
+                    }
                 }
                 is TodoEvent.OnTextFieldCommitmentMessageChange -> {
                     updateState(TodoReduce.UpdateTextFieldCommitmentMessage(commitmentMessage = event.text))
@@ -143,6 +164,101 @@ class TodoViewModel
                 TodoEvent.OnCommitmentBottomSheetDismissRequest -> {
                     updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(false))
                 }
+            }
+        }
+
+        private fun patchTodoCompletion(
+            categoryId: Int,
+            todoId: Int,
+            isChecked: Boolean,
+        ) {
+            toggleCheckBox(
+                categoryList = currentUiState.categories,
+                categoryId = categoryId,
+                todoId = todoId,
+                isChecked = isChecked,
+            )
+            viewModelScope.launch {
+                todoRepository
+                    .toggleTodoCompletion(todoId = todoId.toLong(), isCompleted = isChecked)
+                    .onSuccess { data ->
+                    }.onFailure {
+                        Timber.d("투두 체크 변경 실패")
+                        toggleCheckBox(
+                            categoryList = currentUiState.categories,
+                            categoryId = categoryId,
+                            todoId = todoId,
+                            isChecked = !isChecked,
+                        )
+                    }
+            }
+        }
+
+        private fun toggleCheckBox(
+            categoryList: List<Category>,
+            categoryId: Int,
+            todoId: Int,
+            isChecked: Boolean,
+        ) {
+            val updatedCategories =
+                categoryList.map { category ->
+                    if (category.id == categoryId) {
+                        category.copy(
+                            todos =
+                                category.todos.map { todo ->
+                                    if (todo.todoId == todoId) {
+                                        todo.copy(isCompleted = isChecked)
+                                    } else {
+                                        todo
+                                    }
+                                },
+                        )
+                    } else {
+                        category
+                    }
+                }
+            updateCategoriesAndFlatList(updatedCategories)
+        }
+
+        private fun getTodoList(
+            date: LocalDate = currentUiState.selectedDate,
+        ) {
+            viewModelScope.launch {
+                todoRepository
+                    .getTodoList(
+                        date = date.toYyyyMmDdString(),
+                    )
+                    .onSuccess { data ->
+                        val categoryList =
+                            data.categories.map { category ->
+                                Category(
+                                    id = category.categoryId,
+                                    name = category.categoryName,
+                                    color = category.categoryColor,
+                                    todos =
+                                        category.todos.map { todo ->
+                                            Todo(
+                                                todoId = todo.todoId,
+                                                content = todo.content,
+                                                isCompleted = todo.isCompleted,
+                                                startTime = todo.startTime,
+                                            )
+                                        },
+                                )
+                            }
+
+                        updateState(
+                            TodoReduce.UpdateTodoState(
+                                currentUiState.copy(
+                                    categories = categoryList,
+                                    flatList = categoryList.toFlatList(),
+                                    confirmedCommitmentMessage = data.commitmentMessage,
+                                ),
+                            ),
+                        )
+                    }.onFailure { throwable ->
+                        Timber.d("TimerViewmodel 초기화 실패 $throwable")
+                    }
             }
         }
 
@@ -196,6 +312,10 @@ class TodoViewModel
                 }
                 is TodoReduce.UpdateConfirmedCommitmentMessage -> {
                     state.copy(confirmedCommitmentMessage = reduce.commitmentMessage)
+                }
+
+                is TodoReduce.UpdateTodoState -> {
+                    reduce.todoState
                 }
             }
         }
@@ -283,191 +403,42 @@ class TodoViewModel
             return newCategories
         }
 
-        private fun getExampleList(): List<Category> {
-            return listOf(
-                Category(
-                    id = 1,
-                    name = "제과제빵점",
-                    color = "RED1",
-                    todos =
-                        listOf(
-                            Todo(
-                                todoId = 11,
-                                content = "두줄 \n 두줄",
-                                isCompleted = true,
-                                startTime = LocalTime.of(11, 0),
-                            ),
-                            Todo(
-                                todoId = 12,
-                                content = "제과제빵점_한줄_실패",
-                                isCompleted = false,
-                                startTime = null,
-                            ),
-                            Todo(
-                                todoId = 13,
-                                content = "제과제빵점_한줄_완료",
-                                isCompleted = true,
-                                startTime = null,
-                            ),
-                        ),
-                ),
-                Category(
-                    id = 2,
-                    name = "경제학개론",
-                    color = "YELLOW1",
-                    todos =
-                        listOf(
-                            Todo(
-                                todoId = 21,
-                                content = "경제학개론_한줄_완료",
-                                isCompleted = true,
-                                startTime = null,
-                            ),
-                            Todo(
-                                todoId = 22,
-                                content = "경제학개론 \n 두줄_실패",
-                                isCompleted = false,
-                                startTime = LocalTime.of(11, 0),
-                            ),
-                        ),
-                ),
-                Category(
-                    id = 3,
-                    name = "운동",
-                    color = "GREEN1",
-                    todos =
-                        listOf(
-                            Todo(
-                                todoId = 31,
-                                content = "헬스장 가기",
-                                isCompleted = false,
-                                startTime = LocalTime.of(18, 0),
-                            ),
-                            Todo(
-                                todoId = 32,
-                                content = "저녁 유산소 30분",
-                                isCompleted = true,
-                                startTime = LocalTime.of(19, 30),
-                            ),
-                        ),
-                ),
-                Category(
-                    id = 4,
-                    name = "스터디",
-                    color = "BLUE1",
-                    todos =
-                        listOf(
-                            Todo(
-                                todoId = 41,
-                                content = "알고리즘 문제 풀이",
-                                isCompleted = true,
-                                startTime = LocalTime.of(20, 0),
-                            ),
-                            Todo(
-                                todoId = 42,
-                                content = "코틀린 스터디 준비",
-                                isCompleted = false,
-                                startTime = null,
-                            ),
-                            Todo(
-                                todoId = 43,
-                                content = "CS 스터디 복습",
-                                isCompleted = true,
-                                startTime = LocalTime.of(10, 0),
-                            ),
-                        ),
-                ),
-                Category(
-                    id = 5,
-                    name = "개인 프로젝트",
-                    color = "PURPLE1",
-                    todos =
-                        listOf(
-                            Todo(
-                                todoId = 51,
-                                content = "UI 디자인 검토",
-                                isCompleted = false,
-                                startTime = null,
-                            ),
-                            Todo(
-                                todoId = 52,
-                                content = "백엔드 API 연동",
-                                isCompleted = false,
-                                startTime = LocalTime.of(14, 0),
-                            ),
-                        ),
-                ),
-                Category(
-                    id = 6,
-                    name = "새로운 카테고리",
-                    color = "RED2",
-                    todos =
-                        listOf(
-                            Todo(
-                                todoId = 61,
-                                content = "새로운 할 일 1",
-                                isCompleted = false,
-                                startTime = LocalTime.of(9, 0),
-                            ),
-                            Todo(
-                                todoId = 62,
-                                content = "새로운 할 일 2",
-                                isCompleted = true,
-                                startTime = LocalTime.of(10, 30),
-                            ),
-                        ),
-                ),
-                Category(
-                    id = 7,
-                    name = "영화",
-                    color = "YELLOW2",
-                    todos =
-                        listOf(
-                            Todo(
-                                todoId = 71,
-                                content = "귀멸의 칼날",
-                                isCompleted = false,
-                                startTime = LocalTime.of(9, 0),
-                            ),
-                            Todo(
-                                todoId = 72,
-                                content = "좀비딸",
-                                isCompleted = true,
-                                startTime = LocalTime.of(10, 30),
-                            ),
-                            Todo(
-                                todoId = 73,
-                                content = "F1",
-                                isCompleted = true,
-                                startTime = LocalTime.of(10, 30),
-                            ),
-                        ),
-                ),
-            )
-        }
-
         fun onTodoAdd(
             categoryId: Int,
             todoContent: String,
+            targetDate: LocalDate,
             startTime: LocalTime?,
         ) {
-            val newTodoId = (currentUiState.categories.flatMap { it.todos }.maxOfOrNull { it.todoId } ?: 0) + 1
-            val newTodo =
-                Todo(
-                    todoId = newTodoId,
-                    content = todoContent,
-                    isCompleted = false,
-                    startTime = startTime,
-                )
-
-            val updatedCategories =
-                currentUiState.categories.map { category ->
-                    if (category.id == categoryId) {
-                        category.copy(todos = category.todos + newTodo)
-                    } else {
-                        category
+            viewModelScope.launch {
+                todoRepository
+                    .addTodo(
+                        categoryId = categoryId.toLong(),
+                        content = todoContent,
+                        targetDate = targetDate,
+                        startTime = startTime,
+                    )
+                    .onSuccess { data ->
+                        val newTodo =
+                            Todo(
+                                todoId = data.todoId.toInt(),
+                                content = data.content,
+                                isCompleted = data.isCompleted,
+                                startTime = data.startTime,
+                            )
+                        val updatedCategories =
+                            currentUiState.categories.map { category ->
+                                if (category.id == categoryId) {
+                                    category.copy(todos = category.todos + newTodo)
+                                } else {
+                                    category
+                                }
+                            }
+                        updateCategoriesAndFlatList(updatedCategories)
+                        updateState(TodoReduce.ClearAddTodoState)
+                        updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(false))
+                    }.onFailure {
+                        Timber.d("Todo 생성 싪패!")
                     }
-                }
-            updateCategoriesAndFlatList(updatedCategories)
+            }
         }
     }

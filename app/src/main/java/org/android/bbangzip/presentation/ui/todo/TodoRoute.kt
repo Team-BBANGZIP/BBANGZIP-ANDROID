@@ -42,7 +42,6 @@ fun TodoRoute(
         isAddTodoBottomSheetVisible = uiState.isAddTodoBottomSheetVisible,
         isTimePickerBottomSheetVisible = uiState.isTimePickerBottomSheetVisible,
         todoText = uiState.todoText,
-        selectedCategory = uiState.selectedCategory,
         selectedStartTime = uiState.selectedStartTime,
         onListItemMove = { fromIndex, toIndex ->
             viewModel.setEvent(TodoEvent.OnListItemMove(fromIndex, toIndex))
@@ -53,8 +52,8 @@ fun TodoRoute(
         onMenuClick = {
             viewModel.setEvent(TodoEvent.OnMenuClick)
         },
-        onAddTodoDone = { category, todo, todoDate ->
-            viewModel.setEvent(TodoEvent.OnAddTodoDone(category, todo, todoDate))
+        onAddTodoDone = {
+            viewModel.setEvent(TodoEvent.OnAddTodoDone)
         },
         onTimeConfirmButtonClick = { startTime ->
             viewModel.setEvent(TodoEvent.OnTimeConfirmButtonClick(startTime))
@@ -91,6 +90,9 @@ fun TodoRoute(
         },
         onManageCategoryClick = {
             viewModel.setEvent(TodoEvent.OnManageCategoryClick)
+        },
+        onDateSelect = {
+            viewModel.setEvent(TodoEvent.OnDateSelect(it))
         },
     )
 }

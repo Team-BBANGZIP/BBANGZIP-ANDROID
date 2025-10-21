@@ -7,4 +7,6 @@ object ApiConstants {
     const val VERSIONS = "v1"
 
     const val TIMER = "timers"
+    const val TODO = "todos"
+    const val USER = "users"
 }

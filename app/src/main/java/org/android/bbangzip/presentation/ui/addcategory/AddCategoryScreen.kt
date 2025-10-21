@@ -124,7 +124,10 @@ private fun AddCategoryHeader(
             modifier =
                 Modifier
                     .fillMaxHeight()
-                    .noRippleClickable(onClick = onBackButtonClick),
+                    .noRippleClickable(
+                        isRunOnce = true,
+                        onClick = onBackButtonClick,
+                    ),
             contentAlignment = Alignment.Center,
         ) {
             Icon(
@@ -152,7 +155,11 @@ private fun AddCategoryHeader(
             modifier =
                 Modifier
                     .fillMaxHeight()
-                    .noRippleClickable(enabled = isDoneEnable, onClick = onDoneButtonClick),
+                    .noRippleClickable(
+                        enabled = isDoneEnable,
+                        isRunOnce = true,
+                        onClick = onDoneButtonClick,
+                    ),
             contentAlignment = Alignment.Center,
         ) {
             Text(
