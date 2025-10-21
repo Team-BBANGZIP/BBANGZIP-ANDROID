@@ -5,6 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RequestDummyDto(
-    @SerialName("dummy")
     val dummy: String,
 )

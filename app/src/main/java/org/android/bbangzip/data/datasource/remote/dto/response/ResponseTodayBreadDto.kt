@@ -6,7 +6,6 @@ import org.android.bbangzip.domain.model.BreadCount
 
 @Serializable
 data class ResponseTodayBreadDto(
-    @SerialName("todayBakedCount")
     val todayBakedCount: Int,
 ) {
     fun toBreadCount(): BreadCount =

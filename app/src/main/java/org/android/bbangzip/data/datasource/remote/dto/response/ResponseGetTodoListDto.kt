@@ -1,5 +1,8 @@
 package org.android.bbangzip.data.datasource.remote.dto.response
 
+import kotlinx.serialization.Serializable
+import org.android.bbangzip.data.datasource.remote.util.serializer.LocalDateSerializer
+import org.android.bbangzip.data.datasource.remote.util.serializer.LocalTimeSerializer
 import org.android.bbangzip.domain.model.Category
 import org.android.bbangzip.domain.model.Todo
 import org.android.bbangzip.domain.model.TodoList
@@ -7,6 +10,7 @@ import org.android.bbangzip.domain.model.TodoSummary
 import java.time.LocalDate
 import java.time.LocalTime
 
+@Serializable
 data class ResponseGetTodoListDto(
     val commitmentMessage: String,
     val todoSummary: TodoSummaryDto,
@@ -20,7 +24,9 @@ data class ResponseGetTodoListDto(
         )
 }
 
+@Serializable
 data class TodoSummaryDto(
+    @Serializable(with = LocalDateSerializer::class)
     val date: LocalDate,
     val totalCount: Int,
     val completedCount: Int,
@@ -33,6 +39,7 @@ data class TodoSummaryDto(
         )
 }
 
+@Serializable
 data class CategoryDto(
     val categoryId: Int,
     val categoryName: String,
@@ -48,10 +55,12 @@ data class CategoryDto(
         )
 }
 
+@Serializable
 data class TodoDto(
     val todoId: Int,
     val content: String,
     val isCompleted: Boolean,
+    @Serializable(with = LocalTimeSerializer::class)
     val startTime: LocalTime?,
 ) {
     fun toTodo() =

@@ -6,7 +6,6 @@ import org.android.bbangzip.domain.model.Dummy
 
 @Serializable
 data class ResponseDummyDto(
-    @SerialName("dummy")
     val dummyName: String,
 ) {
     fun toDummyEntity() =
