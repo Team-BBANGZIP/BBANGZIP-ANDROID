@@ -20,7 +20,7 @@ class TodoRepositoryImpl
             responseData.toTodoListInfo()
         }
 
-    override suspend fun patchTodoCompletion(todoId: Long, isCompleted: Boolean): Result<TodoCompletionInfo> =
+    override suspend fun toggleTodoCompletion(todoId: Long, isCompleted: Boolean): Result<TodoCompletionInfo> =
         runCatching {
             val response =
                 todoRemoteDataSource.patchTodoCompletion(todoId, isCompleted)
@@ -30,7 +30,7 @@ class TodoRepositoryImpl
             responseData.toTodoCompletionInfo()
         }
 
-    override suspend fun patchTodoOrder(
+    override suspend fun reorderTodo(
         todoId: Long,
         originCategoryId: Long,
         targetCategoryId: Long,

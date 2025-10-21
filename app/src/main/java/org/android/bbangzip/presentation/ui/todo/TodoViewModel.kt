@@ -162,7 +162,7 @@ class TodoViewModel
         )
         viewModelScope.launch {
             todoRepository
-                .patchTodoCompletion(todoId.toLong(), isChecked)
+                .toggleTodoCompletion(todoId = todoId.toLong(), isCompleted = isChecked)
                 .onSuccess { data ->
                 }.onFailure {
                     Timber.d("투두 체크 변경 실패")
