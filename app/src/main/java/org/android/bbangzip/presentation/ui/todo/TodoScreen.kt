@@ -507,7 +507,7 @@ private fun ListHeader(
         Box(modifier = Modifier.fillMaxWidth()) {
             BbangZipWeeklyCalendar(
                 onDateSelected = onDateSelect,
-                onMenuClick = onMenuClick
+                onMenuClick = onMenuClick,
             )
             if (isMenuOpen) {
                 MenuPopup(

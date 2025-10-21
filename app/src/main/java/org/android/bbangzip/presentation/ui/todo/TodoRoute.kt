@@ -93,6 +93,6 @@ fun TodoRoute(
         },
         onDateSelect = {
             viewModel.setEvent(TodoEvent.OnDateSelect(it))
-        }
+        },
     )
 }

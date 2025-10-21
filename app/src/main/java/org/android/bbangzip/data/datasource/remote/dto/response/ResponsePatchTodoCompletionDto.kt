@@ -6,12 +6,13 @@ data class ResponsePatchTodoCompletionDto(
     val todoId: Long,
     val isCompleted: Boolean,
     val completedCount: Int,
-    val totalCount: Int
-){
-    fun toTodoCompletionInfo()= TodoCompletionInfo(
-        todoId = todoId,
-        isCompleted = isCompleted,
-        completionCount = completedCount,
-        totalTodoCount = totalCount
-    )
+    val totalCount: Int,
+) {
+    fun toTodoCompletionInfo() =
+        TodoCompletionInfo(
+            todoId = todoId,
+            isCompleted = isCompleted,
+            completionCount = completedCount,
+            totalTodoCount = totalCount,
+        )
 }

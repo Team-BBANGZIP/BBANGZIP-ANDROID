@@ -5,5 +5,5 @@ data class RequestPatchTodoOrderDto(
     val originCategoryId: Long,
     val targetCategoryId: Long,
     val targetCategoryColor: String,
-    val todoList: List<Long>
+    val todoList: List<Long>,
 )

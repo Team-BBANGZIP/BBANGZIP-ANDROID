@@ -52,7 +52,7 @@ class TodoViewModel
                     patchTodoCompletion(
                         categoryId = event.categoryId,
                         todoId = event.todoId,
-                        isChecked = event.isChecked
+                        isChecked = event.isChecked,
                     )
                 }
 
@@ -91,7 +91,7 @@ class TodoViewModel
                             categoryId = currentUiState.selectedCategory!!.id,
                             todoContent = currentUiState.todoText,
                             targetDate = currentUiState.selectedDate,
-                            startTime = currentUiState.selectedStartTime
+                            startTime = currentUiState.selectedStartTime,
                         )
                     }
                 }
@@ -112,7 +112,7 @@ class TodoViewModel
                             categoryId = currentUiState.selectedCategory!!.id,
                             todoContent = currentUiState.todoText,
                             targetDate = currentUiState.selectedDate,
-                            startTime = currentUiState.selectedStartTime
+                            startTime = currentUiState.selectedStartTime,
                         )
                     }
                 }
@@ -148,11 +148,10 @@ class TodoViewModel
                     val prevCommitment = currentUiState.confirmedCommitmentMessage
                     updateState(TodoReduce.UpdateConfirmedCommitmentMessage(commitmentMessage = currentUiState.textFieldCommitmentMessage))
                     updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(false))
-                    viewModelScope.launch{
+                    viewModelScope.launch {
                         commitmentRepository
                             .submitCommitmentMessage(commitmentMessage = currentUiState.textFieldCommitmentMessage)
                             .onSuccess { data ->
-
                             }.onFailure {
                                 Timber.d("다짐 메세지 작성 실패")
                                 updateState(TodoReduce.UpdateConfirmedCommitmentMessage(commitmentMessage = prevCommitment))
@@ -168,95 +167,102 @@ class TodoViewModel
             }
         }
 
-    private fun patchTodoCompletion(
-        categoryId: Int,
-        todoId: Int,
-        isChecked: Boolean,
-    ) {
-        toggleCheckBox(
-            categoryList = currentUiState.categories,
-            categoryId = categoryId,
-            todoId = todoId,
-            isChecked = isChecked
-        )
-        viewModelScope.launch {
-            todoRepository
-                .toggleTodoCompletion(todoId = todoId.toLong(), isCompleted = isChecked)
-                .onSuccess { data ->
-                }.onFailure {
-                    Timber.d("투두 체크 변경 실패")
-                    toggleCheckBox(
-                        categoryList = currentUiState.categories,
-                        categoryId = categoryId,
-                        todoId = todoId,
-                        isChecked = !isChecked
-                    )
-                }
-        }
-    }
-
-    private fun toggleCheckBox(categoryList: List<Category>, categoryId: Int, todoId: Int, isChecked: Boolean) {
-        val updatedCategories =
-            categoryList.map { category ->
-                if (category.id == categoryId) {
-                    category.copy(
-                        todos =
-                            category.todos.map { todo ->
-                                if (todo.todoId == todoId) {
-                                    todo.copy(isCompleted = isChecked)
-                                } else {
-                                    todo
-                                }
-                            },
-                    )
-                } else {
-                    category
-                }
-            }
-        updateCategoriesAndFlatList(updatedCategories)
-    }
-
-    private fun getTodoList(
-        date: LocalDate = currentUiState.selectedDate,
-    ) {
-        viewModelScope.launch {
-            todoRepository
-                .getTodoList(
-                    date = date.toYyyyMmDdString()
-                )
-                .onSuccess { data ->
-                    val categoryList = data.categories.map { category ->
-                        Category(
-                            id = category.categoryId,
-                            name = category.categoryName,
-                            color = category.categoryColor,
-                            todos = category.todos.map { todo ->
-                                Todo(
-                                    todoId = todo.todoId,
-                                    content = todo.content,
-                                    isCompleted = todo.isCompleted,
-                                    startTime = todo.startTime
-                                )
-                            }
+        private fun patchTodoCompletion(
+            categoryId: Int,
+            todoId: Int,
+            isChecked: Boolean,
+        ) {
+            toggleCheckBox(
+                categoryList = currentUiState.categories,
+                categoryId = categoryId,
+                todoId = todoId,
+                isChecked = isChecked,
+            )
+            viewModelScope.launch {
+                todoRepository
+                    .toggleTodoCompletion(todoId = todoId.toLong(), isCompleted = isChecked)
+                    .onSuccess { data ->
+                    }.onFailure {
+                        Timber.d("투두 체크 변경 실패")
+                        toggleCheckBox(
+                            categoryList = currentUiState.categories,
+                            categoryId = categoryId,
+                            todoId = todoId,
+                            isChecked = !isChecked,
                         )
                     }
-
-                    updateState(
-                        TodoReduce.UpdateTodoState(
-                            currentUiState.copy(
-                                categories = categoryList,
-                                flatList = categoryList.toFlatList(),
-                                confirmedCommitmentMessage = data.commitmentMessage
-                            )
-                        )
-                    )
-                }.onFailure { throwable ->
-                    Timber.d("TimerViewmodel 초기화 실패 $throwable")
-                }
+            }
         }
-    }
 
-    override fun reduceState(
+        private fun toggleCheckBox(
+            categoryList: List<Category>,
+            categoryId: Int,
+            todoId: Int,
+            isChecked: Boolean,
+        ) {
+            val updatedCategories =
+                categoryList.map { category ->
+                    if (category.id == categoryId) {
+                        category.copy(
+                            todos =
+                                category.todos.map { todo ->
+                                    if (todo.todoId == todoId) {
+                                        todo.copy(isCompleted = isChecked)
+                                    } else {
+                                        todo
+                                    }
+                                },
+                        )
+                    } else {
+                        category
+                    }
+                }
+            updateCategoriesAndFlatList(updatedCategories)
+        }
+
+        private fun getTodoList(
+            date: LocalDate = currentUiState.selectedDate,
+        ) {
+            viewModelScope.launch {
+                todoRepository
+                    .getTodoList(
+                        date = date.toYyyyMmDdString(),
+                    )
+                    .onSuccess { data ->
+                        val categoryList =
+                            data.categories.map { category ->
+                                Category(
+                                    id = category.categoryId,
+                                    name = category.categoryName,
+                                    color = category.categoryColor,
+                                    todos =
+                                        category.todos.map { todo ->
+                                            Todo(
+                                                todoId = todo.todoId,
+                                                content = todo.content,
+                                                isCompleted = todo.isCompleted,
+                                                startTime = todo.startTime,
+                                            )
+                                        },
+                                )
+                            }
+
+                        updateState(
+                            TodoReduce.UpdateTodoState(
+                                currentUiState.copy(
+                                    categories = categoryList,
+                                    flatList = categoryList.toFlatList(),
+                                    confirmedCommitmentMessage = data.commitmentMessage,
+                                ),
+                            ),
+                        )
+                    }.onFailure { throwable ->
+                        Timber.d("TimerViewmodel 초기화 실패 $throwable")
+                    }
+            }
+        }
+
+        override fun reduceState(
             state: TodoState,
             reduce: TodoReduce,
         ): TodoState {
@@ -403,21 +409,22 @@ class TodoViewModel
             targetDate: LocalDate,
             startTime: LocalTime?,
         ) {
-            viewModelScope.launch{
+            viewModelScope.launch {
                 todoRepository
                     .addTodo(
                         categoryId = categoryId.toLong(),
                         content = todoContent,
                         targetDate = targetDate,
-                        startTime = startTime
+                        startTime = startTime,
                     )
                     .onSuccess { data ->
-                        val newTodo = Todo(
-                            todoId = data.todoId.toInt(),
-                            content = data.content,
-                            isCompleted = data.isCompleted,
-                            startTime = data.startTime
-                        )
+                        val newTodo =
+                            Todo(
+                                todoId = data.todoId.toInt(),
+                                content = data.content,
+                                isCompleted = data.isCompleted,
+                                startTime = data.startTime,
+                            )
                         val updatedCategories =
                             currentUiState.categories.map { category ->
                                 if (category.id == categoryId) {

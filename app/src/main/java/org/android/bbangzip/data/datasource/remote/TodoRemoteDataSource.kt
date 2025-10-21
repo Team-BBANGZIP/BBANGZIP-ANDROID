@@ -25,37 +25,43 @@ class TodoRemoteDataSource
             targetCategoryId: Long,
             targetCategoryColor: String,
             todoOrderList: List<Long>,
-        ): BaseResponse<Any> = todoService.patchTodoOrder(
-            requestTodoOrderDto = RequestPatchTodoOrderDto(
-                todoId = todoId,
-                originCategoryId = originCategoryId,
-                targetCategoryId = targetCategoryId,
-                targetCategoryColor = targetCategoryColor,
-                todoList = todoOrderList,
+        ): BaseResponse<Any> =
+            todoService.patchTodoOrder(
+                requestTodoOrderDto =
+                    RequestPatchTodoOrderDto(
+                        todoId = todoId,
+                        originCategoryId = originCategoryId,
+                        targetCategoryId = targetCategoryId,
+                        targetCategoryColor = targetCategoryColor,
+                        todoList = todoOrderList,
+                    ),
             )
-        )
 
         suspend fun patchTodoCompletion(
             todoId: Long,
             isCompleted: Boolean,
-        ): BaseResponse<ResponsePatchTodoCompletionDto> = todoService.patchTodoCompletion(
-            todoId = todoId,
-            requestTodoCompletionDto = RequestPatchTodoCompletionDto(
-                isCompleted = isCompleted,
-            ),
-        )
+        ): BaseResponse<ResponsePatchTodoCompletionDto> =
+            todoService.patchTodoCompletion(
+                todoId = todoId,
+                requestTodoCompletionDto =
+                    RequestPatchTodoCompletionDto(
+                        isCompleted = isCompleted,
+                    ),
+            )
 
-    suspend fun postTodo(
-        categoryId: Long,
-        content: String,
-        targetDate: LocalDate,
-        startTime: LocalTime?,
-    ): BaseResponse<ResponsePostTodoDto> = todoService.postTodo(
-        requestTodoAddDto = RequestPostTodoDto(
-            categoryId = categoryId,
-            content = content,
-            targetDate = targetDate,
-            startTime = startTime
-        )
-    )
-}
+        suspend fun postTodo(
+            categoryId: Long,
+            content: String,
+            targetDate: LocalDate,
+            startTime: LocalTime?,
+        ): BaseResponse<ResponsePostTodoDto> =
+            todoService.postTodo(
+                requestTodoAddDto =
+                    RequestPostTodoDto(
+                        categoryId = categoryId,
+                        content = content,
+                        targetDate = targetDate,
+                        startTime = startTime,
+                    ),
+            )
+    }

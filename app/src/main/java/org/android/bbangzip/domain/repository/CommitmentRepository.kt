@@ -4,6 +4,6 @@ import org.android.bbangzip.domain.model.CommitmentMessage
 
 interface CommitmentRepository {
     suspend fun submitCommitmentMessage(
-        commitmentMessage: String
+        commitmentMessage: String,
     ): Result<CommitmentMessage>
 }

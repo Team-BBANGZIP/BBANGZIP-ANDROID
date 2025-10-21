@@ -73,16 +73,17 @@ object RetrofitModule {
         okHttpClient: OkHttpClient,
         json: Json,
     ): Retrofit {
-        val gson = GsonBuilder()
-            .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
-            .registerTypeAdapter(LocalTime::class.java, LocalTimeAdapter())
-            .create()
+        val gson =
+            GsonBuilder()
+                .registerTypeAdapter(LocalDate::class.java, LocalDateAdapter())
+                .registerTypeAdapter(LocalTime::class.java, LocalTimeAdapter())
+                .create()
 
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(
-                GsonConverterFactory.create(gson)
+                GsonConverterFactory.create(gson),
             )
             .addConverterFactory(
                 json.asConverterFactory(requireNotNull("application/json".toMediaTypeOrNull())),

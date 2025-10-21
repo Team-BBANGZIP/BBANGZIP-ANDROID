@@ -2,11 +2,9 @@ package org.android.bbangzip.data.datasource.remote.service
 
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoCompletionDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoOrderDto
-import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostCommitmentDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostTodoDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseGetTodoListDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePatchTodoCompletionDto
-import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePostCommitmentDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePostTodoDto
 import org.android.bbangzip.data.datasource.remote.util.base.BaseResponse
 import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.API
@@ -22,7 +20,7 @@ import retrofit2.http.Query
 interface TodoService {
     @GET("$API/$VERSIONS/$TODO")
     suspend fun getTodoList(
-        @Query("date") date: String
+        @Query("date") date: String,
     ): BaseResponse<ResponseGetTodoListDto>
 
     @PATCH("$API/$VERSIONS/$TODO/{todoId}/completion")

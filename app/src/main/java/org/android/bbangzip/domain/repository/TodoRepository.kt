@@ -9,7 +9,10 @@ import java.time.LocalTime
 interface TodoRepository {
     suspend fun getTodoList(date: String): Result<TodoList>
 
-    suspend fun toggleTodoCompletion(todoId: Long, isCompleted: Boolean): Result<TodoCompletionInfo>
+    suspend fun toggleTodoCompletion(
+        todoId: Long,
+        isCompleted: Boolean,
+    ): Result<TodoCompletionInfo>
 
     suspend fun reorderTodo(
         todoId: Long,

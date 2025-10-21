@@ -12,7 +12,7 @@ data class ResponsePostTodoDto(
     val isCompleted: Boolean,
     val categoryId: Long,
     val categoryColor: String,
-){
+) {
     fun toTodo() =
         Todo(
             todoId = todoId.toInt(),
