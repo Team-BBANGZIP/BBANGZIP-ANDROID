@@ -1,9 +1,9 @@
 package org.android.bbangzip.data.datasource.remote.dto.response
 
-import org.android.bbangzip.domain.model.CategoryInfo
-import org.android.bbangzip.domain.model.TodoInfo
-import org.android.bbangzip.domain.model.TodoListInfo
-import org.android.bbangzip.domain.model.TodoSummaryInfo
+import org.android.bbangzip.domain.model.Category
+import org.android.bbangzip.domain.model.Todo
+import org.android.bbangzip.domain.model.TodoList
+import org.android.bbangzip.domain.model.TodoSummary
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -12,11 +12,11 @@ data class ResponseGetTodoListDto(
     val todoSummary: TodoSummaryDto,
     val categories: List<CategoryDto>
 ){
-    fun toTodoListInfo() =
-        TodoListInfo(
+    fun toTodoList() =
+        TodoList(
             commitmentMessage = commitmentMessage,
-            todoSummary = todoSummary.toTodoSummaryInfo(),
-            categories = categories.map { it.toCategoryInfo() }
+            todoSummary = todoSummary.toTodoSummary(),
+            categories = categories.map { it.toCategory() }
         )
 }
 
@@ -25,8 +25,8 @@ data class TodoSummaryDto(
     val totalCount: Int,
     val completedCount: Int
 ){
-    fun toTodoSummaryInfo() =
-        TodoSummaryInfo(
+    fun toTodoSummary() =
+        TodoSummary(
             date = date,
             totalCount = totalCount,
             completedCount = completedCount
@@ -39,12 +39,12 @@ data class CategoryDto(
     val categoryColor: String,
     val todos: List<TodoDto>
 ){
-    fun toCategoryInfo() =
-        CategoryInfo(
+    fun toCategory() =
+        Category(
             categoryId = categoryId,
             categoryName = categoryName,
             categoryColor = categoryColor,
-            todos = todos.map { it.toTodoInfo() }
+            todos = todos.map { it.toTodo() }
         )
 }
 
@@ -54,7 +54,7 @@ data class TodoDto(
     val isCompleted: Boolean,
     val startTime: LocalTime?
 ){
-    fun toTodoInfo() = TodoInfo(
+    fun toTodo() = Todo(
         todoId = todoId,
         content = content,
         isCompleted = isCompleted,

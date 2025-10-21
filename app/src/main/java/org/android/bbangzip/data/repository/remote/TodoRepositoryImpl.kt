@@ -1,9 +1,9 @@
 package org.android.bbangzip.data.repository.remote
 
 import org.android.bbangzip.data.datasource.remote.TodoRemoteDataSource
-import org.android.bbangzip.domain.model.NewTodo
+import org.android.bbangzip.domain.model.Todo
 import org.android.bbangzip.domain.model.TodoCompletionInfo
-import org.android.bbangzip.domain.model.TodoListInfo
+import org.android.bbangzip.domain.model.TodoList
 import org.android.bbangzip.domain.repository.TodoRepository
 import java.time.LocalDate
 import java.time.LocalTime
@@ -14,13 +14,13 @@ class TodoRepositoryImpl
     constructor(
         private val todoRemoteDataSource: TodoRemoteDataSource
     ) : TodoRepository {
-    override suspend fun getTodoList(date: String): Result<TodoListInfo> =
+    override suspend fun getTodoList(date: String): Result<TodoList> =
         runCatching {
             val response =
                 todoRemoteDataSource.getTodoList(date)
             val responseData = response.data ?: throw IllegalStateException("Data가 존재하지 않습니다.")
 
-            responseData.toTodoListInfo()
+            responseData.toTodoList()
         }
 
     override suspend fun toggleTodoCompletion(todoId: Long, isCompleted: Boolean): Result<TodoCompletionInfo> =
@@ -54,7 +54,7 @@ class TodoRepositoryImpl
         content: String,
         targetDate: LocalDate,
         startTime: LocalTime?
-    ): Result<NewTodo> = runCatching {
+    ): Result<Todo> = runCatching {
         val response = todoRemoteDataSource.postTodo(
             categoryId = categoryId,
             content = content,
@@ -64,6 +64,6 @@ class TodoRepositoryImpl
 
         val data = response.data ?: throw IllegalStateException("Todo Data가 존재하지 않습니다.")
 
-        data.toNewTodo()
+        data.toTodo()
     }
 }

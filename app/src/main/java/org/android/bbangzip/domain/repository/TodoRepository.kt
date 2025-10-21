@@ -1,13 +1,13 @@
 package org.android.bbangzip.domain.repository
 
-import org.android.bbangzip.domain.model.NewTodo
+import org.android.bbangzip.domain.model.Todo
 import org.android.bbangzip.domain.model.TodoCompletionInfo
-import org.android.bbangzip.domain.model.TodoListInfo
+import org.android.bbangzip.domain.model.TodoList
 import java.time.LocalDate
 import java.time.LocalTime
 
 interface TodoRepository {
-    suspend fun getTodoList(date: String): Result<TodoListInfo>
+    suspend fun getTodoList(date: String): Result<TodoList>
 
     suspend fun toggleTodoCompletion(todoId: Long, isCompleted: Boolean): Result<TodoCompletionInfo>
 
@@ -24,5 +24,5 @@ interface TodoRepository {
         content: String,
         targetDate: LocalDate,
         startTime: LocalTime?,
-    ): Result<NewTodo>
+    ): Result<Todo>
 }

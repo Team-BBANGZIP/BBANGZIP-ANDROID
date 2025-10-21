@@ -3,26 +3,26 @@ package org.android.bbangzip.domain.model
 import java.time.LocalDate
 import java.time.LocalTime
 
-data class TodoListInfo(
+data class TodoList(
     val commitmentMessage: String,
-    val todoSummary: TodoSummaryInfo,
-    val categories: List<CategoryInfo>
+    val todoSummary: TodoSummary,
+    val categories: List<Category>
 )
 
-data class TodoSummaryInfo(
+data class TodoSummary(
     val date: LocalDate,
     val totalCount: Int,
     val completedCount: Int
 )
 
-data class CategoryInfo(
+data class Category(
     val categoryId: Int,
     val categoryName: String,
     val categoryColor: String,
-    val todos: List<TodoInfo>
+    val todos: List<Todo>
 )
 
-data class TodoInfo(
+data class Todo(
     val todoId: Int,
     val content: String,
     val isCompleted: Boolean,
