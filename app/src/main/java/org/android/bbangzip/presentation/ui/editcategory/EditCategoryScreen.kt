@@ -160,7 +160,7 @@ private fun EditCategoryHeader(
                     .fillMaxHeight()
                     .noRippleClickable(
                         isRunOnce = true,
-                        onClick = onBackButtonClick
+                        onClick = onBackButtonClick,
                     ),
             contentAlignment = Alignment.Center,
         ) {
@@ -192,7 +192,7 @@ private fun EditCategoryHeader(
                     .noRippleClickable(
                         enabled = isConfirmEnable,
                         isRunOnce = true,
-                        onClick = onConfirmButtonClick
+                        onClick = onConfirmButtonClick,
                     ),
             contentAlignment = Alignment.Center,
         ) {

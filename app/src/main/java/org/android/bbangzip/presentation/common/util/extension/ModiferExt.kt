@@ -39,25 +39,29 @@ fun Modifier.noRippleClickable(
     role: Role? = null,
     isRunOnce: Boolean = false,
     onClick: () -> Unit,
-): Modifier = composed {
-    var hasClicked by remember { mutableStateOf(false) }
+): Modifier =
+    composed {
+        var hasClicked by remember { mutableStateOf(false) }
 
-    this.clickable(
-        indication = null,
-        interactionSource = remember { MutableInteractionSource() },
-        enabled = enabled,
-        onClickLabel = onClickLabel,
-        role = role,
-        onClick = if(isRunOnce) {
-            {
-                if(!hasClicked) {
-                    hasClicked = true
-                    onClick()
-                }
-            }
-        } else onClick,
-    )
-}
+        this.clickable(
+            indication = null,
+            interactionSource = remember { MutableInteractionSource() },
+            enabled = enabled,
+            onClickLabel = onClickLabel,
+            role = role,
+            onClick =
+                if (isRunOnce) {
+                    {
+                        if (!hasClicked) {
+                            hasClicked = true
+                            onClick()
+                        }
+                    }
+                } else {
+                    onClick
+                },
+        )
+    }
 
 @Composable
 fun Modifier.applyFilterOnClick(

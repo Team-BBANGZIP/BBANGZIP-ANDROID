@@ -65,7 +65,7 @@ fun BbangZipBaseTopBar(
                             Modifier
                                 .noRippleClickable(
                                     isRunOnce = true,
-                                    onClick = onLeadingIconClick
+                                    onClick = onLeadingIconClick,
                                 )
                                 .padding(8.dp),
                     )
@@ -96,7 +96,7 @@ fun BbangZipBaseTopBar(
                             Modifier
                                 .noRippleClickable(
                                     isRunOnce = true,
-                                    onClick = onTrailingIconClick
+                                    onClick = onTrailingIconClick,
                                 )
                                 .padding(8.dp),
                     )

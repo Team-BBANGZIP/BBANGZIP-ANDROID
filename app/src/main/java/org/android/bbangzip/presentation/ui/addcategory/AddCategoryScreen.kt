@@ -126,7 +126,7 @@ private fun AddCategoryHeader(
                     .fillMaxHeight()
                     .noRippleClickable(
                         isRunOnce = true,
-                        onClick = onBackButtonClick
+                        onClick = onBackButtonClick,
                     ),
             contentAlignment = Alignment.Center,
         ) {
@@ -158,7 +158,7 @@ private fun AddCategoryHeader(
                     .noRippleClickable(
                         enabled = isDoneEnable,
                         isRunOnce = true,
-                        onClick = onDoneButtonClick
+                        onClick = onDoneButtonClick,
                     ),
             contentAlignment = Alignment.Center,
         ) {

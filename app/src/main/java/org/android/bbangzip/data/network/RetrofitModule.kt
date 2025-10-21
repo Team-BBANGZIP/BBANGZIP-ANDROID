@@ -67,7 +67,6 @@ object RetrofitModule {
         okHttpClient: OkHttpClient,
         json: Json,
     ): Retrofit {
-
         return Retrofit.Builder()
             .baseUrl(BuildConfig.BASE_URL)
             .client(okHttpClient)
