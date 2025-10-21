@@ -7,7 +7,7 @@ import org.android.bbangzip.domain.model.TodoSummaryInfo
 import java.time.LocalDate
 import java.time.LocalTime
 
-data class ResponseTodoListDto(
+data class ResponseGetTodoListDto(
     val commitmentMessage: String,
     val todoSummary: TodoSummaryDto,
     val categories: List<CategoryDto>

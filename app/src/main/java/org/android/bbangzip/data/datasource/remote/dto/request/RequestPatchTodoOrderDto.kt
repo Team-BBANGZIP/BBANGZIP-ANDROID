@@ -1,6 +1,6 @@
 package org.android.bbangzip.data.datasource.remote.dto.request
 
-data class RequestTodoOrderDto(
+data class RequestPatchTodoOrderDto(
     val todoId: Long,
     val originCategoryId: Long,
     val targetCategoryId: Long,

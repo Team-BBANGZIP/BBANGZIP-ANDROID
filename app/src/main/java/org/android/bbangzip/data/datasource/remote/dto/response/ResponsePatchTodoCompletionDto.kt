@@ -2,7 +2,7 @@ package org.android.bbangzip.data.datasource.remote.dto.response
 
 import org.android.bbangzip.domain.model.TodoCompletionInfo
 
-data class ResponseTodoCompletionDto(
+data class ResponsePatchTodoCompletionDto(
     val todoId: Long,
     val isCompleted: Boolean,
     val completedCount: Int,

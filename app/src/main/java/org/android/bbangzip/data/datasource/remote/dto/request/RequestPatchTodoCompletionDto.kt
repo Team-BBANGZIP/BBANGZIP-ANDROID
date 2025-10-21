@@ -1,5 +1,5 @@
 package org.android.bbangzip.data.datasource.remote.dto.request
 
-data class RequestTodoCompletionDto(
+data class RequestPatchTodoCompletionDto(
     val isCompleted: Boolean
 )

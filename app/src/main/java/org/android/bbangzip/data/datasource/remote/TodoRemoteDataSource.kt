@@ -1,9 +1,9 @@
 package org.android.bbangzip.data.datasource.remote
 
-import org.android.bbangzip.data.datasource.remote.dto.request.RequestTodoCompletionDto
-import org.android.bbangzip.data.datasource.remote.dto.request.RequestTodoOrderDto
-import org.android.bbangzip.data.datasource.remote.dto.response.ResponseTodoCompletionDto
-import org.android.bbangzip.data.datasource.remote.dto.response.ResponseTodoListDto
+import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoCompletionDto
+import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoOrderDto
+import org.android.bbangzip.data.datasource.remote.dto.response.ResponseGetTodoListDto
+import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePatchTodoCompletionDto
 import org.android.bbangzip.data.datasource.remote.service.TodoService
 import org.android.bbangzip.data.datasource.remote.util.base.BaseResponse
 import javax.inject.Inject
@@ -13,7 +13,7 @@ class TodoRemoteDataSource
     constructor(
         private val todoService: TodoService,
     ) {
-        suspend fun getTodoList(date: String): BaseResponse<ResponseTodoListDto> = todoService.getTodoList(date)
+        suspend fun getTodoList(date: String): BaseResponse<ResponseGetTodoListDto> = todoService.getTodoList(date)
 
         suspend fun patchTodoOrder(
             todoId: Long,
@@ -22,7 +22,7 @@ class TodoRemoteDataSource
             targetCategoryColor: String,
             todoOrderList: List<Long>,
         ): BaseResponse<Any> = todoService.patchTodoOrder(
-            requestTodoOrderDto = RequestTodoOrderDto(
+            requestTodoOrderDto = RequestPatchTodoOrderDto(
                 todoId = todoId,
                 originCategoryId = originCategoryId,
                 targetCategoryId = targetCategoryId,
@@ -34,9 +34,9 @@ class TodoRemoteDataSource
         suspend fun patchTodoCompletion(
             todoId: Long,
             isCompleted: Boolean,
-        ): BaseResponse<ResponseTodoCompletionDto> = todoService.patchTodoCompletion(
+        ): BaseResponse<ResponsePatchTodoCompletionDto> = todoService.patchTodoCompletion(
             todoId = todoId,
-            requestTodoCompletionDto = RequestTodoCompletionDto(
+            requestTodoCompletionDto = RequestPatchTodoCompletionDto(
                 isCompleted = isCompleted,
             ),
         )
