@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.android.bbangzip.domain.repository.CommitmentRepository
 import org.android.bbangzip.domain.repository.TodoRepository
 import org.android.bbangzip.presentation.common.base.BaseViewModel
 import org.android.bbangzip.presentation.common.model.Category
@@ -31,6 +32,7 @@ class TodoViewModel
     constructor(
         savedStateHandle: SavedStateHandle,
         private val todoRepository: TodoRepository,
+        private val commitmentRepository: CommitmentRepository,
     ) : BaseViewModel<TodoEvent, TodoState, TodoReduce, TodoSideEffect>(savedStateHandle) {
         override fun createInitialState(savedState: Parcelable?): TodoState {
             return savedState as? TodoState ?: TodoState()
@@ -69,7 +71,7 @@ class TodoViewModel
 
                     updateState(UpdateCategoriesAndFlatList(newCategories, currentFlatList.toList()))
 //                    viewModelScope.launch{
-//                        todoRepository.patchTodoOrder(
+//                        todoRepository.reorderTodo(
 //                            todoId = TODO(),
 //                            originCategoryId = TODO(),
 //                            targetCategoryId = TODO(),
@@ -137,8 +139,19 @@ class TodoViewModel
                     updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(true))
                 }
                 TodoEvent.OnCommitmentDone -> {
+                    val prevCommitment = currentUiState.confirmedCommitmentMessage
                     updateState(TodoReduce.UpdateConfirmedCommitmentMessage(commitmentMessage = currentUiState.textFieldCommitmentMessage))
                     updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(false))
+                    viewModelScope.launch{
+                        commitmentRepository
+                            .submitCommitmentMessage(commitmentMessage = currentUiState.textFieldCommitmentMessage)
+                            .onSuccess { data ->
+
+                            }.onFailure {
+                                Timber.d("다짐 메세지 작성 실패")
+                                updateState(TodoReduce.UpdateConfirmedCommitmentMessage(commitmentMessage = prevCommitment))
+                            }
+                    }
                 }
                 is TodoEvent.OnTextFieldCommitmentMessageChange -> {
                     updateState(TodoReduce.UpdateTextFieldCommitmentMessage(commitmentMessage = event.text))

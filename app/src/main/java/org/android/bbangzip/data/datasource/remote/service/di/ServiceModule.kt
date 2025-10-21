@@ -8,6 +8,7 @@ import org.android.bbangzip.data.auth.qualifier.BbangZip
 import org.android.bbangzip.data.datasource.remote.service.DummyService
 import org.android.bbangzip.data.datasource.remote.service.TimerService
 import org.android.bbangzip.data.datasource.remote.service.TodoService
+import org.android.bbangzip.data.datasource.remote.service.UserService
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -31,4 +32,10 @@ object ServiceModule {
     fun provideTodoService(
         @BbangZip retrofit: Retrofit,
     ): TodoService = retrofit.create(TodoService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideUserService(
+        @BbangZip retrofit: Retrofit,
+    ): UserService = retrofit.create(UserService::class.java)
 }
