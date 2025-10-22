@@ -42,4 +42,9 @@ interface TodoRepository {
     suspend fun copyTodo(
         todoId: Long,
     ): Result<Todo>
+
+    suspend fun modifyTodoDate(
+        todoId: Long,
+        targetDate: LocalDate,
+    ): Result<Todo>
 }
