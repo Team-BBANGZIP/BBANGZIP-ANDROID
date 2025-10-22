@@ -4,6 +4,7 @@ import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoC
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoNameDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoOrderDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostTodoDto
+import org.android.bbangzip.data.datasource.remote.dto.response.ResponseDeleteTodoDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseGetTodoListDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePatchTodoCompletionDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseTodoDto
@@ -75,5 +76,11 @@ class TodoRemoteDataSource
             requestPatchTodoNameDto = RequestPatchTodoNameDto(
                 content = content,
             ),
+        )
+    suspend fun deleteTodo(
+        todoId: Long,
+    ): BaseResponse<ResponseDeleteTodoDto> =
+        todoService.deleteTodo(
+            todoId = todoId,
         )
     }

@@ -3,6 +3,7 @@ package org.android.bbangzip.data.repository.remote
 import org.android.bbangzip.data.datasource.remote.TodoRemoteDataSource
 import org.android.bbangzip.domain.model.Todo
 import org.android.bbangzip.domain.model.TodoCompletionInfo
+import org.android.bbangzip.domain.model.TodoCount
 import org.android.bbangzip.domain.model.TodoList
 import org.android.bbangzip.domain.repository.TodoRepository
 import java.time.LocalDate
@@ -79,5 +80,12 @@ class TodoRepositoryImpl
                 todoId = todoId,
                 content = content,
             )
+        }
+
+    override suspend fun deleteTodo(todoId: Long): Result<TodoCount> =
+        runCatching{
+            val response = todoRemoteDataSource.deleteTodo(todoId)
+            val data = response.data ?: throw IllegalStateException("삭제 Data가 존재하지 않습니다.")
+            data.toTodoCount()
         }
     }
