@@ -1,12 +1,14 @@
 package org.android.bbangzip.data.datasource.remote.service
 
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoCompletionDto
+import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoDateDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoNameDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoOrderDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostTodoDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseDeleteTodoDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseGetTodoListDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePatchTodoCompletionDto
+import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePatchTodoDateDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseTodoDto
 import org.android.bbangzip.data.datasource.remote.util.base.BaseResponse
 import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.API
@@ -57,4 +59,10 @@ interface TodoService {
     suspend fun postTodoCopy(
         @Path("todoId") todoId: Long,
     ): BaseResponse<ResponseTodoDto>
+
+    @PATCH("$API/$VERSIONS/$TODO/{todoId}/reschedule")
+    suspend fun patchTodoDate(
+        @Path("todoId") todoId: Long,
+        @Body requestPatchTodoDateDto: RequestPatchTodoDateDto,
+    ): BaseResponse<ResponsePatchTodoDateDto>
 }
