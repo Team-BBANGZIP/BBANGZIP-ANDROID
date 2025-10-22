@@ -4,11 +4,13 @@ import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoC
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoDateDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoNameDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoOrderDto
+import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoTimeDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostTodoDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseDeleteTodoDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseGetTodoListDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePatchTodoCompletionDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePatchTodoDateDto
+import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePatchTodoTimeDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseTodoDto
 import org.android.bbangzip.data.datasource.remote.service.TodoService
 import org.android.bbangzip.data.datasource.remote.util.base.BaseResponse
@@ -101,6 +103,17 @@ class TodoRemoteDataSource
             todoId = todoId,
             requestPatchTodoDateDto = RequestPatchTodoDateDto(
                 targetDate = targetDate,
+            )
+        )
+
+    suspend fun patchTodoTime(
+        todoId: Long,
+        startTime: LocalTime?,
+    ): BaseResponse<ResponsePatchTodoTimeDto> =
+        todoService.patchTodoTime(
+            todoId = todoId,
+            requestPatchTodoTimeDto = RequestPatchTodoTimeDto(
+                startTime = startTime,
             )
         )
     }

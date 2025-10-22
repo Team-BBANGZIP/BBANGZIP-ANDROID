@@ -105,4 +105,15 @@ class TodoRepositoryImpl
             val data = response.data ?: throw IllegalStateException("Todo Data가 존재하지 않습니다.")
             data.toTodo()
         }
+
+    override suspend fun modifyTodoTime(todoId: Long, startTime: LocalTime?): Result<Todo> =
+        runCatching {
+            val response = todoRemoteDataSource.patchTodoTime(
+                todoId = todoId,
+                startTime = startTime
+            )
+
+            val data = response.data ?: throw IllegalStateException("Todo Data가 존재하지 않습니다.")
+            data.toTodo()
+        }
     }
