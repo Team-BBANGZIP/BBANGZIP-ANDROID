@@ -5,7 +5,7 @@ import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoO
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostTodoDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseGetTodoListDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePatchTodoCompletionDto
-import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePostTodoDto
+import org.android.bbangzip.data.datasource.remote.dto.response.ResponseTodoDto
 import org.android.bbangzip.data.datasource.remote.service.TodoService
 import org.android.bbangzip.data.datasource.remote.util.base.BaseResponse
 import java.time.LocalDate
@@ -54,7 +54,7 @@ class TodoRemoteDataSource
             content: String,
             targetDate: LocalDate,
             startTime: LocalTime?,
-        ): BaseResponse<ResponsePostTodoDto> =
+        ): BaseResponse<ResponseTodoDto> =
             todoService.postTodo(
                 requestTodoAddDto =
                     RequestPostTodoDto(

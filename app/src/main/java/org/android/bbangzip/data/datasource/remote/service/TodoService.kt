@@ -7,7 +7,7 @@ import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostTodoDt
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseDeleteTodoDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseGetTodoListDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePatchTodoCompletionDto
-import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePostTodoDto
+import org.android.bbangzip.data.datasource.remote.dto.response.ResponseTodoDto
 import org.android.bbangzip.data.datasource.remote.util.base.BaseResponse
 import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.API
 import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.TODO
@@ -40,7 +40,7 @@ interface TodoService {
     @POST("$API/$VERSIONS/$TODO")
     suspend fun postTodo(
         @Body requestTodoAddDto: RequestPostTodoDto,
-    ): BaseResponse<ResponsePostTodoDto>
+    ): BaseResponse<ResponseTodoDto>
 
     @PATCH("$API/$VERSIONS/$TODO/{todoId}")
     suspend fun patchTodoName(
@@ -52,4 +52,9 @@ interface TodoService {
     suspend fun deleteTodo(
         @Path("todoId") todoId: Long,
     ): BaseResponse<ResponseDeleteTodoDto>
+
+    @POST("$API/$VERSIONS/$TODO/{todoId}/copy")
+    suspend fun postTodoCopy(
+        @Path("todoId") todoId: Long,
+    ): BaseResponse<ResponseTodoDto>
 }

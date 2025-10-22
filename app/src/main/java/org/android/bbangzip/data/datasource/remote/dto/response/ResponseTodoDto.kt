@@ -8,7 +8,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 @Serializable
-data class ResponsePostTodoDto(
+data class ResponseTodoDto(
     val todoId: Long,
     val content: String,
     @Serializable(with = LocalDateSerializer::class)
