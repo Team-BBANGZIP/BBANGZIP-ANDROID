@@ -38,4 +38,8 @@ interface TodoRepository {
     suspend fun deleteTodo(
         todoId: Long,
     ): Result<TodoCount>
+
+    suspend fun copyTodo(
+        todoId: Long,
+    ): Result<Todo>
 }

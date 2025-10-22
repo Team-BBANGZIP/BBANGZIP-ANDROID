@@ -88,4 +88,11 @@ class TodoRepositoryImpl
             val data = response.data ?: throw IllegalStateException("삭제 Data가 존재하지 않습니다.")
             data.toTodoCount()
         }
+
+    override suspend fun copyTodo(todoId: Long): Result<Todo> =
+        runCatching {
+            val response = todoRemoteDataSource.postTodoCopy(todoId)
+            val data = response.data ?: throw IllegalStateException("복제 Data가 존재하지 않습니다.")
+            data.toTodo()
+        }
     }

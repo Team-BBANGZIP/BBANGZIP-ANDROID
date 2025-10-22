@@ -83,4 +83,11 @@ class TodoRemoteDataSource
         todoService.deleteTodo(
             todoId = todoId,
         )
+
+    suspend fun postTodoCopy(
+        todoId: Long,
+    ): BaseResponse<ResponseTodoDto> =
+        todoService.postTodoCopy(
+            todoId = todoId,
+        )
     }
