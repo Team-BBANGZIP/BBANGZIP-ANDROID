@@ -116,4 +116,14 @@ class TodoRepositoryImpl
             val data = response.data ?: throw IllegalStateException("Todo Data가 존재하지 않습니다.")
             data.toTodo()
         }
+
+    override suspend fun repeatTodo(todoId: Long, targetDate: LocalDate): Result<Todo> =
+        runCatching {
+            val response = todoRemoteDataSource.postTodoRepeat(
+                todoId = todoId,
+                targetDate = targetDate
+            )
+            val data = response.data ?: throw IllegalStateException("Todo Data가 존재하지 않습니다.")
+            data.toTodo()
+        }
     }

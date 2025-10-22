@@ -52,4 +52,9 @@ interface TodoRepository {
         todoId: Long,
         startTime: LocalTime?,
     ): Result<Todo>
+
+    suspend fun repeatTodo(
+        todoId: Long,
+        targetDate: LocalDate,
+    ): Result<Todo>
 }

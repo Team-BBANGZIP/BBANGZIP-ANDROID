@@ -3,6 +3,7 @@ package org.android.bbangzip.data.datasource.remote.dto.response
 import kotlinx.serialization.Serializable
 import org.android.bbangzip.data.datasource.remote.util.serializer.LocalDateSerializer
 import org.android.bbangzip.data.datasource.remote.util.serializer.LocalTimeSerializer
+import org.android.bbangzip.domain.model.Todo
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -15,4 +16,12 @@ data class ResponsePostTodoRepeatDto(
     @Serializable(with = LocalTimeSerializer::class)
     val startTime: LocalTime?, // string으로 주는데 물어보기
     val isCompleted: Boolean,
-)
+){
+    fun toTodo() =
+        Todo(
+            todoId = todoId.toInt(),
+            content = content,
+            startTime = startTime,
+            isCompleted = isCompleted,
+        )
+}

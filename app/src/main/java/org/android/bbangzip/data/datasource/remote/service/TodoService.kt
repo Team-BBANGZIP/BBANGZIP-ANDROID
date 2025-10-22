@@ -77,7 +77,7 @@ interface TodoService {
     ): BaseResponse<ResponsePatchTodoTimeDto>
 
     @POST("$API/$VERSIONS/$TODO/{todoId}/repeat")
-    suspend fun postTodoComplete(
+    suspend fun postTodoRepeat(
         @Path("todoId") todoId: Long,
         @Body requestPostTodoRepeatDto: RequestPostTodoRepeatDto,
     ): BaseResponse<ResponsePostTodoRepeatDto>
