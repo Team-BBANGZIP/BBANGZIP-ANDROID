@@ -1,6 +1,7 @@
 package org.android.bbangzip.data.datasource.remote.service
 
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoCompletionDto
+import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoNameDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoOrderDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostTodoDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseGetTodoListDto
@@ -38,4 +39,10 @@ interface TodoService {
     suspend fun postTodo(
         @Body requestTodoAddDto: RequestPostTodoDto,
     ): BaseResponse<ResponsePostTodoDto>
+
+    @PATCH("$API/$VERSIONS/$TODO/{todoId}")
+    suspend fun patchTodoName(
+        @Path("todoId") todoId: Long,
+        @Body requestPatchTodoNameDto: RequestPatchTodoNameDto,
+    ): BaseResponse<Any>
 }
