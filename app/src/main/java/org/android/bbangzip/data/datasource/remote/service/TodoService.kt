@@ -6,11 +6,13 @@ import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoN
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoOrderDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoTimeDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostTodoDto
+import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostTodoRepeatDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseDeleteTodoDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseGetTodoListDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePatchTodoCompletionDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePatchTodoDateDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePatchTodoTimeDto
+import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePostTodoRepeatDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseTodoDto
 import org.android.bbangzip.data.datasource.remote.util.base.BaseResponse
 import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.API
@@ -73,4 +75,10 @@ interface TodoService {
         @Path("todoId") todoId: Long,
         @Body responsePatchTodoTimeDto: RequestPatchTodoTimeDto
     ): BaseResponse<ResponsePatchTodoTimeDto>
+
+    @POST("$API/$VERSIONS/$TODO/{todoId}/repeat")
+    suspend fun postTodoComplete(
+        @Path("todoId") todoId: Long,
+        @Body requestPostTodoRepeatDto: RequestPostTodoRepeatDto,
+    ): BaseResponse<ResponsePostTodoRepeatDto>
 }
