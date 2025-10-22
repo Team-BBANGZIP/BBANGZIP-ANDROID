@@ -81,6 +81,7 @@ import org.android.bbangzip.presentation.common.util.extension.dropShadow
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.presentation.common.util.scroll.calculateScrollSpeed
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.CommitmentBottomSheet
+import org.android.bbangzip.presentation.ui.todo.bottomsheet.TodoSettingBottomSheet
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalDate
 import java.time.LocalTime
@@ -102,8 +103,10 @@ fun TodoScreen(
     isCommitmentBottomSheetVisible: Boolean,
     isTimePickerBottomSheetVisible: Boolean,
     isAddTodoBottomSheetVisible: Boolean,
+    isTodoSettingBottomSheetVisible: Boolean,
     todoText: String,
     selectedStartTime: LocalTime?,
+    selectedTodoItem: ListItem.TodoItem?,
     onMenuClick: () -> Unit,
     onListItemMove: (from: Int, to: Int) -> Unit,
     onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit,
@@ -111,6 +114,7 @@ fun TodoScreen(
     onTimeConfirmButtonClick: (startTime: LocalTime) -> Unit,
     onTimePickerBottomSheetDismissRequest: () -> Unit,
     onAddTodoBottomSheetDismissRequest: () -> Unit,
+    onTodoSettingBottomSheetDismissRequest: () -> Unit,
     onTimePickerBottomSheetShowRequest: () -> Unit,
     onTodoTextChange: (String) -> Unit,
     onCategoryChipClick: (Category) -> Unit,
@@ -121,6 +125,14 @@ fun TodoScreen(
     onManageCategoryClick: () -> Unit = {},
     onAddCategoryClick: () -> Unit = {},
     onDateSelect: (LocalDate) -> Unit = {},
+    onTodoItemMenuClick: (ListItem.TodoItem) -> Unit = {},
+    onCopyTodoClick: () -> Unit = {},
+    onDeleteTodoButtonClick: () -> Unit = {},
+    onModifyTodoDateClick: () -> Unit = {},
+    onModifyTodoNameButtonClick: () -> Unit = {},
+    onModifyTodoStartTimeClick: () -> Unit = {},
+    onMoveTodoToTomorrowClick: () -> Unit = {},
+    onRepeatTodoClick: () -> Unit = {},
 ) {
     val localDensity = LocalDensity.current
     val itemSpacingPx = with(localDensity) { ITEM_SPACING.toPx() }
@@ -282,6 +294,7 @@ fun TodoScreen(
                     itemSpacingPx = itemSpacingPx,
                     onTodoCheckBoxClick = onTodoCheckBoxClick,
                     onCategoryClick = onCategoryChipClick,
+                    onTodoItemMenuClick = onTodoItemMenuClick,
                     modifier =
                         Modifier.onGloballyPositioned { coordinates ->
                             itemBounds[item.id] = coordinates.boundsInParent()
@@ -309,7 +322,6 @@ fun TodoScreen(
                 BbangZipTaskBox(
                     task = item.todo.content,
                     isCompleted = item.todo.isCompleted,
-                    onCheckBoxClick = {},
                     isLast = item.isLastInCategory,
                     startTime = item.todo.startTime,
                     categoryColor = CategoryColor.fromString(item.category.color).color,
@@ -343,6 +355,19 @@ fun TodoScreen(
             oncommitmentMessageChange = onTextFieldCommitmentMessageChange,
             onDoneAction = onCommitmentDone,
         )
+
+        if (selectedTodoItem != null) {
+            TodoSettingBottomSheet(
+                isBottomSheetVisible = isTodoSettingBottomSheetVisible,
+                onDismissRequest = onTodoSettingBottomSheetDismissRequest,
+                todoName = selectedTodoItem.todo.content,
+                categoryName = selectedTodoItem.category.name,
+                isCompleted = selectedTodoItem.todo.isCompleted,
+                isNotificationEnabled = false,
+                onNotificationEnabledChange = {},
+                startTime = selectedTodoItem.todo.startTime,
+            )
+        }
     }
 }
 
@@ -419,6 +444,7 @@ private fun DraggableListItem(
     itemSpacingPx: Float,
     onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit,
     onCategoryClick: (Category) -> Unit,
+    onTodoItemMenuClick: (ListItem.TodoItem) -> Unit,
 ) {
     val currentDraggingItemIndex =
         remember(draggingItemId, flatList) {
@@ -476,6 +502,9 @@ private fun DraggableListItem(
                     isCompleted = item.todo.isCompleted,
                     onCheckBoxClick = { isChecked ->
                         onTodoCheckBoxClick(item.todo.todoId, item.category.id, isChecked)
+                    },
+                    onMenuClick = {
+                        onTodoItemMenuClick(item)
                     },
                     isLast = item.isLastInCategory,
                     startTime = item.todo.startTime,
@@ -763,6 +792,7 @@ fun TodoScreenPreview() {
         isAddTodoBottomSheetVisible = false,
         todoText = "새로운 할 일",
         selectedStartTime = LocalTime.NOON,
+        selectedTodoItem = null,
         onMenuClick = {},
         onListItemMove = { _, _ -> },
         onTodoCheckBoxClick = { _, _, _ -> },
@@ -780,5 +810,8 @@ fun TodoScreenPreview() {
         onCommitmentDone = {},
         onTextFieldCommitmentMessageChange = { },
         onCommitmentBottomSheetDismissRequest = {},
+        isTodoSettingBottomSheetVisible = false,
+        onTodoItemMenuClick = {},
+        onTodoSettingBottomSheetDismissRequest = {}
     )
 }

@@ -41,8 +41,10 @@ fun TodoRoute(
         isCommitmentBottomSheetVisible = uiState.isCommitmentBottomSheetVisible,
         isAddTodoBottomSheetVisible = uiState.isAddTodoBottomSheetVisible,
         isTimePickerBottomSheetVisible = uiState.isTimePickerBottomSheetVisible,
+        isTodoSettingBottomSheetVisible = uiState.isTodoSettingBottomSheetVisible,
         todoText = uiState.todoText,
         selectedStartTime = uiState.selectedStartTime,
+        selectedTodoItem = uiState.selectedTodoItem,
         onListItemMove = { fromIndex, toIndex ->
             viewModel.setEvent(TodoEvent.OnListItemMove(fromIndex, toIndex))
         },
@@ -93,6 +95,33 @@ fun TodoRoute(
         },
         onDateSelect = {
             viewModel.setEvent(TodoEvent.OnDateSelect(it))
+        },
+        onTodoSettingBottomSheetDismissRequest = {
+            viewModel.setEvent(TodoEvent.OnTodoSettingBottomSheetDismissRequest)
+        },
+        onTodoItemMenuClick = {
+            viewModel.setEvent(TodoEvent.OnTodoItemMenuClick(it))
+        },
+        onCopyTodoClick = {
+            viewModel.setEvent(TodoEvent.OnCopyTodoClick)
+        },
+        onDeleteTodoButtonClick = {
+            viewModel.setEvent(TodoEvent.OnDeleteTodoButtonClick)
+        },
+        onModifyTodoDateClick = {
+            viewModel.setEvent(TodoEvent.OnModifyTodoDateClick)
+        },
+        onModifyTodoNameButtonClick = {
+            viewModel.setEvent(TodoEvent.OnModifyTodoNameButtonClick)
+        },
+        onModifyTodoStartTimeClick = {
+            viewModel.setEvent(TodoEvent.OnModifyTodoStartTimeClick)
+        },
+        onMoveTodoToTomorrowClick = {
+            viewModel.setEvent(TodoEvent.OnMoveTodoToTomorrowClick)
+        },
+        onRepeatTodoClick = {
+            viewModel.setEvent(TodoEvent.OnRepeatTodoClick)
         },
     )
 }

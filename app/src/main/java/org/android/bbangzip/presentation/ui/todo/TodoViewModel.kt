@@ -164,6 +164,36 @@ class TodoViewModel
                 TodoEvent.OnCommitmentBottomSheetDismissRequest -> {
                     updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(false))
                 }
+
+                is TodoEvent.OnTodoItemMenuClick ->{
+                    updateState(
+                        TodoReduce.UpdateTodoState(
+                            currentUiState.copy(
+                                selectedTodoItem = event.todoItem,
+                                isTodoSettingBottomSheetVisible = true
+                            )
+                        )
+                    )
+                }
+
+                TodoEvent.OnTodoSettingBottomSheetDismissRequest -> {
+                    updateState(
+                        TodoReduce.UpdateTodoState(
+                            currentUiState.copy(
+                                selectedTodoItem = null,
+                                isTodoSettingBottomSheetVisible = false
+                            )
+                        )
+                    )
+                }
+
+                TodoEvent.OnCopyTodoClick -> TODO()
+                TodoEvent.OnDeleteTodoButtonClick -> TODO()
+                TodoEvent.OnModifyTodoDateClick -> TODO()
+                TodoEvent.OnModifyTodoNameButtonClick -> TODO()
+                TodoEvent.OnModifyTodoStartTimeClick -> TODO()
+                TodoEvent.OnMoveTodoToTomorrowClick -> TODO()
+                TodoEvent.OnRepeatTodoClick -> TODO()
             }
         }
 
