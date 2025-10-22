@@ -28,4 +28,9 @@ interface TodoRepository {
         targetDate: LocalDate,
         startTime: LocalTime?,
     ): Result<Todo>
+
+    suspend fun modifyTodoName(
+        todoId: Long,
+        content: String,
+    ): Result<Any>
 }

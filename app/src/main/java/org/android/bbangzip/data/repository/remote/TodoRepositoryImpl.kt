@@ -72,4 +72,12 @@ class TodoRepositoryImpl
 
                 data.toTodo()
             }
+
+    override suspend fun modifyTodoName(todoId: Long, content: String): Result<Any> =
+        runCatching{
+            todoRemoteDataSource.patchTodoName(
+                todoId = todoId,
+                content = content,
+            )
+        }
     }

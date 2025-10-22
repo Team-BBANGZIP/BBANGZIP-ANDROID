@@ -1,6 +1,7 @@
 package org.android.bbangzip.data.datasource.remote
 
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoCompletionDto
+import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoNameDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoOrderDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostTodoDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseGetTodoListDto
@@ -64,4 +65,15 @@ class TodoRemoteDataSource
                         startTime = startTime,
                     ),
             )
+
+    suspend fun patchTodoName(
+        todoId: Long,
+        content: String,
+    ): BaseResponse<Any> =
+        todoService.patchTodoName(
+            todoId = todoId,
+            requestPatchTodoNameDto = RequestPatchTodoNameDto(
+                content = content,
+            ),
+        )
     }
