@@ -50,7 +50,7 @@ interface TodoRepository {
 
     suspend fun modifyTodoTime(
         todoId: Long,
-        startTime: String?,
+        startTime: LocalTime?,
     ): Result<Todo>
 
     suspend fun repeatTodo(

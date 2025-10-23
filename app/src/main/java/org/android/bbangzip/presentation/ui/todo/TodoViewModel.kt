@@ -113,7 +113,7 @@ class TodoViewModel
                         viewModelScope.launch {
                             todoRepository.modifyTodoTime(
                                 todoId = selectedTodoId.toLong(),
-                                startTime = "08:00"
+                                startTime = event.startTime
                             ).onSuccess {
                                 val updatedCategories = currentUiState.categories.map{ category ->
                                     category.copy(
@@ -134,6 +134,11 @@ class TodoViewModel
                                             flatList = updatedCategories.toFlatList(),
                                             isTimePickerBottomSheetVisible = false,
                                             isTodoSettingBottomSheetVisible = true,
+                                            selectedTodoItem = currentUiState.selectedTodoItem!!.copy(
+                                                todo = currentUiState.selectedTodoItem!!.todo.copy(
+                                                    startTime = event.startTime
+                                                )
+                                            ),
                                         )
                                     )
                                 )

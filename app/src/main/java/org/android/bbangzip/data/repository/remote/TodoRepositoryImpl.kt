@@ -107,7 +107,7 @@ class TodoRepositoryImpl
             data.toTodo()
         }
 
-    override suspend fun modifyTodoTime(todoId: Long, startTime: String?): Result<Todo> =
+    override suspend fun modifyTodoTime(todoId: Long, startTime: LocalTime?): Result<Todo> =
         runCatching {
             val response = todoRemoteDataSource.patchTodoTime(
                 todoId = todoId,
