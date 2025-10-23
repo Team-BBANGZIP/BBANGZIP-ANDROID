@@ -284,7 +284,43 @@ class TodoViewModel
                 }
 
                 TodoEvent.OnCopyTodoClick -> {
-                    TODO()
+                    viewModelScope.launch {
+                        val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
+                        todoRepository.copyTodo(
+                            todoId = selectedTodoId.toLong()
+                        ).onSuccess { data ->
+                            val newTodo = Todo(
+                                todoId = data.todoId,
+                                content = data.content,
+                                isCompleted = data.isCompleted,
+                                startTime = data.startTime,
+                            )
+                            val updatedCategories = currentUiState.categories.map { category ->
+                                val originTodoIndex = category.todos.indexOfFirst { it.todoId == selectedTodoId }
+
+                                if (originTodoIndex != -1) {
+                                    val mutableTodos = category.todos.toMutableList()
+                                    mutableTodos.add(originTodoIndex + 1, newTodo)
+                                    category.copy(todos = mutableTodos)
+                                } else {
+                                    category
+                                }
+                            }
+
+                            updateState(
+                                TodoReduce.UpdateTodoState(
+                                    currentUiState.copy(
+                                        isTodoSettingBottomSheetVisible = false,
+                                        selectedTodoItem = null,
+                                        categories = updatedCategories,
+                                        flatList = updatedCategories.toFlatList()
+                                    )
+                                )
+                            )
+                        }.onFailure {
+                            Timber.d("복제 실패!")
+                        }
+                    }
                 }
                 TodoEvent.OnDeleteTodoButtonClick -> {
                     viewModelScope.launch {
