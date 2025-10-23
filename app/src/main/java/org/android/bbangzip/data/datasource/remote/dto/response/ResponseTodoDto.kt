@@ -14,7 +14,7 @@ data class ResponseTodoDto(
     @Serializable(with = LocalDateSerializer::class)
     val targetDate: LocalDate,
     @Serializable(with = LocalTimeSerializer::class)
-    val startTime: LocalTime,
+    val startTime: LocalTime?,
     val isCompleted: Boolean,
     val categoryId: Long,
     val categoryColor: String,

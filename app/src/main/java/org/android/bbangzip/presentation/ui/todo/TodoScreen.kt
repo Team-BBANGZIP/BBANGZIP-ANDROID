@@ -336,9 +336,7 @@ fun TodoScreen(
             onTodoChange = onTodoTextChange,
             onSettingTimeClick = onTimePickerBottomSheetShowRequest,
             startTime = selectedStartTime,
-            onDoneAction = {
-                onAddTodoDone()
-            },
+            onDoneAction = onAddTodoDone,
         )
         TimePickerBottomSheet(
             isBottomSheetVisible = isTimePickerBottomSheetVisible,

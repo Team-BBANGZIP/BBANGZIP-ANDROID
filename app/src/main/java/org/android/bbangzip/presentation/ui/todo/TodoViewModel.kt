@@ -85,13 +85,23 @@ class TodoViewModel
                     updateState(UpdateIsMenuOpen(isMenuOpen = !currentUiState.isMenuOpen))
                 }
 
-                is TodoEvent.OnAddTodoDone -> {
-                    if (currentUiState.selectedCategory != null && currentUiState.todoText.isNotBlank()) {
-                        onTodoAdd(
+                TodoEvent.OnAddTodoDone -> {
+                    if (currentUiState.todoText.isNotBlank()) {
+                        addTodo(
                             categoryId = currentUiState.selectedCategory!!.id,
                             todoContent = currentUiState.todoText,
                             targetDate = currentUiState.selectedDate,
                             startTime = currentUiState.selectedStartTime,
+                        )
+                    }else{
+                        updateState(
+                            TodoReduce.UpdateTodoState(
+                                currentUiState.copy(
+                                    isAddTodoBottomSheetVisible = false,
+                                    selectedCategory = null,
+                                    selectedStartTime = null,
+                                )
+                            )
                         )
                     }
                 }
@@ -107,12 +117,22 @@ class TodoViewModel
                     updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(true))
                 }
                 TodoEvent.OnAddTodoBottomSheetDismissRequest -> {
-                    if (currentUiState.selectedCategory != null && currentUiState.todoText.isNotBlank()) {
-                        onTodoAdd(
+                    if (currentUiState.todoText.isNotBlank()) {
+                        addTodo(
                             categoryId = currentUiState.selectedCategory!!.id,
                             todoContent = currentUiState.todoText,
                             targetDate = currentUiState.selectedDate,
                             startTime = currentUiState.selectedStartTime,
+                        )
+                    }else {
+                        updateState(
+                            TodoReduce.UpdateTodoState(
+                                currentUiState.copy(
+                                    isAddTodoBottomSheetVisible = false,
+                                    selectedCategory = null,
+                                    selectedStartTime = null,
+                                )
+                            )
                         )
                     }
                 }
@@ -126,8 +146,14 @@ class TodoViewModel
                     updateState(TodoReduce.UpdateTodoText(event.todoText))
                 }
                 is TodoEvent.OnCategoryChipClick -> {
-                    updateState(TodoReduce.UpdateSelectedCategory(event.category))
-                    updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(true))
+                    updateState(
+                        TodoReduce.UpdateTodoState(
+                            currentUiState.copy(
+                                selectedCategory = event.category,
+                                isAddTodoBottomSheetVisible = true
+                            )
+                        )
+                    )
                 }
                 TodoEvent.OnAddCategoryClick -> {
                     updateState(UpdateIsMenuOpen(false))
@@ -370,7 +396,7 @@ class TodoViewModel
                 }
 
                 is TodoReduce.UpdateTodoState -> {
-                    reduce.todoState
+                    return reduce.todoState
                 }
             }
         }
@@ -458,7 +484,7 @@ class TodoViewModel
             return newCategories
         }
 
-        fun onTodoAdd(
+        fun addTodo(
             categoryId: Int,
             todoContent: String,
             targetDate: LocalDate,
@@ -475,7 +501,7 @@ class TodoViewModel
                     .onSuccess { data ->
                         val newTodo =
                             Todo(
-                                todoId = data.todoId.toInt(),
+                                todoId = data.todoId,
                                 content = data.content,
                                 isCompleted = data.isCompleted,
                                 startTime = data.startTime,
@@ -488,9 +514,19 @@ class TodoViewModel
                                     category
                                 }
                             }
-                        updateCategoriesAndFlatList(updatedCategories)
-                        updateState(TodoReduce.ClearAddTodoState)
-                        updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(false))
+                        updateState(
+                            TodoReduce.UpdateTodoState(
+                                currentUiState.copy(
+                                    todoText = "",
+                                    selectedCategory = null,
+                                    selectedStartTime = null,
+                                    isAddTodoBottomSheetVisible = false,
+                                    categories = updatedCategories,
+                                    flatList = updatedCategories.toFlatList(),
+                                )
+                            )
+                        )
+                        Timber.d("Update Todo 성공!")
                     }.onFailure {
                         Timber.d("Todo 생성 싪패!")
                     }
