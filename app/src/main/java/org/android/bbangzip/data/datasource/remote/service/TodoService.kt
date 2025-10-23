@@ -3,7 +3,7 @@ package org.android.bbangzip.data.datasource.remote.service
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoCompletionDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoDateDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoNameDto
-import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoOrderDto
+import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoReOrderDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoTimeDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostTodoDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostTodoRepeatDto
@@ -38,10 +38,10 @@ interface TodoService {
         @Body requestTodoCompletionDto: RequestPatchTodoCompletionDto,
     ): BaseResponse<ResponsePatchTodoCompletionDto>
 
-    @PATCH("$API/$VERSIONS/$TODO/order")
-    suspend fun patchTodoOrder(
-        @Body requestTodoOrderDto: RequestPatchTodoOrderDto,
-    ): BaseResponse<Any>
+    @PATCH("$API/$VERSIONS/$TODO/reorder")
+    suspend fun patchTodoReOrder(
+        @Body requestTodoReOrderDto: RequestPatchTodoReOrderDto,
+    ): Unit
 
     @POST("$API/$VERSIONS/$TODO")
     suspend fun postTodo(

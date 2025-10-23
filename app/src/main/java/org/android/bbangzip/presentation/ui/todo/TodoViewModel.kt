@@ -64,22 +64,29 @@ class TodoViewModel
                     if (from == to) return
 
                     val currentFlatList = currentUiState.flatList.toMutableList()
-                    val movedItem = currentFlatList.removeAt(from)
+                    val movedItem: ListItem.TodoItem = currentFlatList.removeAt(from) as ListItem.TodoItem
                     currentFlatList.add(to, movedItem)
 
                     synchronizeListState(currentFlatList)
                     val newCategories = reconstructCategoriesFromFlatList(currentFlatList)
+                    val targetCategory = currentFlatList.filterIsInstance<ListItem.TodoItem>().filter {
+                        it.todo.todoId == movedItem.todo.todoId
+                    }[0].category
 
                     updateState(UpdateCategoriesAndFlatList(newCategories, currentFlatList.toList()))
-//                    viewModelScope.launch{
-//                        todoRepository.reorderTodo(
-//                            todoId = TODO(),
-//                            originCategoryId = TODO(),
-//                            targetCategoryId = TODO(),
-//                            targetCategoryColor = TODO(),
-//                            todoOrderList = TODO()
-//                        )
-//                    }
+                    viewModelScope.launch{
+                        todoRepository.reorderTodo(
+                            todoId = movedItem.todo.todoId.toLong(),
+                            originCategoryId = movedItem.category.id.toLong(),
+                            targetCategoryId = targetCategory.id.toLong(),
+                            targetCategoryColor = targetCategory.color,
+                            todoOrderList = currentFlatList.filterIsInstance<ListItem.TodoItem>().map { it.todo.todoId.toLong() }
+                        ).onSuccess {
+
+                        }.onFailure {
+                            Timber.d("투두 순서 변경 실패")
+                        }
+                    }
                 }
 
                 is TodoEvent.OnMenuClick -> {

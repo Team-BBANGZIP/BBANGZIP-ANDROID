@@ -46,7 +46,7 @@ class TodoRepositoryImpl
             todoOrderList: List<Long>,
         ): Result<Any> =
             runCatching {
-                todoRemoteDataSource.patchTodoOrder(
+                todoRemoteDataSource.patchTodoReOrder(
                     todoId = todoId,
                     originCategoryId = originCategoryId,
                     targetCategoryId = targetCategoryId,

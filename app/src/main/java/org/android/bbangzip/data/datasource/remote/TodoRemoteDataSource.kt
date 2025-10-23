@@ -3,7 +3,7 @@ package org.android.bbangzip.data.datasource.remote
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoCompletionDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoDateDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoNameDto
-import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoOrderDto
+import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoReOrderDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchTodoTimeDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostTodoDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostTodoRepeatDto
@@ -27,16 +27,16 @@ class TodoRemoteDataSource
     ) {
         suspend fun getTodoList(date: String): BaseResponse<ResponseGetTodoListDto> = todoService.getTodoList(date)
 
-        suspend fun patchTodoOrder(
+        suspend fun patchTodoReOrder(
             todoId: Long,
             originCategoryId: Long,
             targetCategoryId: Long,
             targetCategoryColor: String,
             todoOrderList: List<Long>,
-        ): BaseResponse<Any> =
-            todoService.patchTodoOrder(
-                requestTodoOrderDto =
-                    RequestPatchTodoOrderDto(
+        ): Unit =
+            todoService.patchTodoReOrder(
+                requestTodoReOrderDto =
+                    RequestPatchTodoReOrderDto(
                         todoId = todoId,
                         originCategoryId = originCategoryId,
                         targetCategoryId = targetCategoryId,
