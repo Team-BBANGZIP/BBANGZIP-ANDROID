@@ -213,7 +213,9 @@ class TodoViewModel
                     )
                 }
 
-                TodoEvent.OnCopyTodoClick -> TODO()
+                TodoEvent.OnCopyTodoClick -> {
+                    TODO()
+                }
                 TodoEvent.OnDeleteTodoButtonClick -> {
                     viewModelScope.launch {
                         todoRepository.deleteTodo(
@@ -240,11 +242,18 @@ class TodoViewModel
                         }
                     }
                 }
-                TodoEvent.OnModifyTodoDateClick -> TODO()
-                TodoEvent.OnModifyTodoNameButtonClick -> TODO()
-                TodoEvent.OnModifyTodoStartTimeClick -> TODO()
-                TodoEvent.OnMoveTodoToTomorrowClick -> TODO()
-                TodoEvent.OnRepeatTodoClick -> TODO()
+                TodoEvent.OnModifyTodoDateClick -> {
+                    TODO()
+                }
+                TodoEvent.OnModifyTodoStartTimeClick -> {
+                    TODO()
+                }
+                TodoEvent.OnMoveTodoToTomorrowClick -> {
+                    TODO()
+                }
+                TodoEvent.OnRepeatTodoClick -> {
+                    TODO()
+                }
                 TodoEvent.OnModifyTodoNameButtonClick -> {
                     updateState(
                         TodoReduce.UpdateTodoState(
@@ -255,6 +264,7 @@ class TodoViewModel
                         )
                     )
                 }
+                TodoEvent.OnEditTodoDone,
                 TodoEvent.OnEditTodoNameBottomSheetDismissRequest -> {
                     viewModelScope.launch {
                         val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId

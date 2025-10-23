@@ -136,6 +136,7 @@ fun TodoScreen(
     onModifyTodoStartTimeClick: () -> Unit = {},
     onMoveTodoToTomorrowClick: () -> Unit = {},
     onRepeatTodoClick: () -> Unit = {},
+    onEditTodoDone: () -> Unit = {},
 ) {
     val localDensity = LocalDensity.current
     val itemSpacingPx = with(localDensity) { ITEM_SPACING.toPx() }
@@ -378,7 +379,7 @@ fun TodoScreen(
                 focusManager = focusManager,
                 todo = todoText,
                 onTodoChange = onTodoTextChange,
-                onDoneAction = onModifyTodoNameButtonClick,
+                onDoneAction = onEditTodoDone,
             )
         }
     }

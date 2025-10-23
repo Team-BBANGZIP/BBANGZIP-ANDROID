@@ -82,6 +82,8 @@ class TodoContract {
 
         data object OnEditTodoNameBottomSheetDismissRequest : TodoEvent
 
+        data object OnEditTodoDone : TodoEvent
+
         data object OnModifyTodoNameButtonClick : TodoEvent
 
         data object OnDeleteTodoButtonClick : TodoEvent

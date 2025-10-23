@@ -127,5 +127,8 @@ fun TodoRoute(
         onRepeatTodoClick = {
             viewModel.setEvent(TodoEvent.OnRepeatTodoClick)
         },
+        onEditTodoDone = {
+            viewModel.setEvent(TodoEvent.OnEditTodoDone)
+        }
     )
 }
