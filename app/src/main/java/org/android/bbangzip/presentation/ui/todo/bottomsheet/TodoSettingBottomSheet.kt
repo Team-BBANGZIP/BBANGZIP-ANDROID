@@ -47,6 +47,7 @@ fun TodoSettingBottomSheet(
     modifier: Modifier = Modifier,
     onEditButtonClick: () -> Unit = {},
     onDeleteButtonClick: () -> Unit = {},
+    onActionRowClick: (TodoSettingActionType) -> Unit = {},
     startTime: LocalTime? = null,
 ) {
     BbangZipBottomSheetSlot(
@@ -90,23 +91,34 @@ fun TodoSettingBottomSheet(
 
                     Gap(20.dp)
 
-                    InteractionRow(
-                        interactionIconResId = R.drawable.ic_again_default_24,
-                        actionName = stringResource(R.string.todo_setting_do_again_action_name),
-                    )
+                    TodoSettingActionType.entries.filter{
+                        it.isCompleteAction
+                    }.forEachIndexed { index, actionType ->
+                        InteractionRow(
+                            interactionIconResId = R.drawable.ic_again_default_24,
+                            actionName = stringResource(R.string.todo_setting_do_again_action_name),
+                            onClickRow = { onActionRowClick(actionType) },
+                        )
+                    }
                 } else {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
-                        TodoSettingActionType.entries.forEachIndexed { index, actionType ->
+                        TodoSettingActionType.entries.filter {
+                            !it.isCompleteAction
+                        }
+                        .forEachIndexed { index, actionType ->
                             InteractionRow(
                                 interactionIconResId = actionType.interactionIconResId,
                                 actionName = stringResource(actionType.actionName),
+                                onClickRow = {
+                                    if(!actionType.hasActionButton) onActionRowClick(actionType)
+                                },
                                 interactionButton = {
                                     when (actionType) {
                                         TodoSettingActionType.START_TIME -> {
                                             TimeSettingButton(
-                                                onSettingTimeClick = {},
+                                                onSettingTimeClick = { onActionRowClick(actionType) },
                                                 startTime = startTime,
                                             )
                                         }
@@ -115,7 +127,7 @@ fun TodoSettingBottomSheet(
                                             BbangZipSwitch(
                                                 modifier = Modifier.fillMaxWidth(44 / 335f),
                                                 isChecked = isNotificationEnabled,
-                                                onCheckedChange = onNotificationEnabledChange,
+                                                onCheckedChange = { onActionRowClick(actionType) },
                                             )
                                         }
 
