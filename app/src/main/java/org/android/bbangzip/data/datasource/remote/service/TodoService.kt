@@ -73,7 +73,7 @@ interface TodoService {
     @PATCH("$API/$VERSIONS/$TODO/{todoId}/start-time")
     suspend fun patchTodoTime(
         @Path("todoId") todoId: Long,
-        @Body requestPatchTodoTimeDto: RequestPatchTodoTimeDto
+        @Body requestPatchTodoTimeDto: RequestPatchTodoTimeDto,
     ): BaseResponse<ResponsePatchTodoTimeDto>
 
     @POST("$API/$VERSIONS/$TODO/{todoId}/repeat")

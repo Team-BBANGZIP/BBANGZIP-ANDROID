@@ -30,10 +30,10 @@ fun InteractionRow(
 ) {
     Column {
         Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .noRippleClickable(onClick = onClickRow)
-            ,
+            modifier =
+                modifier
+                    .fillMaxWidth()
+                    .noRippleClickable(onClick = onClickRow),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(

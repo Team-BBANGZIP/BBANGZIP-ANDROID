@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RequestPatchTodoNameDto(
-    val content: String
+    val content: String,
 )

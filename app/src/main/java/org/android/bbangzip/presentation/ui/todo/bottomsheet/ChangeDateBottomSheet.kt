@@ -65,7 +65,7 @@ fun ChangeDateBottomSheet(
                 MonthlyCalendar(
                     initialDate = date,
                     initialYearMonth = YearMonth.of(date.year, date.month),
-                    onDateSelected = onDateSelect
+                    onDateSelected = onDateSelect,
                 )
 
                 Gap(40.dp)

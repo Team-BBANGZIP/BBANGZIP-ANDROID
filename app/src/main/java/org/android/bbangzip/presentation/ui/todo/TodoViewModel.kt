@@ -69,20 +69,20 @@ class TodoViewModel
 
                     synchronizeListState(currentFlatList)
                     val newCategories = reconstructCategoriesFromFlatList(currentFlatList)
-                    val targetCategory = currentFlatList.filterIsInstance<ListItem.TodoItem>().filter {
-                        it.todo.todoId == movedItem.todo.todoId
-                    }[0].category
+                    val targetCategory =
+                        currentFlatList.filterIsInstance<ListItem.TodoItem>().filter {
+                            it.todo.todoId == movedItem.todo.todoId
+                        }[0].category
 
                     updateState(UpdateCategoriesAndFlatList(newCategories, currentFlatList.toList()))
-                    viewModelScope.launch{
+                    viewModelScope.launch {
                         todoRepository.reorderTodo(
                             todoId = movedItem.todo.todoId.toLong(),
                             originCategoryId = movedItem.category.id.toLong(),
                             targetCategoryId = targetCategory.id.toLong(),
                             targetCategoryColor = targetCategory.color,
-                            todoOrderList = currentFlatList.filterIsInstance<ListItem.TodoItem>().map { it.todo.todoId.toLong() }
+                            todoOrderList = currentFlatList.filterIsInstance<ListItem.TodoItem>().map { it.todo.todoId.toLong() },
                         ).onSuccess {
-
                         }.onFailure {
                             Timber.d("투두 순서 변경 실패")
                         }
@@ -101,39 +101,41 @@ class TodoViewModel
                             targetDate = currentUiState.selectedDate,
                             startTime = currentUiState.selectedStartTime,
                         )
-                    }else{
+                    } else {
                         updateState(
                             UpdateTodoState(
                                 currentUiState.copy(
                                     isAddTodoBottomSheetVisible = false,
                                     selectedCategory = null,
                                     selectedStartTime = null,
-                                )
-                            )
+                                ),
+                            ),
                         )
                     }
                 }
 
                 is TodoEvent.OnTimeConfirmButtonClick -> {
-                    if(currentUiState.isEditMode){
+                    if (currentUiState.isEditMode) {
                         val prevStartTime = currentUiState.selectedStartTime
                         val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
                         viewModelScope.launch {
                             todoRepository.modifyTodoTime(
                                 todoId = selectedTodoId.toLong(),
-                                startTime = event.startTime
+                                startTime = event.startTime,
                             ).onSuccess {
-                                val updatedCategories = currentUiState.categories.map{ category ->
-                                    category.copy(
-                                        todos = category.todos.map{
-                                            if(it.todoId == selectedTodoId){
-                                                it.copy(startTime = event.startTime)
-                                            }else{
-                                                it
-                                            }
-                                        }
-                                    )
-                                }
+                                val updatedCategories =
+                                    currentUiState.categories.map { category ->
+                                        category.copy(
+                                            todos =
+                                                category.todos.map {
+                                                    if (it.todoId == selectedTodoId) {
+                                                        it.copy(startTime = event.startTime)
+                                                    } else {
+                                                        it
+                                                    }
+                                                },
+                                        )
+                                    }
                                 updateState(
                                     UpdateTodoState(
                                         currentUiState.copy(
@@ -142,13 +144,15 @@ class TodoViewModel
                                             flatList = updatedCategories.toFlatList(),
                                             isTimePickerBottomSheetVisible = false,
                                             isTodoSettingBottomSheetVisible = true,
-                                            selectedTodoItem = currentUiState.selectedTodoItem!!.copy(
-                                                todo = currentUiState.selectedTodoItem!!.todo.copy(
-                                                    startTime = event.startTime
-                                                )
-                                            ),
-                                        )
-                                    )
+                                            selectedTodoItem =
+                                                currentUiState.selectedTodoItem!!.copy(
+                                                    todo =
+                                                        currentUiState.selectedTodoItem!!.todo.copy(
+                                                            startTime = event.startTime,
+                                                        ),
+                                                ),
+                                        ),
+                                    ),
                                 )
                             }.onFailure {
                                 updateState(
@@ -157,43 +161,43 @@ class TodoViewModel
                                             selectedStartTime = prevStartTime,
                                             isTimePickerBottomSheetVisible = false,
                                             isTodoSettingBottomSheetVisible = true,
-                                        )
-                                    )
+                                        ),
+                                    ),
                                 )
                                 Timber.d("투두 시간 변경 실패")
                             }
                         }
-                    }else{
+                    } else {
                         updateState(
                             UpdateTodoState(
                                 currentUiState.copy(
                                     selectedStartTime = event.startTime,
                                     isTimePickerBottomSheetVisible = false,
                                     isAddTodoBottomSheetVisible = true,
-                                )
-                            )
+                                ),
+                            ),
                         )
                     }
                 }
 
                 TodoEvent.OnTimePickerBottomSheetDismissRequest -> {
-                    if(currentUiState.isEditMode){
+                    if (currentUiState.isEditMode) {
                         updateState(
                             UpdateTodoState(
                                 currentUiState.copy(
                                     isTimePickerBottomSheetVisible = false,
                                     isTodoSettingBottomSheetVisible = true,
-                                )
-                            )
+                                ),
+                            ),
                         )
-                    }else{
+                    } else {
                         updateState(
                             UpdateTodoState(
                                 currentUiState.copy(
                                     isTimePickerBottomSheetVisible = false,
                                     isAddTodoBottomSheetVisible = true,
-                                )
-                            )
+                                ),
+                            ),
                         )
                     }
                 }
@@ -205,15 +209,15 @@ class TodoViewModel
                             targetDate = currentUiState.selectedDate,
                             startTime = currentUiState.selectedStartTime,
                         )
-                    }else {
+                    } else {
                         updateState(
                             UpdateTodoState(
                                 currentUiState.copy(
                                     isAddTodoBottomSheetVisible = false,
                                     selectedCategory = null,
                                     selectedStartTime = null,
-                                )
-                            )
+                                ),
+                            ),
                         )
                     }
                 }
@@ -231,9 +235,9 @@ class TodoViewModel
                         UpdateTodoState(
                             currentUiState.copy(
                                 selectedCategory = event.category,
-                                isAddTodoBottomSheetVisible = true
-                            )
-                        )
+                                isAddTodoBottomSheetVisible = true,
+                            ),
+                        ),
                     )
                 }
                 TodoEvent.OnAddCategoryClick -> {
@@ -272,16 +276,16 @@ class TodoViewModel
                     updateState(UpdateIsCommitmentBottomSheetVisible(false))
                 }
 
-                is TodoEvent.OnTodoItemMenuClick ->{
+                is TodoEvent.OnTodoItemMenuClick -> {
                     updateState(
                         UpdateTodoState(
                             currentUiState.copy(
                                 selectedTodoItem = event.todoItem,
                                 selectedStartTime = event.todoItem.todo.startTime,
                                 isTodoSettingBottomSheetVisible = true,
-                                isEditMode = true
-                            )
-                        )
+                                isEditMode = true,
+                            ),
+                        ),
                     )
                 }
 
@@ -290,9 +294,9 @@ class TodoViewModel
                         UpdateTodoState(
                             currentUiState.copy(
                                 selectedTodoItem = null,
-                                isTodoSettingBottomSheetVisible = false
-                            )
-                        )
+                                isTodoSettingBottomSheetVisible = false,
+                            ),
+                        ),
                     )
                 }
 
@@ -300,25 +304,27 @@ class TodoViewModel
                     viewModelScope.launch {
                         val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
                         todoRepository.copyTodo(
-                            todoId = selectedTodoId.toLong()
+                            todoId = selectedTodoId.toLong(),
                         ).onSuccess { data ->
-                            val newTodo = Todo(
-                                todoId = data.todoId,
-                                content = data.content,
-                                isCompleted = data.isCompleted,
-                                startTime = data.startTime,
-                            )
-                            val updatedCategories = currentUiState.categories.map { category ->
-                                val originTodoIndex = category.todos.indexOfFirst { it.todoId == selectedTodoId }
+                            val newTodo =
+                                Todo(
+                                    todoId = data.todoId,
+                                    content = data.content,
+                                    isCompleted = data.isCompleted,
+                                    startTime = data.startTime,
+                                )
+                            val updatedCategories =
+                                currentUiState.categories.map { category ->
+                                    val originTodoIndex = category.todos.indexOfFirst { it.todoId == selectedTodoId }
 
-                                if (originTodoIndex != -1) {
-                                    val mutableTodos = category.todos.toMutableList()
-                                    mutableTodos.add(originTodoIndex + 1, newTodo)
-                                    category.copy(todos = mutableTodos)
-                                } else {
-                                    category
+                                    if (originTodoIndex != -1) {
+                                        val mutableTodos = category.todos.toMutableList()
+                                        mutableTodos.add(originTodoIndex + 1, newTodo)
+                                        category.copy(todos = mutableTodos)
+                                    } else {
+                                        category
+                                    }
                                 }
-                            }
 
                             updateState(
                                 UpdateTodoState(
@@ -326,9 +332,9 @@ class TodoViewModel
                                         isTodoSettingBottomSheetVisible = false,
                                         selectedTodoItem = null,
                                         categories = updatedCategories,
-                                        flatList = updatedCategories.toFlatList()
-                                    )
-                                )
+                                        flatList = updatedCategories.toFlatList(),
+                                    ),
+                                ),
                             )
                         }.onFailure {
                             Timber.d("복제 실패!")
@@ -339,22 +345,23 @@ class TodoViewModel
                     viewModelScope.launch {
                         val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
                         todoRepository.deleteTodo(
-                            todoId = selectedTodoId.toLong()
+                            todoId = selectedTodoId.toLong(),
                         ).onSuccess {
-                            val updatedCategories = currentUiState.categories.map { category ->
-                                category.copy(
-                                    todos = category.todos.filter { it.todoId != selectedTodoId }
-                                )
-                            }
+                            val updatedCategories =
+                                currentUiState.categories.map { category ->
+                                    category.copy(
+                                        todos = category.todos.filter { it.todoId != selectedTodoId },
+                                    )
+                                }
                             updateState(
                                 UpdateTodoState(
                                     currentUiState.copy(
                                         selectedTodoItem = null,
                                         isTodoSettingBottomSheetVisible = false,
                                         categories = updatedCategories,
-                                        flatList = updatedCategories.toFlatList()
-                                )
-                            )
+                                        flatList = updatedCategories.toFlatList(),
+                                    ),
+                                ),
                             )
                         }.onFailure {
                             Timber.d("삭제 실패")
@@ -369,9 +376,9 @@ class TodoViewModel
                                 isCalendarBottomSheetVisible = true,
                                 isDateSavable = false,
                                 selectedMonthlyCalendarDate = currentUiState.selectedDate,
-                                isRepeat = false
-                            )
-                        )
+                                isRepeat = false,
+                            ),
+                        ),
                     )
                 }
                 TodoEvent.OnModifyTodoStartTimeClick -> {
@@ -380,9 +387,9 @@ class TodoViewModel
                             currentUiState.copy(
                                 selectedStartTime = null,
                                 isTimePickerBottomSheetVisible = true,
-                                isTodoSettingBottomSheetVisible = false
-                            )
-                        )
+                                isTodoSettingBottomSheetVisible = false,
+                            ),
+                        ),
                     )
                 }
                 TodoEvent.OnMoveTodoToTomorrowClick -> {
@@ -390,13 +397,14 @@ class TodoViewModel
                         val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
                         todoRepository.modifyTodoDate(
                             todoId = selectedTodoId.toLong(),
-                            targetDate = null
+                            targetDate = null,
                         ).onSuccess {
-                            val updatedCategories = currentUiState.categories.map { category ->
-                                category.copy(
-                                    todos = category.todos.filter { it.todoId != selectedTodoId }
-                                )
-                            }
+                            val updatedCategories =
+                                currentUiState.categories.map { category ->
+                                    category.copy(
+                                        todos = category.todos.filter { it.todoId != selectedTodoId },
+                                    )
+                                }
 
                             updateState(
                                 UpdateTodoState(
@@ -404,9 +412,9 @@ class TodoViewModel
                                         selectedTodoItem = null,
                                         isTodoSettingBottomSheetVisible = false,
                                         categories = updatedCategories,
-                                        flatList = updatedCategories.toFlatList()
-                                    )
-                                )
+                                        flatList = updatedCategories.toFlatList(),
+                                    ),
+                                ),
                             )
                         }.onFailure {
                             Timber.d("미루기 실패")
@@ -420,9 +428,9 @@ class TodoViewModel
                                 isTodoSettingBottomSheetVisible = false,
                                 isCalendarBottomSheetVisible = true,
                                 selectedMonthlyCalendarDate = currentUiState.selectedDate,
-                                isRepeat = true
-                            )
-                        )
+                                isRepeat = true,
+                            ),
+                        ),
                     )
                 }
                 TodoEvent.OnModifyTodoNameButtonClick -> {
@@ -431,29 +439,32 @@ class TodoViewModel
                             currentUiState.copy(
                                 isEditTodoNameBottomSheetVisible = true,
                                 isTodoSettingBottomSheetVisible = false,
-                            )
-                        )
+                            ),
+                        ),
                     )
                 }
                 TodoEvent.OnEditTodoDone,
-                TodoEvent.OnEditTodoNameBottomSheetDismissRequest -> {
+                TodoEvent.OnEditTodoNameBottomSheetDismissRequest,
+                -> {
                     viewModelScope.launch {
                         val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
                         todoRepository.modifyTodoName(
                             todoId = selectedTodoId.toLong(),
-                            content = currentUiState.todoText
+                            content = currentUiState.todoText,
                         ).onSuccess {
-                            val updatedCategories = currentUiState.categories.map { category ->
-                                category.copy(
-                                    todos = category.todos.map{
-                                        if(it.todoId == selectedTodoId){
-                                            it.copy(content = currentUiState.todoText)
-                                        }else{
-                                            it
-                                        }
-                                    }
-                                )
-                            }
+                            val updatedCategories =
+                                currentUiState.categories.map { category ->
+                                    category.copy(
+                                        todos =
+                                            category.todos.map {
+                                                if (it.todoId == selectedTodoId) {
+                                                    it.copy(content = currentUiState.todoText)
+                                                } else {
+                                                    it
+                                                }
+                                            },
+                                    )
+                                }
                             updateState(
                                 UpdateTodoState(
                                     currentUiState.copy(
@@ -461,9 +472,9 @@ class TodoViewModel
                                         selectedCategory = null,
                                         isEditTodoNameBottomSheetVisible = false,
                                         categories = updatedCategories,
-                                        flatList = updatedCategories.toFlatList()
-                                    )
-                                )
+                                        flatList = updatedCategories.toFlatList(),
+                                    ),
+                                ),
                             )
                         }.onFailure {
                             Timber.d("투두 이름 변경 실패")
@@ -475,41 +486,42 @@ class TodoViewModel
                         UpdateTodoState(
                             currentUiState.copy(
                                 selectedMonthlyCalendarDate = event.date,
-                                isDateSavable = currentUiState.selectedDate != event.date
-                            )
-                        )
+                                isDateSavable = currentUiState.selectedDate != event.date,
+                            ),
+                        ),
                     )
                 }
                 TodoEvent.OnSaveDateClick -> {
                     viewModelScope.launch {
                         val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
-                        if(currentUiState.isRepeat){
+                        if (currentUiState.isRepeat) {
                             todoRepository.repeatTodo(
                                 todoId = selectedTodoId.toLong(),
-                                targetDate = currentUiState.selectedMonthlyCalendarDate
+                                targetDate = currentUiState.selectedMonthlyCalendarDate,
                             ).onSuccess {
                                 updateState(
                                     UpdateTodoState(
                                         currentUiState.copy(
                                             isCalendarBottomSheetVisible = false,
                                             selectedTodoItem = null,
-                                            selectedMonthlyCalendarDate = LocalDate.now()
-                                        )
-                                    )
+                                            selectedMonthlyCalendarDate = LocalDate.now(),
+                                        ),
+                                    ),
                                 )
                             }.onFailure {
                                 Timber.d("다른날 또하기 실패")
                             }
-                        }else{
+                        } else {
                             todoRepository.modifyTodoDate(
                                 todoId = selectedTodoId.toLong(),
-                                targetDate = currentUiState.selectedMonthlyCalendarDate
+                                targetDate = currentUiState.selectedMonthlyCalendarDate,
                             ).onSuccess {
-                                val updatedCategories = currentUiState.categories.map { category ->
-                                    category.copy(
-                                        todos = category.todos.filter { it.todoId != selectedTodoId }
-                                    )
-                                }
+                                val updatedCategories =
+                                    currentUiState.categories.map { category ->
+                                        category.copy(
+                                            todos = category.todos.filter { it.todoId != selectedTodoId },
+                                        )
+                                    }
 
                                 updateState(
                                     UpdateTodoState(
@@ -518,9 +530,9 @@ class TodoViewModel
                                             selectedTodoItem = null,
                                             categories = updatedCategories,
                                             flatList = updatedCategories.toFlatList(),
-                                            selectedMonthlyCalendarDate = LocalDate.now()
-                                        )
-                                    )
+                                            selectedMonthlyCalendarDate = LocalDate.now(),
+                                        ),
+                                    ),
                                 )
                             }.onFailure {
                                 Timber.d("날짜 변경 실패")
@@ -535,9 +547,9 @@ class TodoViewModel
                             currentUiState.copy(
                                 isCalendarBottomSheetVisible = false,
                                 selectedTodoItem = null,
-                                selectedMonthlyCalendarDate = LocalDate.now()
-                            )
-                        )
+                                selectedMonthlyCalendarDate = LocalDate.now(),
+                            ),
+                        ),
                     )
                 }
             }
@@ -818,8 +830,8 @@ class TodoViewModel
                                     isAddTodoBottomSheetVisible = false,
                                     categories = updatedCategories,
                                     flatList = updatedCategories.toFlatList(),
-                                )
-                            )
+                                ),
+                            ),
                         )
                         Timber.d("Update Todo 성공!")
                     }.onFailure {

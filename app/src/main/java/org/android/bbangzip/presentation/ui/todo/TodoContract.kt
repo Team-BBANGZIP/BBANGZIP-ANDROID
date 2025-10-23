@@ -33,7 +33,7 @@ class TodoContract {
         val isCalendarBottomSheetVisible: Boolean = false,
         val selectedMonthlyCalendarDate: LocalDate = LocalDate.now(),
         val isRepeat: Boolean = false,
-        val isDateSavable: Boolean = false
+        val isDateSavable: Boolean = false,
     ) : BaseContract.State, Parcelable {
         override fun toParcelable(): Parcelable = this
 
@@ -81,7 +81,7 @@ class TodoContract {
 
         data object OnCommitmentBottomSheetDismissRequest : TodoEvent
 
-        data class OnTodoItemMenuClick(val todoItem: ListItem.TodoItem): TodoEvent
+        data class OnTodoItemMenuClick(val todoItem: ListItem.TodoItem) : TodoEvent
 
         data object OnTodoSettingBottomSheetDismissRequest : TodoEvent
 

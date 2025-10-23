@@ -90,7 +90,7 @@ fun TodoSettingBottomSheet(
 
                     Gap(20.dp)
 
-                    TodoSettingActionType.entries.filter{
+                    TodoSettingActionType.entries.filter {
                         it.isCompleteAction
                     }.forEachIndexed { index, actionType ->
                         InteractionRow(
@@ -106,42 +106,42 @@ fun TodoSettingBottomSheet(
                         TodoSettingActionType.entries.filter {
                             !it.isCompleteAction
                         }
-                        .forEachIndexed { index, actionType ->
-                            InteractionRow(
-                                interactionIconResId = actionType.interactionIconResId,
-                                actionName = stringResource(actionType.actionName),
-                                onClickRow = {
-                                    if(!actionType.hasActionButton) onActionRowClick(actionType)
-                                },
-                                interactionButton = {
-                                    when (actionType) {
-                                        TodoSettingActionType.START_TIME -> {
-                                            TimeSettingButton(
-                                                onSettingTimeClick = { onActionRowClick(actionType) },
-                                                startTime = startTime,
-                                            )
+                            .forEachIndexed { index, actionType ->
+                                InteractionRow(
+                                    interactionIconResId = actionType.interactionIconResId,
+                                    actionName = stringResource(actionType.actionName),
+                                    onClickRow = {
+                                        if (!actionType.hasActionButton) onActionRowClick(actionType)
+                                    },
+                                    interactionButton = {
+                                        when (actionType) {
+                                            TodoSettingActionType.START_TIME -> {
+                                                TimeSettingButton(
+                                                    onSettingTimeClick = { onActionRowClick(actionType) },
+                                                    startTime = startTime,
+                                                )
+                                            }
+
+                                            TodoSettingActionType.NOTIFICATION -> {
+                                                BbangZipSwitch(
+                                                    modifier = Modifier.fillMaxWidth(44 / 335f),
+                                                    isChecked = isNotificationEnabled,
+                                                    onCheckedChange = { onActionRowClick(actionType) },
+                                                )
+                                            }
+
+                                            else -> {}
                                         }
-
-                                        TodoSettingActionType.NOTIFICATION -> {
-                                            BbangZipSwitch(
-                                                modifier = Modifier.fillMaxWidth(44 / 335f),
-                                                isChecked = isNotificationEnabled,
-                                                onCheckedChange = { onActionRowClick(actionType) },
-                                            )
-                                        }
-
-                                        else -> {}
-                                    }
-                                },
-                            )
-
-                            if (index == 1) {
-                                HorizontalDivider(
-                                    modifier = Modifier.padding(vertical = 4.dp),
-                                    color = BbangZipTheme.color.componentStrong_F6F6F5,
+                                    },
                                 )
+
+                                if (index == 1) {
+                                    HorizontalDivider(
+                                        modifier = Modifier.padding(vertical = 4.dp),
+                                        color = BbangZipTheme.color.componentStrong_F6F6F5,
+                                    )
+                                }
                             }
-                        }
                     }
                 }
 

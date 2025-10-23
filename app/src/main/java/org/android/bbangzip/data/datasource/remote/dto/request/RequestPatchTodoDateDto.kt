@@ -7,5 +7,5 @@ import java.time.LocalDate
 @Serializable
 data class RequestPatchTodoDateDto(
     @Serializable(with = LocalDateSerializer::class)
-    val targetDate: LocalDate?
+    val targetDate: LocalDate?,
 )

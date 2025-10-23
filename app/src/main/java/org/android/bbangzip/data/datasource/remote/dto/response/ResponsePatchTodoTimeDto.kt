@@ -9,13 +9,14 @@ import java.time.LocalTime
 data class ResponsePatchTodoTimeDto(
     val todoId: Long,
     @Serializable(with = LocalTimeSerializer::class)
-    val startTime: LocalTime?
-){
+    val startTime: LocalTime?,
+) {
     // Todo nullable하게 만들기
-    fun toTodo() = Todo(
-        todoId = todoId.toInt(),
-        content = "",
-        isCompleted = false,
-        startTime = startTime
-    )
+    fun toTodo() =
+        Todo(
+            todoId = todoId.toInt(),
+            content = "",
+            isCompleted = false,
+            startTime = startTime,
+        )
 }

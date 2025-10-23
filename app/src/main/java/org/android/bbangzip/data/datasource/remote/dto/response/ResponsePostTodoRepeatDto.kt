@@ -16,7 +16,7 @@ data class ResponsePostTodoRepeatDto(
     @Serializable(with = LocalTimeSerializer::class)
     val startTime: LocalTime?,
     val isCompleted: Boolean,
-){
+) {
     fun toTodo() =
         Todo(
             todoId = todoId.toInt(),

@@ -8,7 +8,7 @@ enum class TodoSettingActionType(
     @DrawableRes val interactionIconResId: Int,
     @StringRes val actionName: Int,
     val hasActionButton: Boolean = false,
-    val isCompleteAction: Boolean = false
+    val isCompleteAction: Boolean = false,
 ) {
     START_TIME(
         interactionIconResId = R.drawable.ic_clock_default_24,
@@ -35,6 +35,6 @@ enum class TodoSettingActionType(
     REPEAT(
         interactionIconResId = R.drawable.ic_again_default_24,
         actionName = R.string.todo_setting_do_again_action_name,
-        isCompleteAction = true
-    )
+        isCompleteAction = true,
+    ),
 }

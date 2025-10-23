@@ -378,7 +378,7 @@ fun TodoScreen(
                 onEditButtonClick = onModifyTodoNameButtonClick,
                 onDeleteButtonClick = onDeleteTodoButtonClick,
                 onActionRowClick = { actionType ->
-                    when(actionType){
+                    when (actionType) {
                         TodoSettingActionType.START_TIME -> onModifyTodoStartTimeClick()
                         TodoSettingActionType.NOTIFICATION -> {}
                         TodoSettingActionType.POSTPONE -> onMoveTodoToTomorrowClick()
@@ -386,10 +386,10 @@ fun TodoScreen(
                         TodoSettingActionType.CHANGE_DATE -> onModifyTodoDateClick()
                         TodoSettingActionType.REPEAT -> onRepeatTodoClick()
                     }
-                }
+                },
             )
         }
-        if(selectedTodoItem != null){
+        if (selectedTodoItem != null) {
             EditTodoBottomSheet(
                 isBottomSheetVisible = isEditTodoBottomSheetVisible,
                 onDismissRequest = onEditTodoBottomSheetDismissRequest,
@@ -859,6 +859,6 @@ fun TodoScreenPreview() {
         onMonthlyCalendarBottomSheetDismissRequest = {},
         onDateSaveButtonClick = { },
         onMonthlyDateSelect = {},
-        isDateSavable = false
+        isDateSavable = false,
     )
 }

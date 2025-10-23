@@ -73,60 +73,65 @@ class TodoRemoteDataSource
                     ),
             )
 
-    suspend fun patchTodoName(
-        todoId: Long,
-        content: String,
-    ): Unit =
-        todoService.patchTodoName(
-            todoId = todoId,
-            requestPatchTodoNameDto = RequestPatchTodoNameDto(
-                content = content,
-            ),
-        )
-    suspend fun deleteTodo(
-        todoId: Long,
-    ): BaseResponse<ResponseDeleteTodoDto> =
-        todoService.deleteTodo(
-            todoId = todoId,
-        )
-
-    suspend fun postTodoCopy(
-        todoId: Long,
-    ): BaseResponse<ResponseTodoDto> =
-        todoService.postTodoCopy(
-            todoId = todoId,
-        )
-
-    suspend fun patchTodoDate(
-        todoId: Long,
-        targetDate: LocalDate?,
-    ): BaseResponse<ResponsePatchTodoDateDto> =
-        todoService.patchTodoDate(
-            todoId = todoId,
-            requestPatchTodoDateDto = RequestPatchTodoDateDto(
-                targetDate = targetDate,
+        suspend fun patchTodoName(
+            todoId: Long,
+            content: String,
+        ): Unit =
+            todoService.patchTodoName(
+                todoId = todoId,
+                requestPatchTodoNameDto =
+                    RequestPatchTodoNameDto(
+                        content = content,
+                    ),
             )
-        )
 
-    suspend fun patchTodoTime(
-        todoId: Long,
-        startTime: LocalTime?,
-    ): BaseResponse<ResponsePatchTodoTimeDto> =
-        todoService.patchTodoTime(
-            todoId = todoId,
-            requestPatchTodoTimeDto = RequestPatchTodoTimeDto(
-                startTime = startTime,
+        suspend fun deleteTodo(
+            todoId: Long,
+        ): BaseResponse<ResponseDeleteTodoDto> =
+            todoService.deleteTodo(
+                todoId = todoId,
             )
-        )
 
-    suspend fun postTodoRepeat(
-        todoId: Long,
-        targetDate: LocalDate,
-    ): BaseResponse<ResponsePostTodoRepeatDto> =
-        todoService.postTodoRepeat(
-            todoId = todoId,
-            requestPostTodoRepeatDto = RequestPostTodoRepeatDto(
-                targetDate = targetDate
+        suspend fun postTodoCopy(
+            todoId: Long,
+        ): BaseResponse<ResponseTodoDto> =
+            todoService.postTodoCopy(
+                todoId = todoId,
             )
-        )
+
+        suspend fun patchTodoDate(
+            todoId: Long,
+            targetDate: LocalDate?,
+        ): BaseResponse<ResponsePatchTodoDateDto> =
+            todoService.patchTodoDate(
+                todoId = todoId,
+                requestPatchTodoDateDto =
+                    RequestPatchTodoDateDto(
+                        targetDate = targetDate,
+                    ),
+            )
+
+        suspend fun patchTodoTime(
+            todoId: Long,
+            startTime: LocalTime?,
+        ): BaseResponse<ResponsePatchTodoTimeDto> =
+            todoService.patchTodoTime(
+                todoId = todoId,
+                requestPatchTodoTimeDto =
+                    RequestPatchTodoTimeDto(
+                        startTime = startTime,
+                    ),
+            )
+
+        suspend fun postTodoRepeat(
+            todoId: Long,
+            targetDate: LocalDate,
+        ): BaseResponse<ResponsePostTodoRepeatDto> =
+            todoService.postTodoRepeat(
+                todoId = todoId,
+                requestPostTodoRepeatDto =
+                    RequestPostTodoRepeatDto(
+                        targetDate = targetDate,
+                    ),
+            )
     }
