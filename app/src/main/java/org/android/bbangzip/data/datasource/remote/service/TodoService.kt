@@ -52,7 +52,7 @@ interface TodoService {
     suspend fun patchTodoName(
         @Path("todoId") todoId: Long,
         @Body requestPatchTodoNameDto: RequestPatchTodoNameDto,
-    ): BaseResponse<Any>
+    ): Unit
 
     @DELETE("$API/$VERSIONS/$TODO/{todoId}")
     suspend fun deleteTodo(
