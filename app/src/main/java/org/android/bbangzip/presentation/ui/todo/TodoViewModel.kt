@@ -324,10 +324,10 @@ class TodoViewModel
                 }
                 TodoEvent.OnDeleteTodoButtonClick -> {
                     viewModelScope.launch {
+                        val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
                         todoRepository.deleteTodo(
-                            todoId = currentUiState.selectedTodoItem!!.todo.todoId.toLong()
+                            todoId = selectedTodoId.toLong()
                         ).onSuccess {
-                            val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
                             val updatedCategories = currentUiState.categories.map { category ->
                                 category.copy(
                                     todos = category.todos.filter { it.todoId != selectedTodoId }
@@ -362,7 +362,32 @@ class TodoViewModel
                         ))
                 }
                 TodoEvent.OnMoveTodoToTomorrowClick -> {
-                    TODO()
+                    viewModelScope.launch {
+                        val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
+                        todoRepository.modifyTodoDate(
+                            todoId = selectedTodoId.toLong(),
+                            targetDate = null
+                        ).onSuccess {
+                            val updatedCategories = currentUiState.categories.map { category ->
+                                category.copy(
+                                    todos = category.todos.filter { it.todoId != selectedTodoId }
+                                )
+                            }
+
+                            updateState(
+                                TodoReduce.UpdateTodoState(
+                                    currentUiState.copy(
+                                        selectedTodoItem = null,
+                                        isTodoSettingBottomSheetVisible = false,
+                                        categories = updatedCategories,
+                                        flatList = updatedCategories.toFlatList()
+                                    )
+                                )
+                            )
+                        }.onFailure {
+                            Timber.d("미루기 실패")
+                        }
+                    }
                 }
                 TodoEvent.OnRepeatTodoClick -> {
                     TODO()

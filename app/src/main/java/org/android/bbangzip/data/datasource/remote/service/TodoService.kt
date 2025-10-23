@@ -64,8 +64,8 @@ interface TodoService {
         @Path("todoId") todoId: Long,
     ): BaseResponse<ResponseTodoDto>
 
-    @PATCH("$API/$VERSIONS/$TODO/{todoId}/reschedule")
-    suspend fun patchTodoDate(
+    @POST("$API/$VERSIONS/$TODO/{todoId}/reschedule")
+    suspend fun postTodoDate(
         @Path("todoId") todoId: Long,
         @Body requestPatchTodoDateDto: RequestPatchTodoDateDto,
     ): BaseResponse<ResponsePatchTodoDateDto>

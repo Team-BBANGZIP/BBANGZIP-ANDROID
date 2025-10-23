@@ -45,7 +45,7 @@ interface TodoRepository {
 
     suspend fun modifyTodoDate(
         todoId: Long,
-        targetDate: LocalDate,
+        targetDate: LocalDate?,
     ): Result<Todo>
 
     suspend fun modifyTodoTime(
