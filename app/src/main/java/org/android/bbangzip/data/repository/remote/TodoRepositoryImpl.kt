@@ -99,7 +99,7 @@ class TodoRepositoryImpl
 
     override suspend fun modifyTodoDate(todoId: Long, targetDate: LocalDate?): Result<Todo> =
         runCatching {
-            val response = todoRemoteDataSource.postTodoDate(
+            val response = todoRemoteDataSource.patchTodoDate(
                 todoId = todoId,
                 targetDate = targetDate
             )

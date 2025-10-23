@@ -97,11 +97,11 @@ class TodoRemoteDataSource
             todoId = todoId,
         )
 
-    suspend fun postTodoDate(
+    suspend fun patchTodoDate(
         todoId: Long,
         targetDate: LocalDate?,
     ): BaseResponse<ResponsePatchTodoDateDto> =
-        todoService.postTodoDate(
+        todoService.patchTodoDate(
             todoId = todoId,
             requestPatchTodoDateDto = RequestPatchTodoDateDto(
                 targetDate = targetDate,
