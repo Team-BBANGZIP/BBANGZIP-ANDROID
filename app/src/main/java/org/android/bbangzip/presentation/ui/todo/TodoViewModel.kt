@@ -14,6 +14,7 @@ import org.android.bbangzip.presentation.common.model.Todo
 import org.android.bbangzip.presentation.common.util.extension.toYyyyMmDdString
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoEvent
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.*
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategories
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategoriesAndFlatList
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateFlatList
@@ -95,7 +96,7 @@ class TodoViewModel
                         )
                     }else{
                         updateState(
-                            TodoReduce.UpdateTodoState(
+                            UpdateTodoState(
                                 currentUiState.copy(
                                     isAddTodoBottomSheetVisible = false,
                                     selectedCategory = null,
@@ -127,7 +128,7 @@ class TodoViewModel
                                     )
                                 }
                                 updateState(
-                                    TodoReduce.UpdateTodoState(
+                                    UpdateTodoState(
                                         currentUiState.copy(
                                             selectedStartTime = event.startTime,
                                             categories = updatedCategories,
@@ -144,7 +145,7 @@ class TodoViewModel
                                 )
                             }.onFailure {
                                 updateState(
-                                    TodoReduce.UpdateTodoState(
+                                    UpdateTodoState(
                                         currentUiState.copy(
                                             selectedStartTime = prevStartTime,
                                             isTimePickerBottomSheetVisible = false,
@@ -157,7 +158,7 @@ class TodoViewModel
                         }
                     }else{
                         updateState(
-                            TodoReduce.UpdateTodoState(
+                            UpdateTodoState(
                                 currentUiState.copy(
                                     selectedStartTime = event.startTime,
                                     isTimePickerBottomSheetVisible = false,
@@ -171,7 +172,7 @@ class TodoViewModel
                 TodoEvent.OnTimePickerBottomSheetDismissRequest -> {
                     if(currentUiState.isEditMode){
                         updateState(
-                            TodoReduce.UpdateTodoState(
+                            UpdateTodoState(
                                 currentUiState.copy(
                                     isTimePickerBottomSheetVisible = false,
                                     isTodoSettingBottomSheetVisible = true,
@@ -180,7 +181,7 @@ class TodoViewModel
                         )
                     }else{
                         updateState(
-                            TodoReduce.UpdateTodoState(
+                            UpdateTodoState(
                                 currentUiState.copy(
                                     isTimePickerBottomSheetVisible = false,
                                     isAddTodoBottomSheetVisible = true,
@@ -199,7 +200,7 @@ class TodoViewModel
                         )
                     }else {
                         updateState(
-                            TodoReduce.UpdateTodoState(
+                            UpdateTodoState(
                                 currentUiState.copy(
                                     isAddTodoBottomSheetVisible = false,
                                     selectedCategory = null,
@@ -211,16 +212,16 @@ class TodoViewModel
                 }
 
                 TodoEvent.OnTimePickerBottomSheetShowRequest -> {
-                    updateState(TodoReduce.UpdateIsTimePickerBottomSheetVisible(true))
-                    updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(false))
+                    updateState(UpdateIsTimePickerBottomSheetVisible(true))
+                    updateState(UpdateIsAddTodoBottomSheetVisible(false))
                 }
 
                 is TodoEvent.OnTodoTextChange -> {
-                    updateState(TodoReduce.UpdateTodoText(event.todoText))
+                    updateState(UpdateTodoText(event.todoText))
                 }
                 is TodoEvent.OnCategoryChipClick -> {
                     updateState(
-                        TodoReduce.UpdateTodoState(
+                        UpdateTodoState(
                             currentUiState.copy(
                                 selectedCategory = event.category,
                                 isAddTodoBottomSheetVisible = true
@@ -241,32 +242,32 @@ class TodoViewModel
                     setSideEffect(TodoSideEffect.NavigateToManageCategory)
                 }
                 TodoEvent.OnCommitmentAreaClick -> {
-                    updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(true))
+                    updateState(UpdateIsCommitmentBottomSheetVisible(true))
                 }
                 TodoEvent.OnCommitmentDone -> {
                     val prevCommitment = currentUiState.confirmedCommitmentMessage
-                    updateState(TodoReduce.UpdateConfirmedCommitmentMessage(commitmentMessage = currentUiState.textFieldCommitmentMessage))
-                    updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(false))
+                    updateState(UpdateConfirmedCommitmentMessage(commitmentMessage = currentUiState.textFieldCommitmentMessage))
+                    updateState(UpdateIsCommitmentBottomSheetVisible(false))
                     viewModelScope.launch {
                         commitmentRepository
                             .submitCommitmentMessage(commitmentMessage = currentUiState.textFieldCommitmentMessage)
                             .onSuccess { data ->
                             }.onFailure {
                                 Timber.d("다짐 메세지 작성 실패")
-                                updateState(TodoReduce.UpdateConfirmedCommitmentMessage(commitmentMessage = prevCommitment))
+                                updateState(UpdateConfirmedCommitmentMessage(commitmentMessage = prevCommitment))
                             }
                     }
                 }
                 is TodoEvent.OnTextFieldCommitmentMessageChange -> {
-                    updateState(TodoReduce.UpdateTextFieldCommitmentMessage(commitmentMessage = event.text))
+                    updateState(UpdateTextFieldCommitmentMessage(commitmentMessage = event.text))
                 }
                 TodoEvent.OnCommitmentBottomSheetDismissRequest -> {
-                    updateState(TodoReduce.UpdateIsCommitmentBottomSheetVisible(false))
+                    updateState(UpdateIsCommitmentBottomSheetVisible(false))
                 }
 
                 is TodoEvent.OnTodoItemMenuClick ->{
                     updateState(
-                        TodoReduce.UpdateTodoState(
+                        UpdateTodoState(
                             currentUiState.copy(
                                 selectedTodoItem = event.todoItem,
                                 selectedStartTime = event.todoItem.todo.startTime,
@@ -279,7 +280,7 @@ class TodoViewModel
 
                 TodoEvent.OnTodoSettingBottomSheetDismissRequest -> {
                     updateState(
-                        TodoReduce.UpdateTodoState(
+                        UpdateTodoState(
                             currentUiState.copy(
                                 selectedTodoItem = null,
                                 isTodoSettingBottomSheetVisible = false
@@ -313,7 +314,7 @@ class TodoViewModel
                             }
 
                             updateState(
-                                TodoReduce.UpdateTodoState(
+                                UpdateTodoState(
                                     currentUiState.copy(
                                         isTodoSettingBottomSheetVisible = false,
                                         selectedTodoItem = null,
@@ -339,7 +340,7 @@ class TodoViewModel
                                 )
                             }
                             updateState(
-                                TodoReduce.UpdateTodoState(
+                                UpdateTodoState(
                                     currentUiState.copy(
                                         selectedTodoItem = null,
                                         selectedCategory = null,
@@ -347,24 +348,33 @@ class TodoViewModel
                                         categories = updatedCategories,
                                         flatList = updatedCategories.toFlatList()
                                 )
-                            ))
+                            )
+                            )
                         }.onFailure {
                             Timber.d("삭제 실패")
                         }
                     }
                 }
                 TodoEvent.OnModifyTodoDateClick -> {
-                    TODO()
+                    updateState(
+                        UpdateTodoState(
+                            currentUiState.copy(
+                                isTodoSettingBottomSheetVisible = false,
+                                isCalendarBottomSheetVisible = true
+                            )
+                        )
+                    )
                 }
                 TodoEvent.OnModifyTodoStartTimeClick -> {
                     updateState(
-                        TodoReduce.UpdateTodoState(
+                        UpdateTodoState(
                             currentUiState.copy(
                                 selectedStartTime = null,
                                 isTimePickerBottomSheetVisible = true,
                                 isTodoSettingBottomSheetVisible = false
                             )
-                        ))
+                        )
+                    )
                 }
                 TodoEvent.OnMoveTodoToTomorrowClick -> {
                     viewModelScope.launch {
@@ -380,7 +390,7 @@ class TodoViewModel
                             }
 
                             updateState(
-                                TodoReduce.UpdateTodoState(
+                                UpdateTodoState(
                                     currentUiState.copy(
                                         selectedTodoItem = null,
                                         isTodoSettingBottomSheetVisible = false,
@@ -399,7 +409,7 @@ class TodoViewModel
                 }
                 TodoEvent.OnModifyTodoNameButtonClick -> {
                     updateState(
-                        TodoReduce.UpdateTodoState(
+                        UpdateTodoState(
                             currentUiState.copy(
                                 isEditTodoNameBottomSheetVisible = true,
                                 isTodoSettingBottomSheetVisible = false,
@@ -427,7 +437,7 @@ class TodoViewModel
                                 )
                             }
                             updateState(
-                                TodoReduce.UpdateTodoState(
+                                UpdateTodoState(
                                     currentUiState.copy(
                                         selectedTodoItem = null,
                                         selectedCategory = null,
@@ -441,6 +451,54 @@ class TodoViewModel
                             Timber.d("투두 이름 변경 실패")
                         }
                     }
+                }
+                is TodoEvent.OnCalendarCellClick -> {
+                    updateState(
+                        UpdateTodoState(
+                            currentUiState.copy(
+                                selectedMonthlyCalendarDate = event.date
+                            )
+                        )
+                    )
+                }
+                TodoEvent.OnSaveDateClick -> {
+                    viewModelScope.launch {
+                        val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
+                        todoRepository.modifyTodoDate(
+                            todoId = selectedTodoId.toLong(),
+                            targetDate = currentUiState.selectedMonthlyCalendarDate
+                        ).onSuccess {
+                            val updatedCategories = currentUiState.categories.map { category ->
+                                category.copy(
+                                    todos = category.todos.filter { it.todoId != selectedTodoId }
+                                )
+                            }
+
+                            updateState(
+                                UpdateTodoState(
+                                    currentUiState.copy(
+                                        isCalendarBottomSheetVisible = false,
+                                        selectedTodoItem = null,
+                                        categories = updatedCategories,
+                                        flatList = updatedCategories.toFlatList()
+                                    )
+                                )
+                            )
+                        }.onFailure {
+                            Timber.d("날짜 변경 실패")
+                        }
+                    }
+                }
+
+                TodoEvent.OnCalendarBottomSheetDismissRequest -> {
+                    updateState(
+                        UpdateTodoState(
+                            currentUiState.copy(
+                                isCalendarBottomSheetVisible = false,
+                                selectedTodoItem = null
+                            )
+                        )
+                    )
                 }
             }
         }

@@ -46,6 +46,8 @@ fun TodoRoute(
         selectedStartTime = uiState.selectedStartTime,
         selectedTodoItem = uiState.selectedTodoItem,
         isEditTodoBottomSheetVisible = uiState.isEditTodoNameBottomSheetVisible,
+        isMonthlyCalendarBottomSheetVisible = uiState.isCalendarBottomSheetVisible,
+        selectedMonthlyDate = uiState.selectedMonthlyCalendarDate,
         onListItemMove = { fromIndex, toIndex ->
             viewModel.setEvent(TodoEvent.OnListItemMove(fromIndex, toIndex))
         },
@@ -129,6 +131,15 @@ fun TodoRoute(
         },
         onEditTodoDone = {
             viewModel.setEvent(TodoEvent.OnEditTodoDone)
-        }
+        },
+        onMonthlyCalendarBottomSheetDismissRequest = {
+            viewModel.setEvent(TodoEvent.OnCalendarBottomSheetDismissRequest)
+        },
+        onDateSaveButtonClick = {
+            viewModel.setEvent(TodoEvent.OnSaveDateClick)
+        },
+        onMonthlyDateSelect = {
+            viewModel.setEvent(TodoEvent.OnCalendarCellClick(it))
+        },
     )
 }

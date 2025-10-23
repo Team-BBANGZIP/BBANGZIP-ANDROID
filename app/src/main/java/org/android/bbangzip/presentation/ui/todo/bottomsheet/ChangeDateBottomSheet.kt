@@ -40,6 +40,8 @@ fun ChangeDateBottomSheet(
     isBottomSheetVisible: Boolean,
     onDismissRequest: () -> Unit,
     date: LocalDate,
+    onSaveButtonClick: () -> Unit,
+    onDateSelect: (LocalDate) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     BbangZipBottomSheetSlot(
@@ -62,6 +64,7 @@ fun ChangeDateBottomSheet(
                 MonthlyCalendar(
                     initialDate = date,
                     initialYearMonth = YearMonth.of(date.year, date.month),
+                    onDateSelected = onDateSelect
                 )
 
                 Gap(40.dp)
@@ -71,7 +74,7 @@ fun ChangeDateBottomSheet(
                         Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 28.dp),
-                    onClick = {},
+                    onClick = onSaveButtonClick,
                     leadingIcon = {
                         Icon(
                             imageVector = ImageVector.vectorResource(R.drawable.ic_calendar_default_24),
@@ -128,6 +131,8 @@ fun ChangeDateBottomSheetPreview() {
             isBottomSheetVisible = isBottomSheetVisible,
             onDismissRequest = { isBottomSheetVisible = !isBottomSheetVisible },
             date = LocalDate.now(),
+            onSaveButtonClick = {},
+            onDateSelect = {},
         )
     }
 }

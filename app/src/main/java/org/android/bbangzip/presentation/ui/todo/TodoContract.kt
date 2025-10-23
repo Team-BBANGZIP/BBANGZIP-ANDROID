@@ -30,6 +30,8 @@ class TodoContract {
         val isTodoSettingBottomSheetVisible: Boolean = false,
         val selectedTodoItem: ListItem.TodoItem? = null,
         val isEditTodoNameBottomSheetVisible: Boolean = false,
+        val isCalendarBottomSheetVisible: Boolean = false,
+        val selectedMonthlyCalendarDate: LocalDate = selectedDate,
     ) : BaseContract.State, Parcelable {
         override fun toParcelable(): Parcelable = this
 
@@ -83,6 +85,8 @@ class TodoContract {
 
         data object OnEditTodoNameBottomSheetDismissRequest : TodoEvent
 
+        data object OnCalendarBottomSheetDismissRequest : TodoEvent
+
         data object OnEditTodoDone : TodoEvent
 
         data object OnModifyTodoNameButtonClick : TodoEvent
@@ -98,6 +102,10 @@ class TodoContract {
         data object OnModifyTodoDateClick : TodoEvent
 
         data object OnRepeatTodoClick : TodoEvent
+
+        data object OnSaveDateClick : TodoEvent
+
+        data class OnCalendarCellClick(val date: LocalDate) : TodoEvent
     }
 
     sealed interface TodoReduce : BaseContract.Reduce {

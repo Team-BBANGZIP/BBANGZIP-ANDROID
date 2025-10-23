@@ -80,6 +80,7 @@ import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.dropShadow
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.presentation.common.util.scroll.calculateScrollSpeed
+import org.android.bbangzip.presentation.ui.todo.bottomsheet.ChangeDateBottomSheet
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.CommitmentBottomSheet
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.EditTodoBottomSheet
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.TodoSettingBottomSheet
@@ -107,9 +108,11 @@ fun TodoScreen(
     isAddTodoBottomSheetVisible: Boolean,
     isTodoSettingBottomSheetVisible: Boolean,
     isEditTodoBottomSheetVisible: Boolean,
+    isMonthlyCalendarBottomSheetVisible: Boolean,
     todoText: String,
     selectedStartTime: LocalTime?,
     selectedTodoItem: ListItem.TodoItem?,
+    selectedMonthlyDate: LocalDate,
     onMenuClick: () -> Unit,
     onListItemMove: (from: Int, to: Int) -> Unit,
     onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit,
@@ -119,6 +122,9 @@ fun TodoScreen(
     onAddTodoBottomSheetDismissRequest: () -> Unit,
     onTodoSettingBottomSheetDismissRequest: () -> Unit,
     onTimePickerBottomSheetShowRequest: () -> Unit,
+    onMonthlyCalendarBottomSheetDismissRequest: () -> Unit,
+    onDateSaveButtonClick: () -> Unit,
+    onMonthlyDateSelect: (LocalDate) -> Unit,
     onTodoTextChange: (String) -> Unit,
     onCategoryChipClick: (Category) -> Unit,
     onCommitmentAreaClick: () -> Unit,
@@ -392,6 +398,13 @@ fun TodoScreen(
                 onDoneAction = onEditTodoDone,
             )
         }
+        ChangeDateBottomSheet(
+            isBottomSheetVisible = isMonthlyCalendarBottomSheetVisible,
+            onDismissRequest = onMonthlyCalendarBottomSheetDismissRequest,
+            date = selectedMonthlyDate,
+            onDateSelect = onMonthlyDateSelect,
+            onSaveButtonClick = onDateSaveButtonClick,
+        )
     }
 }
 
@@ -839,5 +852,10 @@ fun TodoScreenPreview() {
         onTodoSettingBottomSheetDismissRequest = {},
         isEditTodoBottomSheetVisible = false,
         onEditTodoBottomSheetDismissRequest = { },
+        isMonthlyCalendarBottomSheetVisible = false,
+        selectedMonthlyDate = LocalDate.now(),
+        onMonthlyCalendarBottomSheetDismissRequest = {},
+        onDateSaveButtonClick = { },
+        onMonthlyDateSelect = {},
     )
 }
