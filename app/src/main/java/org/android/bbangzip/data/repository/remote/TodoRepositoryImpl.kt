@@ -6,6 +6,7 @@ import org.android.bbangzip.domain.model.TodoCompletionInfo
 import org.android.bbangzip.domain.model.TodoCount
 import org.android.bbangzip.domain.model.TodoList
 import org.android.bbangzip.domain.repository.TodoRepository
+import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject

@@ -76,7 +76,7 @@ class TodoRemoteDataSource
     suspend fun patchTodoName(
         todoId: Long,
         content: String,
-    ): BaseResponse<Any> =
+    ): Unit =
         todoService.patchTodoName(
             todoId = todoId,
             requestPatchTodoNameDto = RequestPatchTodoNameDto(

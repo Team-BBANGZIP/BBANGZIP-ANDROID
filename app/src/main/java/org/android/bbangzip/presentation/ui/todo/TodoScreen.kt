@@ -81,6 +81,7 @@ import org.android.bbangzip.presentation.common.util.extension.dropShadow
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.presentation.common.util.scroll.calculateScrollSpeed
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.CommitmentBottomSheet
+import org.android.bbangzip.presentation.ui.todo.bottomsheet.EditTodoBottomSheet
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.TodoSettingBottomSheet
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalDate
@@ -104,6 +105,7 @@ fun TodoScreen(
     isTimePickerBottomSheetVisible: Boolean,
     isAddTodoBottomSheetVisible: Boolean,
     isTodoSettingBottomSheetVisible: Boolean,
+    isEditTodoBottomSheetVisible: Boolean,
     todoText: String,
     selectedStartTime: LocalTime?,
     selectedTodoItem: ListItem.TodoItem?,
@@ -122,6 +124,7 @@ fun TodoScreen(
     onCommitmentDone: () -> Unit,
     onTextFieldCommitmentMessageChange: (String) -> Unit,
     onCommitmentBottomSheetDismissRequest: () -> Unit,
+    onEditTodoBottomSheetDismissRequest: () -> Unit,
     onManageCategoryClick: () -> Unit = {},
     onAddCategoryClick: () -> Unit = {},
     onDateSelect: (LocalDate) -> Unit = {},
@@ -366,6 +369,16 @@ fun TodoScreen(
                 startTime = selectedTodoItem.todo.startTime,
                 onEditButtonClick = onModifyTodoNameButtonClick,
                 onDeleteButtonClick = onDeleteTodoButtonClick
+            )
+        }
+        if(selectedTodoItem != null){
+            EditTodoBottomSheet(
+                isBottomSheetVisible = isEditTodoBottomSheetVisible,
+                onDismissRequest = onEditTodoBottomSheetDismissRequest,
+                focusManager = focusManager,
+                todo = todoText,
+                onTodoChange = onTodoTextChange,
+                onDoneAction = onModifyTodoNameButtonClick,
             )
         }
     }
@@ -812,6 +825,8 @@ fun TodoScreenPreview() {
         onCommitmentBottomSheetDismissRequest = {},
         isTodoSettingBottomSheetVisible = false,
         onTodoItemMenuClick = {},
-        onTodoSettingBottomSheetDismissRequest = {}
+        onTodoSettingBottomSheetDismissRequest = {},
+        isEditTodoBottomSheetVisible = false,
+        onEditTodoBottomSheetDismissRequest = { },
     )
 }

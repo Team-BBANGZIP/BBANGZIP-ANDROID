@@ -45,6 +45,7 @@ fun TodoRoute(
         todoText = uiState.todoText,
         selectedStartTime = uiState.selectedStartTime,
         selectedTodoItem = uiState.selectedTodoItem,
+        isEditTodoBottomSheetVisible = uiState.isEditTodoNameBottomSheetVisible,
         onListItemMove = { fromIndex, toIndex ->
             viewModel.setEvent(TodoEvent.OnListItemMove(fromIndex, toIndex))
         },
@@ -98,6 +99,9 @@ fun TodoRoute(
         },
         onTodoSettingBottomSheetDismissRequest = {
             viewModel.setEvent(TodoEvent.OnTodoSettingBottomSheetDismissRequest)
+        },
+        onEditTodoBottomSheetDismissRequest = {
+            viewModel.setEvent(TodoEvent.OnEditTodoNameBottomSheetDismissRequest)
         },
         onTodoItemMenuClick = {
             viewModel.setEvent(TodoEvent.OnTodoItemMenuClick(it))

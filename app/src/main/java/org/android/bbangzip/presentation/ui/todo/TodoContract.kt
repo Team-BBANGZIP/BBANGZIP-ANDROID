@@ -27,7 +27,8 @@ class TodoContract {
         val selectedStartTime: LocalTime? = null,
         // todo setting
         val isTodoSettingBottomSheetVisible: Boolean = false,
-        val selectedTodoItem: ListItem.TodoItem? = null
+        val selectedTodoItem: ListItem.TodoItem? = null,
+        val isEditTodoNameBottomSheetVisible: Boolean = false,
     ) : BaseContract.State, Parcelable {
         override fun toParcelable(): Parcelable = this
 
@@ -78,6 +79,8 @@ class TodoContract {
         data class OnTodoItemMenuClick(val todoItem: ListItem.TodoItem): TodoEvent
 
         data object OnTodoSettingBottomSheetDismissRequest : TodoEvent
+
+        data object OnEditTodoNameBottomSheetDismissRequest : TodoEvent
 
         data object OnModifyTodoNameButtonClick : TodoEvent
 

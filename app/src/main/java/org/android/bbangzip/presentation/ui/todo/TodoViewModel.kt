@@ -245,6 +245,50 @@ class TodoViewModel
                 TodoEvent.OnModifyTodoStartTimeClick -> TODO()
                 TodoEvent.OnMoveTodoToTomorrowClick -> TODO()
                 TodoEvent.OnRepeatTodoClick -> TODO()
+                TodoEvent.OnModifyTodoNameButtonClick -> {
+                    updateState(
+                        UpdateTodoState(
+                            currentUiState.copy(
+                                isEditTodoNameBottomSheetVisible = true,
+                                isTodoSettingBottomSheetVisible = false,
+                            )
+                        )
+                    )
+                }
+                TodoEvent.OnEditTodoNameBottomSheetDismissRequest -> {
+                    viewModelScope.launch {
+                        val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
+                        todoRepository.modifyTodoName(
+                            todoId = selectedTodoId.toLong(),
+                            content = currentUiState.todoText
+                        ).onSuccess {
+                            val updatedCategories = currentUiState.categories.map { category ->
+                                category.copy(
+                                    todos = category.todos.map{
+                                        if(it.todoId == selectedTodoId){
+                                            it.copy(content = currentUiState.todoText)
+                                        }else{
+                                            it
+                                        }
+                                    }
+                                )
+                            }
+                            updateState(
+                                UpdateTodoState(
+                                    currentUiState.copy(
+                                        selectedTodoItem = null,
+                                        selectedCategory = null,
+                                        isEditTodoNameBottomSheetVisible = false,
+                                        categories = updatedCategories,
+                                        flatList = updatedCategories.toFlatList()
+                                    )
+                                )
+                            )
+                        }.onFailure {
+                            Timber.d("투두 이름 변경 실패")
+                        }
+                    }
+                }
             }
         }
 
