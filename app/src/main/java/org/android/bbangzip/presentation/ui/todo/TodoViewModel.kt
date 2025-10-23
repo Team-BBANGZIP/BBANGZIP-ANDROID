@@ -247,7 +247,7 @@ class TodoViewModel
                 TodoEvent.OnRepeatTodoClick -> TODO()
                 TodoEvent.OnModifyTodoNameButtonClick -> {
                     updateState(
-                        UpdateTodoState(
+                        TodoReduce.UpdateTodoState(
                             currentUiState.copy(
                                 isEditTodoNameBottomSheetVisible = true,
                                 isTodoSettingBottomSheetVisible = false,
@@ -274,7 +274,7 @@ class TodoViewModel
                                 )
                             }
                             updateState(
-                                UpdateTodoState(
+                                TodoReduce.UpdateTodoState(
                                     currentUiState.copy(
                                         selectedTodoItem = null,
                                         selectedCategory = null,
