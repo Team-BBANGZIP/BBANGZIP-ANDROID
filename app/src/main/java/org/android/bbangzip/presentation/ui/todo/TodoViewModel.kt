@@ -188,7 +188,32 @@ class TodoViewModel
                 }
 
                 TodoEvent.OnCopyTodoClick -> TODO()
-                TodoEvent.OnDeleteTodoButtonClick -> TODO()
+                TodoEvent.OnDeleteTodoButtonClick -> {
+                    viewModelScope.launch {
+                        todoRepository.deleteTodo(
+                            todoId = currentUiState.selectedTodoItem!!.todo.todoId.toLong()
+                        ).onSuccess {
+                            val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
+                            val updatedCategories = currentUiState.categories.map { category ->
+                                category.copy(
+                                    todos = category.todos.filter { it.todoId != selectedTodoId }
+                                )
+                            }
+                            updateState(
+                                TodoReduce.UpdateTodoState(
+                                    currentUiState.copy(
+                                        selectedTodoItem = null,
+                                        selectedCategory = null,
+                                        isTodoSettingBottomSheetVisible = false,
+                                        categories = updatedCategories,
+                                        flatList = updatedCategories.toFlatList()
+                                )
+                            ))
+                        }.onFailure {
+                            Timber.d("삭제 실패")
+                        }
+                    }
+                }
                 TodoEvent.OnModifyTodoDateClick -> TODO()
                 TodoEvent.OnModifyTodoNameButtonClick -> TODO()
                 TodoEvent.OnModifyTodoStartTimeClick -> TODO()

@@ -366,6 +366,8 @@ fun TodoScreen(
                 isNotificationEnabled = false,
                 onNotificationEnabledChange = {},
                 startTime = selectedTodoItem.todo.startTime,
+                onEditButtonClick = onModifyTodoNameButtonClick,
+                onDeleteButtonClick = onDeleteTodoButtonClick
             )
         }
     }

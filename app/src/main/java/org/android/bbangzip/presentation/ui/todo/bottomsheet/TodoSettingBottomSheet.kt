@@ -45,6 +45,8 @@ fun TodoSettingBottomSheet(
     isNotificationEnabled: Boolean,
     onNotificationEnabledChange: () -> Unit,
     modifier: Modifier = Modifier,
+    onEditButtonClick: () -> Unit = {},
+    onDeleteButtonClick: () -> Unit = {},
     startTime: LocalTime? = null,
 ) {
     BbangZipBottomSheetSlot(
@@ -74,7 +76,10 @@ fun TodoSettingBottomSheet(
         },
         content = {
             Column {
-                InteractionButtons()
+                InteractionButtons(
+                    onDeleteButtonClick = onDeleteButtonClick,
+                    onEditButtonClick = onEditButtonClick,
+                )
 
                 Gap(20.dp)
 
@@ -138,13 +143,15 @@ fun TodoSettingBottomSheet(
 @Composable
 private fun InteractionButtons(
     modifier: Modifier = Modifier,
+    onDeleteButtonClick: () -> Unit = {},
+    onEditButtonClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
     ) {
         BbangzipBaseButton(
             modifier = Modifier.weight(1f),
-            onClick = {},
+            onClick = onEditButtonClick,
             leadingIcon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_return_thin_24),
@@ -170,7 +177,7 @@ private fun InteractionButtons(
 
         BbangzipBaseButton(
             modifier = Modifier.weight(1f),
-            onClick = {},
+            onClick = onDeleteButtonClick,
             leadingIcon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_trash_default_24),
