@@ -26,6 +26,7 @@ class TodoContract {
         val selectedCategory: Category? = null,
         val selectedStartTime: LocalTime? = null,
         // todo setting
+        val isEditMode: Boolean = false,
         val isTodoSettingBottomSheetVisible: Boolean = false,
         val selectedTodoItem: ListItem.TodoItem? = null,
         val isEditTodoNameBottomSheetVisible: Boolean = false,

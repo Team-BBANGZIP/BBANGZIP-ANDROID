@@ -83,6 +83,7 @@ import org.android.bbangzip.presentation.common.util.scroll.calculateScrollSpeed
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.CommitmentBottomSheet
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.EditTodoBottomSheet
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.TodoSettingBottomSheet
+import org.android.bbangzip.presentation.ui.todo.type.TodoSettingActionType
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalDate
 import java.time.LocalTime
@@ -366,10 +367,19 @@ fun TodoScreen(
                 categoryName = selectedTodoItem.category.name,
                 isCompleted = selectedTodoItem.todo.isCompleted,
                 isNotificationEnabled = false,
-                onNotificationEnabledChange = {},
                 startTime = selectedTodoItem.todo.startTime,
                 onEditButtonClick = onModifyTodoNameButtonClick,
-                onDeleteButtonClick = onDeleteTodoButtonClick
+                onDeleteButtonClick = onDeleteTodoButtonClick,
+                onActionRowClick = { actionType ->
+                    when(actionType){
+                        TodoSettingActionType.START_TIME -> onModifyTodoStartTimeClick()
+                        TodoSettingActionType.NOTIFICATION -> {}
+                        TodoSettingActionType.POSTPONE -> onMoveTodoToTomorrowClick()
+                        TodoSettingActionType.DUPLICATE -> onCopyTodoClick()
+                        TodoSettingActionType.CHANGE_DATE -> onModifyTodoDateClick()
+                        TodoSettingActionType.REPEAT -> onRepeatTodoClick()
+                    }
+                }
             )
         }
         if(selectedTodoItem != null){

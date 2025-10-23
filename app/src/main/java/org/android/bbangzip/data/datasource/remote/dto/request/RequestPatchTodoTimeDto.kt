@@ -6,6 +6,6 @@ import java.time.LocalTime
 
 @Serializable
 data class RequestPatchTodoTimeDto(
-    @Serializable(with = LocalTimeSerializer::class)
-    val startTime: LocalTime?,
+//    @Serializable(with = LocalTimeSerializer::class)
+    val startTime: String?,
 )

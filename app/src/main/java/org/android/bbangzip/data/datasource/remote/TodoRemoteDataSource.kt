@@ -110,7 +110,7 @@ class TodoRemoteDataSource
 
     suspend fun patchTodoTime(
         todoId: Long,
-        startTime: LocalTime?,
+        startTime: String?,
     ): BaseResponse<ResponsePatchTodoTimeDto> =
         todoService.patchTodoTime(
             todoId = todoId,

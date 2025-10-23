@@ -107,14 +107,82 @@ class TodoViewModel
                 }
 
                 is TodoEvent.OnTimeConfirmButtonClick -> {
-                    updateState(TodoReduce.UpdateSelectedStartTime(event.startTime))
-                    updateState(TodoReduce.UpdateIsTimePickerBottomSheetVisible(false))
-                    updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(true))
+                    if(currentUiState.isEditMode){
+                        val prevStartTime = currentUiState.selectedStartTime
+                        val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
+                        viewModelScope.launch {
+                            todoRepository.modifyTodoTime(
+                                todoId = selectedTodoId.toLong(),
+                                startTime = "08:00"
+                            ).onSuccess {
+                                val updatedCategories = currentUiState.categories.map{ category ->
+                                    category.copy(
+                                        todos = category.todos.map{
+                                            if(it.todoId == selectedTodoId){
+                                                it.copy(startTime = event.startTime)
+                                            }else{
+                                                it
+                                            }
+                                        }
+                                    )
+                                }
+                                updateState(
+                                    TodoReduce.UpdateTodoState(
+                                        currentUiState.copy(
+                                            selectedStartTime = event.startTime,
+                                            categories = updatedCategories,
+                                            flatList = updatedCategories.toFlatList(),
+                                            isTimePickerBottomSheetVisible = false,
+                                            isTodoSettingBottomSheetVisible = true,
+                                        )
+                                    )
+                                )
+                            }.onFailure {
+                                updateState(
+                                    TodoReduce.UpdateTodoState(
+                                        currentUiState.copy(
+                                            selectedStartTime = prevStartTime,
+                                            isTimePickerBottomSheetVisible = false,
+                                            isTodoSettingBottomSheetVisible = true,
+                                        )
+                                    )
+                                )
+                                Timber.d("투두 시간 변경 실패")
+                            }
+                        }
+                    }else{
+                        updateState(
+                            TodoReduce.UpdateTodoState(
+                                currentUiState.copy(
+                                    selectedStartTime = event.startTime,
+                                    isTimePickerBottomSheetVisible = false,
+                                    isAddTodoBottomSheetVisible = true,
+                                )
+                            )
+                        )
+                    }
                 }
 
                 TodoEvent.OnTimePickerBottomSheetDismissRequest -> {
-                    updateState(TodoReduce.UpdateIsTimePickerBottomSheetVisible(false))
-                    updateState(TodoReduce.UpdateIsAddTodoBottomSheetVisible(true))
+                    if(currentUiState.isEditMode){
+                        updateState(
+                            TodoReduce.UpdateTodoState(
+                                currentUiState.copy(
+                                    isTimePickerBottomSheetVisible = false,
+                                    isTodoSettingBottomSheetVisible = true,
+                                )
+                            )
+                        )
+                    }else{
+                        updateState(
+                            TodoReduce.UpdateTodoState(
+                                currentUiState.copy(
+                                    isTimePickerBottomSheetVisible = false,
+                                    isAddTodoBottomSheetVisible = true,
+                                )
+                            )
+                        )
+                    }
                 }
                 TodoEvent.OnAddTodoBottomSheetDismissRequest -> {
                     if (currentUiState.todoText.isNotBlank()) {
@@ -196,7 +264,9 @@ class TodoViewModel
                         TodoReduce.UpdateTodoState(
                             currentUiState.copy(
                                 selectedTodoItem = event.todoItem,
-                                isTodoSettingBottomSheetVisible = true
+                                selectedStartTime = event.todoItem.todo.startTime,
+                                isTodoSettingBottomSheetVisible = true,
+                                isEditMode = true
                             )
                         )
                     )
@@ -246,7 +316,14 @@ class TodoViewModel
                     TODO()
                 }
                 TodoEvent.OnModifyTodoStartTimeClick -> {
-                    TODO()
+                    updateState(
+                        TodoReduce.UpdateTodoState(
+                            currentUiState.copy(
+                                selectedStartTime = null,
+                                isTimePickerBottomSheetVisible = true,
+                                isTodoSettingBottomSheetVisible = false
+                            )
+                        ))
                 }
                 TodoEvent.OnMoveTodoToTomorrowClick -> {
                     TODO()

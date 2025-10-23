@@ -43,7 +43,6 @@ fun TodoSettingBottomSheet(
     categoryName: String,
     isCompleted: Boolean,
     isNotificationEnabled: Boolean,
-    onNotificationEnabledChange: () -> Unit,
     modifier: Modifier = Modifier,
     onEditButtonClick: () -> Unit = {},
     onDeleteButtonClick: () -> Unit = {},
@@ -226,7 +225,6 @@ fun TodoSettingBottomSheetPreview() {
         categoryName = "바텀시트",
         isCompleted = false,
         isNotificationEnabled = isNotificationEnabled,
-        onNotificationEnabledChange = { isNotificationEnabled = !isNotificationEnabled },
     )
 
     TodoSettingBottomSheet(
@@ -236,6 +234,5 @@ fun TodoSettingBottomSheetPreview() {
         categoryName = "바텀시트",
         isCompleted = true,
         isNotificationEnabled = isNotificationEnabled,
-        onNotificationEnabledChange = { isNotificationEnabled = !isNotificationEnabled },
     )
 }
