@@ -31,7 +31,9 @@ class TodoContract {
         val selectedTodoItem: ListItem.TodoItem? = null,
         val isEditTodoNameBottomSheetVisible: Boolean = false,
         val isCalendarBottomSheetVisible: Boolean = false,
-        val selectedMonthlyCalendarDate: LocalDate = selectedDate,
+        val selectedMonthlyCalendarDate: LocalDate = LocalDate.now(),
+        val isRepeat: Boolean = false,
+        val isDateSavable: Boolean = false
     ) : BaseContract.State, Parcelable {
         override fun toParcelable(): Parcelable = this
 

@@ -113,6 +113,7 @@ fun TodoScreen(
     selectedStartTime: LocalTime?,
     selectedTodoItem: ListItem.TodoItem?,
     selectedMonthlyDate: LocalDate,
+    isDateSavable: Boolean,
     onMenuClick: () -> Unit,
     onListItemMove: (from: Int, to: Int) -> Unit,
     onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit,
@@ -402,6 +403,7 @@ fun TodoScreen(
             isBottomSheetVisible = isMonthlyCalendarBottomSheetVisible,
             onDismissRequest = onMonthlyCalendarBottomSheetDismissRequest,
             date = selectedMonthlyDate,
+            isDateSavable = isDateSavable,
             onDateSelect = onMonthlyDateSelect,
             onSaveButtonClick = onDateSaveButtonClick,
         )
@@ -857,5 +859,6 @@ fun TodoScreenPreview() {
         onMonthlyCalendarBottomSheetDismissRequest = {},
         onDateSaveButtonClick = { },
         onMonthlyDateSelect = {},
+        isDateSavable = false
     )
 }

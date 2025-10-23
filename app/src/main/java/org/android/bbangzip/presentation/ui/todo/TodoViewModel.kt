@@ -343,7 +343,6 @@ class TodoViewModel
                                 UpdateTodoState(
                                     currentUiState.copy(
                                         selectedTodoItem = null,
-                                        selectedCategory = null,
                                         isTodoSettingBottomSheetVisible = false,
                                         categories = updatedCategories,
                                         flatList = updatedCategories.toFlatList()
@@ -360,7 +359,10 @@ class TodoViewModel
                         UpdateTodoState(
                             currentUiState.copy(
                                 isTodoSettingBottomSheetVisible = false,
-                                isCalendarBottomSheetVisible = true
+                                isCalendarBottomSheetVisible = true,
+                                isDateSavable = false,
+                                selectedMonthlyCalendarDate = currentUiState.selectedDate,
+                                isRepeat = false
                             )
                         )
                     )
@@ -405,7 +407,16 @@ class TodoViewModel
                     }
                 }
                 TodoEvent.OnRepeatTodoClick -> {
-                    TODO()
+                    updateState(
+                        UpdateTodoState(
+                            currentUiState.copy(
+                                isTodoSettingBottomSheetVisible = false,
+                                isCalendarBottomSheetVisible = true,
+                                selectedMonthlyCalendarDate = currentUiState.selectedDate,
+                                isRepeat = true
+                            )
+                        )
+                    )
                 }
                 TodoEvent.OnModifyTodoNameButtonClick -> {
                     updateState(
@@ -456,7 +467,8 @@ class TodoViewModel
                     updateState(
                         UpdateTodoState(
                             currentUiState.copy(
-                                selectedMonthlyCalendarDate = event.date
+                                selectedMonthlyCalendarDate = event.date,
+                                isDateSavable = currentUiState.selectedDate != event.date
                             )
                         )
                     )
@@ -464,28 +476,48 @@ class TodoViewModel
                 TodoEvent.OnSaveDateClick -> {
                     viewModelScope.launch {
                         val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
-                        todoRepository.modifyTodoDate(
-                            todoId = selectedTodoId.toLong(),
-                            targetDate = currentUiState.selectedMonthlyCalendarDate
-                        ).onSuccess {
-                            val updatedCategories = currentUiState.categories.map { category ->
-                                category.copy(
-                                    todos = category.todos.filter { it.todoId != selectedTodoId }
-                                )
-                            }
-
-                            updateState(
-                                UpdateTodoState(
-                                    currentUiState.copy(
-                                        isCalendarBottomSheetVisible = false,
-                                        selectedTodoItem = null,
-                                        categories = updatedCategories,
-                                        flatList = updatedCategories.toFlatList()
+                        if(currentUiState.isRepeat){
+                            todoRepository.repeatTodo(
+                                todoId = selectedTodoId.toLong(),
+                                targetDate = currentUiState.selectedMonthlyCalendarDate
+                            ).onSuccess {
+                                updateState(
+                                    UpdateTodoState(
+                                        currentUiState.copy(
+                                            isCalendarBottomSheetVisible = false,
+                                            selectedTodoItem = null,
+                                            selectedMonthlyCalendarDate = LocalDate.now()
+                                        )
                                     )
                                 )
-                            )
-                        }.onFailure {
-                            Timber.d("날짜 변경 실패")
+                            }.onFailure {
+                                Timber.d("다른날 또하기 실패")
+                            }
+                        }else{
+                            todoRepository.modifyTodoDate(
+                                todoId = selectedTodoId.toLong(),
+                                targetDate = currentUiState.selectedMonthlyCalendarDate
+                            ).onSuccess {
+                                val updatedCategories = currentUiState.categories.map { category ->
+                                    category.copy(
+                                        todos = category.todos.filter { it.todoId != selectedTodoId }
+                                    )
+                                }
+
+                                updateState(
+                                    UpdateTodoState(
+                                        currentUiState.copy(
+                                            isCalendarBottomSheetVisible = false,
+                                            selectedTodoItem = null,
+                                            categories = updatedCategories,
+                                            flatList = updatedCategories.toFlatList(),
+                                            selectedMonthlyCalendarDate = LocalDate.now()
+                                        )
+                                    )
+                                )
+                            }.onFailure {
+                                Timber.d("날짜 변경 실패")
+                            }
                         }
                     }
                 }
@@ -495,7 +527,8 @@ class TodoViewModel
                         UpdateTodoState(
                             currentUiState.copy(
                                 isCalendarBottomSheetVisible = false,
-                                selectedTodoItem = null
+                                selectedTodoItem = null,
+                                selectedMonthlyCalendarDate = LocalDate.now()
                             )
                         )
                     )

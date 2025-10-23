@@ -43,6 +43,7 @@ fun ChangeDateBottomSheet(
     onSaveButtonClick: () -> Unit,
     onDateSelect: (LocalDate) -> Unit,
     modifier: Modifier = Modifier,
+    isDateSavable: Boolean = false,
 ) {
     BbangZipBottomSheetSlot(
         isBottomSheetVisible = isBottomSheetVisible,
@@ -74,6 +75,7 @@ fun ChangeDateBottomSheet(
                         Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 28.dp),
+                    enabled = isDateSavable,
                     onClick = onSaveButtonClick,
                     leadingIcon = {
                         Icon(

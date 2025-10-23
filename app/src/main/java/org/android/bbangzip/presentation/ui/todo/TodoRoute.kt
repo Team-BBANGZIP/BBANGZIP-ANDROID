@@ -48,6 +48,7 @@ fun TodoRoute(
         isEditTodoBottomSheetVisible = uiState.isEditTodoNameBottomSheetVisible,
         isMonthlyCalendarBottomSheetVisible = uiState.isCalendarBottomSheetVisible,
         selectedMonthlyDate = uiState.selectedMonthlyCalendarDate,
+        isDateSavable = uiState.isDateSavable,
         onListItemMove = { fromIndex, toIndex ->
             viewModel.setEvent(TodoEvent.OnListItemMove(fromIndex, toIndex))
         },
