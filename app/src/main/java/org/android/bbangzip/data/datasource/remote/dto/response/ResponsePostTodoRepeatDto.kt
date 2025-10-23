@@ -14,7 +14,7 @@ data class ResponsePostTodoRepeatDto(
     @Serializable(with = LocalDateSerializer::class)
     val targetDate: LocalDate,
     @Serializable(with = LocalTimeSerializer::class)
-    val startTime: LocalTime?, // string으로 주는데 물어보기
+    val startTime: LocalTime?,
     val isCompleted: Boolean,
 ){
     fun toTodo() =
