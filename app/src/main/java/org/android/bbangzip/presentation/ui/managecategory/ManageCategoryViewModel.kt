@@ -25,10 +25,6 @@ class ManageCategoryViewModel
             return savedState as? ManageCategoryState ?: ManageCategoryState()
         }
 
-        init {
-            setEvent(ManageCategoryEvent.Initialize)
-        }
-
         override fun handleEvent(event: ManageCategoryEvent) {
             when (event) {
                 ManageCategoryEvent.Initialize -> {
