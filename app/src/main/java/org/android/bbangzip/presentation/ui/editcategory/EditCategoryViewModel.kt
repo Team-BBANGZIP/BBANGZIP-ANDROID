@@ -75,8 +75,8 @@ class EditCategoryViewModel
                         UpdateEditCategoryState(
                             currentUiState.copy(
                                 isDeleteConfirmationBottomSheetVisible = true,
-                            )
-                        )
+                            ),
+                        ),
                     )
                 }
                 EditCategoryEvent.OnStopRowSwitchClick -> {
@@ -88,8 +88,8 @@ class EditCategoryViewModel
                         UpdateEditCategoryState(
                             currentUiState.copy(
                                 isDeleteConfirmationBottomSheetVisible = false,
-                            )
-                        )
+                            ),
+                        ),
                     )
                 }
 
@@ -109,8 +109,8 @@ class EditCategoryViewModel
                         UpdateEditCategoryState(
                             currentUiState.copy(
                                 isDeleteConfirmationBottomSheetVisible = false,
-                            )
-                        )
+                            ),
+                        ),
                     )
                 }
             }

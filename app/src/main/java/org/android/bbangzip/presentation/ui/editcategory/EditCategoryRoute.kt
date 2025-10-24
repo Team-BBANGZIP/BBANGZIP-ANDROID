@@ -72,6 +72,5 @@ fun EditCategoryRoute(
         onDeleteConfirmationBottomSheetConfirmButtonClick = {
             viewModel.setEvent(EditCategoryEvent.OnDeleteConfirmButtonClick)
         },
-
     )
 }

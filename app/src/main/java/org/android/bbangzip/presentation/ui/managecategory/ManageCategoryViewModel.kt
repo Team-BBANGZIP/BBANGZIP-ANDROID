@@ -34,21 +34,21 @@ class ManageCategoryViewModel
                             .onSuccess { data ->
                                 updateState(
                                     ManageCategoryReduce.UpdateCategories(
-                                        categories = data.map{
-                                            Category(
-                                                id = it.categoryId,
-                                                name = it.categoryName,
-                                                color = it.categoryColor,
-                                                isStopped = it.isStopped,
+                                        categories =
+                                            data.map {
+                                                Category(
+                                                    id = it.categoryId,
+                                                    name = it.categoryName,
+                                                    color = it.categoryColor,
+                                                    isStopped = it.isStopped,
                                                 )
-                                        },
-                                    )
+                                            },
+                                    ),
                                 )
                             }.onFailure {
                                 // TODO: 에러 처리
                             }
                     }
-
                 }
                 is ManageCategoryEvent.OnCategoryChipClick -> {
                     setSideEffect(ManageCategorySideEffect.NavigateToEditCategory(event.category))
@@ -58,7 +58,7 @@ class ManageCategoryViewModel
                     updateState(ManageCategoryReduce.UpdateCategories(categories = reorderedList))
                     viewModelScope.launch {
                         categoryRepository.reorderCategories(
-                            categoryOrder = reorderedList.map{ it.id.toLong() }
+                            categoryOrder = reorderedList.map { it.id.toLong() },
                         ).onSuccess {
                             Timber.d("reorderCategories 성공")
                         }.onFailure {

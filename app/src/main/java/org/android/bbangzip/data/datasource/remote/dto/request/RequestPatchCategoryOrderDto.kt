@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class RequestPatchCategoryOrderDto(
-    val categoryOrder: List<Long>
+    val categoryOrder: List<Long>,
 )

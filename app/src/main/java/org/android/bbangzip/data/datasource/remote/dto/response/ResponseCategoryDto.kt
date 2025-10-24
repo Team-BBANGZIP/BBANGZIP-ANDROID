@@ -9,13 +9,13 @@ data class ResponseCategoryDto(
     val name: String,
     val color: String,
     val isStopped: Boolean,
-){
+) {
     fun toCategory(): Category =
         Category(
             categoryId = categoryId.toInt(),
             categoryName = name,
             categoryColor = color,
             isStopped = isStopped,
-            todos = emptyList()
+            todos = emptyList(),
         )
 }

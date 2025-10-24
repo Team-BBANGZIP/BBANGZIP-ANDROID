@@ -21,22 +21,22 @@ interface CategoryService {
 
     @POST("$API/$VERSIONS/$CATEGORY")
     suspend fun postCategory(
-        @Body requestPostCategoryDto: RequestPostCategoryDto
+        @Body requestPostCategoryDto: RequestPostCategoryDto,
     ): BaseResponse<ResponseCategoryDto>
 
     @PATCH("$API/$VERSIONS/$CATEGORY/{categoryId}")
     suspend fun patchCategory(
         @Path("categoryId") categoryId: Long,
-        @Body requestPatchCategoryDto: RequestPatchCategoryDto
+        @Body requestPatchCategoryDto: RequestPatchCategoryDto,
     ): BaseResponse<ResponseCategoryDto>
 
     @PATCH("$API/$VERSIONS/$CATEGORY/order")
     suspend fun patchCategoryOrder(
-        @Body requestPatchCategoryOrderDto: RequestPatchCategoryOrderDto
+        @Body requestPatchCategoryOrderDto: RequestPatchCategoryOrderDto,
     ): BaseResponse<Unit>
 
     @DELETE("$API/$VERSIONS/$CATEGORY/{categoryId}")
     suspend fun deleteCategory(
-        @Path("categoryId") categoryId: Long
+        @Path("categoryId") categoryId: Long,
     ): BaseResponse<Unit>
 }

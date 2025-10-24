@@ -41,11 +41,11 @@ class AddCategoryViewModel
                     setSideEffect(AddCategorySideEffect.PopBackStack)
                 }
                 AddCategoryEvent.OnTopBarTrailingIconClick -> {
-                    viewModelScope.launch{
+                    viewModelScope.launch {
                         categoryRepository.addCategory(
                             name = currentUiState.categoryNameInput,
-                            color = currentUiState.selectedColorString
-                        ).onSuccess{
+                            color = currentUiState.selectedColorString,
+                        ).onSuccess {
                             setSideEffect(AddCategorySideEffect.PopBackStack)
                         }.onFailure {
                             // TODO 에러 처리

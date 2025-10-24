@@ -20,9 +20,9 @@ fun ManageCategoryRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit){
+    LaunchedEffect(Unit) {
         viewModel.setEvent(
-            ManageCategoryEvent.Initialize
+            ManageCategoryEvent.Initialize,
         )
     }
 

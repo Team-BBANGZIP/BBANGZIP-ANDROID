@@ -150,7 +150,7 @@ fun EditCategoryScreen(
             onDismissRequest = onDeleteConfirmationBottomSheetDismissRequest,
             onConfirmButtonClick = onDeleteConfirmationBottomSheetConfirmButtonClick,
             onCancelButtonClick = onDeleteConfirmationBottomSheetCancelButtonClick,
-            categoryName = categoryName
+            categoryName = categoryName,
         )
     }
 }

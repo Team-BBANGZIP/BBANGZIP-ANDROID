@@ -6,13 +6,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.bottomsheet.BbangZipBottomSheetSlot
@@ -29,8 +29,8 @@ fun DeleteConfirmationBottomSheet(
     categoryName: String = "",
     onDismissRequest: () -> Unit = {},
     onConfirmButtonClick: () -> Unit = {},
-    onCancelButtonClick: () -> Unit = {}
-){
+    onCancelButtonClick: () -> Unit = {},
+) {
     BbangZipBottomSheetSlot(
         isBottomSheetVisible = isBottomSheetVisible,
         onDismissRequest = onDismissRequest,
@@ -48,7 +48,7 @@ fun DeleteConfirmationBottomSheet(
                 stringResource(R.string.delete_confirmation_bottom_sheet_content, categoryName),
                 style = BbangZipTheme.typography.body2Medium,
                 color = BbangZipTheme.color.labelAlternative_A29D96,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Gap(height = 60.dp)
@@ -56,18 +56,18 @@ fun DeleteConfirmationBottomSheet(
         interactRow = {
             DeleteConfirmationInteractionRow(
                 onCancelButtonClick = onCancelButtonClick,
-                onConfirmButtonClick = onConfirmButtonClick
+                onConfirmButtonClick = onConfirmButtonClick,
             )
 
             Gap(height = 12.dp)
-        }
+        },
     )
 }
 
 @Composable
 private fun DeleteConfirmationInteractionRow(
     onCancelButtonClick: () -> Unit,
-    onConfirmButtonClick: () -> Unit
+    onConfirmButtonClick: () -> Unit,
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),

@@ -4,7 +4,6 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.presentation.common.base.BaseContract
 import org.android.bbangzip.presentation.common.model.Category
-import org.android.bbangzip.presentation.ui.managecategory.ManageCategoryContract.ManageCategoryEvent
 
 class EditCategoryContract {
     @Parcelize
