@@ -12,6 +12,7 @@ import org.android.bbangzip.presentation.ui.managecategory.ManageCategoryContrac
 import org.android.bbangzip.presentation.ui.managecategory.ManageCategoryContract.ManageCategoryReduce
 import org.android.bbangzip.presentation.ui.managecategory.ManageCategoryContract.ManageCategorySideEffect
 import org.android.bbangzip.presentation.ui.managecategory.ManageCategoryContract.ManageCategoryState
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
@@ -55,6 +56,15 @@ class ManageCategoryViewModel
                 is ManageCategoryEvent.OnCategoryChipDragEnd -> {
                     val reorderedList = reorderList(event.from, event.to)
                     updateState(ManageCategoryReduce.UpdateCategories(categories = reorderedList))
+                    viewModelScope.launch {
+                        categoryRepository.reorderCategories(
+                            categoryOrder = reorderedList.map{ it.id.toLong() }
+                        ).onSuccess {
+                            Timber.d("reorderCategories 성공")
+                        }.onFailure {
+                            Timber.d("reorderCategories 실패")
+                        }
+                    }
                 }
                 ManageCategoryEvent.OnTopBarLeadingIconClick -> {
                     setSideEffect(ManageCategorySideEffect.PopBackStack)

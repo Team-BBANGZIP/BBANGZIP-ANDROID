@@ -44,7 +44,7 @@ class CategoryRemoteDataSource
 
     suspend fun patchCategoryOrder(
         categoryOrder: List<Long>
-    ): BaseResponse<Any> =
+    ): BaseResponse<Unit> =
         categoryService.patchCategoryOrder(
             requestPatchCategoryOrderDto = RequestPatchCategoryOrderDto(
                 categoryOrder = categoryOrder

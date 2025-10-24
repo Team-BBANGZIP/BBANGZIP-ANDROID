@@ -33,7 +33,7 @@ interface CategoryService {
     @PATCH("$API/$VERSIONS/$CATEGORY/order")
     suspend fun patchCategoryOrder(
         @Body requestPatchCategoryOrderDto: RequestPatchCategoryOrderDto
-    ): BaseResponse<Any>
+    ): BaseResponse<Unit>
 
     @DELETE("$API/$VERSIONS/$CATEGORY/{categoryId}")
     suspend fun deleteCategory(
