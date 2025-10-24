@@ -2,7 +2,10 @@ package org.android.bbangzip.presentation.ui.addcategory
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import org.android.bbangzip.domain.repository.CategoryRepository
 import org.android.bbangzip.presentation.common.base.BaseViewModel
 import org.android.bbangzip.presentation.ui.addcategory.AddCategoryContract.*
 import javax.inject.Inject
@@ -10,7 +13,10 @@ import javax.inject.Inject
 @HiltViewModel
 class AddCategoryViewModel
     @Inject
-    constructor(savedStateHandle: SavedStateHandle) : BaseViewModel<AddCategoryEvent, AddCategoryState, AddCategoryReduce, AddCategorySideEffect>(savedStateHandle) {
+    constructor(
+        savedStateHandle: SavedStateHandle,
+        private val categoryRepository: CategoryRepository,
+    ) : BaseViewModel<AddCategoryEvent, AddCategoryState, AddCategoryReduce, AddCategorySideEffect>(savedStateHandle) {
         override fun createInitialState(savedState: Parcelable?): AddCategoryState {
             return savedState as? AddCategoryState ?: AddCategoryState()
         }
@@ -35,8 +41,16 @@ class AddCategoryViewModel
                     setSideEffect(AddCategorySideEffect.PopBackStack)
                 }
                 AddCategoryEvent.OnTopBarTrailingIconClick -> {
-                    setSideEffect(AddCategorySideEffect.PopBackStack)
-                    // 정보 저장 후 원래 화면
+                    viewModelScope.launch{
+                        categoryRepository.addCategory(
+                            name = currentUiState.categoryNameInput,
+                            color = currentUiState.selectedColorString
+                        ).onSuccess{
+                            setSideEffect(AddCategorySideEffect.PopBackStack)
+                        }.onFailure {
+                            // TODO 에러 처리
+                        }
+                    }
                 }
             }
         }
