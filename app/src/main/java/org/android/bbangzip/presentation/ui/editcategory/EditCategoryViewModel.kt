@@ -69,7 +69,15 @@ class EditCategoryViewModel
                     }
                 }
                 EditCategoryEvent.OnDeleteButtonClick -> {
-                    // 삭제 api
+                    viewModelScope.launch {
+                        categoryRepository.deleteCategory(currentUiState.categoryId.toLong())
+                            .onSuccess {
+                                setSideEffect(EditCategorySideEffect.PopBackStack)
+                            }.onFailure {
+                                // TODO 에러처리
+                                setSideEffect(EditCategorySideEffect.PopBackStack)
+                            }
+                    }
                 }
                 EditCategoryEvent.OnStopRowSwitchClick -> {
                     updateState(EditCategoryReduce.UpdateIsCategoryStopped(!currentUiState.isCategoryStopped))
