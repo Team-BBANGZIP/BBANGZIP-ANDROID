@@ -27,7 +27,7 @@ class CategoryRepositoryImpl
             val data = response.data ?: throw IllegalStateException("category data가 존재하지 않습니다.")
             data.toCategory()
         }
-    override suspend fun modifyCategoryName(
+    override suspend fun modifyCategory(
         categoryId: Long,
         name: String?,
         color: String?,

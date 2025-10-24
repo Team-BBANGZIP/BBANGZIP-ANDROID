@@ -2,13 +2,21 @@ package org.android.bbangzip.presentation.ui.editcategory
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import org.android.bbangzip.domain.repository.CategoryRepository
 import org.android.bbangzip.presentation.common.base.BaseViewModel
 import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.*
 import javax.inject.Inject
 
+@HiltViewModel
 class EditCategoryViewModel
     @Inject
-    constructor(savedStateHandle: SavedStateHandle) : BaseViewModel<EditCategoryEvent, EditCategoryState, EditCategoryReduce, EditCategorySideEffect>(savedStateHandle) {
+    constructor(
+        savedStateHandle: SavedStateHandle,
+        private val categoryRepository: CategoryRepository,
+    ) : BaseViewModel<EditCategoryEvent, EditCategoryState, EditCategoryReduce, EditCategorySideEffect>(savedStateHandle) {
         override fun createInitialState(savedState: Parcelable?): EditCategoryState {
             return savedState as? EditCategoryState ?: EditCategoryState()
         }
@@ -46,8 +54,19 @@ class EditCategoryViewModel
                     updateState(EditCategoryReduce.UpdateIsColorPickerBottomSheetVisible(true))
                 }
                 EditCategoryEvent.OnConfirmButtonClick -> {
-                    setSideEffect(EditCategorySideEffect.PopBackStack)
-                    // 수정 api
+                    viewModelScope.launch {
+                        categoryRepository.modifyCategory(
+                            categoryId = currentUiState.categoryId.toLong(),
+                            name = currentUiState.categoryNameInput,
+                            color = currentUiState.selectedColorString,
+                            isStopped = currentUiState.isCategoryStopped,
+                        ).onSuccess {
+                            setSideEffect(EditCategorySideEffect.PopBackStack)
+                        }.onFailure {
+                            // TODO 에러처리
+                            setSideEffect(EditCategorySideEffect.PopBackStack)
+                        }
+                    }
                 }
                 EditCategoryEvent.OnDeleteButtonClick -> {
                     // 삭제 api

@@ -11,7 +11,7 @@ interface CategoryRepository{
         color: String,
     ): Result<Category>
 
-    suspend fun modifyCategoryName(
+    suspend fun modifyCategory(
         categoryId: Long,
         name: String?,
         color: String?,

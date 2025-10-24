@@ -38,5 +38,5 @@ interface CategoryService {
     @DELETE("$API/$VERSIONS/$CATEGORY/{categoryId}")
     suspend fun deleteCategory(
         @Path("categoryId") categoryId: Long
-    ): BaseResponse<Any>
+    ): BaseResponse<Unit>
 }

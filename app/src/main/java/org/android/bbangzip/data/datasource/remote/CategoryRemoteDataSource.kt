@@ -53,7 +53,7 @@ class CategoryRemoteDataSource
 
     suspend fun deleteCategory(
         categoryId: Long,
-    ): BaseResponse<Any> =
+    ): BaseResponse<Unit> =
         categoryService.deleteCategory(
             categoryId = categoryId,
         )
