@@ -9,4 +9,5 @@ object ApiConstants {
     const val TIMER = "timers"
     const val TODO = "todos"
     const val USER = "users"
+    const val CATEGORY = "categories"
 }
