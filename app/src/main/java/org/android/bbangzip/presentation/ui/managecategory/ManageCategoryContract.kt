@@ -8,7 +8,7 @@ import org.android.bbangzip.presentation.common.model.Category
 class ManageCategoryContract {
     @Parcelize
     data class ManageCategoryState(
-        val categories: List<Category> = emptyList()
+        val categories: List<Category> = emptyList(),
     ) : Parcelable, BaseContract.State
 
     sealed interface ManageCategoryEvent : BaseContract.Event {

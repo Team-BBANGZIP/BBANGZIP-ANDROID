@@ -4,16 +4,19 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.presentation.common.base.BaseContract
 import org.android.bbangzip.presentation.common.model.Category
+import org.android.bbangzip.presentation.ui.managecategory.ManageCategoryContract.ManageCategoryEvent
 
 class EditCategoryContract {
     @Parcelize
     data class EditCategoryState(
         val categoryId: Int = 0,
+        val categoryName: String = "",
         val categoryNameInput: String = "",
         val isConfirmEnable: Boolean = false,
         val isColorPickerBottomSheetVisible: Boolean = false,
         val selectedColorString: String = "RED1",
         val isCategoryStopped: Boolean = false,
+        val isDeleteConfirmationBottomSheetVisible: Boolean = false,
     ) : Parcelable, BaseContract.State
 
     sealed interface EditCategoryEvent : BaseContract.Event {
@@ -34,6 +37,12 @@ class EditCategoryContract {
         data class OnColorItemClick(val colorString: String) : EditCategoryEvent
 
         data class OnCategoryNameInputChange(val categoryNameInput: String) : EditCategoryEvent
+
+        data object OnDeleteCancleButtonClick : EditCategoryEvent
+
+        data object OnDeleteConfirmButtonClick : EditCategoryEvent
+
+        data object OnDeleteConfirmationBottomSheetDismissRequest : EditCategoryEvent
     }
 
     sealed interface EditCategoryReduce : BaseContract.Reduce {

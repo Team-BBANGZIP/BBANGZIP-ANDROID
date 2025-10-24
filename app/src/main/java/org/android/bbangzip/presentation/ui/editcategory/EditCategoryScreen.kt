@@ -39,6 +39,7 @@ import org.android.bbangzip.presentation.common.component.textfield.BbangZipUnde
 import org.android.bbangzip.presentation.common.component.toggle.BbangZipSwitch
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
+import org.android.bbangzip.presentation.ui.editcategory.component.DeleteConfirmationBottomSheet
 import org.android.bbangzip.presentation.ui.editcategory.type.EditCategoryActionType
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
@@ -46,10 +47,12 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
 @Composable
 fun EditCategoryScreen(
     categoryNameInput: String = "",
+    categoryName: String = "",
     isConfirmEnable: Boolean = false,
     isColorPickerBottomSheetVisible: Boolean = false,
     selectedColorString: String = "RED1",
     isCategoryStopped: Boolean = false,
+    isDeleteConfirmationBottomSheetVisible: Boolean = false,
     onCategoryNameInputChange: (String) -> Unit = {},
     onBackIconClick: () -> Unit = {},
     onConfirmButtonClick: () -> Unit = {},
@@ -58,6 +61,9 @@ fun EditCategoryScreen(
     onColorItemClick: (String) -> Unit = {},
     onStopRowSwitchClick: () -> Unit = {},
     onDeleteButtonClick: () -> Unit = {},
+    onDeleteConfirmationBottomSheetDismissRequest: () -> Unit = {},
+    onDeleteConfirmationBottomSheetConfirmButtonClick: () -> Unit = {},
+    onDeleteConfirmationBottomSheetCancelButtonClick: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -137,6 +143,14 @@ fun EditCategoryScreen(
             isBottomSheetVisible = isColorPickerBottomSheetVisible,
             onDismissRequest = onColorPickerBottomSheetDismissRequest,
             onColorItemClick = onColorItemClick,
+        )
+
+        DeleteConfirmationBottomSheet(
+            isBottomSheetVisible = isDeleteConfirmationBottomSheetVisible,
+            onDismissRequest = onDeleteConfirmationBottomSheetDismissRequest,
+            onConfirmButtonClick = onDeleteConfirmationBottomSheetConfirmButtonClick,
+            onCancelButtonClick = onDeleteConfirmationBottomSheetCancelButtonClick,
+            categoryName = categoryName
         )
     }
 }

@@ -136,5 +136,10 @@
     <string name = "change_date_title">날짜 변경</string>"
 
     <!-- Category Color Picker BottomSheet -->
-    <string name = "category_color_picker_title">카테고리 색상</string>"
+    <string name = "category_color_picker_title">카테고리 색상</string>
+
+    <!-- Category Delete Confirmation BottomSheet -->
+    <string name="delete_confirmation_bottom_sheet_title">정말 삭제 하시겠어요?</string>
+    <string name="delete_confirmation_bottom_sheet_content">삭제 시 카테고리 관련 데이터는 모두 삭제되며,\n삭제된 데이터는 복구가 불가능합니다.\n\n\"%s\"카테고리를 삭제할까요?</string>"
+
 </resources>
