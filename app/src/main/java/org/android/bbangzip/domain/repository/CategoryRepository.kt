@@ -4,7 +4,7 @@ import org.android.bbangzip.domain.model.Category
 
 
 interface CategoryRepository{
-    suspend fun getCategories(): Result<Category>
+    suspend fun getCategories(): Result<List<Category>>
 
     suspend fun addCategory(
         name: String,

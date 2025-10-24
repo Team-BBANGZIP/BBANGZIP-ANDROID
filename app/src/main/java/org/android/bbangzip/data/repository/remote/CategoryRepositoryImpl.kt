@@ -10,11 +10,11 @@ class CategoryRepositoryImpl
     constructor(
         private val categoryRemoteDataSource: CategoryRemoteDataSource,
     ): CategoryRepository{
-    override suspend fun getCategories(): Result<Category> =
+    override suspend fun getCategories(): Result<List<Category>> =
         runCatching {
             val response = categoryRemoteDataSource.getCategories()
             val data = response.data ?: throw IllegalStateException("category data가 존재하지 않습니다.")
-            data.toCategory()
+            data.map{ it.toCategory() }
         }
 
 

@@ -13,7 +13,7 @@ class CategoryRemoteDataSource
     constructor(
         private val categoryService: CategoryService
     ) {
-    suspend fun getCategories(): BaseResponse<ResponseCategoryDto> =
+    suspend fun getCategories(): BaseResponse<List<ResponseCategoryDto>> =
         categoryService.getCategories()
 
     suspend fun postCategory(

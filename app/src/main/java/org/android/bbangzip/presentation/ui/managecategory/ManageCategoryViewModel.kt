@@ -2,7 +2,10 @@ package org.android.bbangzip.presentation.ui.managecategory
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import org.android.bbangzip.domain.repository.CategoryRepository
 import org.android.bbangzip.presentation.common.base.BaseViewModel
 import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.ui.managecategory.ManageCategoryContract.ManageCategoryEvent
@@ -16,6 +19,7 @@ class ManageCategoryViewModel
     @Inject
     constructor(
         savedStateHandle: SavedStateHandle,
+        private val categoryRepository: CategoryRepository,
     ) : BaseViewModel<ManageCategoryEvent, ManageCategoryState, ManageCategoryReduce, ManageCategorySideEffect>(savedStateHandle) {
         override fun createInitialState(savedState: Parcelable?): ManageCategoryState {
             return savedState as? ManageCategoryState ?: ManageCategoryState()
@@ -28,10 +32,28 @@ class ManageCategoryViewModel
         override fun handleEvent(event: ManageCategoryEvent) {
             when (event) {
                 ManageCategoryEvent.Initialize -> {
-                    // 서버에서 카테고리 리스트 받아옴
+                    viewModelScope.launch {
+                        categoryRepository.getCategories()
+                            .onSuccess { data ->
+                                updateState(
+                                    ManageCategoryReduce.UpdateCategories(
+                                        categories = data.map{
+                                            Category(
+                                                id = it.categoryId,
+                                                name = it.categoryName,
+                                                color = it.categoryColor,
+                                                isStopped = it.isStopped,
+                                                )
+                                        },
+                                    )
+                                )
+                            }.onFailure {
+                                // TODO: 에러 처리
+                            }
+                    }
+
                 }
                 is ManageCategoryEvent.OnCategoryChipClick -> {
-                    // 카테고리 수정 화면으로 이동
                     setSideEffect(ManageCategorySideEffect.NavigateToEditCategory(event.category))
                 }
                 is ManageCategoryEvent.OnCategoryChipDragEnd -> {
@@ -43,7 +65,6 @@ class ManageCategoryViewModel
                 }
                 ManageCategoryEvent.OnTopBarTrailingIconClick -> {
                     setSideEffect(ManageCategorySideEffect.NavigateToAddCategory)
-                    // 카테고리 추가 화면으로 이동
                 }
             }
         }

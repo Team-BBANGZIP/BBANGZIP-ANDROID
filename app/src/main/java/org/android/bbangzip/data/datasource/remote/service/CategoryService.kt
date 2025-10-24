@@ -17,7 +17,7 @@ import retrofit2.http.Path
 
 interface CategoryService {
     @GET("$API/$VERSIONS/$CATEGORY")
-    suspend fun getCategories(): BaseResponse<ResponseCategoryDto>
+    suspend fun getCategories(): BaseResponse<List<ResponseCategoryDto>>
 
     @POST("$API/$VERSIONS/$CATEGORY")
     suspend fun postCategory(
