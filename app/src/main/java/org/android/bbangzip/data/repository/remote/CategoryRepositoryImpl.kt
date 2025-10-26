@@ -49,12 +49,12 @@ class CategoryRepositoryImpl
                 data.toCategory()
             }
 
-        override suspend fun reorderCategories(categoryOrder: List<Long>): Result<Any> =
+        override suspend fun reorderCategories(categoryOrder: List<Long>): Result<Unit> =
             runCatching {
                 categoryRemoteDataSource.patchCategoryOrder(categoryOrder)
             }
 
-        override suspend fun deleteCategory(categoryId: Long): Result<Any> =
+        override suspend fun deleteCategory(categoryId: Long): Result<Unit> =
             runCatching {
                 categoryRemoteDataSource.deleteCategory(categoryId)
             }

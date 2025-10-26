@@ -19,9 +19,9 @@ interface CategoryRepository {
 
     suspend fun reorderCategories(
         categoryOrder: List<Long>,
-    ): Result<Any>
+    ): Result<Unit>
 
     suspend fun deleteCategory(
         categoryId: Long,
-    ): Result<Any>
+    ): Result<Unit>
 }
