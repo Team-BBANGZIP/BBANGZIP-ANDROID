@@ -41,7 +41,7 @@ interface TodoService {
     @PATCH("$API/$VERSIONS/$TODO/reorder")
     suspend fun patchTodoReOrder(
         @Body requestTodoReOrderDto: RequestPatchTodoReOrderDto,
-    ): Unit
+    ): BaseResponse<Unit>
 
     @POST("$API/$VERSIONS/$TODO")
     suspend fun postTodo(
@@ -52,7 +52,7 @@ interface TodoService {
     suspend fun patchTodoName(
         @Path("todoId") todoId: Long,
         @Body requestPatchTodoNameDto: RequestPatchTodoNameDto,
-    ): Unit
+    ): BaseResponse<Unit>
 
     @DELETE("$API/$VERSIONS/$TODO/{todoId}")
     suspend fun deleteTodo(

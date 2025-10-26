@@ -33,7 +33,7 @@ class TodoRemoteDataSource
             targetCategoryId: Long,
             targetCategoryColor: String,
             todoOrderList: List<Long>,
-        ): Unit =
+        ): BaseResponse<Unit> =
             todoService.patchTodoReOrder(
                 requestTodoReOrderDto =
                     RequestPatchTodoReOrderDto(
@@ -76,7 +76,7 @@ class TodoRemoteDataSource
         suspend fun patchTodoName(
             todoId: Long,
             content: String,
-        ): Unit =
+        ): BaseResponse<Unit> =
             todoService.patchTodoName(
                 todoId = todoId,
                 requestPatchTodoNameDto =

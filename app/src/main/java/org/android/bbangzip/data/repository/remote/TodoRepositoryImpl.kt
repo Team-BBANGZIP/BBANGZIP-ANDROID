@@ -43,7 +43,7 @@ class TodoRepositoryImpl
             targetCategoryId: Long,
             targetCategoryColor: String,
             todoOrderList: List<Long>,
-        ): Result<Any> =
+        ): Result<Unit> =
             runCatching {
                 todoRemoteDataSource.patchTodoReOrder(
                     todoId = todoId,
@@ -77,7 +77,7 @@ class TodoRepositoryImpl
         override suspend fun modifyTodoName(
             todoId: Long,
             content: String,
-        ): Result<Any> =
+        ): Result<Unit> =
             runCatching {
                 todoRemoteDataSource.patchTodoName(
                     todoId = todoId,
