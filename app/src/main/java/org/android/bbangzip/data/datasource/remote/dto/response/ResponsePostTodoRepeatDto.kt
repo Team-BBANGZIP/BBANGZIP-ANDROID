@@ -8,16 +8,14 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 @Serializable
-data class ResponsePostTodoDto(
+data class ResponsePostTodoRepeatDto(
     val todoId: Long,
     val content: String,
     @Serializable(with = LocalDateSerializer::class)
     val targetDate: LocalDate,
     @Serializable(with = LocalTimeSerializer::class)
-    val startTime: LocalTime,
+    val startTime: LocalTime?,
     val isCompleted: Boolean,
-    val categoryId: Long,
-    val categoryColor: String,
 ) {
     fun toTodo() =
         Todo(

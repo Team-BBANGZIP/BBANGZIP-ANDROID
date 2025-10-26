@@ -43,8 +43,10 @@ fun TodoSettingBottomSheet(
     categoryName: String,
     isCompleted: Boolean,
     isNotificationEnabled: Boolean,
-    onNotificationEnabledChange: () -> Unit,
     modifier: Modifier = Modifier,
+    onEditButtonClick: () -> Unit = {},
+    onDeleteButtonClick: () -> Unit = {},
+    onActionRowClick: (TodoSettingActionType) -> Unit = {},
     startTime: LocalTime? = null,
 ) {
     BbangZipBottomSheetSlot(
@@ -74,7 +76,10 @@ fun TodoSettingBottomSheet(
         },
         content = {
             Column {
-                InteractionButtons()
+                InteractionButtons(
+                    onDeleteButtonClick = onDeleteButtonClick,
+                    onEditButtonClick = onEditButtonClick,
+                )
 
                 Gap(20.dp)
 
@@ -85,47 +90,58 @@ fun TodoSettingBottomSheet(
 
                     Gap(20.dp)
 
-                    InteractionRow(
-                        interactionIconResId = R.drawable.ic_again_default_24,
-                        actionName = stringResource(R.string.todo_setting_do_again_action_name),
-                    )
+                    TodoSettingActionType.entries.filter {
+                        it.isCompleteAction
+                    }.forEachIndexed { index, actionType ->
+                        InteractionRow(
+                            interactionIconResId = R.drawable.ic_again_default_24,
+                            actionName = stringResource(R.string.todo_setting_do_again_action_name),
+                            onClickRow = { onActionRowClick(actionType) },
+                        )
+                    }
                 } else {
                     Column(
                         verticalArrangement = Arrangement.spacedBy(16.dp),
                     ) {
-                        TodoSettingActionType.entries.forEachIndexed { index, actionType ->
-                            InteractionRow(
-                                interactionIconResId = actionType.interactionIconResId,
-                                actionName = stringResource(actionType.actionName),
-                                interactionButton = {
-                                    when (actionType) {
-                                        TodoSettingActionType.START_TIME -> {
-                                            TimeSettingButton(
-                                                onSettingTimeClick = {},
-                                                startTime = startTime,
-                                            )
-                                        }
-
-                                        TodoSettingActionType.NOTIFICATION -> {
-                                            BbangZipSwitch(
-                                                modifier = Modifier.fillMaxWidth(44 / 335f),
-                                                isChecked = isNotificationEnabled,
-                                                onCheckedChange = onNotificationEnabledChange,
-                                            )
-                                        }
-
-                                        else -> {}
-                                    }
-                                },
-                            )
-
-                            if (index == 1) {
-                                HorizontalDivider(
-                                    modifier = Modifier.padding(vertical = 4.dp),
-                                    color = BbangZipTheme.color.componentStrong_F6F6F5,
-                                )
-                            }
+                        TodoSettingActionType.entries.filter {
+                            !it.isCompleteAction
                         }
+                            .forEachIndexed { index, actionType ->
+                                InteractionRow(
+                                    interactionIconResId = actionType.interactionIconResId,
+                                    actionName = stringResource(actionType.actionName),
+                                    onClickRow = {
+                                        if (!actionType.hasActionButton) onActionRowClick(actionType)
+                                    },
+                                    interactionButton = {
+                                        when (actionType) {
+                                            TodoSettingActionType.START_TIME -> {
+                                                TimeSettingButton(
+                                                    onSettingTimeClick = { onActionRowClick(actionType) },
+                                                    startTime = startTime,
+                                                )
+                                            }
+
+                                            TodoSettingActionType.NOTIFICATION -> {
+                                                BbangZipSwitch(
+                                                    modifier = Modifier.fillMaxWidth(44 / 335f),
+                                                    isChecked = isNotificationEnabled,
+                                                    onCheckedChange = { onActionRowClick(actionType) },
+                                                )
+                                            }
+
+                                            else -> {}
+                                        }
+                                    },
+                                )
+
+                                if (index == 1) {
+                                    HorizontalDivider(
+                                        modifier = Modifier.padding(vertical = 4.dp),
+                                        color = BbangZipTheme.color.componentStrong_F6F6F5,
+                                    )
+                                }
+                            }
                     }
                 }
 
@@ -138,13 +154,15 @@ fun TodoSettingBottomSheet(
 @Composable
 private fun InteractionButtons(
     modifier: Modifier = Modifier,
+    onDeleteButtonClick: () -> Unit = {},
+    onEditButtonClick: () -> Unit = {},
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
     ) {
         BbangzipBaseButton(
             modifier = Modifier.weight(1f),
-            onClick = {},
+            onClick = onEditButtonClick,
             leadingIcon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_return_thin_24),
@@ -170,7 +188,7 @@ private fun InteractionButtons(
 
         BbangzipBaseButton(
             modifier = Modifier.weight(1f),
-            onClick = {},
+            onClick = onDeleteButtonClick,
             leadingIcon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_trash_default_24),
@@ -207,7 +225,6 @@ fun TodoSettingBottomSheetPreview() {
         categoryName = "바텀시트",
         isCompleted = false,
         isNotificationEnabled = isNotificationEnabled,
-        onNotificationEnabledChange = { isNotificationEnabled = !isNotificationEnabled },
     )
 
     TodoSettingBottomSheet(
@@ -217,6 +234,5 @@ fun TodoSettingBottomSheetPreview() {
         categoryName = "바텀시트",
         isCompleted = true,
         isNotificationEnabled = isNotificationEnabled,
-        onNotificationEnabledChange = { isNotificationEnabled = !isNotificationEnabled },
     )
 }

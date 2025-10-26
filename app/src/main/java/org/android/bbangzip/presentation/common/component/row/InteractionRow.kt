@@ -16,6 +16,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.presentation.common.util.extension.Gap
+import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @Composable
@@ -24,11 +25,15 @@ fun InteractionRow(
     actionName: String,
     modifier: Modifier = Modifier,
     @StringRes description: Int? = null,
+    onClickRow: () -> Unit = {},
     interactionButton: @Composable () -> Unit = {},
 ) {
     Column {
         Row(
-            modifier = modifier.fillMaxWidth(),
+            modifier =
+                modifier
+                    .fillMaxWidth()
+                    .noRippleClickable(onClick = onClickRow),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Icon(
