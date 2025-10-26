@@ -2,13 +2,22 @@ package org.android.bbangzip.presentation.ui.editcategory
 
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import org.android.bbangzip.domain.repository.CategoryRepository
 import org.android.bbangzip.presentation.common.base.BaseViewModel
 import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.*
+import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.EditCategoryReduce.*
 import javax.inject.Inject
 
+@HiltViewModel
 class EditCategoryViewModel
     @Inject
-    constructor(savedStateHandle: SavedStateHandle) : BaseViewModel<EditCategoryEvent, EditCategoryState, EditCategoryReduce, EditCategorySideEffect>(savedStateHandle) {
+    constructor(
+        savedStateHandle: SavedStateHandle,
+        private val categoryRepository: CategoryRepository,
+    ) : BaseViewModel<EditCategoryEvent, EditCategoryState, EditCategoryReduce, EditCategorySideEffect>(savedStateHandle) {
         override fun createInitialState(savedState: Parcelable?): EditCategoryState {
             return savedState as? EditCategoryState ?: EditCategoryState()
         }
@@ -17,9 +26,10 @@ class EditCategoryViewModel
             when (event) {
                 is EditCategoryEvent.Initialize -> {
                     updateState(
-                        EditCategoryReduce.UpdateEditCategoryState(
+                        UpdateEditCategoryState(
                             currentUiState.copy(
                                 categoryId = event.category.id,
+                                categoryName = event.category.name,
                                 categoryNameInput = event.category.name,
                                 selectedColorString = event.category.color,
                                 isConfirmEnable = true,
@@ -32,28 +42,76 @@ class EditCategoryViewModel
                     setSideEffect(EditCategorySideEffect.PopBackStack)
                 }
                 is EditCategoryEvent.OnCategoryNameInputChange -> {
-                    updateState(EditCategoryReduce.UpdateCategoryNameInput(event.categoryNameInput))
-                    updateState(EditCategoryReduce.UpdateIsConfirmEnable(isValidConfirm(event.categoryNameInput)))
+                    updateState(UpdateCategoryNameInput(event.categoryNameInput))
+                    updateState(UpdateIsConfirmEnable(isValidConfirm(event.categoryNameInput)))
                 }
                 is EditCategoryEvent.OnColorItemClick -> {
-                    updateState(EditCategoryReduce.UpdateSelectedColorString(event.colorString))
-                    updateState(EditCategoryReduce.UpdateIsColorPickerBottomSheetVisible(false))
+                    updateState(UpdateSelectedColorString(event.colorString))
+                    updateState(UpdateIsColorPickerBottomSheetVisible(false))
                 }
                 EditCategoryEvent.OnColorPickerBottomSheetDismissRequest -> {
-                    updateState(EditCategoryReduce.UpdateIsColorPickerBottomSheetVisible(false))
+                    updateState(UpdateIsColorPickerBottomSheetVisible(false))
                 }
                 EditCategoryEvent.OnColorSettingRowActionIconClick -> {
-                    updateState(EditCategoryReduce.UpdateIsColorPickerBottomSheetVisible(true))
+                    updateState(UpdateIsColorPickerBottomSheetVisible(true))
                 }
                 EditCategoryEvent.OnConfirmButtonClick -> {
-                    setSideEffect(EditCategorySideEffect.PopBackStack)
-                    // 수정 api
+                    viewModelScope.launch {
+                        categoryRepository.modifyCategory(
+                            categoryId = currentUiState.categoryId.toLong(),
+                            name = currentUiState.categoryNameInput,
+                            color = currentUiState.selectedColorString,
+                            isStopped = currentUiState.isCategoryStopped,
+                        ).onSuccess {
+                            setSideEffect(EditCategorySideEffect.PopBackStack)
+                        }.onFailure {
+                            // TODO 에러처리
+                            setSideEffect(EditCategorySideEffect.PopBackStack)
+                        }
+                    }
                 }
                 EditCategoryEvent.OnDeleteButtonClick -> {
-                    // 삭제 api
+                    updateState(
+                        UpdateEditCategoryState(
+                            currentUiState.copy(
+                                isDeleteConfirmationBottomSheetVisible = true,
+                            ),
+                        ),
+                    )
                 }
                 EditCategoryEvent.OnStopRowSwitchClick -> {
-                    updateState(EditCategoryReduce.UpdateIsCategoryStopped(!currentUiState.isCategoryStopped))
+                    updateState(UpdateIsCategoryStopped(!currentUiState.isCategoryStopped))
+                }
+
+                EditCategoryEvent.OnDeleteCancleButtonClick -> {
+                    updateState(
+                        UpdateEditCategoryState(
+                            currentUiState.copy(
+                                isDeleteConfirmationBottomSheetVisible = false,
+                            ),
+                        ),
+                    )
+                }
+
+                EditCategoryEvent.OnDeleteConfirmButtonClick -> {
+                    viewModelScope.launch {
+                        categoryRepository.deleteCategory(currentUiState.categoryId.toLong())
+                            .onSuccess {
+                                setSideEffect(EditCategorySideEffect.PopBackStack)
+                            }.onFailure {
+                                // TODO 에러처리
+                                setSideEffect(EditCategorySideEffect.PopBackStack)
+                            }
+                    }
+                }
+                EditCategoryEvent.OnDeleteConfirmationBottomSheetDismissRequest -> {
+                    updateState(
+                        UpdateEditCategoryState(
+                            currentUiState.copy(
+                                isDeleteConfirmationBottomSheetVisible = false,
+                            ),
+                        ),
+                    )
                 }
             }
         }

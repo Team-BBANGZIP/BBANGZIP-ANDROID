@@ -20,6 +20,12 @@ fun ManageCategoryRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    LaunchedEffect(Unit) {
+        viewModel.setEvent(
+            ManageCategoryEvent.Initialize,
+        )
+    }
+
     LaunchedEffect(viewModel.uiSideEffect) {
         viewModel.uiSideEffect.collectLatest { sideEffect ->
             when (sideEffect) {

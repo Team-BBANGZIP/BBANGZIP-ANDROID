@@ -19,6 +19,7 @@ data class Category(
     val categoryId: Int,
     val categoryName: String,
     val categoryColor: String,
+    val isStopped: Boolean = false,
     val todos: List<Todo>,
 )
 

@@ -5,6 +5,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import org.android.bbangzip.data.auth.qualifier.BbangZip
+import org.android.bbangzip.data.datasource.remote.service.CategoryService
 import org.android.bbangzip.data.datasource.remote.service.DummyService
 import org.android.bbangzip.data.datasource.remote.service.TimerService
 import org.android.bbangzip.data.datasource.remote.service.TodoService
@@ -38,4 +39,10 @@ object ServiceModule {
     fun provideUserService(
         @BbangZip retrofit: Retrofit,
     ): UserService = retrofit.create(UserService::class.java)
+
+    @Provides
+    @Singleton
+    fun provideCategoryService(
+        @BbangZip retrofit: Retrofit,
+    ): CategoryService = retrofit.create(CategoryService::class.java)
 }

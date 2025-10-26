@@ -33,10 +33,12 @@ fun EditCategoryRoute(
 
     EditCategoryScreen(
         categoryNameInput = uiState.categoryNameInput,
+        categoryName = uiState.categoryName,
         isConfirmEnable = uiState.isConfirmEnable,
         isColorPickerBottomSheetVisible = uiState.isColorPickerBottomSheetVisible,
         selectedColorString = uiState.selectedColorString,
         isCategoryStopped = uiState.isCategoryStopped,
+        isDeleteConfirmationBottomSheetVisible = uiState.isDeleteConfirmationBottomSheetVisible,
         onCategoryNameInputChange = {
             viewModel.setEvent(EditCategoryEvent.OnCategoryNameInputChange(it))
         },
@@ -60,6 +62,15 @@ fun EditCategoryRoute(
         },
         onDeleteButtonClick = {
             viewModel.setEvent(EditCategoryEvent.OnDeleteButtonClick)
+        },
+        onDeleteConfirmationBottomSheetDismissRequest = {
+            viewModel.setEvent(EditCategoryEvent.OnDeleteConfirmationBottomSheetDismissRequest)
+        },
+        onDeleteConfirmationBottomSheetCancelButtonClick = {
+            viewModel.setEvent(EditCategoryEvent.OnDeleteCancleButtonClick)
+        },
+        onDeleteConfirmationBottomSheetConfirmButtonClick = {
+            viewModel.setEvent(EditCategoryEvent.OnDeleteConfirmButtonClick)
         },
     )
 }
