@@ -1,0 +1,67 @@
+package org.android.bbangzip.data.repository.remote
+
+import org.android.bbangzip.data.datasource.remote.UserRemoteDataSource
+import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostUserInfoDto
+import org.android.bbangzip.domain.model.OnboardingInfo
+import org.android.bbangzip.domain.model.ReissueToken
+import org.android.bbangzip.domain.model.UserTokenInfo
+import org.android.bbangzip.domain.repository.UserRepository
+import org.android.bbangzip.presentation.common.util.device.DeviceInfoManager
+import timber.log.Timber
+import javax.inject.Inject
+
+class UserRepositoryImpl
+@Inject
+constructor(
+    private val userRemoteDataSource: UserRemoteDataSource,
+) : UserRepository {
+    override suspend fun login(code: String): Result<UserTokenInfo> =
+        runCatching {
+            Timber.d("[카카오 로그인] -> 액세스 토큰 $code")
+
+            val deviceInfo = DeviceInfoManager.getDeviceInfo()
+
+            val request =
+                RequestPostUserInfoDto(
+                    deviceName = deviceInfo.deviceName,
+                    deviceType = deviceInfo.deviceType,
+                    provider = "KAKAO",
+                    role = "USER",
+                    appVersion = deviceInfo.appVersion,
+                    osVersion = deviceInfo.osVersion,
+                    osType = deviceInfo.osType,
+                )
+
+            val response = userRemoteDataSource.login(code = code, request)
+            val responseData = response.data
+            responseData!!.toUserTokenInfo()
+        }
+
+    override suspend fun logout(): Result<String> =
+        runCatching {
+            val response = userRemoteDataSource.logout()
+            val responseData = response.data
+            responseData.toString()
+        }
+
+    override suspend fun reissue(): Result<ReissueToken> =
+        runCatching {
+            val response = userRemoteDataSource.reissue()
+            val responseData = response.data
+            responseData!!.toReissueToken()
+        }
+
+    override suspend fun withdraw(): Result<String> =
+        runCatching {
+            val response = userRemoteDataSource.withDraw()
+            val responseData = response.data
+            responseData!!
+        }
+
+    override suspend fun onboardingComplete(onboardingEntity: OnboardingInfo): Result<String> =
+        runCatching {
+            val response = userRemoteDataSource.onboardingComplete(requestOnboardingDto = onboardingEntity.toRequestPostOnboardingDto())
+            val responseData = response.data
+            responseData!!
+        }
+}
