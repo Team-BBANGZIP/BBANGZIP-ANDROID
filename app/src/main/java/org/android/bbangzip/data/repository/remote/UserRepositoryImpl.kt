@@ -6,7 +6,7 @@ import org.android.bbangzip.domain.model.OnboardingInfo
 import org.android.bbangzip.domain.model.ReissueToken
 import org.android.bbangzip.domain.model.UserTokenInfo
 import org.android.bbangzip.domain.repository.UserRepository
-import org.android.bbangzip.presentation.common.util.device.DeviceInfoManager
+import org.android.bbangzip.presentation.common.util.device.DeviceInfo
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -14,12 +14,11 @@ class UserRepositoryImpl
 @Inject
 constructor(
     private val userRemoteDataSource: UserRemoteDataSource,
+    private val deviceInfo: DeviceInfo
 ) : UserRepository {
     override suspend fun login(code: String): Result<UserTokenInfo> =
         runCatching {
             Timber.d("[카카오 로그인] -> 액세스 토큰 $code")
-
-            val deviceInfo = DeviceInfoManager.getDeviceInfo()
 
             val request =
                 RequestPostUserInfoDto(

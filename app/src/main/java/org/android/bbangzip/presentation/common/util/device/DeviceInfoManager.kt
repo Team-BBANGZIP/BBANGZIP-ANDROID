@@ -1,18 +1,16 @@
 package org.android.bbangzip.presentation.common.util.device
 
 import android.os.Build
-import org.android.bbangzip.BuildConfig
 
 object DeviceInfoManager {
-    fun getDeviceInfo(): DeviceInfo {
+    fun getDeviceInfo(appVersion: String, deviceType: String): DeviceInfo {
         val osVersion = Build.VERSION.RELEASE
         val deviceName = Build.MODEL
         val osType = "Android"
-        val appVersion = BuildConfig.VERSION_NAME
 
         return DeviceInfo(
             deviceName = deviceName,
-            deviceType = deviceName,
+            deviceType = deviceType,
             osVersion = osVersion,
             osType = osType,
             appVersion = appVersion,
