@@ -108,15 +108,18 @@ fun LoginScreen(
                     Icon(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_kakao_14_15),
                         contentDescription = null,
-                        // tint = BbangZipTheme.color.kakaoBlack_0000D9,
                         modifier = Modifier.size(20.dp),
+                        tint = BbangZipTheme.color.kakaoBlack_0000D9
                     )
                 },
-                colors = BbangZipButtonDefaults.colors(enabledContainerColor = BbangZipTheme.color.kakaoYellow_FEE500),
+                colors = BbangZipButtonDefaults.colors(
+                    enabledContainerColor = BbangZipTheme.color.kakaoYellow_FEE500,
+                ),
                 content = {
                     Text(
                         text = stringResource(R.string.auth_kakao_login),
                         style = BbangZipTheme.typography.body1Bold,
+                        color = BbangZipTheme.color.kakaoBlack_0000D9
                     )
                 },
             )

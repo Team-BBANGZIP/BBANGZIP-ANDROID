@@ -45,8 +45,8 @@ private val Todo9 = Color(0xFF8F63E9)
 private val Todo10 = Color(0xFFB79FE8)
 
 // Yellow
-private val KakaoYellow = Color(0xFC000000)
-private val KakaoBlack = Color(0x00000000)
+private val KakaoYellow = Color(0xFFFEE500)
+private val KakaoBlack = Color(0xFF282119)
 
 @Immutable
 data class BbangZipColor(
