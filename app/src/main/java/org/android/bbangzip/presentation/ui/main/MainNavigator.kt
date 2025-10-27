@@ -21,6 +21,7 @@ import org.android.bbangzip.presentation.ui.editcategory.navigation.navigateToEd
 import org.android.bbangzip.presentation.ui.friend.navigation.navigateToFriend
 import org.android.bbangzip.presentation.ui.managecategory.navigation.navigateToManageCategory
 import org.android.bbangzip.presentation.ui.my.navigation.navigateToMy
+import org.android.bbangzip.presentation.ui.onboarding.navigateToOnboarding
 import org.android.bbangzip.presentation.ui.timer.navigation.navigateTimerTodo
 import org.android.bbangzip.presentation.ui.timer.navigation.navigateToTimer
 import org.android.bbangzip.presentation.ui.todo.navigation.navigateToTodo
@@ -79,7 +80,7 @@ class MainNavigator(
     }
 
     fun navigateToOnboarding() {
-        // TODO Onboarding 구현 후 연결
+        navHostController.navigateToOnboarding()
     }
 
     private fun navigateToFriend(navOptions: NavOptions) {
@@ -94,7 +95,7 @@ class MainNavigator(
         navHostController.navigateToTimer(navOptions)
     }
 
-    fun navigateToTodo(navOptions: NavOptions) {
+    private fun navigateToTodo(navOptions: NavOptions) {
         navHostController.navigateToTodo(navOptions)
     }
 
