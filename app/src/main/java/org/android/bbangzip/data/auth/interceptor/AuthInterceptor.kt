@@ -1,12 +1,6 @@
 package org.android.bbangzip.data.auth.interceptor
 
-import android.app.Application
-import android.content.Intent
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import okhttp3.Interceptor
@@ -17,6 +11,7 @@ import org.android.bbangzip.BuildConfig
 import org.android.bbangzip.UserPreferences
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseGetReissueDto
 import org.android.bbangzip.data.datasource.remote.util.base.BaseResponse
+import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants
 import org.android.bbangzip.domain.repository.UserDefaultRepository
 import javax.inject.Inject
 
@@ -24,37 +19,29 @@ import javax.inject.Inject
 class AuthInterceptor @Inject constructor(
     private val json: Json,
     private val userDefaultRepository: UserDefaultRepository,
-    private val context: Application
+    private val authEventManager: AuthEventManager
 ) : Interceptor {
-    private fun getStoredToken(mapper: (UserPreferences) -> String?): String? {
+    private fun getUserPreferences(): UserPreferences? {
         return runBlocking {
-            userDefaultRepository.userPreferenceFlow
-                .map(mapper)
-                .firstOrNull()
-        }
-    }
-
-    private fun getIsLogin(mapper: (UserPreferences) -> Boolean?): Boolean? {
-        return runBlocking {
-            userDefaultRepository.userPreferenceFlow
-                .map(mapper)
-                .firstOrNull()
+            userDefaultRepository.userPreferenceFlow.firstOrNull()
         }
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
-        val accessToken = getStoredToken { it.accessToken }
-        val refreshToken = getStoredToken { it.refreshToken }
-        val isLogin = getIsLogin { it.isLogin }
+        val userPreferences = getUserPreferences()
+        val accessToken = userPreferences?.accessToken
+        val refreshToken = userPreferences?.refreshToken
+        val isLogin = userPreferences?.isLogin
 
         val authRequest =
-            if (isLogin == true) {
+            if (isLogin == true && accessToken != null) {
                 originalRequest.newBuilder()
-                    .addHeader(AUTHORIZATION, "$accessToken").build()
+                    .addHeader(AUTHORIZATION, accessToken).build()
             } else {
                 originalRequest
             }
+
         val response = chain.proceed(authRequest)
 
         when (response.code) {
@@ -62,7 +49,7 @@ class AuthInterceptor @Inject constructor(
                 response.close()
                 val refreshTokenRequest =
                     originalRequest.newBuilder().get()
-                        .url("${BuildConfig.BASE_URL}v1/auth/re-issue")
+                        .url("${BuildConfig.BASE_URL}${ApiConstants.VERSIONS}/${ApiConstants.AUTH}/${ApiConstants.REISSUE}")
                         .post("".toRequestBody())
                         .addHeader(AUTHORIZATION, refreshToken ?: "")
                         .build()
@@ -87,18 +74,12 @@ class AuthInterceptor @Inject constructor(
                     val newRequest = newAuthBuilder(originalRequest)
                     return chain.proceed(newRequest)
                 } else {
-                    with(context) {
-                        CoroutineScope(Dispatchers.Main).launch {
-                            startActivity(
-                                Intent.makeRestartActivityTask(packageManager.getLaunchIntentForPackage(packageName)?.component),
-                            )
-                        }
+                    runBlocking {
+                        authEventManager.emitEvent(AuthEvent.ForceLogout)
 
-                        runBlocking {
-                            with(userDefaultRepository) {
-                                clearRefreshToken()
-                                clearAccessToken()
-                            }
+                        with(userDefaultRepository) {
+                            clearRefreshToken()
+                            clearAccessToken()
                         }
                     }
                 }
@@ -108,7 +89,7 @@ class AuthInterceptor @Inject constructor(
     }
 
     private fun newAuthBuilder(originalRequest: Request): Request {
-        val accessToken = getStoredToken { it.accessToken }
+        val accessToken = getUserPreferences()?.accessToken
         return originalRequest.newBuilder()
             .addHeader(AUTHORIZATION, accessToken ?: "")
             .build()
