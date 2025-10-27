@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.navigation.NavDestination
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.NavOptions
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -14,6 +15,8 @@ import org.android.bbangzip.presentation.common.model.BottomNavigationRoute.Comp
 import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.model.Route
 import org.android.bbangzip.presentation.ui.addcategory.navigation.navigateToAddCategory
+import org.android.bbangzip.presentation.ui.auth.LoginRoute
+import org.android.bbangzip.presentation.ui.auth.navigateToLogin
 import org.android.bbangzip.presentation.ui.editcategory.navigation.navigateToEditCategory
 import org.android.bbangzip.presentation.ui.friend.navigation.navigateToFriend
 import org.android.bbangzip.presentation.ui.managecategory.navigation.navigateToManageCategory
@@ -29,7 +32,7 @@ class MainNavigator(
     private val currentDestination: NavDestination?
         @Composable get() = navHostController.currentBackStackEntryAsState().value?.destination
 
-    val startDestination = BottomNavigationRoute.Timer()
+    val startDestination = LoginRoute
 
     val currentBottomNavigationBarItem: BottomNavigationType?
         @Composable get() =
@@ -60,6 +63,25 @@ class MainNavigator(
         }
     }
 
+    fun navigateToTodoAfterLogin() {
+        navHostController.navigateToTodo(
+            navOptions = navOptions {
+                popUpTo(LoginRoute::class.qualifiedName.orEmpty()) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        )
+    }
+
+    private fun navigateToLogin() {
+        navHostController.navigateToLogin()
+    }
+
+    fun navigateToOnboarding() {
+        // TODO Onboarding 구현 후 연결
+    }
+
     private fun navigateToFriend(navOptions: NavOptions) {
         navHostController.navigateToFriend(navOptions)
     }
@@ -72,7 +94,7 @@ class MainNavigator(
         navHostController.navigateToTimer(navOptions)
     }
 
-    private fun navigateToTodo(navOptions: NavOptions) {
+    fun navigateToTodo(navOptions: NavOptions) {
         navHostController.navigateToTodo(navOptions)
     }
 
@@ -100,6 +122,18 @@ class MainNavigator(
     }
 
     fun navigateToAddCategory() = navHostController.navigateToAddCategory()
+
+    fun navigateToLoginAndClearStack() {
+        navHostController.navigate(
+            route = LoginRoute,
+            navOptions = navOptions {
+                popUpTo(navHostController.graph.findStartDestination().id) {
+                    inclusive = true
+                }
+                launchSingleTop = true
+            }
+        )
+    }
 
     fun popBackStack() {
         navHostController.popBackStack()

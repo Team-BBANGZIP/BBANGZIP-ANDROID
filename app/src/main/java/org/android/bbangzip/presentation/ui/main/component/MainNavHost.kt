@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import org.android.bbangzip.presentation.ui.addcategory.navigation.addCategoryNavGraph
+import org.android.bbangzip.presentation.ui.auth.loginNavGraph
 import org.android.bbangzip.presentation.ui.editcategory.navigation.editCategoryNavGraph
 import org.android.bbangzip.presentation.ui.friend.navigation.friendNavGraph
 import org.android.bbangzip.presentation.ui.main.MainNavigator
@@ -26,6 +27,11 @@ fun MainNavHost(
         navController = navigator.navHostController,
         startDestination = navigator.startDestination,
     ) {
+        loginNavGraph(
+            navigateToTodo = navigator::navigateToTodoAfterLogin,
+            navigateToOnboarding = navigator::navigateToOnboarding
+        )
+
         timerNavGraph(
             sharedViewModel = sharedViewModel,
             navigateToTimerTodo = navigator::navigateToTimerTodo,
