@@ -2,7 +2,7 @@ package org.android.bbangzip.data.datasource.remote.dto.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.android.bbangzip.domain.model.ReissueEntity
+import org.android.bbangzip.domain.model.ReissueToken
 
 @Serializable
 data class ResponseGetReissueDto(
@@ -11,8 +11,8 @@ data class ResponseGetReissueDto(
     @SerialName("refreshToken")
     val refreshToken: String,
 ) {
-    fun toReissueEntity() =
-        ReissueEntity(
+    fun toReissueToken() =
+        ReissueToken(
             accessToken = accessToken,
             refreshToken = refreshToken,
         )

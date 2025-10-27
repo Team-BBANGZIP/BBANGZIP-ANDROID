@@ -3,7 +3,7 @@ package org.android.bbangzip.data.datasource.remote.dto.response
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.android.bbangzip.domain.model.UserEntity
+import org.android.bbangzip.domain.model.UserTokenInfo
 
 @Serializable
 data class ResponseGetUserDto(
@@ -14,8 +14,8 @@ data class ResponseGetUserDto(
     @SerialName("isOnboardingComplete")
     val isSignUpComplete: Boolean,
 ) {
-    fun toUserEntity() =
-        UserEntity(
+    fun toUserTokenInfo() =
+        UserTokenInfo(
             accessToken = accessToken,
             refreshToken = refreshToken,
             isSignUpComplete = isSignUpComplete,
