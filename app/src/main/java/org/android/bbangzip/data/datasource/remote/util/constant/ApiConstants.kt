@@ -19,4 +19,5 @@ object ApiConstants {
     const val WITHDRAW = "withdraw"
     const val SIGN_UP = "signup"
     const val CODE = "code"
+    const val PROV_TOKEN = "Provider-Token"
 }

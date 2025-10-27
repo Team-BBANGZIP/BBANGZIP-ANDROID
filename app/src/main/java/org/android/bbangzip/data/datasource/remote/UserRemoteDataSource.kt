@@ -16,7 +16,8 @@ constructor(
     suspend fun login(
         code: String,
         requestUserInfoDto: RequestPostUserInfoDto,
-    ): BaseResponse<ResponseGetUserDto> = userService.login(code = code, requestUserInfoDto = requestUserInfoDto)
+    ): BaseResponse<ResponseGetUserDto> =
+        userService.login(providerToken = code, requestUserInfoDto = requestUserInfoDto)
 
     suspend fun reissue(): BaseResponse<ResponseGetReissueDto> = userService.reissue()
 
