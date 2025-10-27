@@ -51,6 +51,7 @@ constructor(
                             login(accessToken)
                         },
                     )
+                    setSideEffect(LoginContract.LoginSideEffect.NavigateToOnboarding)
                 }
             }
         }

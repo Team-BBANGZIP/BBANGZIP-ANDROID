@@ -20,10 +20,7 @@ fun LoginRoute(
     LaunchedEffect(viewModel.uiSideEffect) {
         viewModel.uiSideEffect.collectLatest { effect ->
             when (effect) {
-                is LoginContract.LoginSideEffect.NavigateToTodo -> {
-                    navigateToTodo()
-                }
-
+                is LoginContract.LoginSideEffect.NavigateToTodo -> navigateToTodo()
                 is LoginContract.LoginSideEffect.NavigateToOnboarding -> navigateToOnboarding()
             }
         }
