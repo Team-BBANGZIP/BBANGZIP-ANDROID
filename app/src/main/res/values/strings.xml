@@ -2,6 +2,9 @@
     <string name="app_name">BBANGZIP-ANDROID</string>
     <string name="dummy">더미</string>
 
+    <!-- auth -->
+    <string name="auth_kakao_login">카카오로 로그인하기</string>
+
     <!-- bottom - navigation -->
     <string name="bottom_navi_timer_tab_title">빵굽기</string>
     <string name="bottom_navi_todo_tab_title">할 일</string>
