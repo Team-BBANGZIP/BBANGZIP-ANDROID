@@ -114,39 +114,39 @@ class OnboardingViewModel
             }
         }
 
-    private fun convertResIdToKey(
-        @DrawableRes imgResId: Int,
-    ): Int {
-        return when (imgResId) {
-            DEFAULT_PROFILE_IMG_RES_ID -> 0
+        private fun convertResIdToKey(
+            @DrawableRes imgResId: Int,
+        ): Int {
+            return when (imgResId) {
+                DEFAULT_PROFILE_IMG_RES_ID -> 0
 
-            else -> {
-                val index = OnboardingConstants.PROFILE_IMG_RES_IDS.indexOf(imgResId)
-                if (index != -1) {
-                    index + 1
-                } else {
-                    0
+                else -> {
+                    val index = OnboardingConstants.PROFILE_IMG_RES_IDS.indexOf(imgResId)
+                    if (index != -1) {
+                        index + 1
+                    } else {
+                        0
+                    }
                 }
             }
         }
-    }
 
-    private fun signup(
-        nickname: String,
-        profileImgKey: Int = 0,
-    ) {
-        viewModelScope.launch {
-            userRepository.onboardingComplete(
-                onboardingEntity =
-                    OnboardingInfo(
-                        nickname = nickname,
-                        img = convertResIdToKey(profileImgKey),
-                    ),
-            ).onSuccess {
-                Timber.d("[온보딩] 완료")
-            }.onFailure {
-                Timber.d("[온보딩] 실패")
+        private fun signup(
+            nickname: String,
+            profileImgKey: Int = 0,
+        ) {
+            viewModelScope.launch {
+                userRepository.onboardingComplete(
+                    onboardingEntity =
+                        OnboardingInfo(
+                            nickname = nickname,
+                            img = convertResIdToKey(profileImgKey),
+                        ),
+                ).onSuccess {
+                    Timber.d("[온보딩] 완료")
+                }.onFailure {
+                    Timber.d("[온보딩] 실패")
+                }
             }
         }
-    }
     }
