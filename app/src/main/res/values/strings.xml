@@ -19,6 +19,7 @@
     <string name="button_label_initialize">초기화 하기</string>
     <string name="button_label_exit">종료 하기</string>
     <string name="button_label_cancellation">취소</string>
+    <string name="button_label_complete">완료</string>
     <string name="button_label_setting">설정</string>
     <string name="button_label_delete">삭제하기</string>
     <string name="button_label_save">저장하기</string>
@@ -45,6 +46,16 @@
     <string name="calendar_menu_description">메뉴</string>
     <string name="calendar_previous_month_description">이전 달</string>
     <string name="calendar_next_month_description">다음 달</string>
+
+    <!-- Onboarding - view -->
+    <string name="onboarding_title">프로필 설정</string>
+    <string name="onboarding_name_description">이름을 입력해 주세요</string>
+
+    <!-- Profile Image Picker BottomSheet -->
+    <string name="profile_img_picker_title">프로필 이미지 설정</string>
+
+    <!-- Profile Nickname BottomSheet -->
+    <string name="profile_nickname_input_title">이름 설정하기</string>
 
     <!-- timer - view -->
     <string name="timer_idle_title">오늘의 빵을 구워보세요!</string>
