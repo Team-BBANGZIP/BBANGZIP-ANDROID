@@ -61,10 +61,11 @@ fun BreadWithTriangleIndicator(
             exit = fadeOut(animationSpec = tween(300)),
         ) {
             Icon(
-                modifier = Modifier
-                    .width(breadSize.width)
-                    .align(Alignment.TopCenter)
-                    .offset(y = (triangleOffset).dp),
+                modifier =
+                    Modifier
+                        .width(breadSize.width)
+                        .align(Alignment.TopCenter)
+                        .offset(y = (triangleOffset).dp),
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_triangle_down_24),
                 contentDescription = "moving triangle",
                 tint = BbangZipTheme.color.primaryNormal_897869,
