@@ -20,7 +20,6 @@ import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.WI
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.Header
-import retrofit2.http.PATCH
 import retrofit2.http.POST
 
 interface UserService {
@@ -39,7 +38,7 @@ interface UserService {
     @DELETE("$API/$VERSIONS/$AUTH/$WITHDRAW")
     suspend fun withdraw(): BaseResponse<String>
 
-    @PATCH("$API/$VERSIONS/$AUTH/$SIGN_UP")
+    @POST("$API/$VERSIONS/$AUTH/$SIGN_UP")
     suspend fun onboardingComplete(
         @Body requestOnboardingDto: RequestPostOnboardingDto,
     ): BaseResponse<String>

@@ -86,7 +86,6 @@ class OnboardingViewModel
                 // 온보딩 완료
                 OnboardingContract.OnboardingEvent.OnClickSaveBtn -> {
                     if (currentUiState.isSaveBtnEnabled) {
-                        setSideEffect(OnboardingContract.OnboardingSideEffect.NavigateToTodo)
                         signup(currentUiState.nickname, currentUiState.profileImg)
                     }
                 }
@@ -144,6 +143,7 @@ class OnboardingViewModel
                         ),
                 ).onSuccess {
                     Timber.d("[온보딩] 완료")
+                    setSideEffect(OnboardingContract.OnboardingSideEffect.NavigateToTodo)
                 }.onFailure {
                     Timber.d("[온보딩] 실패")
                 }
