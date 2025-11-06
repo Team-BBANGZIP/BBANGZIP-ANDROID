@@ -67,7 +67,7 @@
     <string name="restart_sheet_sub_title">지금까지 구운 빵이 완성되지 않아요</string>
     <!-- timer - view - reset/restart sheet common string-->
     <string name="re_sheet_left_btn">돌아가기</string>
-     <!-- timer - view - complete sheet-->
+    <!-- timer - view - complete sheet-->
     <string name="complete_sheet_left_btn_thirty">30분 더</string>
     <string name="complete_sheet_left_btn_sixty">60분 더</string>
     <string name="complete_sheet_sub_title_n1">빵 한 개를 휙득했어요</string>
@@ -117,11 +117,11 @@
     <string name="add_todo_arrow_icon_description">시간 설정 화면으로 이동 아이콘</string>
 
     <!-- Time Picker BottomSheet -->
-    <string name = "time_picker_title">시작 시간 설정</string>
+    <string name="time_picker_title">시작 시간 설정</string>
 
     <!-- Commitment BottomSheet -->
-    <string name = "commitment_title">나만의 다짐 작성</string>
-    <string name = "commitment_placeholder">나만의 다짐을 적어보세요</string>
+    <string name="commitment_title">나만의 다짐 작성</string>
+    <string name="commitment_placeholder">나만의 다짐을 적어보세요</string>
 
     <!-- Todo Setting BottomSheet -->
     <string name="todo_setting_start_time_action_name">시작 시간</string>
@@ -132,14 +132,14 @@
     <string name="todo_setting_do_again_action_name">다른 날 또 하기</string>
 
     <!-- Edit Todo BottomSheet -->
-    <string name = "edit_todo_title">할 일 수정</string>
-    <string name = "edit_todo_placeholder">할 일을 입력해 주세요</string>
+    <string name="edit_todo_title">할 일 수정</string>
+    <string name="edit_todo_placeholder">할 일을 입력해 주세요</string>
 
     <!-- Change Date BottomSheet -->
-    <string name = "change_date_title">날짜 변경</string>"
+    <string name="change_date_title">날짜 변경</string>"
 
     <!-- Category Color Picker BottomSheet -->
-    <string name = "category_color_picker_title">카테고리 색상</string>
+    <string name="category_color_picker_title">카테고리 색상</string>
 
     <!-- Category Delete Confirmation BottomSheet -->
     <string name="delete_confirmation_bottom_sheet_title">정말 삭제 하시겠어요?</string>

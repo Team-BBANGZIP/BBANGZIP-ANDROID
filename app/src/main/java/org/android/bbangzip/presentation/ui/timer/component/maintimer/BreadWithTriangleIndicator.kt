@@ -1,7 +1,5 @@
 package org.android.bbangzip.presentation.ui.timer.component.maintimer
 
-import android.R.attr.contentDescription
-import android.R.attr.y
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.RepeatMode
@@ -63,7 +61,10 @@ fun BreadWithTriangleIndicator(
             exit = fadeOut(animationSpec = tween(300)),
         ) {
             Icon(
-                modifier = Modifier.width(breadSize.width).align(Alignment.TopCenter).offset(y = (triangleOffset).dp),
+                modifier = Modifier
+                    .width(breadSize.width)
+                    .align(Alignment.TopCenter)
+                    .offset(y = (triangleOffset).dp),
                 imageVector = ImageVector.vectorResource(id = R.drawable.ic_triangle_down_24),
                 contentDescription = "moving triangle",
                 tint = BbangZipTheme.color.primaryNormal_897869,

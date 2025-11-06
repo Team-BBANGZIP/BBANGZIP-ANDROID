@@ -5,9 +5,9 @@ import org.android.bbangzip.domain.repository.DummyRepository
 import javax.inject.Inject
 
 class FetchDummyUseCase
-    @Inject
-    constructor(
-        private val dummyRepository: DummyRepository,
-    ) {
-        suspend operator fun invoke(id: Long): Result<Dummy?> = dummyRepository.fetchDummy(dummyId = id)
-    }
+@Inject
+constructor(
+    private val dummyRepository: DummyRepository,
+) {
+    suspend operator fun invoke(id: Long): Result<Dummy?> = dummyRepository.fetchDummy(dummyId = id)
+}

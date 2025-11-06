@@ -108,6 +108,7 @@ fun EditCategoryScreen(
                                 selectedColorString = selectedColorString,
                                 onColorSettingRowActionIconClick = onColorSettingRowActionIconClick,
                             )
+
                         EditCategoryActionType.STOP ->
                             BbangZipSwitch(
                                 modifier = Modifier.fillMaxWidth(44 / 335f),

@@ -6,9 +6,9 @@ import org.android.bbangzip.data.datasource.remote.util.base.BaseResponse
 import javax.inject.Inject
 
 class DummyRemoteDataSource
-    @Inject
-    constructor(
-        private val dummyService: DummyService,
-    ) {
-        suspend fun getDummy(dummyId: Long): BaseResponse<ResponseDummyDto> = dummyService.getDummy(dummyId = dummyId)
-    }
+@Inject
+constructor(
+    private val dummyService: DummyService,
+) {
+    suspend fun getDummy(dummyId: Long): BaseResponse<ResponseDummyDto> = dummyService.getDummy(dummyId = dummyId)
+}

@@ -9,7 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
-import org.android.bbangzip.presentation.ui.todo.TodoContract.*
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoEvent
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoSideEffect
 
 @Composable
 fun TodoRoute(

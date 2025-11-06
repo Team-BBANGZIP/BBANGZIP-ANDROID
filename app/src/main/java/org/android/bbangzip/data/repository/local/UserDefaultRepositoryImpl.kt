@@ -7,57 +7,57 @@ import org.android.bbangzip.domain.repository.UserDefaultRepository
 import javax.inject.Inject
 
 class UserDefaultRepositoryImpl
-    @Inject
-    constructor(
-        private val userDataSource: UserLocalDataSource,
-    ) : UserDefaultRepository {
-        override val userPreferenceFlow: Flow<UserPreferences> = userDataSource.userPreferencesFlow
+@Inject
+constructor(
+    private val userDataSource: UserLocalDataSource,
+) : UserDefaultRepository {
+    override val userPreferenceFlow: Flow<UserPreferences> = userDataSource.userPreferencesFlow
 
-        override suspend fun setAccessToken(accessToken: String) {
-            userDataSource.updateUserPreferences { userData ->
-                userData
-                    .toBuilder()
-                    .setAccessToken(accessToken)
-                    .build()
-            }
-        }
-
-        override suspend fun clearAccessToken() {
-            userDataSource.updateUserPreferences { userData ->
-                val cleared =
-                    userData
-                        .toBuilder()
-                        .clearAccessToken()
-                        .build()
-
-                cleared
-            }
-        }
-
-        override suspend fun setRefreshToken(refreshToken: String) {
-            userDataSource.updateUserPreferences { userData ->
-                userData
-                    .toBuilder()
-                    .setRefreshToken(refreshToken)
-                    .build()
-            }
-        }
-
-        override suspend fun clearRefreshToken() {
-            userDataSource.updateUserPreferences { userData ->
-                userData
-                    .toBuilder()
-                    .clearRefreshToken()
-                    .build()
-            }
-        }
-
-        override suspend fun setIsLogin(isLogin: Boolean) {
-            userDataSource.updateUserPreferences { userData ->
-                userData
-                    .toBuilder()
-                    .setIsLogin(isLogin)
-                    .build()
-            }
+    override suspend fun setAccessToken(accessToken: String) {
+        userDataSource.updateUserPreferences { userData ->
+            userData
+                .toBuilder()
+                .setAccessToken(accessToken)
+                .build()
         }
     }
+
+    override suspend fun clearAccessToken() {
+        userDataSource.updateUserPreferences { userData ->
+            val cleared =
+                userData
+                    .toBuilder()
+                    .clearAccessToken()
+                    .build()
+
+            cleared
+        }
+    }
+
+    override suspend fun setRefreshToken(refreshToken: String) {
+        userDataSource.updateUserPreferences { userData ->
+            userData
+                .toBuilder()
+                .setRefreshToken(refreshToken)
+                .build()
+        }
+    }
+
+    override suspend fun clearRefreshToken() {
+        userDataSource.updateUserPreferences { userData ->
+            userData
+                .toBuilder()
+                .clearRefreshToken()
+                .build()
+        }
+    }
+
+    override suspend fun setIsLogin(isLogin: Boolean) {
+        userDataSource.updateUserPreferences { userData ->
+            userData
+                .toBuilder()
+                .setIsLogin(isLogin)
+                .build()
+        }
+    }
+}

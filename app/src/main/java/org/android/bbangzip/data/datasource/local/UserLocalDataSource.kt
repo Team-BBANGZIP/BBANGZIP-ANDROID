@@ -9,15 +9,15 @@ import org.android.bbangzip.data.datasource.local.util.context.userDataSource
 import javax.inject.Inject
 
 class UserLocalDataSource
-    @Inject
-    constructor(
-        @ApplicationContext private val context: Context,
-    ) {
-        private val dataStore: DataStore<UserPreferences> = context.userDataSource
+@Inject
+constructor(
+    @ApplicationContext private val context: Context,
+) {
+    private val dataStore: DataStore<UserPreferences> = context.userDataSource
 
-        val userPreferencesFlow: Flow<UserPreferences> = dataStore.data
+    val userPreferencesFlow: Flow<UserPreferences> = dataStore.data
 
-        suspend fun updateUserPreferences(update: (UserPreferences) -> UserPreferences) {
-            dataStore.updateData(update)
-        }
+    suspend fun updateUserPreferences(update: (UserPreferences) -> UserPreferences) {
+        dataStore.updateData(update)
     }
+}

@@ -7,7 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
-import org.android.bbangzip.presentation.ui.addcategory.AddCategoryContract.*
+import org.android.bbangzip.presentation.ui.addcategory.AddCategoryContract.AddCategoryEvent
+import org.android.bbangzip.presentation.ui.addcategory.AddCategoryContract.AddCategorySideEffect
 
 @Composable
 fun AddCategoryRoute(

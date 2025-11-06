@@ -6,12 +6,12 @@ import org.android.bbangzip.domain.repository.DummyRepository
 import javax.inject.Inject
 
 class DummyRepositoryImpl
-    @Inject
-    constructor(
-        private val dummyRemoteDataSource: DummyRemoteDataSource,
-    ) : DummyRepository {
-        override suspend fun fetchDummy(dummyId: Long): Result<Dummy> =
-            runCatching {
-                dummyRemoteDataSource.getDummy(dummyId = dummyId).data?.toDummyEntity() ?: throw Exception()
-            }
-    }
+@Inject
+constructor(
+    private val dummyRemoteDataSource: DummyRemoteDataSource,
+) : DummyRepository {
+    override suspend fun fetchDummy(dummyId: Long): Result<Dummy> =
+        runCatching {
+            dummyRemoteDataSource.getDummy(dummyId = dummyId).data?.toDummyEntity() ?: throw Exception()
+        }
+}

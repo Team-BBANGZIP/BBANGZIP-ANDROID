@@ -12,44 +12,44 @@ import javax.inject.Inject
 
 @HiltViewModel
 class SharedViewModel
-    @Inject
-    constructor(
-        savedStateHandle: SavedStateHandle,
-    ) : BaseViewModel<SharedEvent, SharedState, SharedReduce, SharedSideEffect>(
-            savedStateHandle = savedStateHandle,
-        ) {
-        override fun createInitialState(savedState: Parcelable?): SharedState {
-            return savedState as? SharedState ?: SharedState()
-        }
+@Inject
+constructor(
+    savedStateHandle: SavedStateHandle,
+) : BaseViewModel<SharedEvent, SharedState, SharedReduce, SharedSideEffect>(
+    savedStateHandle = savedStateHandle,
+) {
+    override fun createInitialState(savedState: Parcelable?): SharedState {
+        return savedState as? SharedState ?: SharedState()
+    }
 
-        override fun handleEvent(event: SharedEvent) {
-            when (event) {
-                is SharedEvent.OnClickBread -> {
-                    updateState(SharedReduce.SetBreadId(event.breadId))
-                }
-
-                SharedEvent.OnHideBottomBar -> {
-                    updateState(SharedReduce.UpdateBottomBarVisibility(false))
-                }
-
-                SharedEvent.OnShowBottomBar -> {
-                    updateState(SharedReduce.UpdateBottomBarVisibility(true))
-                }
+    override fun handleEvent(event: SharedEvent) {
+        when (event) {
+            is SharedEvent.OnClickBread -> {
+                updateState(SharedReduce.SetBreadId(event.breadId))
             }
-        }
 
-        override fun reduceState(
-            state: SharedState,
-            reduce: SharedReduce,
-        ): SharedState {
-            return when (reduce) {
-                is SharedReduce.SetBreadId -> {
-                    state.copy(breadId = reduce.breadId)
-                }
+            SharedEvent.OnHideBottomBar -> {
+                updateState(SharedReduce.UpdateBottomBarVisibility(false))
+            }
 
-                is SharedReduce.UpdateBottomBarVisibility -> {
-                    state.copy(isBottomBarVisible = reduce.isVisible)
-                }
+            SharedEvent.OnShowBottomBar -> {
+                updateState(SharedReduce.UpdateBottomBarVisibility(true))
             }
         }
     }
+
+    override fun reduceState(
+        state: SharedState,
+        reduce: SharedReduce,
+    ): SharedState {
+        return when (reduce) {
+            is SharedReduce.SetBreadId -> {
+                state.copy(breadId = reduce.breadId)
+            }
+
+            is SharedReduce.UpdateBottomBarVisibility -> {
+                state.copy(isBottomBarVisible = reduce.isVisible)
+            }
+        }
+    }
+}
