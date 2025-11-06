@@ -18,8 +18,11 @@ fun OnboardingRoute(
     LaunchedEffect(viewModel.uiSideEffect) {
         viewModel.uiSideEffect.collectLatest { effect ->
             when (effect) {
-                is OnboardingContract.OnboardingSideEffect.NavigateToTodo -> navigateToTodo()
-                is OnboardingContract.OnboardingSideEffect.NavigateToLogin -> navigateToLogin()
+                OnboardingContract.OnboardingSideEffect.NavigateToTodo -> navigateToTodo()
+                OnboardingContract.OnboardingSideEffect.NavigateToLogin -> navigateToLogin()
+                OnboardingContract.OnboardingSideEffect.DismissNicknameInputBottomSheet -> TODO()
+                OnboardingContract.OnboardingSideEffect.DismissProfileImgBottomSheet -> TODO()
+                is OnboardingContract.OnboardingSideEffect.TriggerNicknameValidation -> TODO()
             }
         }
     }
