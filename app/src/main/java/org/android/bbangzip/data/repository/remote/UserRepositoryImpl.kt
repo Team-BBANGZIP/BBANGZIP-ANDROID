@@ -11,56 +11,56 @@ import timber.log.Timber
 import javax.inject.Inject
 
 class UserRepositoryImpl
-@Inject
-constructor(
-    private val userRemoteDataSource: UserRemoteDataSource,
-    private val deviceInfo: DeviceInfo,
-) : UserRepository {
-    override suspend fun login(code: String): Result<UserTokenInfo> =
-        runCatching {
-            Timber.d("[카카오 로그인] -> 액세스 토큰 $code")
+    @Inject
+    constructor(
+        private val userRemoteDataSource: UserRemoteDataSource,
+        private val deviceInfo: DeviceInfo,
+    ) : UserRepository {
+        override suspend fun login(code: String): Result<UserTokenInfo> =
+            runCatching {
+                Timber.d("[카카오 로그인] -> 액세스 토큰 $code")
 
-            val request =
-                RequestPostUserInfoDto(
-                    deviceName = deviceInfo.deviceName,
-                    deviceType = deviceInfo.deviceType,
-                    provider = "KAKAO",
-                    role = "USER",
-                    appVersion = deviceInfo.appVersion,
-                    osVersion = deviceInfo.osVersion,
-                    osType = deviceInfo.osType,
-                )
+                val request =
+                    RequestPostUserInfoDto(
+                        deviceName = deviceInfo.deviceName,
+                        deviceType = deviceInfo.deviceType,
+                        provider = "KAKAO",
+                        role = "USER",
+                        appVersion = deviceInfo.appVersion,
+                        osVersion = deviceInfo.osVersion,
+                        osType = deviceInfo.osType,
+                    )
 
-            val response = userRemoteDataSource.login(code = code, request)
-            val responseData = response.data
-            responseData!!.toUserTokenInfo()
-        }
+                val response = userRemoteDataSource.login(code = code, request)
+                val responseData = response.data
+                responseData!!.toUserTokenInfo()
+            }
 
-    override suspend fun logout(): Result<String> =
-        runCatching {
-            val response = userRemoteDataSource.logout()
-            val responseData = response.data
-            responseData.toString()
-        }
+        override suspend fun logout(): Result<String> =
+            runCatching {
+                val response = userRemoteDataSource.logout()
+                val responseData = response.data
+                responseData.toString()
+            }
 
-    override suspend fun reissue(): Result<ReissueToken> =
-        runCatching {
-            val response = userRemoteDataSource.reissue()
-            val responseData = response.data
-            responseData!!.toReissueToken()
-        }
+        override suspend fun reissue(): Result<ReissueToken> =
+            runCatching {
+                val response = userRemoteDataSource.reissue()
+                val responseData = response.data
+                responseData!!.toReissueToken()
+            }
 
-    override suspend fun withdraw(): Result<String> =
-        runCatching {
-            val response = userRemoteDataSource.withDraw()
-            val responseData = response.data
-            responseData!!
-        }
+        override suspend fun withdraw(): Result<String> =
+            runCatching {
+                val response = userRemoteDataSource.withDraw()
+                val responseData = response.data
+                responseData!!
+            }
 
-    override suspend fun onboardingComplete(onboardingEntity: OnboardingInfo): Result<String> =
-        runCatching {
-            val response = userRemoteDataSource.onboardingComplete(requestOnboardingDto = onboardingEntity.toRequestPostOnboardingDto())
-            val responseData = response.data
-            responseData!!
-        }
-}
+        override suspend fun onboardingComplete(onboardingEntity: OnboardingInfo): Result<String> =
+            runCatching {
+                val response = userRemoteDataSource.onboardingComplete(requestOnboardingDto = onboardingEntity.toRequestPostOnboardingDto())
+                val responseData = response.data
+                responseData!!
+            }
+    }

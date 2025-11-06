@@ -9,21 +9,21 @@ import org.android.bbangzip.data.datasource.remote.util.base.BaseResponse
 import javax.inject.Inject
 
 class UserRemoteDataSource
-@Inject
-constructor(
-    private val userService: UserService,
-) {
-    suspend fun login(
-        code: String,
-        requestUserInfoDto: RequestPostUserInfoDto,
-    ): BaseResponse<ResponseGetUserDto> =
-        userService.login(providerToken = code, requestUserInfoDto = requestUserInfoDto)
+    @Inject
+    constructor(
+        private val userService: UserService,
+    ) {
+        suspend fun login(
+            code: String,
+            requestUserInfoDto: RequestPostUserInfoDto,
+        ): BaseResponse<ResponseGetUserDto> =
+            userService.login(providerToken = code, requestUserInfoDto = requestUserInfoDto)
 
-    suspend fun reissue(): BaseResponse<ResponseGetReissueDto> = userService.reissue()
+        suspend fun reissue(): BaseResponse<ResponseGetReissueDto> = userService.reissue()
 
-    suspend fun logout(): BaseResponse<String> = userService.logout()
+        suspend fun logout(): BaseResponse<String> = userService.logout()
 
-    suspend fun withDraw(): BaseResponse<String> = userService.withdraw()
+        suspend fun withDraw(): BaseResponse<String> = userService.withdraw()
 
-    suspend fun onboardingComplete(requestOnboardingDto: RequestPostOnboardingDto): BaseResponse<String> = userService.onboardingComplete(requestOnboardingDto = requestOnboardingDto)
-}
+        suspend fun onboardingComplete(requestOnboardingDto: RequestPostOnboardingDto): BaseResponse<String> = userService.onboardingComplete(requestOnboardingDto = requestOnboardingDto)
+    }

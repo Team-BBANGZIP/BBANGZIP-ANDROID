@@ -46,8 +46,8 @@ fun DummyScreen(
         items(
             drawables.filter {
                 it.first != "ic_launcher_foreground" &&
-                        it.first != "ic_launcher_background" &&
-                        it.first != "ic_dummy_x_24"
+                    it.first != "ic_launcher_background" &&
+                    it.first != "ic_dummy_x_24"
             },
         ) { (name, resId) ->
             Row(
