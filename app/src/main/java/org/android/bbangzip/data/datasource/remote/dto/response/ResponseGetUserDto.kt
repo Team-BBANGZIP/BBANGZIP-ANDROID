@@ -10,7 +10,7 @@ data class ResponseGetUserDto(
     val accessToken: String,
     @SerialName("refreshToken")
     val refreshToken: String,
-    @SerialName("isOnboardingComplete")
+    @SerialName("isSignUpComplete")
     val isSignUpComplete: Boolean,
 ) {
     fun toUserTokenInfo() =

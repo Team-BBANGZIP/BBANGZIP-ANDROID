@@ -5,6 +5,8 @@ import org.android.bbangzip.R
 import org.android.bbangzip.ui.theme.defaultBbangZipColor
 
 object OnboardingConstants {
+    @DrawableRes
+    val DEFAULT_PROFILE_IMG_RES_ID = R.drawable.ic_profile_default_100
 
     @DrawableRes
     val PROFILE_IMG_RES_IDS = listOf(

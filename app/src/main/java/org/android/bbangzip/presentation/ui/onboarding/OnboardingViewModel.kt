@@ -1,15 +1,24 @@
 package org.android.bbangzip.presentation.ui.onboarding
 
 import android.os.Parcelable
+import androidx.annotation.DrawableRes
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
+import org.android.bbangzip.domain.model.OnboardingInfo
+import org.android.bbangzip.domain.repository.UserRepository
 import org.android.bbangzip.presentation.common.base.BaseViewModel
+import org.android.bbangzip.presentation.common.util.constant.OnboardingConstants
+import org.android.bbangzip.presentation.common.util.constant.OnboardingConstants.DEFAULT_PROFILE_IMG_RES_ID
+import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
 class OnboardingViewModel
     @Inject
     constructor(
+        private val userRepository: UserRepository,
         savedStateHandle: SavedStateHandle,
     ) : BaseViewModel<OnboardingContract.OnboardingEvent, OnboardingContract.OnboardingState, OnboardingContract.OnboardingReduce, OnboardingContract.OnboardingSideEffect>(
             savedStateHandle = savedStateHandle,
@@ -74,6 +83,7 @@ class OnboardingViewModel
                 OnboardingContract.OnboardingEvent.OnClickSaveBtn -> {
                     if (currentUiState.isSaveBtnEnabled) {
                         setSideEffect(OnboardingContract.OnboardingSideEffect.NavigateToTodo)
+                        signup(currentUiState.nickname, currentUiState.profileImg)
                     }
                 }
             }
@@ -99,4 +109,34 @@ class OnboardingViewModel
                 is OnboardingContract.OnboardingReduce.UpdateSaveButtonEnabled -> state.copy(isSaveBtnEnabled = reduce.isEnabled)
             }
         }
+
+    private fun convertResIdToKey(@DrawableRes imgResId: Int): Int {
+        return when (imgResId) {
+            DEFAULT_PROFILE_IMG_RES_ID -> 0
+
+            else -> {
+                val index = OnboardingConstants.PROFILE_IMG_RES_IDS.indexOf(imgResId)
+                if (index != -1) {
+                    index + 1
+                } else {
+                    0
+                }
+            }
+        }
+    }
+
+    private fun signup(nickname: String, profileImgKey: Int = 0) {
+        viewModelScope.launch {
+            userRepository.onboardingComplete(
+                onboardingEntity = OnboardingInfo(
+                    nickname = nickname,
+                    img = convertResIdToKey(profileImgKey)
+                )
+            ).onSuccess {
+                Timber.d("[온보딩] 완료")
+            }.onFailure {
+                Timber.d("[온보딩] 실패")
+            }
+        }
+    } 
     }
