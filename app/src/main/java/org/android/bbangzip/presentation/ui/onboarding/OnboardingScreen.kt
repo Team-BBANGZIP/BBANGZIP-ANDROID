@@ -46,15 +46,15 @@ import org.android.bbangzip.ui.theme.defaultBbangZipTypography
 @Composable
 fun OnboardingScreen(
     state: OnboardingContract.OnboardingState,
-    nickname: String = "",
-    isNicknameInputBottomSheetVisible: Boolean = false,
-    isProfileImgBottomSheetVisible: Boolean = false,
-    isSaveBtnEnabled: Boolean = false,
     onNicknameChange: (String) -> Unit = {},
     onClickNicknameTextField: () -> Unit = {},
     onClickNicknameInputBottomSheetDismissRequest: () -> Unit = {},
+    onNicknameInputDoneAction: () -> Unit = {},
     onClickProfileImg: () -> Unit = {},
+    onSelectProfileImg: (Int) -> Unit = {},
     onClickProfileImgBottomSheetDismissRequest: () -> Unit = {},
+    onClickProfileImgCancelBtn: () -> Unit = {},
+    onClickProfileImgCompleteBtn: () -> Unit = {},
     onClickBackBtn: () -> Unit = {},
     onClickSaveBtn: () -> Unit = {},
 ) {
@@ -78,14 +78,14 @@ fun OnboardingScreen(
         Gap(height = 32.dp)
 
         ProfileImageArea(
-            currentProfileResId = state.selectedImg,
+            currentProfileResId = state.profileImg,
             onClick = onClickProfileImg
         )
 
         Gap(height = 48.dp)
 
         NicknameClickableField(
-            value = nickname,
+            value = state.nickname,
             onClick = onClickNicknameTextField,
             placeholder = R.string.onboarding_name_description
         )
@@ -96,7 +96,7 @@ fun OnboardingScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 24.dp),
-            enabled = isSaveBtnEnabled,
+            enabled = state.isSaveBtnEnabled,
             onClick = onClickSaveBtn,
             trailingIcon = {
                 Icon(
@@ -108,6 +108,9 @@ fun OnboardingScreen(
             colors =
                 BbangZipButtonDefaults.colors(
                     enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
+                    enabledContentColor = BbangZipTheme.color.staticWhite_FFFFFF,
+                    disabledContainerColor = BbangZipTheme.color.labelDisable_E4E2E0,
+                    disabledContentColor = BbangZipTheme.color.labelAssistive_C9C7C5
                 ),
             content = {
                 Text(
@@ -120,21 +123,21 @@ fun OnboardingScreen(
     }
 
     ProfileNicknameInputBottomSheet(
-        isBottomSheetVisible = isNicknameInputBottomSheetVisible,
+        isBottomSheetVisible = state.isNicknameBottomSheetVisible,
         onDismissRequest = onClickNicknameInputBottomSheetDismissRequest,
-        nickname = nickname,
+        nickname = state.nickname,
         focusManager = focusManager,
         onNicknameChange = onNicknameChange,
         onDoneAction = {}
     )
 
     ProfileImgPickerBottomSheet(
-        isBottomSheetVisible = isProfileImgBottomSheetVisible,
+        isBottomSheetVisible = state.isProfileImgBottomSheetVisible,
         onDismissRequest = onClickProfileImgBottomSheetDismissRequest,
-        onProfileImgItemClick = {},
-        onCancelClick = {},
-        onCompleteClick = {},
-        selectedImgResId = R.drawable.ic_profile_default_100
+        onProfileImgItemClick = onSelectProfileImg,
+        onCancelClick = onClickProfileImgCancelBtn,
+        onCompleteClick = onClickProfileImgCompleteBtn,
+        selectedImgResId = state.selectedImg
     )
 }
 

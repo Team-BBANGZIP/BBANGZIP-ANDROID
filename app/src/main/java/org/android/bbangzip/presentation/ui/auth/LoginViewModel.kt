@@ -5,9 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import org.android.bbangzip.UserPreferences
 import org.android.bbangzip.data.auth.service.KakaoAuthService
 import org.android.bbangzip.domain.repository.UserDefaultRepository
 import org.android.bbangzip.domain.repository.UserRepository
@@ -26,7 +24,6 @@ class LoginViewModel
     ) : BaseViewModel<LoginContract.LoginEvent, LoginContract.LoginState, LoginContract.LoginReduce, LoginContract.LoginSideEffect>(
             savedStateHandle = savedStateHandle,
         ) {
-        val userPreferencesFlow: Flow<UserPreferences> = userDefaultRepository.userPreferenceFlow
 
         init {
             startAnimation()
@@ -50,7 +47,6 @@ class LoginViewModel
                                 login(accessToken)
                             },
                         )
-                        setSideEffect(LoginContract.LoginSideEffect.NavigateToOnboarding)
                     }
                 }
             }
