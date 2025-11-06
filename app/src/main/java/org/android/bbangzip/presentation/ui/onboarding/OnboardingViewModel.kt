@@ -69,7 +69,8 @@ class OnboardingViewModel
                 }
 
                 OnboardingContract.OnboardingEvent.OnClickProfileImgCancelBtn,
-                OnboardingContract.OnboardingEvent.OnClickProfileImgBottomSheetDismissRequest -> {
+                OnboardingContract.OnboardingEvent.OnClickProfileImgBottomSheetDismissRequest,
+                    -> {
                     setSideEffect(OnboardingContract.OnboardingSideEffect.DismissProfileImgBottomSheet)
                     updateState(OnboardingContract.OnboardingReduce.UpdateSelectedProfileImg(currentUiState.profileImg))
                 }
@@ -110,7 +111,9 @@ class OnboardingViewModel
             }
         }
 
-    private fun convertResIdToKey(@DrawableRes imgResId: Int): Int {
+    private fun convertResIdToKey(
+        @DrawableRes imgResId: Int,
+    ): Int {
         return when (imgResId) {
             DEFAULT_PROFILE_IMG_RES_ID -> 0
 
@@ -125,18 +128,22 @@ class OnboardingViewModel
         }
     }
 
-    private fun signup(nickname: String, profileImgKey: Int = 0) {
+    private fun signup(
+        nickname: String,
+        profileImgKey: Int = 0,
+    ) {
         viewModelScope.launch {
             userRepository.onboardingComplete(
-                onboardingEntity = OnboardingInfo(
-                    nickname = nickname,
-                    img = convertResIdToKey(profileImgKey)
-                )
+                onboardingEntity =
+                    OnboardingInfo(
+                        nickname = nickname,
+                        img = convertResIdToKey(profileImgKey),
+                    ),
             ).onSuccess {
                 Timber.d("[온보딩] 완료")
             }.onFailure {
                 Timber.d("[온보딩] 실패")
             }
         }
-    } 
+    }
     }

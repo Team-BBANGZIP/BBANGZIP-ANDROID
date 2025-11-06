@@ -12,12 +12,9 @@ class OnboardingContract {
         val isNicknameValid: Boolean = false,
         val isNicknameBottomSheetVisible: Boolean = false,
         val isSaveBtnEnabled: Boolean = false,
-
         val profileImg: Int = R.drawable.ic_profile_default_100,
         val selectedImg: Int = R.drawable.ic_profile_default_100,
         val isProfileImgBottomSheetVisible: Boolean = false,
-
-
         val onboardingState: Boolean = false,
     ) : BaseContract.State, Parcelable {
         override fun toParcelable(): Parcelable = this
@@ -27,36 +24,49 @@ class OnboardingContract {
         data object OnClickPreviousBtn : OnboardingEvent
 
         data object OnClickNicknameTextField : OnboardingEvent
+
         data class OnChangeNickname(val input: String) : OnboardingEvent
+
         data object OnClickNicknameBottomSheetDismissRequest : OnboardingEvent
+
         data object OnNicknameInputDone : OnboardingEvent
+
         data object OnClickSaveBtn : OnboardingEvent
 
         data object OnClickProfileImgSettingBtn : OnboardingEvent
-        data object OnClickProfileImgBottomSheetDismissRequest : OnboardingEvent
-        data object OnClickProfileImgCancelBtn : OnboardingEvent
-        data object OnClickProfileImgCompleteBtn : OnboardingEvent
-        data class OnSelectProfileImg(val imgResId: Int) : OnboardingEvent
 
+        data object OnClickProfileImgBottomSheetDismissRequest : OnboardingEvent
+
+        data object OnClickProfileImgCancelBtn : OnboardingEvent
+
+        data object OnClickProfileImgCompleteBtn : OnboardingEvent
+
+        data class OnSelectProfileImg(val imgResId: Int) : OnboardingEvent
     }
 
     sealed interface OnboardingReduce : BaseContract.Reduce {
         data class UpdateState(val state: OnboardingState) : OnboardingReduce
+
         data class UpdateNickname(val nickname: String) : OnboardingReduce
+
         data class UpdateNicknameBottomSheetVisibility(val isVisible: Boolean) : OnboardingReduce
+
         data class UpdateSaveButtonEnabled(val isEnabled: Boolean) : OnboardingReduce
 
         data class UpdateProfileImgBottomSheetVisibility(val isVisible: Boolean) : OnboardingReduce
-        data class UpdateCurrentProfileImg(val imgResId: Int) : OnboardingReduce
-        data class UpdateSelectedProfileImg(val imgResId: Int) : OnboardingReduce
 
+        data class UpdateCurrentProfileImg(val imgResId: Int) : OnboardingReduce
+
+        data class UpdateSelectedProfileImg(val imgResId: Int) : OnboardingReduce
     }
 
     sealed interface OnboardingSideEffect : BaseContract.SideEffect {
         data object NavigateToTodo : OnboardingSideEffect
+
         data object NavigateToLogin : OnboardingSideEffect
 
         data object DismissProfileImgBottomSheet : OnboardingSideEffect
+
         data object DismissNicknameInputBottomSheet : OnboardingSideEffect
     }
 }

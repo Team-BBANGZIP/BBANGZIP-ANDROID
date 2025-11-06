@@ -35,7 +35,7 @@ fun ProfileNicknameInputBottomSheet(
     nickname: String,
     focusManager: FocusManager,
     onNicknameChange: (String) -> Unit,
-    onDoneAction: () -> Unit
+    onDoneAction: () -> Unit,
 ) {
     val focusRequester = remember { FocusRequester() }
 
@@ -59,9 +59,9 @@ fun ProfileNicknameInputBottomSheet(
                 focusRequester = focusRequester,
                 placeholder = R.string.onboarding_name_description,
                 onEnterClick = onDoneAction,
-                maxCharacter = 20
+                maxCharacter = 20,
             )
-        }
+        },
     )
 }
 

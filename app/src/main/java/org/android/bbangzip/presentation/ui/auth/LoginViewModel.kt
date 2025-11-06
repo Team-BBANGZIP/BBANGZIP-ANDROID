@@ -24,7 +24,6 @@ class LoginViewModel
     ) : BaseViewModel<LoginContract.LoginEvent, LoginContract.LoginState, LoginContract.LoginReduce, LoginContract.LoginSideEffect>(
             savedStateHandle = savedStateHandle,
         ) {
-
         init {
             startAnimation()
         }

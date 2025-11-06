@@ -54,7 +54,7 @@ fun ProfileImgPickerBottomSheet(
     onProfileImgItemClick: (Int) -> Unit,
     onCancelClick: () -> Unit,
     onCompleteClick: () -> Unit,
-    selectedImgResId: Int
+    selectedImgResId: Int,
 ) {
     BbangZipBottomSheetSlot(
         isBottomSheetVisible = isBottomSheetVisible,
@@ -70,16 +70,17 @@ fun ProfileImgPickerBottomSheet(
         },
         content = {
             Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 20.dp),
-                contentAlignment = Alignment.Center
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .padding(bottom = 20.dp),
+                contentAlignment = Alignment.Center,
             ) {
                 ProfileImgChip(
                     imageResId = selectedImgResId,
                     size = 100.dp,
                     isSelected = false,
-                    onClick = { }
+                    onClick = { },
                 )
             }
 
@@ -88,14 +89,14 @@ fun ProfileImgPickerBottomSheet(
             Column(
                 modifier = Modifier.fillMaxWidth(),
                 verticalArrangement = Arrangement.spacedBy(12.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
+                horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 OnboardingConstants.PROFILE_IMG_RES_IDS
                     .chunked(3)
                     .forEach { rowItems ->
                         Row(
                             modifier = Modifier.fillMaxWidth(),
-                            verticalAlignment = Alignment.CenterVertically
+                            verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Spacer(modifier = Modifier.weight(1f))
 
@@ -104,7 +105,7 @@ fun ProfileImgPickerBottomSheet(
                                     imageResId = imgResId,
                                     size = 60.dp,
                                     isSelected = imgResId == selectedImgResId,
-                                    onClick = { onProfileImgItemClick(imgResId) }
+                                    onClick = { onProfileImgItemClick(imgResId) },
                                 )
 
                                 if (index < rowItems.lastIndex) {
@@ -121,11 +122,11 @@ fun ProfileImgPickerBottomSheet(
 
             ProfileImgPickerBtn(
                 onCancelClick = onCancelClick,
-                onCompleteClick = onCompleteClick
+                onCompleteClick = onCompleteClick,
             )
 
             Gap(height = 27.dp)
-        }
+        },
     )
 }
 
@@ -193,15 +194,16 @@ private fun ProfileImgChip(
     val outlineWidth = 3.dp
     val outlineColor = OnboardingConstants.PROFILE_IMG_OUTLINE_COLORS.getOrElse(imageResId) { OnboardingConstants.DEFAULT_OUTLINE_COLOR }
 
-    val borderModifier = if (isSelected) {
-        Modifier.border(
-            width = outlineWidth,
-            color = outlineColor,
-            shape = CircleShape
-        )
-    } else {
-        Modifier
-    }
+    val borderModifier =
+        if (isSelected) {
+            Modifier.border(
+                width = outlineWidth,
+                color = outlineColor,
+                shape = CircleShape,
+            )
+        } else {
+            Modifier
+        }
 
     Box(
         modifier =
@@ -211,13 +213,13 @@ private fun ProfileImgChip(
                 .padding(outlineWidth)
                 .clip(CircleShape)
                 .noRippleClickable(onClick = onClick),
-        contentAlignment = Alignment.Center
+        contentAlignment = Alignment.Center,
     ) {
         Image(
             painter = painterResource(id = imageResId),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier.fillMaxSize(),
         )
     }
 }
@@ -256,7 +258,7 @@ private fun ProfileImgPickerBottomSheetPreview() {
             onCancelClick = { isBottomSheetVisible = false },
             // ViewModel에서는 OnCompleteClick에서 최종 저장 로직 넣을 것
             onCompleteClick = { isBottomSheetVisible = false },
-            selectedImgResId = selectedImg
+            selectedImgResId = selectedImg,
         )
     }
 }

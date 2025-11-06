@@ -38,6 +38,6 @@ fun OnboardingRoute(
         onClickProfileImgCancelBtn = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickProfileImgCancelBtn) },
         onClickProfileImgCompleteBtn = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickProfileImgCompleteBtn) },
         onClickBackBtn = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickPreviousBtn) },
-        onClickSaveBtn = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickSaveBtn) }
+        onClickSaveBtn = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickSaveBtn) },
     )
 }

@@ -61,11 +61,12 @@ fun OnboardingScreen(
     val focusManager = LocalFocusManager.current
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(defaultBbangZipColor.backgroundNormal_FFFFFF)
-            .windowInsetsPadding(WindowInsets.systemBars),
-        horizontalAlignment = Alignment.CenterHorizontally
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(defaultBbangZipColor.backgroundNormal_FFFFFF)
+                .windowInsetsPadding(WindowInsets.systemBars),
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         BbangZipBaseTopBar(
             title = "프로필 설정",
@@ -79,7 +80,7 @@ fun OnboardingScreen(
 
         ProfileImageArea(
             currentProfileResId = state.profileImg,
-            onClick = onClickProfileImg
+            onClick = onClickProfileImg,
         )
 
         Gap(height = 48.dp)
@@ -87,15 +88,16 @@ fun OnboardingScreen(
         NicknameClickableField(
             value = state.nickname,
             onClick = onClickNicknameTextField,
-            placeholder = R.string.onboarding_name_description
+            placeholder = R.string.onboarding_name_description,
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         BbangzipBaseButton(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 24.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
             enabled = state.isSaveBtnEnabled,
             onClick = onClickSaveBtn,
             trailingIcon = {
@@ -110,7 +112,7 @@ fun OnboardingScreen(
                     enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
                     enabledContentColor = BbangZipTheme.color.staticWhite_FFFFFF,
                     disabledContainerColor = BbangZipTheme.color.labelDisable_E4E2E0,
-                    disabledContentColor = BbangZipTheme.color.labelAssistive_C9C7C5
+                    disabledContentColor = BbangZipTheme.color.labelAssistive_C9C7C5,
                 ),
             content = {
                 Text(
@@ -119,7 +121,6 @@ fun OnboardingScreen(
                 )
             },
         )
-
     }
 
     ProfileNicknameInputBottomSheet(
@@ -128,7 +129,7 @@ fun OnboardingScreen(
         nickname = state.nickname,
         focusManager = focusManager,
         onNicknameChange = onNicknameChange,
-        onDoneAction = {}
+        onDoneAction = {},
     )
 
     ProfileImgPickerBottomSheet(
@@ -137,7 +138,7 @@ fun OnboardingScreen(
         onProfileImgItemClick = onSelectProfileImg,
         onCancelClick = onClickProfileImgCancelBtn,
         onCompleteClick = onClickProfileImgCompleteBtn,
-        selectedImgResId = state.selectedImg
+        selectedImgResId = state.selectedImg,
     )
 }
 
@@ -145,29 +146,32 @@ fun OnboardingScreen(
 private fun ProfileImageArea(
     @DrawableRes currentProfileResId: Int,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Box(
-        modifier = modifier
-            .size(100.dp)
-            .noRippleClickable(onClick = onClick)
+        modifier =
+            modifier
+                .size(100.dp)
+                .noRippleClickable(onClick = onClick),
     ) {
         Image(
             painter = painterResource(id = currentProfileResId),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(100.dp)
-                .clip(CircleShape)
-                .align(Alignment.Center)
+            modifier =
+                Modifier
+                    .size(100.dp)
+                    .clip(CircleShape)
+                    .align(Alignment.Center),
         )
 
         Image(
             painter = painterResource(R.drawable.ic_profile_with_circle_24),
             contentDescription = null,
-            modifier = Modifier
-                .size(24.dp)
-                .align(Alignment.BottomEnd)
+            modifier =
+                Modifier
+                    .size(24.dp)
+                    .align(Alignment.BottomEnd),
         )
     }
 }
@@ -179,36 +183,39 @@ private fun NicknameClickableField(
     @StringRes placeholder: Int,
     modifier: Modifier = Modifier,
 ) {
-    val textColor = if (value.isEmpty()) {
-        defaultBbangZipColor.labelAssistive_C9C7C5
-    } else {
-        defaultBbangZipColor.labelNormal_6B6560
-    }
+    val textColor =
+        if (value.isEmpty()) {
+            defaultBbangZipColor.labelAssistive_C9C7C5
+        } else {
+            defaultBbangZipColor.labelNormal_6B6560
+        }
 
-    val textToShow = if (value.isEmpty()) {
-        stringResource(placeholder)
-    } else {
-        value
-    }
+    val textToShow =
+        if (value.isEmpty()) {
+            stringResource(placeholder)
+        } else {
+            value
+        }
 
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)
-            .noRippleClickable(onClick = onClick)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp)
+                .noRippleClickable(onClick = onClick),
     ) {
         Text(
             text = textToShow,
             style = defaultBbangZipTypography.body1Medium,
             color = textColor,
-            modifier = Modifier.padding(start = 2.dp)
+            modifier = Modifier.padding(start = 2.dp),
         )
 
         Gap(height = 8.dp)
 
         HorizontalDivider(
             thickness = 2.dp,
-            color = defaultBbangZipColor.primaryNormal_897869
+            color = defaultBbangZipColor.primaryNormal_897869,
         )
     }
 }
