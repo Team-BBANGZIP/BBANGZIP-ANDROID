@@ -43,7 +43,7 @@ class OnboardingViewModel
                 }
 
                 OnboardingContract.OnboardingEvent.OnClickNicknameBottomSheetDismissRequest -> {
-                    setSideEffect(OnboardingContract.OnboardingSideEffect.DismissNicknameInputBottomSheet)
+                    updateState(OnboardingContract.OnboardingReduce.UpdateNicknameBottomSheetVisibility(isVisible = false))
                 }
 
                 OnboardingContract.OnboardingEvent.OnNicknameInputDone -> {
@@ -55,7 +55,7 @@ class OnboardingViewModel
                         updateState(OnboardingContract.OnboardingReduce.UpdateSaveButtonEnabled(false))
                     }
 
-                    setSideEffect(OnboardingContract.OnboardingSideEffect.DismissNicknameInputBottomSheet)
+                    updateState(OnboardingContract.OnboardingReduce.UpdateNicknameBottomSheetVisibility(isVisible = false))
                 }
 
                 // 프로필 이미지
@@ -68,16 +68,19 @@ class OnboardingViewModel
                     updateState(OnboardingContract.OnboardingReduce.UpdateSelectedProfileImg(event.imgResId))
                 }
 
-                OnboardingContract.OnboardingEvent.OnClickProfileImgCancelBtn,
-                OnboardingContract.OnboardingEvent.OnClickProfileImgBottomSheetDismissRequest,
-                    -> {
-                    setSideEffect(OnboardingContract.OnboardingSideEffect.DismissProfileImgBottomSheet)
+                OnboardingContract.OnboardingEvent.OnClickProfileImgCancelBtn -> {
+                    updateState(OnboardingContract.OnboardingReduce.UpdateProfileImgBottomSheetVisibility(isVisible = false))
+                    updateState(OnboardingContract.OnboardingReduce.UpdateSelectedProfileImg(currentUiState.profileImg))
+                }
+
+                OnboardingContract.OnboardingEvent.OnClickProfileImgBottomSheetDismissRequest -> {
+                    updateState(OnboardingContract.OnboardingReduce.UpdateProfileImgBottomSheetVisibility(isVisible = false))
                     updateState(OnboardingContract.OnboardingReduce.UpdateSelectedProfileImg(currentUiState.profileImg))
                 }
 
                 OnboardingContract.OnboardingEvent.OnClickProfileImgCompleteBtn -> {
+                    updateState(OnboardingContract.OnboardingReduce.UpdateProfileImgBottomSheetVisibility(isVisible = false))
                     updateState(OnboardingContract.OnboardingReduce.UpdateCurrentProfileImg(currentUiState.selectedImg))
-                    setSideEffect(OnboardingContract.OnboardingSideEffect.DismissProfileImgBottomSheet)
                 }
 
                 // 온보딩 완료

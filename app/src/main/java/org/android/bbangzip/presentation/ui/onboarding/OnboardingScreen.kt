@@ -69,7 +69,7 @@ fun OnboardingScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         BbangZipBaseTopBar(
-            title = "프로필 설정",
+            title = stringResource(R.string.onboarding_title),
             titleStyle = BbangZipTheme.typography.body1Medium,
             titleColor = BbangZipTheme.color.labelStrong_463D34,
             leadingIcon = R.drawable.ic_arrow_left_24,
@@ -129,7 +129,10 @@ fun OnboardingScreen(
         nickname = state.nickname,
         focusManager = focusManager,
         onNicknameChange = onNicknameChange,
-        onDoneAction = {},
+        onDoneAction = {
+            focusManager.clearFocus()
+            onNicknameInputDoneAction()
+        },
     )
 
     ProfileImgPickerBottomSheet(

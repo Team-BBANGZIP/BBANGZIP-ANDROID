@@ -32,11 +32,13 @@ fun OnboardingRoute(
         onClickNicknameTextField = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickNicknameTextField) },
         onClickNicknameInputBottomSheetDismissRequest = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickNicknameBottomSheetDismissRequest) },
         onNicknameInputDoneAction = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnNicknameInputDone) },
+
         onClickProfileImg = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickProfileImgSettingBtn) },
         onSelectProfileImg = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnSelectProfileImg(it)) },
         onClickProfileImgBottomSheetDismissRequest = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickProfileImgBottomSheetDismissRequest) },
         onClickProfileImgCancelBtn = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickProfileImgCancelBtn) },
         onClickProfileImgCompleteBtn = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickProfileImgCompleteBtn) },
+
         onClickBackBtn = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickPreviousBtn) },
         onClickSaveBtn = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickSaveBtn) },
     )
