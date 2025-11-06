@@ -104,7 +104,9 @@ fun BbangZipBaseTextField(
     var isFocused by remember { mutableStateOf(false) }
     val aspectRatio = 336f / 90f
     val heightModifier =
-        if (maxCharacter != null) {
+        if (maxCharacter == 20) {
+            Modifier
+        } else if (maxCharacter != null) {
             Modifier
                 .aspectRatio(aspectRatio)
         } else {

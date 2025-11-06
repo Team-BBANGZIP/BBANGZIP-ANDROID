@@ -10,6 +10,5 @@ data class OnboardingInfo(
         RequestPostOnboardingDto(
             nickname = nickname,
             profileImageKey = img,
-            platform = "KAKAO",
         )
 }

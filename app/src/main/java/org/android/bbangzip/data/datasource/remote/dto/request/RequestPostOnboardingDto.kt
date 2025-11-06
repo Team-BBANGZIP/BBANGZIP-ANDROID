@@ -7,8 +7,6 @@ import kotlinx.serialization.Serializable
 data class RequestPostOnboardingDto(
     @SerialName("nickname")
     val nickname: String,
-    @SerialName("platform")
-    val platform: String,
     @SerialName("profileImageKey")
     val profileImageKey: Int,
 )
