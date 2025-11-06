@@ -90,6 +90,7 @@ class TimerTodoViewModel
                     updateState(ClearAddTodoState)
                     updateState(UpdateAddTodoBottomSheetState(false))
                 }
+
                 is TimerTodoEvent.OnAddTodoDone -> {
                     if (event.todoContent.isNotBlank() && event.category != null) {
                         onTodoAdd(event.category.id, event.todoContent, event.startTime)

@@ -8,7 +8,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
 import org.android.bbangzip.presentation.common.model.Category
-import org.android.bbangzip.presentation.ui.managecategory.ManageCategoryContract.*
+import org.android.bbangzip.presentation.ui.managecategory.ManageCategoryContract.ManageCategoryEvent
+import org.android.bbangzip.presentation.ui.managecategory.ManageCategoryContract.ManageCategorySideEffect
 
 @Composable
 fun ManageCategoryRoute(

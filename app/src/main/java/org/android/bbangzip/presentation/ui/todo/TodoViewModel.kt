@@ -14,12 +14,18 @@ import org.android.bbangzip.presentation.common.model.Todo
 import org.android.bbangzip.presentation.common.util.extension.toYyyyMmDdString
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoEvent
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce
-import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.*
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategories
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategoriesAndFlatList
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateConfirmedCommitmentMessage
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateFlatList
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateIsAddTodoBottomSheetVisible
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateIsCommitmentBottomSheetVisible
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateIsMenuOpen
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateIsTimePickerBottomSheetVisible
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateSelectedDate
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateTextFieldCommitmentMessage
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateTodoState
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateTodoText
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoSideEffect
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoState
 import timber.log.Timber
@@ -201,6 +207,7 @@ class TodoViewModel
                         )
                     }
                 }
+
                 TodoEvent.OnAddTodoBottomSheetDismissRequest -> {
                     if (currentUiState.todoText.isNotBlank()) {
                         addTodo(
@@ -230,6 +237,7 @@ class TodoViewModel
                 is TodoEvent.OnTodoTextChange -> {
                     updateState(UpdateTodoText(event.todoText))
                 }
+
                 is TodoEvent.OnCategoryChipClick -> {
                     updateState(
                         UpdateTodoState(
@@ -240,21 +248,26 @@ class TodoViewModel
                         ),
                     )
                 }
+
                 TodoEvent.OnAddCategoryClick -> {
                     updateState(UpdateIsMenuOpen(false))
                     setSideEffect(TodoSideEffect.NavigateToAddCategory)
                 }
+
                 is TodoEvent.OnDateSelect -> {
                     updateState(UpdateSelectedDate(event.date))
                     getTodoList(event.date)
                 }
+
                 TodoEvent.OnManageCategoryClick -> {
                     updateState(UpdateIsMenuOpen(false))
                     setSideEffect(TodoSideEffect.NavigateToManageCategory)
                 }
+
                 TodoEvent.OnCommitmentAreaClick -> {
                     updateState(UpdateIsCommitmentBottomSheetVisible(true))
                 }
+
                 TodoEvent.OnCommitmentDone -> {
                     val prevCommitment = currentUiState.confirmedCommitmentMessage
                     updateState(UpdateConfirmedCommitmentMessage(commitmentMessage = currentUiState.textFieldCommitmentMessage))
@@ -269,9 +282,11 @@ class TodoViewModel
                             }
                     }
                 }
+
                 is TodoEvent.OnTextFieldCommitmentMessageChange -> {
                     updateState(UpdateTextFieldCommitmentMessage(commitmentMessage = event.text))
                 }
+
                 TodoEvent.OnCommitmentBottomSheetDismissRequest -> {
                     updateState(UpdateIsCommitmentBottomSheetVisible(false))
                 }
@@ -341,6 +356,7 @@ class TodoViewModel
                         }
                     }
                 }
+
                 TodoEvent.OnDeleteTodoButtonClick -> {
                     viewModelScope.launch {
                         val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
@@ -368,6 +384,7 @@ class TodoViewModel
                         }
                     }
                 }
+
                 TodoEvent.OnModifyTodoDateClick -> {
                     updateState(
                         UpdateTodoState(
@@ -381,6 +398,7 @@ class TodoViewModel
                         ),
                     )
                 }
+
                 TodoEvent.OnModifyTodoStartTimeClick -> {
                     updateState(
                         UpdateTodoState(
@@ -392,6 +410,7 @@ class TodoViewModel
                         ),
                     )
                 }
+
                 TodoEvent.OnMoveTodoToTomorrowClick -> {
                     viewModelScope.launch {
                         val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
@@ -421,6 +440,7 @@ class TodoViewModel
                         }
                     }
                 }
+
                 TodoEvent.OnRepeatTodoClick -> {
                     updateState(
                         UpdateTodoState(
@@ -433,6 +453,7 @@ class TodoViewModel
                         ),
                     )
                 }
+
                 TodoEvent.OnModifyTodoNameButtonClick -> {
                     updateState(
                         UpdateTodoState(
@@ -443,6 +464,7 @@ class TodoViewModel
                         ),
                     )
                 }
+
                 TodoEvent.OnEditTodoDone,
                 TodoEvent.OnEditTodoNameBottomSheetDismissRequest,
                 -> {
@@ -481,6 +503,7 @@ class TodoViewModel
                         }
                     }
                 }
+
                 is TodoEvent.OnCalendarCellClick -> {
                     updateState(
                         UpdateTodoState(
@@ -491,6 +514,7 @@ class TodoViewModel
                         ),
                     )
                 }
+
                 TodoEvent.OnSaveDateClick -> {
                     viewModelScope.launch {
                         val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
@@ -658,33 +682,43 @@ class TodoViewModel
                 is UpdateCategories -> {
                     state.copy(categories = reduce.categories)
                 }
+
                 is UpdateFlatList -> {
                     state.copy(flatList = reduce.flatList)
                 }
+
                 is UpdateCategoriesAndFlatList -> {
                     state.copy(categories = reduce.categories, flatList = reduce.flatList)
                 }
+
                 is UpdateIsMenuOpen -> {
                     state.copy(isMenuOpen = reduce.isMenuOpen)
                 }
+
                 is UpdateSelectedDate -> {
                     state.copy(selectedDate = reduce.selectedDate)
                 }
+
                 is TodoReduce.UpdateIsAddTodoBottomSheetVisible -> {
                     state.copy(isAddTodoBottomSheetVisible = reduce.isVisible)
                 }
+
                 is TodoReduce.UpdateIsTimePickerBottomSheetVisible -> {
                     state.copy(isTimePickerBottomSheetVisible = reduce.isVisible)
                 }
+
                 is TodoReduce.UpdateSelectedCategory -> {
                     state.copy(selectedCategory = reduce.category)
                 }
+
                 is TodoReduce.UpdateSelectedStartTime -> {
                     state.copy(selectedStartTime = reduce.startTime)
                 }
+
                 is TodoReduce.UpdateTodoText -> {
                     state.copy(todoText = reduce.todoText)
                 }
+
                 TodoReduce.ClearAddTodoState -> {
                     state.copy(
                         todoText = "",
@@ -692,12 +726,15 @@ class TodoViewModel
                         selectedStartTime = null,
                     )
                 }
+
                 is TodoReduce.UpdateIsCommitmentBottomSheetVisible -> {
                     state.copy(isCommitmentBottomSheetVisible = reduce.isVisible)
                 }
+
                 is TodoReduce.UpdateTextFieldCommitmentMessage -> {
                     state.copy(textFieldCommitmentMessage = reduce.commitmentMessage)
                 }
+
                 is TodoReduce.UpdateConfirmedCommitmentMessage -> {
                     state.copy(confirmedCommitmentMessage = reduce.commitmentMessage)
                 }
@@ -738,6 +775,7 @@ class TodoViewModel
                     is ListItem.CategoryItem -> {
                         currentCategory = item
                     }
+
                     is ListItem.TodoItem -> {
                         currentCategory?.let { catItem ->
                             val correctCategory = catItem.category
@@ -778,6 +816,7 @@ class TodoViewModel
                         currentCategory = item.category
                         currentTodos = mutableListOf()
                     }
+
                     is ListItem.TodoItem -> {
                         currentTodos.add(item.todo)
                     }

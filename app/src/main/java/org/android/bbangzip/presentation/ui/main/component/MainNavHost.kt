@@ -5,11 +5,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import org.android.bbangzip.presentation.ui.addcategory.navigation.addCategoryNavGraph
+import org.android.bbangzip.presentation.ui.auth.loginNavGraph
 import org.android.bbangzip.presentation.ui.editcategory.navigation.editCategoryNavGraph
 import org.android.bbangzip.presentation.ui.friend.navigation.friendNavGraph
 import org.android.bbangzip.presentation.ui.main.MainNavigator
 import org.android.bbangzip.presentation.ui.managecategory.navigation.manageCategoryNavGraph
 import org.android.bbangzip.presentation.ui.my.navigation.myNavGraph
+import org.android.bbangzip.presentation.ui.onboarding.onboardingNavGraph
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 import org.android.bbangzip.presentation.ui.timer.navigation.timerNavGraph
 import org.android.bbangzip.presentation.ui.timer.navigation.timerTodoNavGraph
@@ -26,6 +28,16 @@ fun MainNavHost(
         navController = navigator.navHostController,
         startDestination = navigator.startDestination,
     ) {
+        loginNavGraph(
+            navigateToTodo = navigator::navigateToTodoAfterLogin,
+            navigateToOnboarding = navigator::navigateToOnboarding,
+        )
+
+        onboardingNavGraph(
+            navigateToTodo = navigator::navigateToTodoAfterLogin,
+            navigateToLogin = navigator::navigateToLoginAndClearStack,
+        )
+
         timerNavGraph(
             sharedViewModel = sharedViewModel,
             navigateToTimerTodo = navigator::navigateToTimerTodo,

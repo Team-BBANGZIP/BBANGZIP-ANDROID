@@ -50,9 +50,11 @@ class ManageCategoryViewModel
                             }
                     }
                 }
+
                 is ManageCategoryEvent.OnCategoryChipClick -> {
                     setSideEffect(ManageCategorySideEffect.NavigateToEditCategory(event.category))
                 }
+
                 is ManageCategoryEvent.OnCategoryChipDragEnd -> {
                     val reorderedList = reorderList(event.from, event.to)
                     updateState(ManageCategoryReduce.UpdateCategories(categories = reorderedList))
@@ -66,9 +68,11 @@ class ManageCategoryViewModel
                         }
                     }
                 }
+
                 ManageCategoryEvent.OnTopBarLeadingIconClick -> {
                     setSideEffect(ManageCategorySideEffect.PopBackStack)
                 }
+
                 ManageCategoryEvent.OnTopBarTrailingIconClick -> {
                     setSideEffect(ManageCategorySideEffect.NavigateToAddCategory)
                 }

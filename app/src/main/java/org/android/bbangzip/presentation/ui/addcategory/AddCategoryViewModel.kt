@@ -7,7 +7,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.android.bbangzip.domain.repository.CategoryRepository
 import org.android.bbangzip.presentation.common.base.BaseViewModel
-import org.android.bbangzip.presentation.ui.addcategory.AddCategoryContract.*
+import org.android.bbangzip.presentation.ui.addcategory.AddCategoryContract.AddCategoryEvent
+import org.android.bbangzip.presentation.ui.addcategory.AddCategoryContract.AddCategoryReduce
+import org.android.bbangzip.presentation.ui.addcategory.AddCategoryContract.AddCategorySideEffect
+import org.android.bbangzip.presentation.ui.addcategory.AddCategoryContract.AddCategoryState
 import javax.inject.Inject
 
 @HiltViewModel
@@ -27,19 +30,24 @@ class AddCategoryViewModel
                     updateState(AddCategoryReduce.UpdatedCategoryNameInput(event.categoryNameInput))
                     updateState(AddCategoryReduce.UpdatedIsDoneEnable(isValidToComplete(event.categoryNameInput)))
                 }
+
                 is AddCategoryEvent.OnColorItemClick -> {
                     updateState(AddCategoryReduce.UpdatedSelectedColorString(event.colorString))
                     updateState(AddCategoryReduce.UpdatedIsColorPickerBottomSheetVisible(false))
                 }
+
                 AddCategoryEvent.OnColorPickerBottomSheetDismissRequest -> {
                     updateState(AddCategoryReduce.UpdatedIsColorPickerBottomSheetVisible(false))
                 }
+
                 AddCategoryEvent.OnColorSettingRowActionIconClick -> {
                     updateState(AddCategoryReduce.UpdatedIsColorPickerBottomSheetVisible(true))
                 }
+
                 AddCategoryEvent.OnTopBarLeadingIconClick -> {
                     setSideEffect(AddCategorySideEffect.PopBackStack)
                 }
+
                 AddCategoryEvent.OnTopBarTrailingIconClick -> {
                     viewModelScope.launch {
                         categoryRepository.addCategory(
@@ -63,12 +71,15 @@ class AddCategoryViewModel
                 is AddCategoryReduce.UpdatedCategoryNameInput -> {
                     return state.copy(categoryNameInput = reduce.categoryNameInput)
                 }
+
                 is AddCategoryReduce.UpdatedIsColorPickerBottomSheetVisible -> {
                     return state.copy(isColorPickerBottomSheetVisible = reduce.isColorPickerBottomSheetVisible)
                 }
+
                 is AddCategoryReduce.UpdatedIsDoneEnable -> {
                     return state.copy(isDoneEnable = reduce.isDoneEnable)
                 }
+
                 is AddCategoryReduce.UpdatedSelectedColorString -> {
                     return state.copy(selectedColorString = reduce.selectedColorString)
                 }

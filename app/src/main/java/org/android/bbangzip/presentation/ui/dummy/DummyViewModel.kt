@@ -7,7 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import org.android.bbangzip.UserPreferences
-import org.android.bbangzip.domain.repository.UserRepository
+import org.android.bbangzip.domain.repository.UserDefaultRepository
 import org.android.bbangzip.domain.usecase.FetchDummyUseCase
 import org.android.bbangzip.presentation.common.base.BaseViewModel
 import javax.inject.Inject
@@ -16,21 +16,21 @@ import javax.inject.Inject
 class DummyViewModel
     @Inject
     constructor(
-        private val userRepository: UserRepository,
+        private val userDefaultRepository: UserDefaultRepository,
         private val fetchDummyUseCase: FetchDummyUseCase,
         savedStateHandle: SavedStateHandle,
     ) : BaseViewModel<DummyContract.DummyEvent, DummyContract.DummyState, DummyContract.DummyReduce, DummyContract.DummySideEffect>(
             savedStateHandle = savedStateHandle,
         ) {
-        val userPreferencesFlow: Flow<UserPreferences> = userRepository.userPreferenceFlow
+        val userPreferencesFlow: Flow<UserPreferences> = userDefaultRepository.userPreferenceFlow
 
         fun setUserData(accessToken: String) {
-            viewModelScope.launch { userRepository.setAccessToken(accessToken) }
+            viewModelScope.launch { userDefaultRepository.setAccessToken(accessToken) }
         }
 
         fun clearAccessToken() {
             viewModelScope.launch {
-                userRepository.clearAccessToken()
+                userDefaultRepository.clearAccessToken()
             }
         }
 

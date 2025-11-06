@@ -3,7 +3,6 @@ package org.android.bbangzip.data.datasource.remote.dto.response
 import kotlinx.serialization.Serializable
 import org.android.bbangzip.domain.model.BreadInfo
 import org.android.bbangzip.domain.model.BreadList
-import kotlin.collections.map
 
 @Serializable
 data class ResponseBreadListDto(

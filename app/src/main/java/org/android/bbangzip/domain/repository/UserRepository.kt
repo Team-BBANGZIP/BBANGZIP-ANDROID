@@ -1,18 +1,17 @@
 package org.android.bbangzip.domain.repository
 
-import kotlinx.coroutines.flow.Flow
-import org.android.bbangzip.UserPreferences
+import org.android.bbangzip.domain.model.OnboardingInfo
+import org.android.bbangzip.domain.model.ReissueToken
+import org.android.bbangzip.domain.model.UserTokenInfo
 
 interface UserRepository {
-    val userPreferenceFlow: Flow<UserPreferences>
+    suspend fun login(code: String): Result<UserTokenInfo>
 
-    suspend fun setAccessToken(accessToken: String)
+    suspend fun reissue(): Result<ReissueToken>
 
-    suspend fun clearAccessToken()
+    suspend fun logout(): Result<String>
 
-    suspend fun setRefreshToken(refreshToken: String)
+    suspend fun withdraw(): Result<String>
 
-    suspend fun clearRefreshToken()
-
-    suspend fun setIsLogin(isLogin: Boolean)
+    suspend fun onboardingComplete(onboardingEntity: OnboardingInfo): Result<String>
 }

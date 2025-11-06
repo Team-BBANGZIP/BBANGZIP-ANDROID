@@ -7,8 +7,16 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.android.bbangzip.domain.repository.CategoryRepository
 import org.android.bbangzip.presentation.common.base.BaseViewModel
-import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.*
-import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.EditCategoryReduce.*
+import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.EditCategoryEvent
+import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.EditCategoryReduce
+import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.EditCategoryReduce.UpdateCategoryNameInput
+import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.EditCategoryReduce.UpdateEditCategoryState
+import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.EditCategoryReduce.UpdateIsCategoryStopped
+import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.EditCategoryReduce.UpdateIsColorPickerBottomSheetVisible
+import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.EditCategoryReduce.UpdateIsConfirmEnable
+import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.EditCategoryReduce.UpdateSelectedColorString
+import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.EditCategorySideEffect
+import org.android.bbangzip.presentation.ui.editcategory.EditCategoryContract.EditCategoryState
 import javax.inject.Inject
 
 @HiltViewModel
@@ -38,23 +46,29 @@ class EditCategoryViewModel
                         ),
                     )
                 }
+
                 EditCategoryEvent.OnBackIconClick -> {
                     setSideEffect(EditCategorySideEffect.PopBackStack)
                 }
+
                 is EditCategoryEvent.OnCategoryNameInputChange -> {
                     updateState(UpdateCategoryNameInput(event.categoryNameInput))
                     updateState(UpdateIsConfirmEnable(isValidConfirm(event.categoryNameInput)))
                 }
+
                 is EditCategoryEvent.OnColorItemClick -> {
                     updateState(UpdateSelectedColorString(event.colorString))
                     updateState(UpdateIsColorPickerBottomSheetVisible(false))
                 }
+
                 EditCategoryEvent.OnColorPickerBottomSheetDismissRequest -> {
                     updateState(UpdateIsColorPickerBottomSheetVisible(false))
                 }
+
                 EditCategoryEvent.OnColorSettingRowActionIconClick -> {
                     updateState(UpdateIsColorPickerBottomSheetVisible(true))
                 }
+
                 EditCategoryEvent.OnConfirmButtonClick -> {
                     viewModelScope.launch {
                         categoryRepository.modifyCategory(
@@ -70,6 +84,7 @@ class EditCategoryViewModel
                         }
                     }
                 }
+
                 EditCategoryEvent.OnDeleteButtonClick -> {
                     updateState(
                         UpdateEditCategoryState(
@@ -79,6 +94,7 @@ class EditCategoryViewModel
                         ),
                     )
                 }
+
                 EditCategoryEvent.OnStopRowSwitchClick -> {
                     updateState(UpdateIsCategoryStopped(!currentUiState.isCategoryStopped))
                 }
@@ -104,6 +120,7 @@ class EditCategoryViewModel
                             }
                     }
                 }
+
                 EditCategoryEvent.OnDeleteConfirmationBottomSheetDismissRequest -> {
                     updateState(
                         UpdateEditCategoryState(
@@ -124,18 +141,23 @@ class EditCategoryViewModel
                 is EditCategoryReduce.UpdateEditCategoryState -> {
                     return reduce.editCategoryState
                 }
+
                 is EditCategoryReduce.UpdateCategoryNameInput -> {
                     return state.copy(categoryNameInput = reduce.categoryNameInput)
                 }
+
                 is EditCategoryReduce.UpdateIsCategoryStopped -> {
                     return state.copy(isCategoryStopped = reduce.isCategoryStopped)
                 }
+
                 is EditCategoryReduce.UpdateIsColorPickerBottomSheetVisible -> {
                     return state.copy(isColorPickerBottomSheetVisible = reduce.isColorPickerBottomSheetVisible)
                 }
+
                 is EditCategoryReduce.UpdateIsConfirmEnable -> {
                     return state.copy(isConfirmEnable = reduce.isConfirmEnable)
                 }
+
                 is EditCategoryReduce.UpdateSelectedColorString -> {
                     return state.copy(selectedColorString = reduce.selectedColorString)
                 }
