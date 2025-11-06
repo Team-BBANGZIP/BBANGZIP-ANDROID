@@ -11,7 +11,7 @@ import kotlinx.coroutines.flow.collectLatest
 fun OnboardingRoute(
     navigateToTodo: () -> Unit,
     navigateToLogin: () -> Unit,
-    viewModel: OnboardingViewModel = hiltViewModel()
+    viewModel: OnboardingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 

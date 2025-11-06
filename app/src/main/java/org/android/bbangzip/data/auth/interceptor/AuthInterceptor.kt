@@ -15,11 +15,12 @@ import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants
 import org.android.bbangzip.domain.repository.UserDefaultRepository
 import javax.inject.Inject
 
-
-class AuthInterceptor @Inject constructor(
+class AuthInterceptor
+@Inject
+constructor(
     private val json: Json,
     private val userDefaultRepository: UserDefaultRepository,
-    private val authEventManager: AuthEventManager
+    private val authEventManager: AuthEventManager,
 ) : Interceptor {
     private fun getUserPreferences(): UserPreferences? {
         return runBlocking {

@@ -1,6 +1,5 @@
 package org.android.bbangzip.presentation.ui.auth
 
-
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.EaseOut
@@ -29,7 +28,6 @@ import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.button.BbangZipButtonDefaults
 import org.android.bbangzip.presentation.common.component.button.BbangzipBaseButton
-
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
@@ -109,17 +107,18 @@ fun LoginScreen(
                         imageVector = ImageVector.vectorResource(R.drawable.ic_kakao_14_15),
                         contentDescription = null,
                         modifier = Modifier.size(20.dp),
-                        tint = BbangZipTheme.color.kakaoBlack_0000D9
+                        tint = BbangZipTheme.color.kakaoBlack_0000D9,
                     )
                 },
-                colors = BbangZipButtonDefaults.colors(
-                    enabledContainerColor = BbangZipTheme.color.kakaoYellow_FEE500,
-                ),
+                colors =
+                    BbangZipButtonDefaults.colors(
+                        enabledContainerColor = BbangZipTheme.color.kakaoYellow_FEE500,
+                    ),
                 content = {
                     Text(
                         text = stringResource(R.string.auth_kakao_login),
                         style = BbangZipTheme.typography.body1Bold,
-                        color = BbangZipTheme.color.kakaoBlack_0000D9
+                        color = BbangZipTheme.color.kakaoBlack_0000D9,
                     )
                 },
             )

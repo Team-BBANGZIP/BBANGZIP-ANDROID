@@ -7,18 +7,14 @@ import org.android.bbangzip.presentation.common.base.BaseContract
 class OnboardingContract {
     @Parcelize
     data class OnboardingState(
-        val onboardingState: Boolean = false
+        val onboardingState: Boolean = false,
     ) : BaseContract.State, Parcelable {
         override fun toParcelable(): Parcelable = this
     }
 
-    sealed interface OnboardingEvent : BaseContract.Event {
+    sealed interface OnboardingEvent : BaseContract.Event
 
-    }
-
-    sealed interface OnboardingReduce : BaseContract.Reduce {
-
-    }
+    sealed interface OnboardingReduce : BaseContract.Reduce
 
     sealed interface OnboardingSideEffect : BaseContract.SideEffect {
         data object NavigateToTodo : OnboardingSideEffect

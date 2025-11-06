@@ -22,13 +22,15 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideDeviceInfo(@ApplicationContext context: Context): DeviceInfo {
+    fun provideDeviceInfo(
+        @ApplicationContext context: Context,
+    ): DeviceInfo {
         val appVersion = context.packageManager.getPackageInfo(context.packageName, 0).versionName
         val deviceType = getDeviceType(context)
 
         return DeviceInfoManager.getDeviceInfo(
             appVersion = appVersion!!,
-            deviceType = deviceType
+            deviceType = deviceType,
         )
     }
 }

@@ -14,7 +14,7 @@ class UserRepositoryImpl
 @Inject
 constructor(
     private val userRemoteDataSource: UserRemoteDataSource,
-    private val deviceInfo: DeviceInfo
+    private val deviceInfo: DeviceInfo,
 ) : UserRepository {
     override suspend fun login(code: String): Result<UserTokenInfo> =
         runCatching {

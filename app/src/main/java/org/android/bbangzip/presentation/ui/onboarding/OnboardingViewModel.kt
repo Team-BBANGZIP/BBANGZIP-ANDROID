@@ -10,21 +10,21 @@ import javax.inject.Inject
 class OnboardingViewModel
 @Inject
 constructor(
-    savedStateHandle: SavedStateHandle
+    savedStateHandle: SavedStateHandle,
 ) : BaseViewModel<OnboardingContract.OnboardingEvent, OnboardingContract.OnboardingState, OnboardingContract.OnboardingReduce, OnboardingContract.OnboardingSideEffect>(
-    savedStateHandle = savedStateHandle
+    savedStateHandle = savedStateHandle,
 ) {
     override fun createInitialState(savedState: Parcelable?): OnboardingContract.OnboardingState {
         return savedState as? OnboardingContract.OnboardingState ?: OnboardingContract.OnboardingState()
     }
 
     override fun handleEvent(event: OnboardingContract.OnboardingEvent) {
-
     }
 
-    override fun reduceState(state: OnboardingContract.OnboardingState, reduce: OnboardingContract.OnboardingReduce): OnboardingContract.OnboardingState {
+    override fun reduceState(
+        state: OnboardingContract.OnboardingState,
+        reduce: OnboardingContract.OnboardingReduce,
+    ): OnboardingContract.OnboardingState {
         TODO("Not yet implemented")
     }
-
-
 }

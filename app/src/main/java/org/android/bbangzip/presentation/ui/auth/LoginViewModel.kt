@@ -1,6 +1,5 @@
 package org.android.bbangzip.presentation.ui.auth
 
-
 import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope

@@ -30,12 +30,12 @@ fun MainNavHost(
     ) {
         loginNavGraph(
             navigateToTodo = navigator::navigateToTodoAfterLogin,
-            navigateToOnboarding = navigator::navigateToOnboarding
+            navigateToOnboarding = navigator::navigateToOnboarding,
         )
 
         onboardingNavGraph(
             navigateToTodo = navigator::navigateToTodoAfterLogin,
-            navigateToLogin = navigator::navigateToLoginAndClearStack
+            navigateToLogin = navigator::navigateToLoginAndClearStack,
         )
 
         timerNavGraph(

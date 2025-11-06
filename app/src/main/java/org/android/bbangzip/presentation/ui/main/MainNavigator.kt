@@ -66,12 +66,13 @@ class MainNavigator(
 
     fun navigateToTodoAfterLogin() {
         navHostController.navigateToTodo(
-            navOptions = navOptions {
-                popUpTo(LoginRoute::class.qualifiedName.orEmpty()) {
-                    inclusive = true
-                }
-                launchSingleTop = true
-            }
+            navOptions =
+                navOptions {
+                    popUpTo(LoginRoute::class.qualifiedName.orEmpty()) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                },
         )
     }
 
@@ -127,12 +128,13 @@ class MainNavigator(
     fun navigateToLoginAndClearStack() {
         navHostController.navigate(
             route = LoginRoute,
-            navOptions = navOptions {
-                popUpTo(navHostController.graph.findStartDestination().id) {
-                    inclusive = true
-                }
-                launchSingleTop = true
-            }
+            navOptions =
+                navOptions {
+                    popUpTo(navHostController.graph.findStartDestination().id) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                },
         )
     }
 
