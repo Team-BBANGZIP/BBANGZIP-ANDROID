@@ -24,6 +24,7 @@ data class BbangZipTypography(
     val title1SemiBold: TextStyle,
     val title2Medium: TextStyle,
     val title3SemiBold: TextStyle,
+    val title4SemiBold: TextStyle,
     // Subtitle
     val subTitle1Medium: TextStyle,
     val subTitle2Regular: TextStyle,
@@ -89,6 +90,12 @@ val defaultBbangZipTypography =
                 fontFamily = pretendardSemiBold,
                 lineHeight = 19.2.sp,
                 letterSpacing = (-0.48).sp,
+            ),
+        title4SemiBold =
+            TextStyle(
+                fontSize = 18.sp,
+                fontFamily = pretendardSemiBold,
+                lineHeight = 25.2.sp
             ),
         // Subtitle
         subTitle1Medium =
