@@ -29,6 +29,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
+import org.android.bbangzip.presentation.common.component.bottomsheet.TwoButtonBottomSheet
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BbangZipTheme
@@ -44,7 +45,13 @@ fun MyScreen(
     onClickFeedback: () -> Unit,
     onClickAppReview: () -> Unit,
     onClickLogoutBtn: () -> Unit,
-    onClickWithdrawalBtn: () -> Unit
+    onConfirmLogoutBtn: () -> Unit,
+    onCancelLogoutBtn: () -> Unit,
+    onClickLogoutBottomSheetDismissRequest: () -> Unit,
+    onClickWithdrawalBtn: () -> Unit,
+    onConfirmWithdrawalBtn: () -> Unit,
+    onCancelWithdrawalBtn: () -> Unit,
+    onClickWithdrawalBottomSheetDismissRequest: () -> Unit
 ) {
     LazyColumn(
         modifier = Modifier
@@ -166,6 +173,28 @@ fun MyScreen(
             )
         }
     }
+
+    TwoButtonBottomSheet(
+        title = stringResource(R.string.my_logout_title),
+        description = stringResource(R.string.my_logout_descriptoin),
+        isBottomSheetVisible = state.isLogoutConfirmBottomSheetVisible,
+        onDismissRequest = onClickLogoutBottomSheetDismissRequest,
+        completeBtnTitle = stringResource(R.string.button_label_logout),
+        cancelBtnTitle = stringResource(R.string.button_label_cancellation),
+        onCancelClick = onCancelLogoutBtn,
+        onCompleteClick = onConfirmLogoutBtn,
+    )
+
+    TwoButtonBottomSheet(
+        title = stringResource(R.string.my_withdrawal_title),
+        description = stringResource(R.string.my_withdrawal_description),
+        completeBtnTitle = stringResource(R.string.button_label_withdrawal),
+        cancelBtnTitle = stringResource(R.string.button_label_cancellation),
+        isBottomSheetVisible = state.isWithdrawalConfirmBottomSheetVisible,
+        onDismissRequest = onClickWithdrawalBottomSheetDismissRequest,
+        onCancelClick = onCancelWithdrawalBtn,
+        onCompleteClick = onConfirmWithdrawalBtn,
+    )
 }
 
 @Composable

@@ -32,7 +32,9 @@ class MyContract {
         data object OnClickReviewApp : MyEvent
 
         data object OnClickLogoutBtn : MyEvent
+        data object OnClickLogoutBottomSheetDismissRequest : MyEvent
         data object OnClickWithdrawalBtn : MyEvent
+        data object OnClickWithdrawalBottomSheetDismissRequest : MyEvent
 
         data object OnConfirmLogout : MyEvent
         data object OnCancelLogoutBottomSheet : MyEvent
