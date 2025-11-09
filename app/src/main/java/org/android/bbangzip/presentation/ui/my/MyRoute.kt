@@ -3,11 +3,15 @@ package org.android.bbangzip.presentation.ui.my
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
+import org.android.bbangzip.presentation.common.util.extension.openStore
+import org.android.bbangzip.presentation.common.util.extension.openUrl
+
 
 @Composable
 fun MyRoute(
@@ -17,6 +21,7 @@ fun MyRoute(
     viewModel: MyViewModel = hiltViewModel()
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+    val context = LocalContext.current
 
     LaunchedEffect(viewModel.uiSideEffect) {
         viewModel.uiSideEffect.collectLatest { effect ->
@@ -24,10 +29,10 @@ fun MyRoute(
                 MyContract.MySideEffect.NavigateToProfileEdit -> navigateToProfileEdit()
                 MyContract.MySideEffect.NavigateToScreenSetting -> navigateToScreenSetting()
                 MyContract.MySideEffect.NavigateToLogin -> navigateToLogin()
-                MyContract.MySideEffect.OpenAppStoreReview -> TODO()
-                MyContract.MySideEffect.OpenCustomerCenterWeb -> TODO()
-                MyContract.MySideEffect.OpenFeedbackForm -> TODO()
-                MyContract.MySideEffect.OpenTermsOfServiceWeb -> TODO()
+                MyContract.MySideEffect.OpenAppStoreReview -> openStore(context)
+                MyContract.MySideEffect.OpenCustomerCenterWeb -> openUrl(context, "")
+                MyContract.MySideEffect.OpenFeedbackForm -> openUrl(context, "")
+                MyContract.MySideEffect.OpenTermsOfServiceWeb -> openUrl(context, "")
             }
         }
     }
