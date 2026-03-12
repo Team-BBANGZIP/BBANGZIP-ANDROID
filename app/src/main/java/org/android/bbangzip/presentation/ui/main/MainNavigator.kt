@@ -18,7 +18,6 @@ import org.android.bbangzip.presentation.ui.addcategory.navigation.navigateToAdd
 import org.android.bbangzip.presentation.ui.auth.LoginRoute
 import org.android.bbangzip.presentation.ui.auth.navigateToLogin
 import org.android.bbangzip.presentation.ui.editcategory.navigation.navigateToEditCategory
-import org.android.bbangzip.presentation.ui.friend.navigation.navigateToFriend
 import org.android.bbangzip.presentation.ui.managecategory.navigation.navigateToManageCategory
 import org.android.bbangzip.presentation.ui.my.navigation.navigateToMy
 import org.android.bbangzip.presentation.ui.onboarding.navigateToOnboarding
@@ -58,7 +57,6 @@ class MainNavigator(
             when (bottomNavigationType) {
                 BottomNavigationType.TIMER -> navigateToTimer(navOptions)
                 BottomNavigationType.TODO -> navigateToTodo(navOptions)
-                BottomNavigationType.FRIEND -> navigateToFriend(navOptions)
                 BottomNavigationType.MY -> navigateToMy(navOptions)
             }
         }
@@ -82,10 +80,6 @@ class MainNavigator(
 
     fun navigateToOnboarding() {
         navHostController.navigateToOnboarding()
-    }
-
-    private fun navigateToFriend(navOptions: NavOptions) {
-        navHostController.navigateToFriend(navOptions)
     }
 
     private fun navigateToMy(navOptions: NavOptions) {

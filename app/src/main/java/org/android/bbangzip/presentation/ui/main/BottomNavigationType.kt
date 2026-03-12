@@ -22,11 +22,6 @@ enum class BottomNavigationType(
         bottomNaviTitle = R.string.bottom_navi_todo_tab_title,
         route = BottomNavigationRoute.Todo,
     ),
-    FRIEND(
-        bottomNaviIcon = R.drawable.ic_bubble_default_24,
-        bottomNaviTitle = R.string.bottom_navi_friend_tab_title,
-        route = BottomNavigationRoute.Friend,
-    ),
     MY(
         bottomNaviIcon = R.drawable.ic_person_default_24,
         bottomNaviTitle = R.string.bottom_navi_my_title,

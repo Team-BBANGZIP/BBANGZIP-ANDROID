@@ -7,7 +7,6 @@ import androidx.navigation.compose.NavHost
 import org.android.bbangzip.presentation.ui.addcategory.navigation.addCategoryNavGraph
 import org.android.bbangzip.presentation.ui.auth.loginNavGraph
 import org.android.bbangzip.presentation.ui.editcategory.navigation.editCategoryNavGraph
-import org.android.bbangzip.presentation.ui.friend.navigation.friendNavGraph
 import org.android.bbangzip.presentation.ui.main.MainNavigator
 import org.android.bbangzip.presentation.ui.managecategory.navigation.manageCategoryNavGraph
 import org.android.bbangzip.presentation.ui.my.navigation.myNavGraph
@@ -55,8 +54,6 @@ fun MainNavHost(
         )
 
         myNavGraph()
-
-        friendNavGraph()
 
         manageCategoryNavGraph(
             popBackStack = navigator::popBackStack,
