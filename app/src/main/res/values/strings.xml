@@ -19,6 +19,7 @@
     <string name="button_label_initialize">초기화 하기</string>
     <string name="button_label_exit">종료 하기</string>
     <string name="button_label_cancellation">취소</string>
+    <string name="button_label_cancel">취소하기</string>
     <string name="button_label_complete">완료</string>
     <string name="button_label_setting">설정</string>
     <string name="button_label_delete">삭제하기</string>
@@ -171,9 +172,9 @@
     <string name="my_withdrawal">회원 탈퇴</string>
 
     <string name="my_logout_title">정말 로그아웃 하시겠어요?</string>
-    <string name="my_logout_descriptoin">로그아웃하면\n다시 로그인해야 이용할 수 있어요.</string>
+    <string name="my_logout_descriptoin">로그아웃 시 다시 로그인 하기 전까지\n서비스 내 모든 기능을 이용할 수 없습니다.\n\n 로그아웃을 진행할까요?</string>
     <string name="my_withdrawal_title">정말 탈퇴 하시겠어요?</string>
-    <string name="my_withdrawal_description">계정을 정말 삭제하시겠어요?\n탈퇴 시 모든 정보가 삭제되며 복구할 수 없습니다.</string>
+    <string name="my_withdrawal_description">탈퇴 시 모든 정보가 삭제되며,\n삭제된 데이터 및 계정은 복구가 불가능합니다.\n\n회원 탈퇴를 진행할까요?</string>
 
     <!-- My page - profile edit -->
     <string name="my_profile_edit_title">프로필 변경</string>

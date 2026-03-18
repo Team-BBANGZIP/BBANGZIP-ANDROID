@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -30,10 +31,13 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
-import org.android.bbangzip.presentation.common.component.bottomsheet.TwoButtonBottomSheet
+import org.android.bbangzip.presentation.common.component.bottomsheet.BbangZipBottomSheetSlot
+import org.android.bbangzip.presentation.common.component.button.BbangZipButtonDefaults
+import org.android.bbangzip.presentation.common.component.button.BbangzipBaseButton
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
@@ -181,26 +185,18 @@ fun MyScreen(
         }
     }
 
-    TwoButtonBottomSheet(
-        title = stringResource(R.string.my_logout_title),
-        description = stringResource(R.string.my_logout_descriptoin),
+    LogoutBottomSheet(
         isBottomSheetVisible = state.isLogoutConfirmBottomSheetVisible,
         onDismissRequest = onClickLogoutBottomSheetDismissRequest,
-        completeBtnTitle = stringResource(R.string.button_label_logout),
-        cancelBtnTitle = stringResource(R.string.button_label_cancellation),
+        onLogoutClick = onConfirmLogoutBtn,
         onCancelClick = onCancelLogoutBtn,
-        onCompleteClick = onConfirmLogoutBtn,
     )
 
-    TwoButtonBottomSheet(
-        title = stringResource(R.string.my_withdrawal_title),
-        description = stringResource(R.string.my_withdrawal_description),
-        completeBtnTitle = stringResource(R.string.button_label_withdrawal),
-        cancelBtnTitle = stringResource(R.string.button_label_cancellation),
+    WithdrawalBottomSheet(
         isBottomSheetVisible = state.isWithdrawalConfirmBottomSheetVisible,
         onDismissRequest = onClickWithdrawalBottomSheetDismissRequest,
         onCancelClick = onCancelWithdrawalBtn,
-        onCompleteClick = onConfirmWithdrawalBtn,
+        onWithdrawalClick = onConfirmWithdrawalBtn,
     )
 }
 
@@ -344,7 +340,9 @@ private fun LogoutAndWithdrawal(
         VerticalDivider(
             thickness = 1.dp,
             color = BbangZipTheme.color.labelAssistive_C9C7C5,
-            modifier = Modifier.padding(horizontal = 12.dp).height(16.dp)
+            modifier = Modifier
+                .padding(horizontal = 12.dp)
+                .height(16.dp)
         )
 
         Text(
@@ -358,6 +356,151 @@ private fun LogoutAndWithdrawal(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun LogoutBottomSheet(
+    isBottomSheetVisible: Boolean,
+    onDismissRequest: () -> Unit,
+    onCancelClick: () -> Unit,
+    onLogoutClick: () -> Unit
+) {
+    BbangZipBottomSheetSlot(
+        isBottomSheetVisible = isBottomSheetVisible,
+        onDismissRequest = onDismissRequest,
+        title = {
+            Gap(16.dp)
+
+            Text(
+                text = stringResource(R.string.my_logout_title),
+                style = BbangZipTheme.typography.title1SemiBold,
+                color = BbangZipTheme.color.primaryNormal_897869,
+            )
+
+            Gap(height = 60.dp)
+        },
+        content = {
+            Text(
+                text = stringResource(R.string.my_logout_descriptoin),
+                style = BbangZipTheme.typography.body2Medium,
+                color = BbangZipTheme.color.labelAlternative_A29D96,
+                textAlign = TextAlign.Center
+            )
+
+            Gap(height = 60.dp)
+        },
+        interactRow = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+            ){
+                BbangzipBaseButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = onCancelClick,
+                    colors = BbangZipButtonDefaults.colors(
+                        enabledContainerColor = BbangZipTheme.color.primaryNormal_897869,
+                    ),
+                    content = {
+                        Text(
+                            text = stringResource(R.string.button_label_cancel),
+                            style = BbangZipTheme.typography.body2Medium,
+                            color = BbangZipTheme.color.staticWhite_FFFFFF
+                        )
+                    }
+                )
+
+                Gap(width = 8.dp)
+
+                BbangzipBaseButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = onLogoutClick,
+                    colors = BbangZipButtonDefaults.colors(
+                        enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
+                    ),
+                    content = {
+                        Text(
+                            text = stringResource(R.string.button_label_logout),
+                            style = BbangZipTheme.typography.body2Medium,
+                            color = BbangZipTheme.color.staticWhite_FFFFFF,
+                        )
+                    }
+                )
+            }
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun WithdrawalBottomSheet(
+    isBottomSheetVisible: Boolean,
+    onDismissRequest: () -> Unit,
+    onCancelClick: () -> Unit,
+    onWithdrawalClick: () -> Unit
+) {
+    BbangZipBottomSheetSlot(
+        isBottomSheetVisible = isBottomSheetVisible,
+        onDismissRequest = onDismissRequest,
+        title = {
+            Gap(16.dp)
+
+            Text(
+                text = stringResource(R.string.my_withdrawal_title),
+                style = BbangZipTheme.typography.title1SemiBold,
+                color = BbangZipTheme.color.primaryNormal_897869,
+            )
+
+            Gap(height = 60.dp)
+        },
+        content = {
+            Text(
+                text = stringResource(R.string.my_withdrawal_description),
+                style = BbangZipTheme.typography.body2Medium,
+                color = BbangZipTheme.color.labelAlternative_A29D96,
+                textAlign = TextAlign.Center
+            )
+
+            Gap(height = 60.dp)
+        },
+        interactRow = {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+            ){
+                BbangzipBaseButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = onCancelClick,
+                    colors = BbangZipButtonDefaults.colors(
+                        enabledContainerColor = BbangZipTheme.color.primaryNormal_897869,
+                    ),
+                    content = {
+                        Text(
+                            text = stringResource(R.string.button_label_cancel),
+                            style = BbangZipTheme.typography.body2Medium,
+                            color = BbangZipTheme.color.staticWhite_FFFFFF
+                        )
+                    }
+                )
+
+                Gap(width = 8.dp)
+
+                BbangzipBaseButton(
+                    modifier = Modifier.weight(1f),
+                    onClick = onWithdrawalClick,
+                    colors = BbangZipButtonDefaults.colors(
+                        enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
+                    ),
+                    content = {
+                        Text(
+                            text = stringResource(R.string.button_label_withdrawal),
+                            style = BbangZipTheme.typography.body2Medium,
+                            color = BbangZipTheme.color.staticWhite_FFFFFF,
+                        )
+                    }
+                )
+            }
+        },
+    )
+}
+
+
 @Preview(showBackground = true)
 @Composable
 fun MyScreenPreview() {
@@ -366,7 +509,8 @@ fun MyScreenPreview() {
             state = MyContract.MyState(
                 nickname = "홍길동",
                 commitmentMessage = "열심히 하자!",
-                appVersion = "v 1.0.0"
+                appVersion = "v 1.0.0",
+                isWithdrawalConfirmBottomSheetVisible = true
             ),
             onClickProfileArea = {},
             onClickScreenSetting = {},
