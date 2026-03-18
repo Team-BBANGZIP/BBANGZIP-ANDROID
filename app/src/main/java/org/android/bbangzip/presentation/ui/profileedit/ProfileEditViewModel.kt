@@ -58,6 +58,10 @@ class ProfileEditViewModel @Inject constructor(
             ProfileEditContract.ProfileEditEvent.OnProfileImgBottomSheetDismissRequest -> {
                 updateState(UpdateState(currentUiState.copy(isProfileImgBottomSheetVisible = false)))
             }
+
+            ProfileEditContract.ProfileEditEvent.OnCommitmentBottomSheetDismissRequest -> {
+                updateState(UpdateState(currentUiState.copy(isCommitmentBottomSheetVisible = false)))
+            }
         }
     }
 

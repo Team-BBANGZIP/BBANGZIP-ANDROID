@@ -26,19 +26,21 @@ class ProfileEditContract {
 
         data object OnProfileImgClick : ProfileEditEvent
 
-        data class OnProfileImgSelect(val imgRes: Int) : ProfileEditEvent
-
         data object OnNicknameClick : ProfileEditEvent
-
-        data class OnNicknameChange(val nickname: String) : ProfileEditEvent
 
         data object OnCommitmentMessageClick : ProfileEditEvent
 
-        data class OnCommitmentMessageChange(val commitmentMessage: String) : ProfileEditEvent
+        data class OnProfileImgSelect(val imgRes: Int) : ProfileEditEvent
+
+        data object OnProfileImgBottomSheetDismissRequest : ProfileEditEvent
+
+        data class OnNicknameChange(val nickname: String) : ProfileEditEvent
 
         data object OnNicknameBottomSheetDismissRequest : ProfileEditEvent
 
-        data object OnProfileImgBottomSheetDismissRequest : ProfileEditEvent
+        data class OnCommitmentMessageChange(val commitmentMessage: String) : ProfileEditEvent
+
+        data object OnCommitmentBottomSheetDismissRequest : ProfileEditEvent
     }
 
     sealed interface ProfileEditReduce : BaseContract.Reduce {

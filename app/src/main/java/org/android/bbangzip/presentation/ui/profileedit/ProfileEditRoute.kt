@@ -26,6 +26,9 @@ fun ProfileEditRoute(
         onNicknameClick = {
             viewModel.setEvent(ProfileEditContract.ProfileEditEvent.OnNicknameClick)
         },
+        onCommitmentAreaClick = {
+            viewModel.setEvent(ProfileEditContract.ProfileEditEvent.OnCommitmentMessageClick)
+        },
         onNicknameInputBottomSheetDismissRequest = {
             viewModel.setEvent(ProfileEditContract.ProfileEditEvent.OnNicknameBottomSheetDismissRequest)
         },
@@ -43,6 +46,12 @@ fun ProfileEditRoute(
         },
         onProfileImageCompleteBtnClick = {
             viewModel.setEvent(ProfileEditContract.ProfileEditEvent.OnProfileImgBottomSheetDismissRequest)
+        },
+        onCommitmentBottomSheetDismissRequest = {
+            viewModel.setEvent(ProfileEditContract.ProfileEditEvent.OnCommitmentBottomSheetDismissRequest)
+        },
+        onCommitmentMessageChange = {
+            viewModel.setEvent(ProfileEditContract.ProfileEditEvent.OnCommitmentMessageChange(it))
         },
     )
 }

@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileNicknameInputBottomSheet
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
+import org.android.bbangzip.presentation.common.component.bottomsheet.CommitmentBottomSheet
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
@@ -42,6 +43,7 @@ fun ProfileEditScreen(
     onBackIconClick: () -> Unit = {},
     onProfileImageClick: () -> Unit = {},
     onNicknameClick: () -> Unit = {},
+    onCommitmentAreaClick: () -> Unit = {},
     onNicknameChange: (String) -> Unit = {},
     onNicknameInputBottomSheetDismissRequest: () -> Unit = {},
     onNicknameInputDoneAction: () -> Unit = {},
@@ -49,6 +51,8 @@ fun ProfileEditScreen(
     onSelectProfileImg: (Int) -> Unit = {},
     onProfileImageCancelBtnClick: () -> Unit = {},
     onProfileImageCompleteBtnClick: () -> Unit = {},
+    onCommitmentBottomSheetDismissRequest: () -> Unit = {},
+    onCommitmentMessageChange: (String) -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
 
@@ -87,6 +91,7 @@ fun ProfileEditScreen(
         
         CommitmentMessageArea(
             commitmentMessage = state.commitmentMessage,
+            onCommitmentAreaClick = onCommitmentAreaClick,
         )
     }
 
@@ -109,6 +114,15 @@ fun ProfileEditScreen(
             focusManager.clearFocus()
             onNicknameInputDoneAction()
         },
+    )
+
+    CommitmentBottomSheet(
+        isBottomSheetVisible = state.isCommitmentBottomSheetVisible,
+        onDismissRequest = onCommitmentBottomSheetDismissRequest,
+        focusManager = focusManager,
+        commitmentMessage = state.commitmentMessage,
+        oncommitmentMessageChange = onCommitmentMessageChange,
+        onDoneAction = onCommitmentBottomSheetDismissRequest,
     )
 }
 
@@ -153,7 +167,7 @@ private fun NicknameArea(
     onNicknameClick: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ){
         Row(
             modifier = Modifier
@@ -182,6 +196,7 @@ private fun NicknameArea(
                 Gap(width = 8.dp)
 
                 Icon(
+                    modifier = Modifier.padding(4.dp),
                     painter = painterResource(R.drawable.ic_arrow_right_24),
                     contentDescription = null,
                     tint = BbangZipTheme.color.labelAlternative_A29D96,
@@ -193,11 +208,12 @@ private fun NicknameArea(
 
 @Composable
 private fun CommitmentMessageArea(
-    modifier: Modifier = Modifier,
     commitmentMessage: String,
+    modifier: Modifier = Modifier,
+    onCommitmentAreaClick: () -> Unit = {},
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ){
         Row(
             modifier = Modifier
@@ -214,6 +230,9 @@ private fun CommitmentMessageArea(
             Gap()
 
             Icon(
+                modifier = Modifier
+                    .noRippleClickable(onClick = onCommitmentAreaClick)
+                    .padding(4.dp),
                 painter = painterResource(R.drawable.ic_arrow_right_24),
                 contentDescription = null,
                 tint = BbangZipTheme.color.labelAlternative_A29D96,
