@@ -20,18 +20,17 @@ class ScreenSettingViewModel @Inject constructor(
     override fun handleEvent(event: ScreenSettingContract.ScreenSettingEvent) {
         when (event) {
             ScreenSettingContract.ScreenSettingEvent.Initialize -> {
-                // 초기 데이터 로드 (필요 시)
+                // 초기 데이터 로드
             }
 
-            ScreenSettingContract.ScreenSettingEvent.OnClickBack -> {
-                setSideEffect(ScreenSettingContract.ScreenSettingSideEffect.NavigateBack)
+            ScreenSettingContract.ScreenSettingEvent.OnBackIconClick -> {
+                setSideEffect(ScreenSettingContract.ScreenSettingSideEffect.NavigateToBack)
             }
 
-            ScreenSettingContract.ScreenSettingEvent.OnToggleSundayStart -> {
-                val currentState = uiState.value
+            ScreenSettingContract.ScreenSettingEvent.OnSundayStartToggle -> {
                 updateState(
                     ScreenSettingContract.ScreenSettingReduce.UpdateSundayStartEnabled(
-                        isEnabled = !currentState.isSundayStartEnabled
+                        isEnabled = !currentUiState.isSundayStartEnabled
                     )
                 )
             }

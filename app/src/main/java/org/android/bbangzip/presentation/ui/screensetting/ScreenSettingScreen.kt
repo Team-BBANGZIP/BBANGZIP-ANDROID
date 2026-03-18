@@ -90,8 +90,6 @@ private fun SundayStartSettingItem(
             )
         }
 
-        Gap(height = 4.dp)
-
         Text(
             text = stringResource(R.string.screen_setting_sunday_start_description),
             style = BbangZipTheme.typography.body4Medium,

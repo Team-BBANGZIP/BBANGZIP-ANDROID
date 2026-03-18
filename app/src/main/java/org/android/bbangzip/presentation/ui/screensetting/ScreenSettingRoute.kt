@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun ScreenSettingRoute(
-    navigateBack: () -> Unit,
+    navigateToBack: () -> Unit,
     viewModel: ScreenSettingViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
@@ -17,14 +17,14 @@ fun ScreenSettingRoute(
     LaunchedEffect(viewModel.uiSideEffect) {
         viewModel.uiSideEffect.collectLatest { effect ->
             when (effect) {
-                ScreenSettingContract.ScreenSettingSideEffect.NavigateBack -> navigateBack()
+                ScreenSettingContract.ScreenSettingSideEffect.NavigateToBack -> navigateToBack()
             }
         }
     }
 
     ScreenSettingScreen(
         state = state,
-        onClickBack = { viewModel.setEvent(ScreenSettingContract.ScreenSettingEvent.OnClickBack) },
-        onToggleSundayStart = { viewModel.setEvent(ScreenSettingContract.ScreenSettingEvent.OnToggleSundayStart) },
+        onClickBack = { viewModel.setEvent(ScreenSettingContract.ScreenSettingEvent.OnBackIconClick) },
+        onToggleSundayStart = { viewModel.setEvent(ScreenSettingContract.ScreenSettingEvent.OnSundayStartToggle) },
     )
 }

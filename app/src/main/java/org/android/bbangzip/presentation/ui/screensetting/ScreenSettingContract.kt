@@ -15,9 +15,9 @@ class ScreenSettingContract {
     sealed interface ScreenSettingEvent : BaseContract.Event {
         data object Initialize : ScreenSettingEvent
 
-        data object OnClickBack : ScreenSettingEvent
+        data object OnBackIconClick : ScreenSettingEvent
 
-        data object OnToggleSundayStart : ScreenSettingEvent
+        data object OnSundayStartToggle : ScreenSettingEvent
     }
 
     sealed interface ScreenSettingReduce : BaseContract.Reduce {
@@ -25,6 +25,6 @@ class ScreenSettingContract {
     }
 
     sealed interface ScreenSettingSideEffect : BaseContract.SideEffect {
-        data object NavigateBack : ScreenSettingSideEffect
+        data object NavigateToBack : ScreenSettingSideEffect
     }
 }
