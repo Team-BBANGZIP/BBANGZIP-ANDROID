@@ -12,7 +12,7 @@ class FakeUserRepository @Inject constructor() : UserRepository {
             UserTokenInfo(
                 accessToken = "fake_access_token",
                 refreshToken = "fake_refresh_token",
-                isSignUpComplete = true
+                isSignUpComplete = false
             )
         )
     }
