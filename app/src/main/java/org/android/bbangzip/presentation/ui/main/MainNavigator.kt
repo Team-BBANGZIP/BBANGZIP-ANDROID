@@ -16,6 +16,7 @@ import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.model.Route
 import org.android.bbangzip.presentation.ui.addcategory.navigation.navigateToAddCategory
 import org.android.bbangzip.presentation.ui.auth.LoginRoute
+import org.android.bbangzip.presentation.ui.splash.SplashRoute
 import org.android.bbangzip.presentation.ui.auth.navigateToLogin
 import org.android.bbangzip.presentation.ui.editcategory.navigation.navigateToEditCategory
 import org.android.bbangzip.presentation.ui.managecategory.navigation.navigateToManageCategory
@@ -34,7 +35,7 @@ class MainNavigator(
     private val currentDestination: NavDestination?
         @Composable get() = navHostController.currentBackStackEntryAsState().value?.destination
 
-    val startDestination = LoginRoute
+    val startDestination = SplashRoute
 
     val currentBottomNavigationBarItem: BottomNavigationType?
         @Composable get() =
@@ -69,6 +70,19 @@ class MainNavigator(
             navOptions =
                 navOptions {
                     popUpTo(LoginRoute::class.qualifiedName.orEmpty()) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                },
+        )
+    }
+
+    fun navigateToLoginFromSplash() {
+        navHostController.navigate(
+            route = LoginRoute,
+            navOptions =
+                navOptions {
+                    popUpTo(SplashRoute::class.qualifiedName.orEmpty()) {
                         inclusive = true
                     }
                     launchSingleTop = true

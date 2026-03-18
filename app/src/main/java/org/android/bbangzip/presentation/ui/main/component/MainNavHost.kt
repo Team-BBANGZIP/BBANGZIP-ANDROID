@@ -14,6 +14,7 @@ import org.android.bbangzip.presentation.ui.onboarding.onboardingNavGraph
 import org.android.bbangzip.presentation.ui.profileedit.navigation.profileEditNavGraph
 import org.android.bbangzip.presentation.ui.screensetting.navigation.screenSettingNavGraph
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
+import org.android.bbangzip.presentation.ui.splash.splashNavGraph
 import org.android.bbangzip.presentation.ui.timer.navigation.timerNavGraph
 import org.android.bbangzip.presentation.ui.timer.navigation.timerTodoNavGraph
 import org.android.bbangzip.presentation.ui.todo.navigation.todoNavGraph
@@ -29,6 +30,10 @@ fun MainNavHost(
         navController = navigator.navHostController,
         startDestination = navigator.startDestination,
     ) {
+        splashNavGraph(
+            navigateToLogin = navigator::navigateToLoginFromSplash,
+        )
+
         loginNavGraph(
             navigateToTodo = navigator::navigateToTodoAfterLogin,
             navigateToOnboarding = navigator::navigateToOnboarding,
