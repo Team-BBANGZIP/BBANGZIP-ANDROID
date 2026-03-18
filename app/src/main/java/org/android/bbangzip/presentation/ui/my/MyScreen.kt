@@ -3,12 +3,14 @@ package org.android.bbangzip.presentation.ui.my
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
@@ -24,6 +26,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -58,7 +61,7 @@ fun MyScreen(
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
-            .background(BbangZipTheme.color.backgroundStrong_F2EAE4)
+            .background(BbangZipTheme.color.secondaryLight_FAF6F3)
             .windowInsetsPadding(WindowInsets.systemBars)
     ) {
         item {
@@ -77,6 +80,8 @@ fun MyScreen(
                 profileImgResId = state.profileImgRes,
                 onClickProfileArea = onClickProfileArea
             )
+
+            Gap(height = 32.dp)
         }
 
         item {
@@ -90,7 +95,8 @@ fun MyScreen(
                 Icon(
                     painter = painterResource(R.drawable.ic_screen_20),
                     contentDescription = null,
-                    modifier = Modifier.padding(start = 24.dp)
+                    modifier = Modifier.padding(start = 24.dp),
+                    tint = Color.Unspecified,
                 )
 
                 Gap(height = 12.dp)
@@ -109,7 +115,8 @@ fun MyScreen(
                 Icon(
                     painter = painterResource(R.drawable.ic_notification_20),
                     contentDescription = null,
-                    modifier = Modifier.padding(start = 24.dp)
+                    modifier = Modifier.padding(start = 24.dp),
+                    tint = Color.Unspecified,
                 )
 
                 Gap(height = 12.dp)
@@ -126,9 +133,10 @@ fun MyScreen(
                 )
 
                 Icon(
-                    painter = painterResource(R.drawable.ic_notification_20),
+                    painter = painterResource(R.drawable.ic_service_20),
                     contentDescription = null,
-                    modifier = Modifier.padding(start = 24.dp)
+                    modifier = Modifier.padding(start = 24.dp),
+                    tint = Color.Unspecified,
                 )
 
                 Gap(height = 12.dp)
@@ -160,19 +168,16 @@ fun MyScreen(
                 )
 
                 Gap(height = 12.dp)
+
+                AppVersionItem(appVersion = state.appVersion)
+
+                Gap(height = 17.dp)
+
+                LogoutAndWithdrawal(
+                    onClickLogoutBtn = onClickLogoutBtn,
+                    onClickWithdrawalBtn = onClickWithdrawalBtn
+                )
             }
-        }
-
-        item {
-            AppVersionItem(appVersion = state.appVersion)
-            Gap(height = 17.dp)
-        }
-
-        item {
-            LogoutAndWithdrawal(
-                onClickLogoutBtn = onClickLogoutBtn,
-                onClickWithdrawalBtn = onClickWithdrawalBtn
-            )
         }
     }
 
@@ -229,7 +234,9 @@ private fun ProfileArea(
             modifier = Modifier
                 .weight(1f)
         ) {
-            Row {
+            Row(
+                verticalAlignment = Alignment.CenterVertically
+            ) {
                 Text(
                     text = nickname,
                     style = BbangZipTheme.typography.title4SemiBold,
@@ -238,7 +245,8 @@ private fun ProfileArea(
 
                 Icon(
                     painter = painterResource(R.drawable.ic_pencil_default_24),
-                    contentDescription = null
+                    contentDescription = null,
+                    tint = BbangZipTheme.color.labelAssistive_C9C7C5,
                 )
             }
 
@@ -279,7 +287,8 @@ private fun MyPageMenuItem(
             painter = painterResource(R.drawable.ic_arrow_right_24),
             modifier = Modifier
                 .padding(4.dp),
-            contentDescription = null
+            contentDescription = null,
+            tint = BbangZipTheme.color.labelAssistive_C9C7C5
         )
     }
 }
@@ -320,7 +329,8 @@ private fun LogoutAndWithdrawal(
     Row(
         modifier = modifier
             .fillMaxWidth(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.Center
     ) {
         Text(
             modifier = Modifier
@@ -334,14 +344,14 @@ private fun LogoutAndWithdrawal(
         VerticalDivider(
             thickness = 1.dp,
             color = BbangZipTheme.color.labelAssistive_C9C7C5,
-            modifier = Modifier.padding(horizontal = 12.dp, vertical = 8.dp)
+            modifier = Modifier.padding(horizontal = 12.dp).height(16.dp)
         )
 
         Text(
             modifier = Modifier
                 .padding(vertical = 8.dp)
                 .noRippleClickable { onClickWithdrawalBtn() },
-            text = stringResource(R.string.my_logout),
+            text = stringResource(R.string.my_withdrawal),
             style = BbangZipTheme.typography.body4Medium,
             color = BbangZipTheme.color.labelAssistive_C9C7C5
         )
