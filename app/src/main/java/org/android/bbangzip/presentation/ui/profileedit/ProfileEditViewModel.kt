@@ -4,6 +4,7 @@ import android.os.Parcelable
 import androidx.lifecycle.SavedStateHandle
 import dagger.hilt.android.lifecycle.HiltViewModel
 import org.android.bbangzip.presentation.common.base.BaseViewModel
+import org.android.bbangzip.presentation.ui.profileedit.ProfileEditContract.ProfileEditReduce.*
 import javax.inject.Inject
 
 @HiltViewModel
@@ -18,8 +19,45 @@ class ProfileEditViewModel @Inject constructor(
 
     override fun handleEvent(event: ProfileEditContract.ProfileEditEvent) {
         when (event) {
+            ProfileEditContract.ProfileEditEvent.Initialize -> {
 
-            else -> {}
+            }
+
+            ProfileEditContract.ProfileEditEvent.OnBackIconClick -> {
+                setSideEffect(ProfileEditContract.ProfileEditSideEffect.NavigateToBack)
+            }
+
+            is ProfileEditContract.ProfileEditEvent.OnCommitmentMessageChange -> {
+                updateState(UpdateState(currentUiState.copy(commitmentMessage = event.commitmentMessage)))
+            }
+
+            ProfileEditContract.ProfileEditEvent.OnCommitmentMessageClick -> {
+                updateState(UpdateState(currentUiState.copy(isCommitmentBottomSheetVisible = true)))
+            }
+
+            is ProfileEditContract.ProfileEditEvent.OnNicknameChange -> {
+                updateState(UpdateState(currentUiState.copy(nickname = event.nickname)))
+            }
+
+            ProfileEditContract.ProfileEditEvent.OnNicknameClick -> {
+                updateState(UpdateState(currentUiState.copy(isNicknameBottomSheetVisible = true)))
+            }
+
+            ProfileEditContract.ProfileEditEvent.OnProfileImgClick -> {
+                updateState(UpdateState(currentUiState.copy(isProfileImgBottomSheetVisible = true)))
+            }
+
+            is ProfileEditContract.ProfileEditEvent.OnProfileImgSelect -> {
+                updateState(UpdateState(currentUiState.copy(profileImg = event.imgRes)))
+            }
+
+            ProfileEditContract.ProfileEditEvent.OnNicknameBottomSheetDismissRequest -> {
+                updateState(UpdateState(currentUiState.copy(isNicknameBottomSheetVisible = false)))
+            }
+
+            ProfileEditContract.ProfileEditEvent.OnProfileImgBottomSheetDismissRequest -> {
+                updateState(UpdateState(currentUiState.copy(isProfileImgBottomSheetVisible = false)))
+            }
         }
     }
 

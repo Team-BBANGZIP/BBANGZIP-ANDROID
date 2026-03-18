@@ -20,7 +20,25 @@ class ProfileEditContract {
     }
 
     sealed interface ProfileEditEvent : BaseContract.Event {
+        data object Initialize : ProfileEditEvent
 
+        data object OnBackIconClick : ProfileEditEvent
+
+        data object OnProfileImgClick : ProfileEditEvent
+
+        data class OnProfileImgSelect(val imgRes: Int) : ProfileEditEvent
+
+        data object OnNicknameClick : ProfileEditEvent
+
+        data class OnNicknameChange(val nickname: String) : ProfileEditEvent
+
+        data object OnCommitmentMessageClick : ProfileEditEvent
+
+        data class OnCommitmentMessageChange(val commitmentMessage: String) : ProfileEditEvent
+
+        data object OnNicknameBottomSheetDismissRequest : ProfileEditEvent
+
+        data object OnProfileImgBottomSheetDismissRequest : ProfileEditEvent
     }
 
     sealed interface ProfileEditReduce : BaseContract.Reduce {
@@ -28,7 +46,6 @@ class ProfileEditContract {
     }
 
     sealed interface ProfileEditSideEffect : BaseContract.SideEffect {
-
+        data object NavigateToBack : ProfileEditSideEffect
     }
-
 }
