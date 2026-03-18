@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
@@ -40,7 +41,7 @@ fun ScreenSettingScreen(
             .windowInsetsPadding(WindowInsets.systemBars)
     ) {
         BbangZipBaseTopBar(
-            title = "화면 설정",
+            title = stringResource(R.string.screen_setting_title),
             titleColor = BbangZipTheme.color.labelNormal_6B6560,
             titleStyle = BbangZipTheme.typography.title2Medium,
             backGroundColor = BbangZipTheme.color.backgroundNormal_FFFFFF,
@@ -76,7 +77,7 @@ private fun SundayStartSettingItem(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
-                text = "주 시작 요일 일요일로 설정",
+                text = stringResource(R.string.screen_setting_sunday_start_title),
                 style = BbangZipTheme.typography.body2Medium,
                 color = BbangZipTheme.color.labelNormal_6B6560,
                 modifier = Modifier.weight(1f),
@@ -92,7 +93,7 @@ private fun SundayStartSettingItem(
         Gap(height = 4.dp)
 
         Text(
-            text = "캘린더의 주 시작 요일을\n월요일에서 일요일로 변경할 수 있어요",
+            text = stringResource(R.string.screen_setting_sunday_start_description),
             style = BbangZipTheme.typography.body4Medium,
             color = BbangZipTheme.color.labelAssistive_C9C7C5,
         )
