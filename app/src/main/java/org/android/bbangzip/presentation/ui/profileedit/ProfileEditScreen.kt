@@ -96,6 +96,7 @@ fun ProfileEditScreen(
     }
 
     ProfileImgPickerBottomSheet(
+        confirmButtonLabel = stringResource(R.string.button_label_save),
         isBottomSheetVisible = state.isProfileImgBottomSheetVisible,
         onDismissRequest = onProfileImageBottomSheetDismissRequest,
         onProfileImgItemClick = onSelectProfileImg,

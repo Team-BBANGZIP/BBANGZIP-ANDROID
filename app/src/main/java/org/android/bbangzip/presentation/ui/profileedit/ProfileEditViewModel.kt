@@ -48,7 +48,7 @@ class ProfileEditViewModel @Inject constructor(
             }
 
             is ProfileEditContract.ProfileEditEvent.OnProfileImgSelect -> {
-                updateState(UpdateState(currentUiState.copy(profileImg = event.imgRes)))
+                updateState(UpdateState(currentUiState.copy(selectedImg = event.imgRes)))
             }
 
             ProfileEditContract.ProfileEditEvent.OnNicknameBottomSheetDismissRequest -> {
@@ -61,6 +61,13 @@ class ProfileEditViewModel @Inject constructor(
 
             ProfileEditContract.ProfileEditEvent.OnCommitmentBottomSheetDismissRequest -> {
                 updateState(UpdateState(currentUiState.copy(isCommitmentBottomSheetVisible = false)))
+            }
+
+            ProfileEditContract.ProfileEditEvent.OnProfileImgCompleteBtnClick -> {
+                updateState(UpdateState(currentUiState.copy(
+                    profileImg = currentUiState.selectedImg,
+                    isProfileImgBottomSheetVisible = false
+                )))
             }
         }
     }

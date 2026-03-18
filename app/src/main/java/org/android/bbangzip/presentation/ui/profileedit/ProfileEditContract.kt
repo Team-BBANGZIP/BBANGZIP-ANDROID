@@ -32,6 +32,8 @@ class ProfileEditContract {
 
         data class OnProfileImgSelect(val imgRes: Int) : ProfileEditEvent
 
+        data object OnProfileImgCompleteBtnClick : ProfileEditEvent
+
         data object OnProfileImgBottomSheetDismissRequest : ProfileEditEvent
 
         data class OnNicknameChange(val nickname: String) : ProfileEditEvent

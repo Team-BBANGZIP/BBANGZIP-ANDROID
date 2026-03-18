@@ -45,7 +45,7 @@ fun ProfileEditRoute(
             viewModel.setEvent(ProfileEditContract.ProfileEditEvent.OnProfileImgBottomSheetDismissRequest)
         },
         onProfileImageCompleteBtnClick = {
-            viewModel.setEvent(ProfileEditContract.ProfileEditEvent.OnProfileImgBottomSheetDismissRequest)
+            viewModel.setEvent(ProfileEditContract.ProfileEditEvent.OnProfileImgCompleteBtnClick)
         },
         onCommitmentBottomSheetDismissRequest = {
             viewModel.setEvent(ProfileEditContract.ProfileEditEvent.OnCommitmentBottomSheetDismissRequest)
