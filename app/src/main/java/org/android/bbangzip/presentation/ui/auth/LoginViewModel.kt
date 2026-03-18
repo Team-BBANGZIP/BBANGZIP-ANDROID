@@ -24,10 +24,6 @@ class LoginViewModel
     ) : BaseViewModel<LoginContract.LoginEvent, LoginContract.LoginState, LoginContract.LoginReduce, LoginContract.LoginSideEffect>(
             savedStateHandle = savedStateHandle,
         ) {
-        init {
-            startAnimation()
-        }
-
         override fun createInitialState(savedState: Parcelable?): LoginContract.LoginState {
             return savedState as? LoginContract.LoginState ?: LoginContract.LoginState()
         }
@@ -58,18 +54,6 @@ class LoginViewModel
             return when (reduce) {
                 is LoginContract.LoginReduce.UpdateState -> reduce.state
                 is LoginContract.LoginReduce.UpdateLoginSuccess -> state.copy(loginState = !currentUiState.loginState)
-            }
-        }
-
-        private fun startAnimation() {
-            viewModelScope.launch {
-                delay(200)
-                updateState(LoginContract.LoginReduce.UpdateState(currentUiState.copy(isSloganVisible = true)))
-
-                updateState(LoginContract.LoginReduce.UpdateState(currentUiState.copy(isBackgroundVisible = true)))
-
-                delay(300)
-                updateState(LoginContract.LoginReduce.UpdateState(currentUiState.copy(isKakaoLoginBtnVisible = true)))
             }
         }
 

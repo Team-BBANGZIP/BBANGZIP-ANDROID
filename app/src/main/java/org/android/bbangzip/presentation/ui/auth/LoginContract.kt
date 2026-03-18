@@ -8,9 +8,6 @@ import org.android.bbangzip.presentation.common.base.BaseContract
 class LoginContract {
     @Parcelize
     data class LoginState(
-        val isSloganVisible: Boolean = false,
-        val isBackgroundVisible: Boolean = false,
-        val isKakaoLoginBtnVisible: Boolean = false,
         val isLoading: Boolean = false,
         val isOnboardingCompleted: Boolean = false,
         val loginState: Boolean = false,

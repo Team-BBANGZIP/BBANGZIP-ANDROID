@@ -5,6 +5,7 @@ import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.EaseOut
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -16,6 +17,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -36,15 +42,55 @@ fun LoginScreen(
     state: LoginContract.LoginState,
     onClickKakaoLoginBtn: () -> Unit = {},
 ) {
+    var isEntered by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        isEntered = true
+    }
+
     Box(
         modifier =
             Modifier
                 .background(BbangZipTheme.color.backgroundStrong_F2EAE4)
                 .fillMaxSize(),
     ) {
+        // Step 1: Delay 200ms, Duration 500ms
         AnimatedVisibility(
-            visible = state.isBackgroundVisible,
-            enter = fadeIn(animationSpec = tween(durationMillis = 600, easing = EaseOut)),
+            visible = isEntered,
+            enter =
+                fadeIn(
+                    animationSpec =
+                        tween(
+                            durationMillis = 500,
+                            delayMillis = 200,
+                            easing = EaseInOut,
+                        ),
+                ),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(start = 61.dp, end = 61.dp, top = 163.dp),
+        ) {
+            Image(
+                painter = painterResource(R.drawable.png_bbangzip_slogan),
+                contentDescription = null,
+                modifier = Modifier.align(Alignment.Center),
+            )
+        }
+
+        // Step 2: Delay (200 + 500 + 200) = 900ms, Duration 600ms
+        AnimatedVisibility(
+            visible = isEntered,
+            enter =
+                slideInVertically(
+                    initialOffsetY = { fullHeight -> fullHeight },
+                    animationSpec =
+                        tween(
+                            durationMillis = 600,
+                            delayMillis = 900,
+                            easing = EaseOut,
+                        ),
+                ),
             modifier =
                 Modifier
                     .align(Alignment.BottomCenter)
@@ -59,9 +105,17 @@ fun LoginScreen(
             )
         }
 
+        // Step 2: Same Timing
         AnimatedVisibility(
-            visible = state.isBackgroundVisible,
-            enter = fadeIn(animationSpec = tween(durationMillis = 600, easing = EaseOut)),
+            visible = isEntered,
+            enter = fadeIn(
+                        animationSpec =
+                            tween(
+                                durationMillis = 600,
+                                delayMillis = 900,
+                                easing = EaseOut,
+                            ),
+                    ),
             modifier =
                 Modifier
                     .align(Alignment.BottomCenter)
@@ -74,24 +128,18 @@ fun LoginScreen(
             )
         }
 
+        // Step 3: Delay (900 + 600 + 300) = 1800ms, Duration 400ms
         AnimatedVisibility(
-            visible = state.isSloganVisible,
-            enter = fadeIn(animationSpec = tween(durationMillis = 500, easing = EaseInOut)),
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .padding(start = 61.dp, end = 61.dp, top = 163.dp),
-        ) {
-            Image(
-                painter = painterResource(R.drawable.png_bbangzip_slogan),
-                contentDescription = null,
-                modifier = Modifier.align(Alignment.Center),
-            )
-        }
-
-        AnimatedVisibility(
-            visible = state.isKakaoLoginBtnVisible,
-            enter = fadeIn(animationSpec = tween(durationMillis = 400, easing = EaseInOut)),
+            visible = isEntered,
+            enter =
+                fadeIn(
+                    animationSpec =
+                        tween(
+                            durationMillis = 400,
+                            delayMillis = 1800,
+                            easing = EaseInOut,
+                        ),
+                ),
             modifier =
                 Modifier
                     .align(Alignment.BottomCenter)
