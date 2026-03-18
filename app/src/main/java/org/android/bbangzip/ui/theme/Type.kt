@@ -95,7 +95,7 @@ val defaultBbangZipTypography =
             TextStyle(
                 fontSize = 18.sp,
                 fontFamily = pretendardSemiBold,
-                lineHeight = 25.2.sp
+                lineHeight = 25.2.sp,
             ),
         // Subtitle
         subTitle1Medium =

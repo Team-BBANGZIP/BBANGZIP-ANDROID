@@ -60,13 +60,14 @@ fun MyScreen(
     onClickWithdrawalBtn: () -> Unit,
     onConfirmWithdrawalBtn: () -> Unit,
     onCancelWithdrawalBtn: () -> Unit,
-    onClickWithdrawalBottomSheetDismissRequest: () -> Unit
+    onClickWithdrawalBottomSheetDismissRequest: () -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BbangZipTheme.color.secondaryLight_FAF6F3)
-            .windowInsetsPadding(WindowInsets.systemBars)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(BbangZipTheme.color.secondaryLight_FAF6F3)
+                .windowInsetsPadding(WindowInsets.systemBars),
     ) {
         item {
             Gap(height = 32.dp)
@@ -75,14 +76,14 @@ fun MyScreen(
                 text = stringResource(R.string.my_title),
                 style = BbangZipTheme.typography.title1SemiBold,
                 color = BbangZipTheme.color.labelStrong_463D34,
-                modifier = Modifier.padding(start = 20.dp, bottom = 20.dp)
+                modifier = Modifier.padding(start = 20.dp, bottom = 20.dp),
             )
 
             ProfileArea(
                 nickname = state.nickname,
                 commitmentMessage = state.commitmentMessage,
                 profileImgResId = state.profileImgRes,
-                onClickProfileArea = onClickProfileArea
+                onClickProfileArea = onClickProfileArea,
             )
 
             Gap(height = 32.dp)
@@ -90,11 +91,12 @@ fun MyScreen(
 
         item {
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
-                    .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
-                    .padding(vertical = 32.dp)
+                modifier =
+                    Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
+                        .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
+                        .padding(vertical = 32.dp),
             ) {
                 Icon(
                     painter = painterResource(R.drawable.ic_screen_20),
@@ -107,13 +109,13 @@ fun MyScreen(
 
                 MyPageMenuItem(
                     title = stringResource(R.string.my_screen),
-                    onClickMenu = onClickScreenSetting
+                    onClickMenu = onClickScreenSetting,
                 )
 
                 HorizontalDivider(
                     thickness = 1.dp,
                     color = BbangZipTheme.color.secondaryNormal_F6F1EE,
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 24.dp)
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 24.dp),
                 )
 
                 Icon(
@@ -127,13 +129,13 @@ fun MyScreen(
 
                 MyPageMenuItem(
                     title = stringResource(R.string.my_notification),
-                    onClickMenu = onClickNotification
+                    onClickMenu = onClickNotification,
                 )
 
                 HorizontalDivider(
                     thickness = 1.dp,
                     color = BbangZipTheme.color.secondaryNormal_F6F1EE,
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 24.dp)
+                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 24.dp),
                 )
 
                 Icon(
@@ -147,28 +149,28 @@ fun MyScreen(
 
                 MyPageMenuItem(
                     title = stringResource(R.string.my_customer_center),
-                    onClickMenu = onClickCustomerCenter
+                    onClickMenu = onClickCustomerCenter,
                 )
 
                 Gap(height = 12.dp)
 
                 MyPageMenuItem(
                     title = stringResource(R.string.my_terms_of_service),
-                    onClickMenu = onClickTermsOfService
+                    onClickMenu = onClickTermsOfService,
                 )
 
                 Gap(height = 12.dp)
 
                 MyPageMenuItem(
                     title = stringResource(R.string.my_feedback),
-                    onClickMenu = onClickFeedback
+                    onClickMenu = onClickFeedback,
                 )
 
                 Gap(height = 12.dp)
 
                 MyPageMenuItem(
                     title = stringResource(R.string.my_app_review),
-                    onClickMenu = onClickAppReview
+                    onClickMenu = onClickAppReview,
                 )
 
                 Gap(height = 12.dp)
@@ -179,7 +181,7 @@ fun MyScreen(
 
                 LogoutAndWithdrawal(
                     onClickLogoutBtn = onClickLogoutBtn,
-                    onClickWithdrawalBtn = onClickWithdrawalBtn
+                    onClickWithdrawalBtn = onClickWithdrawalBtn,
                 )
             }
         }
@@ -206,37 +208,40 @@ private fun ProfileArea(
     nickname: String,
     commitmentMessage: String,
     @DrawableRes profileImgResId: Int,
-    onClickProfileArea: () -> Unit
+    onClickProfileArea: () -> Unit,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .noRippleClickable { onClickProfileArea() }
-            .padding(horizontal = 20.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .noRippleClickable { onClickProfileArea() }
+                .padding(horizontal = 20.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Image(
             painter = painterResource(id = profileImgResId),
             contentDescription = null,
             contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(60.dp)
-                .clip(CircleShape)
+            modifier =
+                Modifier
+                    .size(60.dp)
+                    .clip(CircleShape),
         )
 
         Gap(width = 12.dp)
 
         Column(
-            modifier = Modifier
-                .weight(1f)
+            modifier =
+                Modifier
+                    .weight(1f),
         ) {
             Row(
-                verticalAlignment = Alignment.CenterVertically
+                verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
                     text = nickname,
                     style = BbangZipTheme.typography.title4SemiBold,
-                    color = BbangZipTheme.color.labelStrong_463D34
+                    color = BbangZipTheme.color.labelStrong_463D34,
                 )
 
                 Icon(
@@ -252,7 +257,7 @@ private fun ProfileArea(
                 modifier = Modifier.fillMaxWidth(),
                 text = commitmentMessage,
                 style = BbangZipTheme.typography.subTitle1Medium,
-                color = BbangZipTheme.color.labelAlternative_A29D96
+                color = BbangZipTheme.color.labelAlternative_A29D96,
             )
         }
     }
@@ -262,14 +267,15 @@ private fun ProfileArea(
 private fun MyPageMenuItem(
     modifier: Modifier = Modifier,
     title: String,
-    onClickMenu: () -> Unit
+    onClickMenu: () -> Unit,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .noRippleClickable { onClickMenu() }
-            .padding(start = 24.dp, end = 16.dp, top = 6.dp, bottom = 6.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .noRippleClickable { onClickMenu() }
+                .padding(start = 24.dp, end = 16.dp, top = 6.dp, bottom = 6.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = title,
@@ -281,10 +287,11 @@ private fun MyPageMenuItem(
 
         Icon(
             painter = painterResource(R.drawable.ic_arrow_right_24),
-            modifier = Modifier
-                .padding(4.dp),
+            modifier =
+                Modifier
+                    .padding(4.dp),
             contentDescription = null,
-            tint = BbangZipTheme.color.labelAssistive_C9C7C5
+            tint = BbangZipTheme.color.labelAssistive_C9C7C5,
         )
     }
 }
@@ -295,10 +302,11 @@ private fun AppVersionItem(
     appVersion: String,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(start = 24.dp, end = 24.dp, top = 12.dp, bottom = 12.dp),
-        verticalAlignment = Alignment.CenterVertically
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(start = 24.dp, end = 24.dp, top = 12.dp, bottom = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
             text = stringResource(R.string.my_app_version),
@@ -311,7 +319,7 @@ private fun AppVersionItem(
         Text(
             text = appVersion,
             style = BbangZipTheme.typography.body2Medium,
-            color = BbangZipTheme.color.labelAssistive_C9C7C5
+            color = BbangZipTheme.color.labelAssistive_C9C7C5,
         )
     }
 }
@@ -323,35 +331,39 @@ private fun LogoutAndWithdrawal(
     onClickWithdrawalBtn: () -> Unit,
 ) {
     Row(
-        modifier = modifier
-            .fillMaxWidth(),
+        modifier =
+            modifier
+                .fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.Center
+        horizontalArrangement = Arrangement.Center,
     ) {
         Text(
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-                .noRippleClickable { onClickLogoutBtn() },
+            modifier =
+                Modifier
+                    .padding(vertical = 8.dp)
+                    .noRippleClickable { onClickLogoutBtn() },
             text = stringResource(R.string.my_logout),
             style = BbangZipTheme.typography.body4Medium,
-            color = BbangZipTheme.color.labelAssistive_C9C7C5
+            color = BbangZipTheme.color.labelAssistive_C9C7C5,
         )
 
         VerticalDivider(
             thickness = 1.dp,
             color = BbangZipTheme.color.labelAssistive_C9C7C5,
-            modifier = Modifier
-                .padding(horizontal = 12.dp)
-                .height(16.dp)
+            modifier =
+                Modifier
+                    .padding(horizontal = 12.dp)
+                    .height(16.dp),
         )
 
         Text(
-            modifier = Modifier
-                .padding(vertical = 8.dp)
-                .noRippleClickable { onClickWithdrawalBtn() },
+            modifier =
+                Modifier
+                    .padding(vertical = 8.dp)
+                    .noRippleClickable { onClickWithdrawalBtn() },
             text = stringResource(R.string.my_withdrawal),
             style = BbangZipTheme.typography.body4Medium,
-            color = BbangZipTheme.color.labelAssistive_C9C7C5
+            color = BbangZipTheme.color.labelAssistive_C9C7C5,
         )
     }
 }
@@ -362,7 +374,7 @@ private fun LogoutBottomSheet(
     isBottomSheetVisible: Boolean,
     onDismissRequest: () -> Unit,
     onCancelClick: () -> Unit,
-    onLogoutClick: () -> Unit
+    onLogoutClick: () -> Unit,
 ) {
     BbangZipBottomSheetSlot(
         isBottomSheetVisible = isBottomSheetVisible,
@@ -383,7 +395,7 @@ private fun LogoutBottomSheet(
                 text = stringResource(R.string.my_logout_descriptoin),
                 style = BbangZipTheme.typography.body2Medium,
                 color = BbangZipTheme.color.labelAlternative_A29D96,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Gap(height = 60.dp)
@@ -391,20 +403,21 @@ private fun LogoutBottomSheet(
         interactRow = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-            ){
+            ) {
                 BbangzipBaseButton(
                     modifier = Modifier.weight(1f),
                     onClick = onCancelClick,
-                    colors = BbangZipButtonDefaults.colors(
-                        enabledContainerColor = BbangZipTheme.color.primaryNormal_897869,
-                    ),
+                    colors =
+                        BbangZipButtonDefaults.colors(
+                            enabledContainerColor = BbangZipTheme.color.primaryNormal_897869,
+                        ),
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_cancel),
                             style = BbangZipTheme.typography.body2Medium,
-                            color = BbangZipTheme.color.staticWhite_FFFFFF
+                            color = BbangZipTheme.color.staticWhite_FFFFFF,
                         )
-                    }
+                    },
                 )
 
                 Gap(width = 8.dp)
@@ -412,16 +425,17 @@ private fun LogoutBottomSheet(
                 BbangzipBaseButton(
                     modifier = Modifier.weight(1f),
                     onClick = onLogoutClick,
-                    colors = BbangZipButtonDefaults.colors(
-                        enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
-                    ),
+                    colors =
+                        BbangZipButtonDefaults.colors(
+                            enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
+                        ),
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_logout),
                             style = BbangZipTheme.typography.body2Medium,
                             color = BbangZipTheme.color.staticWhite_FFFFFF,
                         )
-                    }
+                    },
                 )
             }
         },
@@ -434,7 +448,7 @@ private fun WithdrawalBottomSheet(
     isBottomSheetVisible: Boolean,
     onDismissRequest: () -> Unit,
     onCancelClick: () -> Unit,
-    onWithdrawalClick: () -> Unit
+    onWithdrawalClick: () -> Unit,
 ) {
     BbangZipBottomSheetSlot(
         isBottomSheetVisible = isBottomSheetVisible,
@@ -455,7 +469,7 @@ private fun WithdrawalBottomSheet(
                 text = stringResource(R.string.my_withdrawal_description),
                 style = BbangZipTheme.typography.body2Medium,
                 color = BbangZipTheme.color.labelAlternative_A29D96,
-                textAlign = TextAlign.Center
+                textAlign = TextAlign.Center,
             )
 
             Gap(height = 60.dp)
@@ -463,20 +477,21 @@ private fun WithdrawalBottomSheet(
         interactRow = {
             Row(
                 modifier = Modifier.fillMaxWidth(),
-            ){
+            ) {
                 BbangzipBaseButton(
                     modifier = Modifier.weight(1f),
                     onClick = onCancelClick,
-                    colors = BbangZipButtonDefaults.colors(
-                        enabledContainerColor = BbangZipTheme.color.primaryNormal_897869,
-                    ),
+                    colors =
+                        BbangZipButtonDefaults.colors(
+                            enabledContainerColor = BbangZipTheme.color.primaryNormal_897869,
+                        ),
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_cancel),
                             style = BbangZipTheme.typography.body2Medium,
-                            color = BbangZipTheme.color.staticWhite_FFFFFF
+                            color = BbangZipTheme.color.staticWhite_FFFFFF,
                         )
-                    }
+                    },
                 )
 
                 Gap(width = 8.dp)
@@ -484,34 +499,35 @@ private fun WithdrawalBottomSheet(
                 BbangzipBaseButton(
                     modifier = Modifier.weight(1f),
                     onClick = onWithdrawalClick,
-                    colors = BbangZipButtonDefaults.colors(
-                        enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
-                    ),
+                    colors =
+                        BbangZipButtonDefaults.colors(
+                            enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
+                        ),
                     content = {
                         Text(
                             text = stringResource(R.string.button_label_withdrawal),
                             style = BbangZipTheme.typography.body2Medium,
                             color = BbangZipTheme.color.staticWhite_FFFFFF,
                         )
-                    }
+                    },
                 )
             }
         },
     )
 }
 
-
 @Preview(showBackground = true)
 @Composable
 fun MyScreenPreview() {
     BBANGZIPANDROIDTheme {
         MyScreen(
-            state = MyContract.MyState(
-                nickname = "홍길동",
-                commitmentMessage = "열심히 하자!",
-                appVersion = "v 1.0.0",
-                isWithdrawalConfirmBottomSheetVisible = true
-            ),
+            state =
+                MyContract.MyState(
+                    nickname = "홍길동",
+                    commitmentMessage = "열심히 하자!",
+                    appVersion = "v 1.0.0",
+                    isWithdrawalConfirmBottomSheetVisible = true,
+                ),
             onClickProfileArea = {},
             onClickScreenSetting = {},
             onClickNotification = {},
@@ -526,7 +542,7 @@ fun MyScreenPreview() {
             onClickWithdrawalBtn = {},
             onConfirmWithdrawalBtn = {},
             onCancelWithdrawalBtn = {},
-            onClickWithdrawalBottomSheetDismissRequest = {}
+            onClickWithdrawalBottomSheetDismissRequest = {},
         )
     }
 }

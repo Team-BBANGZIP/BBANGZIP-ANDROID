@@ -25,15 +25,15 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import org.android.bbangzip.R
-import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileImgPickerBottomSheet
-import org.android.bbangzip.presentation.common.component.topbar.BbangZipBaseTopBar
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import org.android.bbangzip.R
+import org.android.bbangzip.presentation.common.component.bottomsheet.CommitmentBottomSheet
+import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileImgPickerBottomSheet
 import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileNicknameInputBottomSheet
+import org.android.bbangzip.presentation.common.component.topbar.BbangZipBaseTopBar
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
-import org.android.bbangzip.presentation.common.component.bottomsheet.CommitmentBottomSheet
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
@@ -57,10 +57,11 @@ fun ProfileEditScreen(
     val focusManager = LocalFocusManager.current
 
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
-            .windowInsetsPadding(WindowInsets.systemBars),
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
+                .windowInsetsPadding(WindowInsets.systemBars),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         BbangZipBaseTopBar(
@@ -88,7 +89,7 @@ fun ProfileEditScreen(
         )
 
         Gap(height = 48.dp)
-        
+
         CommitmentMessageArea(
             commitmentMessage = state.commitmentMessage,
             onCommitmentAreaClick = onCommitmentAreaClick,
@@ -168,12 +169,13 @@ private fun NicknameArea(
     onNicknameClick: () -> Unit = {},
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
-    ){
+        modifier = modifier.fillMaxWidth(),
+    ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
@@ -183,9 +185,10 @@ private fun NicknameArea(
             Gap()
 
             Row(
-                modifier = Modifier.noRippleClickable {
-                    onNicknameClick()
-                },
+                modifier =
+                    Modifier.noRippleClickable {
+                        onNicknameClick()
+                    },
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
@@ -214,14 +217,15 @@ private fun CommitmentMessageArea(
     onCommitmentAreaClick: () -> Unit = {},
 ) {
     Column(
-        modifier = modifier.fillMaxWidth()
-    ){
+        modifier = modifier.fillMaxWidth(),
+    ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
-        ){
+        ) {
             Text(
                 text = stringResource(R.string.my_profile_commitment_message),
                 style = BbangZipTheme.typography.body1Medium,
@@ -231,9 +235,10 @@ private fun CommitmentMessageArea(
             Gap()
 
             Icon(
-                modifier = Modifier
-                    .noRippleClickable(onClick = onCommitmentAreaClick)
-                    .padding(4.dp),
+                modifier =
+                    Modifier
+                        .noRippleClickable(onClick = onCommitmentAreaClick)
+                        .padding(4.dp),
                 painter = painterResource(R.drawable.ic_arrow_right_24),
                 contentDescription = null,
                 tint = BbangZipTheme.color.labelAlternative_A29D96,
@@ -243,15 +248,16 @@ private fun CommitmentMessageArea(
         Gap(height = 20.dp)
 
         Box(
-            modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .fillMaxWidth()
-                .background(
-                    color = BbangZipTheme.color.componentStrong_F6F6F5,
-                    shape = RoundedCornerShape(8.dp),
-                )
-                .padding(horizontal = 12.dp, vertical = 11.dp),
-        ){
+            modifier =
+                Modifier
+                    .padding(horizontal = 20.dp)
+                    .fillMaxWidth()
+                    .background(
+                        color = BbangZipTheme.color.componentStrong_F6F6F5,
+                        shape = RoundedCornerShape(8.dp),
+                    )
+                    .padding(horizontal = 12.dp, vertical = 11.dp),
+        ) {
             Text(
                 text = commitmentMessage,
                 style = BbangZipTheme.typography.body1Medium,
@@ -266,11 +272,12 @@ private fun CommitmentMessageArea(
 fun ProfileEditScreenPreview() {
     BBANGZIPANDROIDTheme {
         ProfileEditScreen(
-            state = ProfileEditContract.ProfileEditState(
-                profileImg = R.drawable.ic_profile_default_100,
-                nickname = "김재민",
-                commitmentMessage = "빵을 굽자",
-            )
+            state =
+                ProfileEditContract.ProfileEditState(
+                    profileImg = R.drawable.ic_profile_default_100,
+                    nickname = "김재민",
+                    commitmentMessage = "빵을 굽자",
+                ),
         )
     }
 }

@@ -24,21 +24,31 @@ class MyContract {
         data object OnClickProfileArea : MyEvent
 
         data object OnClickScreenSetting : MyEvent
+
         data object OnClickAlarmSetting : MyEvent
 
         data object OnClickCustomerCenter : MyEvent
+
         data object OnClickTermsOfService : MyEvent
+
         data object OnClickFeedback : MyEvent
+
         data object OnClickReviewApp : MyEvent
 
         data object OnClickLogoutBtn : MyEvent
+
         data object OnClickLogoutBottomSheetDismissRequest : MyEvent
+
         data object OnClickWithdrawalBtn : MyEvent
+
         data object OnClickWithdrawalBottomSheetDismissRequest : MyEvent
 
         data object OnConfirmLogout : MyEvent
+
         data object OnCancelLogoutBottomSheet : MyEvent
+
         data object OnConfirmWithdrawal : MyEvent
+
         data object OnCancelWithdrawalBottomSheet : MyEvent
     }
 

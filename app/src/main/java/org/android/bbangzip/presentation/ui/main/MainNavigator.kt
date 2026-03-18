@@ -16,7 +16,6 @@ import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.model.Route
 import org.android.bbangzip.presentation.ui.addcategory.navigation.navigateToAddCategory
 import org.android.bbangzip.presentation.ui.auth.LoginRoute
-import org.android.bbangzip.presentation.ui.splash.SplashRoute
 import org.android.bbangzip.presentation.ui.auth.navigateToLogin
 import org.android.bbangzip.presentation.ui.editcategory.navigation.navigateToEditCategory
 import org.android.bbangzip.presentation.ui.managecategory.navigation.navigateToManageCategory
@@ -24,6 +23,7 @@ import org.android.bbangzip.presentation.ui.my.navigation.navigateToMy
 import org.android.bbangzip.presentation.ui.onboarding.navigateToOnboarding
 import org.android.bbangzip.presentation.ui.profileedit.navigation.navigateToProfileEdit
 import org.android.bbangzip.presentation.ui.screensetting.navigation.navigateToScreenSetting
+import org.android.bbangzip.presentation.ui.splash.SplashRoute
 import org.android.bbangzip.presentation.ui.timer.navigation.navigateTimerTodo
 import org.android.bbangzip.presentation.ui.timer.navigation.navigateToTimer
 import org.android.bbangzip.presentation.ui.todo.navigation.navigateToTodo
@@ -148,11 +148,11 @@ class MainNavigator(
         )
     }
 
-    fun navigateToProfileEdit(){
+    fun navigateToProfileEdit() {
         navHostController.navigateToProfileEdit()
     }
 
-    fun navigateToScreenSetting(){
+    fun navigateToScreenSetting() {
         navHostController.navigateToScreenSetting()
     }
 

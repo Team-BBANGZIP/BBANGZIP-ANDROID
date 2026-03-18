@@ -6,35 +6,37 @@ import org.android.bbangzip.domain.model.UserTokenInfo
 import org.android.bbangzip.domain.repository.UserRepository
 import javax.inject.Inject
 
-class FakeUserRepository @Inject constructor() : UserRepository {
-    override suspend fun login(code: String): Result<UserTokenInfo> {
-        return Result.success(
-            UserTokenInfo(
-                accessToken = "fake_access_token",
-                refreshToken = "fake_refresh_token",
-                isSignUpComplete = false
+class FakeUserRepository
+    @Inject
+    constructor() : UserRepository {
+        override suspend fun login(code: String): Result<UserTokenInfo> {
+            return Result.success(
+                UserTokenInfo(
+                    accessToken = "fake_access_token",
+                    refreshToken = "fake_refresh_token",
+                    isSignUpComplete = false,
+                ),
             )
-        )
-    }
+        }
 
-    override suspend fun reissue(): Result<ReissueToken> {
-        return Result.success(
-            ReissueToken(
-                accessToken = "new_fake_access_token",
-                refreshToken = "new_fake_refresh_token"
+        override suspend fun reissue(): Result<ReissueToken> {
+            return Result.success(
+                ReissueToken(
+                    accessToken = "new_fake_access_token",
+                    refreshToken = "new_fake_refresh_token",
+                ),
             )
-        )
-    }
+        }
 
-    override suspend fun logout(): Result<String> {
-        return Result.success("Success")
-    }
+        override suspend fun logout(): Result<String> {
+            return Result.success("Success")
+        }
 
-    override suspend fun withdraw(): Result<String> {
-        return Result.success("Success")
-    }
+        override suspend fun withdraw(): Result<String> {
+            return Result.success("Success")
+        }
 
-    override suspend fun onboardingComplete(onboardingEntity: OnboardingInfo): Result<String> {
-        return Result.success("Success")
+        override suspend fun onboardingComplete(onboardingEntity: OnboardingInfo): Result<String> {
+            return Result.success("Success")
+        }
     }
-}

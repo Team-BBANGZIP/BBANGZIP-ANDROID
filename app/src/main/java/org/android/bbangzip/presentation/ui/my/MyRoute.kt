@@ -12,13 +12,12 @@ import kotlinx.coroutines.flow.collectLatest
 import org.android.bbangzip.presentation.common.util.extension.openStore
 import org.android.bbangzip.presentation.common.util.extension.openUrl
 
-
 @Composable
 fun MyRoute(
     navigateToProfileEdit: () -> Unit,
     navigateToScreenSetting: () -> Unit,
     navigateToLogin: () -> Unit,
-    viewModel: MyViewModel = hiltViewModel()
+    viewModel: MyViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
     val context = LocalContext.current

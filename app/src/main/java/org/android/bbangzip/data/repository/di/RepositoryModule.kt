@@ -4,13 +4,13 @@ import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import org.android.bbangzip.data.repository.local.UserDefaultRepositoryImpl
 import org.android.bbangzip.data.repository.fake.FakeCategoryRepository
 import org.android.bbangzip.data.repository.fake.FakeCommitmentRepository
 import org.android.bbangzip.data.repository.fake.FakeDummyRepository
 import org.android.bbangzip.data.repository.fake.FakeTimerRepository
 import org.android.bbangzip.data.repository.fake.FakeTodoRepository
 import org.android.bbangzip.data.repository.fake.FakeUserRepository
+import org.android.bbangzip.data.repository.local.UserDefaultRepositoryImpl
 import org.android.bbangzip.domain.repository.CategoryRepository
 import org.android.bbangzip.domain.repository.CommitmentRepository
 import org.android.bbangzip.domain.repository.DummyRepository

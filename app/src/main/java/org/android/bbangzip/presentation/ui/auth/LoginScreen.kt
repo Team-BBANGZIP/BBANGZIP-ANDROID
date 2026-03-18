@@ -108,14 +108,15 @@ fun LoginScreen(
         // Step 2: Same Timing
         AnimatedVisibility(
             visible = isEntered,
-            enter = fadeIn(
-                        animationSpec =
-                            tween(
-                                durationMillis = 600,
-                                delayMillis = 900,
-                                easing = EaseOut,
-                            ),
-                    ),
+            enter =
+                fadeIn(
+                    animationSpec =
+                        tween(
+                            durationMillis = 600,
+                            delayMillis = 900,
+                            easing = EaseOut,
+                        ),
+                ),
             modifier =
                 Modifier
                     .align(Alignment.BottomCenter)

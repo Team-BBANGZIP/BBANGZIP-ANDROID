@@ -35,10 +35,11 @@ fun ScreenSettingScreen(
     onToggleSundayStart: () -> Unit,
 ) {
     Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
-            .windowInsetsPadding(WindowInsets.systemBars)
+        modifier =
+            Modifier
+                .fillMaxSize()
+                .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
+                .windowInsetsPadding(WindowInsets.systemBars),
     ) {
         BbangZipBaseTopBar(
             title = stringResource(R.string.screen_setting_title),
@@ -66,14 +67,16 @@ private fun SundayStartSettingItem(
     onToggle: () -> Unit,
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(horizontal = 20.dp)
+        modifier =
+            modifier
+                .fillMaxWidth()
+                .padding(horizontal = 20.dp),
     ) {
         Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 4.dp),
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(vertical = 4.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
@@ -105,9 +108,10 @@ fun ScreenSettingScreenPreview() {
         var isSundayStartEnabled by remember { mutableStateOf(false) }
 
         ScreenSettingScreen(
-            state = ScreenSettingContract.ScreenSettingState(
-                isSundayStartEnabled = isSundayStartEnabled,
-            ),
+            state =
+                ScreenSettingContract.ScreenSettingState(
+                    isSundayStartEnabled = isSundayStartEnabled,
+                ),
             onClickBack = {},
             onToggleSundayStart = {
                 isSundayStartEnabled = !isSundayStartEnabled
