@@ -21,6 +21,8 @@ import org.android.bbangzip.presentation.ui.editcategory.navigation.navigateToEd
 import org.android.bbangzip.presentation.ui.managecategory.navigation.navigateToManageCategory
 import org.android.bbangzip.presentation.ui.my.navigation.navigateToMy
 import org.android.bbangzip.presentation.ui.onboarding.navigateToOnboarding
+import org.android.bbangzip.presentation.ui.profileedit.navigation.navigateToProfileEdit
+import org.android.bbangzip.presentation.ui.screensetting.navigation.navigateToScreenSetting
 import org.android.bbangzip.presentation.ui.timer.navigation.navigateTimerTodo
 import org.android.bbangzip.presentation.ui.timer.navigation.navigateToTimer
 import org.android.bbangzip.presentation.ui.todo.navigation.navigateToTodo
@@ -130,6 +132,14 @@ class MainNavigator(
                     launchSingleTop = true
                 },
         )
+    }
+
+    fun navigateToProfileEdit(){
+        navHostController.navigateToProfileEdit()
+    }
+
+    fun navigateToScreenSetting(){
+        navHostController.navigateToScreenSetting()
     }
 
     fun popBackStack() {

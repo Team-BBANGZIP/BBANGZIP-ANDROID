@@ -11,6 +11,8 @@ import org.android.bbangzip.presentation.ui.main.MainNavigator
 import org.android.bbangzip.presentation.ui.managecategory.navigation.manageCategoryNavGraph
 import org.android.bbangzip.presentation.ui.my.navigation.myNavGraph
 import org.android.bbangzip.presentation.ui.onboarding.onboardingNavGraph
+import org.android.bbangzip.presentation.ui.profileedit.navigation.profileEditNavGraph
+import org.android.bbangzip.presentation.ui.screensetting.navigation.screenSettingNavGraph
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
 import org.android.bbangzip.presentation.ui.timer.navigation.timerNavGraph
 import org.android.bbangzip.presentation.ui.timer.navigation.timerTodoNavGraph
@@ -53,7 +55,10 @@ fun MainNavHost(
             navigateToAddCategory = navigator::navigateToAddCategory,
         )
 
-        myNavGraph()
+        myNavGraph(
+            navigateToProfileEdit = navigator::navigateToProfileEdit,
+            navigateToScreenSetting = navigator::navigateToScreenSetting,
+        )
 
         manageCategoryNavGraph(
             popBackStack = navigator::popBackStack,
@@ -67,6 +72,14 @@ fun MainNavHost(
 
         editCategoryNavGraph(
             popBackStack = navigator::popBackStack,
+        )
+
+        profileEditNavGraph(
+            navigateToMy = navigator::popBackStack,
+        )
+
+        screenSettingNavGraph(
+            navigateToBack = navigator::popBackStack,
         )
     }
 }
