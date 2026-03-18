@@ -27,11 +27,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.bottomsheet.TwoButtonBottomSheet
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
+import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
 @Composable
@@ -342,6 +344,35 @@ private fun LogoutAndWithdrawal(
             text = stringResource(R.string.my_logout),
             style = BbangZipTheme.typography.body4Medium,
             color = BbangZipTheme.color.labelAssistive_C9C7C5
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MyScreenPreview() {
+    BBANGZIPANDROIDTheme {
+        MyScreen(
+            state = MyContract.MyState(
+                nickname = "홍길동",
+                commitmentMessage = "열심히 하자!",
+                appVersion = "v 1.0.0"
+            ),
+            onClickProfileArea = {},
+            onClickScreenSetting = {},
+            onClickNotification = {},
+            onClickCustomerCenter = {},
+            onClickTermsOfService = {},
+            onClickFeedback = {},
+            onClickAppReview = {},
+            onClickLogoutBtn = {},
+            onConfirmLogoutBtn = {},
+            onCancelLogoutBtn = {},
+            onClickLogoutBottomSheetDismissRequest = {},
+            onClickWithdrawalBtn = {},
+            onConfirmWithdrawalBtn = {},
+            onCancelWithdrawalBtn = {},
+            onClickWithdrawalBottomSheetDismissRequest = {}
         )
     }
 }
