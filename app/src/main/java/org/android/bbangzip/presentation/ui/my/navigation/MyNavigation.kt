@@ -14,8 +14,16 @@ fun NavController.navigateToMy(navOptions: NavOptions) {
     )
 }
 
-fun NavGraphBuilder.myNavGraph() {
+fun NavGraphBuilder.myNavGraph(
+    navigateToProfileEdit: () -> Unit = {},
+    navigateToScreenSetting: () -> Unit = {},
+    navigateToLogin: () -> Unit = {},
+) {
     composable<BottomNavigationRoute.My> {
-        MyRoute()
+        MyRoute(
+            navigateToProfileEdit = navigateToProfileEdit,
+            navigateToScreenSetting = navigateToScreenSetting,
+            navigateToLogin = navigateToLogin,
+        )
     }
 }

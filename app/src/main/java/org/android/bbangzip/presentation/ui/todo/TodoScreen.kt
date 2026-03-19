@@ -67,6 +67,7 @@ import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.bottomsheet.AddTodoBottomSheet
+import org.android.bbangzip.presentation.common.component.bottomsheet.CommitmentBottomSheet
 import org.android.bbangzip.presentation.common.component.bottomsheet.TimePickerBottomSheet
 import org.android.bbangzip.presentation.common.component.calendar.BbangZipWeeklyCalendar
 import org.android.bbangzip.presentation.common.component.chip.BbangZipCategoryChip
@@ -81,7 +82,6 @@ import org.android.bbangzip.presentation.common.util.extension.dropShadow
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.presentation.common.util.scroll.calculateScrollSpeed
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.ChangeDateBottomSheet
-import org.android.bbangzip.presentation.ui.todo.bottomsheet.CommitmentBottomSheet
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.EditTodoBottomSheet
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.TodoSettingBottomSheet
 import org.android.bbangzip.presentation.ui.todo.type.TodoSettingActionType

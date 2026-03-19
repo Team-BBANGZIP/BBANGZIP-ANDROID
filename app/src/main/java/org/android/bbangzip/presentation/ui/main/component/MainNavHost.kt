@@ -7,12 +7,14 @@ import androidx.navigation.compose.NavHost
 import org.android.bbangzip.presentation.ui.addcategory.navigation.addCategoryNavGraph
 import org.android.bbangzip.presentation.ui.auth.loginNavGraph
 import org.android.bbangzip.presentation.ui.editcategory.navigation.editCategoryNavGraph
-import org.android.bbangzip.presentation.ui.friend.navigation.friendNavGraph
 import org.android.bbangzip.presentation.ui.main.MainNavigator
 import org.android.bbangzip.presentation.ui.managecategory.navigation.manageCategoryNavGraph
 import org.android.bbangzip.presentation.ui.my.navigation.myNavGraph
 import org.android.bbangzip.presentation.ui.onboarding.onboardingNavGraph
+import org.android.bbangzip.presentation.ui.profileedit.navigation.profileEditNavGraph
+import org.android.bbangzip.presentation.ui.screensetting.navigation.screenSettingNavGraph
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
+import org.android.bbangzip.presentation.ui.splash.splashNavGraph
 import org.android.bbangzip.presentation.ui.timer.navigation.timerNavGraph
 import org.android.bbangzip.presentation.ui.timer.navigation.timerTodoNavGraph
 import org.android.bbangzip.presentation.ui.todo.navigation.todoNavGraph
@@ -28,6 +30,10 @@ fun MainNavHost(
         navController = navigator.navHostController,
         startDestination = navigator.startDestination,
     ) {
+        splashNavGraph(
+            navigateToLogin = navigator::navigateToLoginFromSplash,
+        )
+
         loginNavGraph(
             navigateToTodo = navigator::navigateToTodoAfterLogin,
             navigateToOnboarding = navigator::navigateToOnboarding,
@@ -54,9 +60,10 @@ fun MainNavHost(
             navigateToAddCategory = navigator::navigateToAddCategory,
         )
 
-        myNavGraph()
-
-        friendNavGraph()
+        myNavGraph(
+            navigateToProfileEdit = navigator::navigateToProfileEdit,
+            navigateToScreenSetting = navigator::navigateToScreenSetting,
+        )
 
         manageCategoryNavGraph(
             popBackStack = navigator::popBackStack,
@@ -70,6 +77,14 @@ fun MainNavHost(
 
         editCategoryNavGraph(
             popBackStack = navigator::popBackStack,
+        )
+
+        profileEditNavGraph(
+            navigateToMy = navigator::popBackStack,
+        )
+
+        screenSettingNavGraph(
+            navigateToBack = navigator::popBackStack,
         )
     }
 }

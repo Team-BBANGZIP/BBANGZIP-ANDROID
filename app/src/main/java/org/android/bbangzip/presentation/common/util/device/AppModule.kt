@@ -25,11 +25,11 @@ object AppModule {
     fun provideDeviceInfo(
         @ApplicationContext context: Context,
     ): DeviceInfo {
-        val appVersion = context.packageManager.getPackageInfo(context.packageName, 0).versionName
+        val appVersion = "v ${context.packageManager.getPackageInfo(context.packageName, 0).versionName}"
         val deviceType = getDeviceType(context)
 
         return DeviceInfoManager.getDeviceInfo(
-            appVersion = appVersion!!,
+            appVersion = appVersion,
             deviceType = deviceType,
         )
     }

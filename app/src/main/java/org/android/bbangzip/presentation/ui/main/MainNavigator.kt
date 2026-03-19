@@ -18,10 +18,12 @@ import org.android.bbangzip.presentation.ui.addcategory.navigation.navigateToAdd
 import org.android.bbangzip.presentation.ui.auth.LoginRoute
 import org.android.bbangzip.presentation.ui.auth.navigateToLogin
 import org.android.bbangzip.presentation.ui.editcategory.navigation.navigateToEditCategory
-import org.android.bbangzip.presentation.ui.friend.navigation.navigateToFriend
 import org.android.bbangzip.presentation.ui.managecategory.navigation.navigateToManageCategory
 import org.android.bbangzip.presentation.ui.my.navigation.navigateToMy
 import org.android.bbangzip.presentation.ui.onboarding.navigateToOnboarding
+import org.android.bbangzip.presentation.ui.profileedit.navigation.navigateToProfileEdit
+import org.android.bbangzip.presentation.ui.screensetting.navigation.navigateToScreenSetting
+import org.android.bbangzip.presentation.ui.splash.SplashRoute
 import org.android.bbangzip.presentation.ui.timer.navigation.navigateTimerTodo
 import org.android.bbangzip.presentation.ui.timer.navigation.navigateToTimer
 import org.android.bbangzip.presentation.ui.todo.navigation.navigateToTodo
@@ -33,7 +35,7 @@ class MainNavigator(
     private val currentDestination: NavDestination?
         @Composable get() = navHostController.currentBackStackEntryAsState().value?.destination
 
-    val startDestination = LoginRoute
+    val startDestination = SplashRoute
 
     val currentBottomNavigationBarItem: BottomNavigationType?
         @Composable get() =
@@ -58,7 +60,6 @@ class MainNavigator(
             when (bottomNavigationType) {
                 BottomNavigationType.TIMER -> navigateToTimer(navOptions)
                 BottomNavigationType.TODO -> navigateToTodo(navOptions)
-                BottomNavigationType.FRIEND -> navigateToFriend(navOptions)
                 BottomNavigationType.MY -> navigateToMy(navOptions)
             }
         }
@@ -76,16 +77,25 @@ class MainNavigator(
         )
     }
 
+    fun navigateToLoginFromSplash() {
+        navHostController.navigate(
+            route = LoginRoute,
+            navOptions =
+                navOptions {
+                    popUpTo(SplashRoute::class.qualifiedName.orEmpty()) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                },
+        )
+    }
+
     private fun navigateToLogin() {
         navHostController.navigateToLogin()
     }
 
     fun navigateToOnboarding() {
         navHostController.navigateToOnboarding()
-    }
-
-    private fun navigateToFriend(navOptions: NavOptions) {
-        navHostController.navigateToFriend(navOptions)
     }
 
     private fun navigateToMy(navOptions: NavOptions) {
@@ -136,6 +146,14 @@ class MainNavigator(
                     launchSingleTop = true
                 },
         )
+    }
+
+    fun navigateToProfileEdit() {
+        navHostController.navigateToProfileEdit()
+    }
+
+    fun navigateToScreenSetting() {
+        navHostController.navigateToScreenSetting()
     }
 
     fun popBackStack() {

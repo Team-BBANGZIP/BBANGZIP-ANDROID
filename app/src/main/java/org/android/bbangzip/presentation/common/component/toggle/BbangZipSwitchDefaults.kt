@@ -14,8 +14,8 @@ object BbangZipSwitchDefaults {
     fun colors(
         checkedThumbColor: Color = BbangZipTheme.color.primaryNormal_897869,
         uncheckedThumbColor: Color = BbangZipTheme.color.labelAssistive_C9C7C5,
-        checkedContainerColor: Color = BbangZipTheme.color.componentIvory_FDFDFD,
-        uncheckedContainerColor: Color = BbangZipTheme.color.componentIvory_FDFDFD,
+        checkedContainerColor: Color = BbangZipTheme.color.componentStrong_F6F6F5,
+        uncheckedContainerColor: Color = BbangZipTheme.color.componentStrong_F6F6F5,
     ): SwitchColors =
         remember(
             checkedThumbColor,

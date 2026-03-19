@@ -10,14 +10,12 @@ sealed interface BottomNavigationRoute : Route {
     companion object {
         const val TIMER = "Timer"
         const val TODO = "Todo"
-        const val FRIEND = "Friend"
         const val MY = "My"
 
         fun BottomNavigationRoute.routeName(): String =
             when (this) {
                 is Timer -> TIMER
                 is Todo -> TODO
-                is Friend -> FRIEND
                 is My -> MY
             }
     }
@@ -29,9 +27,6 @@ sealed interface BottomNavigationRoute : Route {
 
     @Serializable
     data object Todo : BottomNavigationRoute
-
-    @Serializable
-    data object Friend : BottomNavigationRoute
 
     @Serializable
     data object My : BottomNavigationRoute

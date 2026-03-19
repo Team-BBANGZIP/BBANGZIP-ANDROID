@@ -49,6 +49,7 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileImgPickerBottomSheet(
+    confirmButtonLabel: String = stringResource(R.string.button_label_complete),
     isBottomSheetVisible: Boolean,
     onDismissRequest: () -> Unit,
     onProfileImgItemClick: (Int) -> Unit,
@@ -121,6 +122,7 @@ fun ProfileImgPickerBottomSheet(
             Gap(height = 32.dp)
 
             ProfileImgPickerBtn(
+                confirmButtonLabel = confirmButtonLabel,
                 onCancelClick = onCancelClick,
                 onCompleteClick = onCompleteClick,
             )
@@ -132,6 +134,7 @@ fun ProfileImgPickerBottomSheet(
 
 @Composable
 private fun ProfileImgPickerBtn(
+    confirmButtonLabel: String,
     modifier: Modifier = Modifier,
     onCancelClick: () -> Unit,
     onCompleteClick: () -> Unit,
@@ -175,7 +178,7 @@ private fun ProfileImgPickerBtn(
                 ),
             content = {
                 Text(
-                    text = stringResource(R.string.button_label_complete),
+                    text = confirmButtonLabel,
                     style = BbangZipTheme.typography.body2Medium,
                 )
             },
