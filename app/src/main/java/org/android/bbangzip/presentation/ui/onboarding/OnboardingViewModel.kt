@@ -95,7 +95,6 @@ class OnboardingViewModel
             refreshSaveButtonState()
         }
 
-
         override fun reduceState(
             state: OnboardingContract.OnboardingState,
             reduce: OnboardingContract.OnboardingReduce,

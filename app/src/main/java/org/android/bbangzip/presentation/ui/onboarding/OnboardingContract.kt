@@ -2,7 +2,6 @@ package org.android.bbangzip.presentation.ui.onboarding
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.base.BaseContract
 
 class OnboardingContract {

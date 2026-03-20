@@ -36,13 +36,13 @@ import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileNic
 import org.android.bbangzip.presentation.common.component.button.BbangZipButtonDefaults
 import org.android.bbangzip.presentation.common.component.button.BbangzipBaseButton
 import org.android.bbangzip.presentation.common.component.topbar.BbangZipBaseTopBar
+import org.android.bbangzip.presentation.common.util.constant.OnboardingConstants.DEFAULT_PROFILE_IMG_RES_ID
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import org.android.bbangzip.ui.theme.defaultBbangZipColor
 import org.android.bbangzip.ui.theme.defaultBbangZipTypography
-import org.android.bbangzip.presentation.common.util.constant.OnboardingConstants.DEFAULT_PROFILE_IMG_RES_ID
 
 @Composable
 fun OnboardingScreen(
