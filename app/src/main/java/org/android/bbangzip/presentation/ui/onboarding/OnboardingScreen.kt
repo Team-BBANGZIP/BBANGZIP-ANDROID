@@ -102,9 +102,9 @@ fun OnboardingScreen(
             onClick = onClickSaveBtn,
             trailingIcon = {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_x_default_24),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_check_default_24),
                     contentDescription = null,
-                    modifier = Modifier.size(16.dp),
+                    modifier = Modifier.size(20.dp),
                 )
             },
             colors =
