@@ -56,6 +56,7 @@ fun ProfileImgPickerBottomSheet(
     onCancelClick: () -> Unit,
     onCompleteClick: () -> Unit,
     selectedImgResId: Int,
+    isCompleteBtnEnabled: Boolean = true,
 ) {
     BbangZipBottomSheetSlot(
         isBottomSheetVisible = isBottomSheetVisible,
@@ -125,6 +126,7 @@ fun ProfileImgPickerBottomSheet(
                 confirmButtonLabel = confirmButtonLabel,
                 onCancelClick = onCancelClick,
                 onCompleteClick = onCompleteClick,
+                isCompleteBtnEnabled = isCompleteBtnEnabled,
             )
 
             Gap(height = 27.dp)
@@ -136,6 +138,7 @@ fun ProfileImgPickerBottomSheet(
 private fun ProfileImgPickerBtn(
     confirmButtonLabel: String,
     modifier: Modifier = Modifier,
+    isCompleteBtnEnabled: Boolean = true,
     onCancelClick: () -> Unit,
     onCompleteClick: () -> Unit,
 ) {
@@ -165,6 +168,7 @@ private fun ProfileImgPickerBtn(
         BbangzipBaseButton(
             modifier = Modifier.weight(1f),
             onClick = onCompleteClick,
+            enabled = isCompleteBtnEnabled,
             trailingIcon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_check_default_24),
@@ -175,6 +179,8 @@ private fun ProfileImgPickerBtn(
             colors =
                 BbangZipButtonDefaults.colors(
                     enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
+                    disabledContainerColor = BbangZipTheme.color.labelDisable_E4E2E0,
+                    disabledContentColor = BbangZipTheme.color.labelAssistive_C9C7C5,
                 ),
             content = {
                 Text(

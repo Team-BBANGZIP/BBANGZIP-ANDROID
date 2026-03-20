@@ -2,7 +2,6 @@ package org.android.bbangzip.presentation.ui.onboarding
 
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
-import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.base.BaseContract
 
 class OnboardingContract {
@@ -12,8 +11,8 @@ class OnboardingContract {
         val isNicknameValid: Boolean = false,
         val isNicknameBottomSheetVisible: Boolean = false,
         val isSaveBtnEnabled: Boolean = false,
-        val profileImg: Int = R.drawable.ic_profile_default_100,
-        val selectedImg: Int = R.drawable.ic_profile_default_100,
+        val profileImg: Int? = null,
+        val selectedImg: Int? = null,
         val isProfileImgBottomSheetVisible: Boolean = false,
         val onboardingState: Boolean = false,
     ) : BaseContract.State, Parcelable {
@@ -57,7 +56,7 @@ class OnboardingContract {
 
         data class UpdateCurrentProfileImg(val imgResId: Int) : OnboardingReduce
 
-        data class UpdateSelectedProfileImg(val imgResId: Int) : OnboardingReduce
+        data class UpdateSelectedProfileImg(val imgResId: Int?) : OnboardingReduce
     }
 
     sealed interface OnboardingSideEffect : BaseContract.SideEffect {

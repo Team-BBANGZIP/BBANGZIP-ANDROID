@@ -36,6 +36,7 @@ import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileNic
 import org.android.bbangzip.presentation.common.component.button.BbangZipButtonDefaults
 import org.android.bbangzip.presentation.common.component.button.BbangzipBaseButton
 import org.android.bbangzip.presentation.common.component.topbar.BbangZipBaseTopBar
+import org.android.bbangzip.presentation.common.util.constant.OnboardingConstants.DEFAULT_PROFILE_IMG_RES_ID
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
@@ -79,7 +80,7 @@ fun OnboardingScreen(
         Gap(height = 32.dp)
 
         ProfileImageArea(
-            currentProfileResId = state.profileImg,
+            currentProfileResId = state.profileImg ?: DEFAULT_PROFILE_IMG_RES_ID,
             onClick = onClickProfileImg,
         )
 
@@ -102,9 +103,9 @@ fun OnboardingScreen(
             onClick = onClickSaveBtn,
             trailingIcon = {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_x_default_24),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_check_default_24),
                     contentDescription = null,
-                    modifier = Modifier.size(16.dp),
+                    modifier = Modifier.size(20.dp),
                 )
             },
             colors =
@@ -141,7 +142,8 @@ fun OnboardingScreen(
         onProfileImgItemClick = onSelectProfileImg,
         onCancelClick = onClickProfileImgCancelBtn,
         onCompleteClick = onClickProfileImgCompleteBtn,
-        selectedImgResId = state.selectedImg,
+        selectedImgResId = state.selectedImg ?: DEFAULT_PROFILE_IMG_RES_ID,
+        isCompleteBtnEnabled = state.selectedImg != null,
     )
 }
 

@@ -44,24 +44,18 @@ class OnboardingViewModel
 
                 OnboardingContract.OnboardingEvent.OnClickNicknameBottomSheetDismissRequest -> {
                     updateState(OnboardingContract.OnboardingReduce.UpdateNicknameBottomSheetVisibility(isVisible = false))
+                    refreshSaveButtonState()
                 }
 
                 OnboardingContract.OnboardingEvent.OnNicknameInputDone -> {
-                    val finalNickname = currentUiState.nickname
-
-                    if (finalNickname.isNotEmpty()) {
-                        updateState(OnboardingContract.OnboardingReduce.UpdateSaveButtonEnabled(true))
-                    } else {
-                        updateState(OnboardingContract.OnboardingReduce.UpdateSaveButtonEnabled(false))
-                    }
-
                     updateState(OnboardingContract.OnboardingReduce.UpdateNicknameBottomSheetVisibility(isVisible = false))
+                    refreshSaveButtonState()
                 }
 
                 // 프로필 이미지
                 OnboardingContract.OnboardingEvent.OnClickProfileImgSettingBtn -> {
                     updateState(OnboardingContract.OnboardingReduce.UpdateProfileImgBottomSheetVisibility(true))
-                    updateState(OnboardingContract.OnboardingReduce.UpdateSelectedProfileImg(currentUiState.profileImg))
+                    currentUiState.profileImg?.let { updateState(OnboardingContract.OnboardingReduce.UpdateSelectedProfileImg(it)) }
                 }
 
                 is OnboardingContract.OnboardingEvent.OnSelectProfileImg -> {
@@ -74,22 +68,31 @@ class OnboardingViewModel
                 }
 
                 OnboardingContract.OnboardingEvent.OnClickProfileImgBottomSheetDismissRequest -> {
-                    updateState(OnboardingContract.OnboardingReduce.UpdateProfileImgBottomSheetVisibility(isVisible = false))
-                    updateState(OnboardingContract.OnboardingReduce.UpdateSelectedProfileImg(currentUiState.profileImg))
+                    applySelectedProfileImgAndDismiss()
                 }
 
                 OnboardingContract.OnboardingEvent.OnClickProfileImgCompleteBtn -> {
-                    updateState(OnboardingContract.OnboardingReduce.UpdateProfileImgBottomSheetVisibility(isVisible = false))
-                    updateState(OnboardingContract.OnboardingReduce.UpdateCurrentProfileImg(currentUiState.selectedImg))
+                    applySelectedProfileImgAndDismiss()
                 }
 
                 // 온보딩 완료
                 OnboardingContract.OnboardingEvent.OnClickSaveBtn -> {
                     if (currentUiState.isSaveBtnEnabled) {
-                        signup(currentUiState.nickname, currentUiState.profileImg)
+                        signup(currentUiState.nickname, currentUiState.profileImg ?: 0)
                     }
                 }
             }
+        }
+
+        private fun refreshSaveButtonState() {
+            val isEnabled = currentUiState.nickname.isNotEmpty() && currentUiState.profileImg != null
+            updateState(OnboardingContract.OnboardingReduce.UpdateSaveButtonEnabled(isEnabled))
+        }
+
+        private fun applySelectedProfileImgAndDismiss() {
+            updateState(OnboardingContract.OnboardingReduce.UpdateProfileImgBottomSheetVisibility(isVisible = false))
+            currentUiState.selectedImg?.let { updateState(OnboardingContract.OnboardingReduce.UpdateCurrentProfileImg(it)) }
+            refreshSaveButtonState()
         }
 
         override fun reduceState(
@@ -132,7 +135,7 @@ class OnboardingViewModel
 
         private fun signup(
             nickname: String,
-            profileImgKey: Int = 0,
+            profileImgKey: Int,
         ) {
             viewModelScope.launch {
                 userRepository.onboardingComplete(

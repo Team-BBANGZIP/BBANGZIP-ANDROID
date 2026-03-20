@@ -58,7 +58,7 @@
     <string name="profile_img_picker_title">프로필 이미지 설정</string>
 
     <!-- Profile Nickname BottomSheet -->
-    <string name="profile_nickname_input_title">이름 설정하기</string>
+    <string name="profile_nickname_input_title">이름 설정</string>
 
     <!-- timer - view -->
     <string name="timer_idle_title">오늘의 빵을 구워보세요!</string>
