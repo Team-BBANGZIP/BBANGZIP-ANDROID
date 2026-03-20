@@ -94,6 +94,7 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
+hotswan-compiler = { id = "com.github.skydoves.compose.hotswan.compiler", version = "1.0.8" }
 
 [bundles]
 androidx = [
