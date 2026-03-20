@@ -42,6 +42,7 @@ import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import org.android.bbangzip.ui.theme.defaultBbangZipColor
 import org.android.bbangzip.ui.theme.defaultBbangZipTypography
+import org.android.bbangzip.presentation.common.util.constant.OnboardingConstants.DEFAULT_PROFILE_IMG_RES_ID
 
 @Composable
 fun OnboardingScreen(
@@ -79,7 +80,7 @@ fun OnboardingScreen(
         Gap(height = 32.dp)
 
         ProfileImageArea(
-            currentProfileResId = state.profileImg,
+            currentProfileResId = state.profileImg ?: DEFAULT_PROFILE_IMG_RES_ID,
             onClick = onClickProfileImg,
         )
 
@@ -141,7 +142,8 @@ fun OnboardingScreen(
         onProfileImgItemClick = onSelectProfileImg,
         onCancelClick = onClickProfileImgCancelBtn,
         onCompleteClick = onClickProfileImgCompleteBtn,
-        selectedImgResId = state.selectedImg,
+        selectedImgResId = state.selectedImg ?: DEFAULT_PROFILE_IMG_RES_ID,
+        isCompleteBtnEnabled = state.selectedImg != null,
     )
 }
 
