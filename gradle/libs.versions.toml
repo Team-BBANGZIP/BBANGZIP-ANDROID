@@ -32,6 +32,9 @@ timber = "5.0.1"
 ktlint = "12.1.1"
 ksp = "2.0.0-1.0.21"
 kakaoV2User = "2.21.1"
+hotSwan = "1.0.8"
+
+# Plugin
 
 # DataStore
 datastore = "1.1.5"
@@ -94,7 +97,7 @@ kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", versi
 kotlin-parcelize = { id = "org.jetbrains.kotlin.plugin.parcelize", version.ref = "kotlin" }
 dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 protobuf = { id = "com.google.protobuf", version.ref = "protobufPlugin" }
-hotswan-compiler = { id = "com.github.skydoves.compose.hotswan.compiler", version = "1.0.8" }
+hotswan-compiler = { id = "com.github.skydoves.compose.hotswan.compiler", version.ref = "hotSwan" }
 
 [bundles]
 androidx = [
