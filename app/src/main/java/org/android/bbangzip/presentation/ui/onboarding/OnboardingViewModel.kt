@@ -44,12 +44,12 @@ class OnboardingViewModel
 
                 OnboardingContract.OnboardingEvent.OnClickNicknameBottomSheetDismissRequest -> {
                     updateState(OnboardingContract.OnboardingReduce.UpdateNicknameBottomSheetVisibility(isVisible = false))
-                    refreshSaveButtonState()
+                    refreshSaveButtonState(nickname = currentUiState.nickname, profileImg = currentUiState.profileImg)
                 }
 
                 OnboardingContract.OnboardingEvent.OnNicknameInputDone -> {
                     updateState(OnboardingContract.OnboardingReduce.UpdateNicknameBottomSheetVisibility(isVisible = false))
-                    refreshSaveButtonState()
+                    refreshSaveButtonState(nickname = currentUiState.nickname, profileImg = currentUiState.profileImg)
                 }
 
                 // 프로필 이미지
@@ -68,11 +68,11 @@ class OnboardingViewModel
                 }
 
                 OnboardingContract.OnboardingEvent.OnClickProfileImgBottomSheetDismissRequest -> {
-                    applySelectedProfileImgAndDismiss()
+                    applySelectedProfileImgAndDismiss(selectedImg = currentUiState.selectedImg)
                 }
 
                 OnboardingContract.OnboardingEvent.OnClickProfileImgCompleteBtn -> {
-                    applySelectedProfileImgAndDismiss()
+                    applySelectedProfileImgAndDismiss(selectedImg = currentUiState.selectedImg)
                 }
 
                 // 온보딩 완료
@@ -84,15 +84,20 @@ class OnboardingViewModel
             }
         }
 
-        private fun refreshSaveButtonState() {
-            val isEnabled = currentUiState.nickname.isNotEmpty() && currentUiState.profileImg != null
+        private fun refreshSaveButtonState(
+            nickname: String,
+            profileImg: Int?,
+        ) {
+            val isEnabled = nickname.isNotEmpty() && profileImg != null
             updateState(OnboardingContract.OnboardingReduce.UpdateSaveButtonEnabled(isEnabled))
         }
 
-        private fun applySelectedProfileImgAndDismiss() {
+        private fun applySelectedProfileImgAndDismiss(
+            selectedImg: Int?,
+        ) {
             updateState(OnboardingContract.OnboardingReduce.UpdateProfileImgBottomSheetVisibility(isVisible = false))
-            currentUiState.selectedImg?.let { updateState(OnboardingContract.OnboardingReduce.UpdateCurrentProfileImg(it)) }
-            refreshSaveButtonState()
+            selectedImg?.let { updateState(OnboardingContract.OnboardingReduce.UpdateCurrentProfileImg(it)) }
+            refreshSaveButtonState(nickname = currentUiState.nickname, profileImg = selectedImg ?: currentUiState.profileImg)
         }
 
         override fun reduceState(
