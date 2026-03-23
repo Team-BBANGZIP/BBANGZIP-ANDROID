@@ -660,12 +660,10 @@ class TodoViewModel
                             }
 
                         updateState(
-                            TodoReduce.UpdateTodoState(
-                                currentUiState.copy(
-                                    categories = categoryList,
-                                    flatList = categoryList.toFlatList(),
-                                    confirmedCommitmentMessage = data.commitmentMessage,
-                                ),
+                            TodoReduce.UpdateTodoListData(
+                                categories = categoryList,
+                                flatList = categoryList.toFlatList(),
+                                confirmedCommitmentMessage = data.commitmentMessage,
                             ),
                         )
                     }.onFailure { throwable ->
@@ -696,6 +694,7 @@ class TodoViewModel
                 }
 
                 is UpdateSelectedDate -> {
+                    Timber.tag("BbangZipWeeklyCalendar").d("reduce selectedDate: ${reduce.selectedDate}")
                     state.copy(selectedDate = reduce.selectedDate)
                 }
 
@@ -741,6 +740,14 @@ class TodoViewModel
 
                 is TodoReduce.UpdateTodoState -> {
                     return reduce.todoState
+                }
+
+                is TodoReduce.UpdateTodoListData -> {
+                    state.copy(
+                        categories = reduce.categories,
+                        flatList = reduce.flatList,
+                        confirmedCommitmentMessage = reduce.confirmedCommitmentMessage,
+                    )
                 }
             }
         }

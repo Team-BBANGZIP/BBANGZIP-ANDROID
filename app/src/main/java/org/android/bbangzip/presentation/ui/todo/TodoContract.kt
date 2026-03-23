@@ -143,6 +143,12 @@ class TodoContract {
         data class UpdateConfirmedCommitmentMessage(val commitmentMessage: String) : TodoReduce
 
         data class UpdateIsCommitmentBottomSheetVisible(val isVisible: Boolean) : TodoReduce
+
+        data class UpdateTodoListData(
+            val categories: List<Category>,
+            val flatList: List<ListItem>,
+            val confirmedCommitmentMessage: String,
+        ) : TodoReduce
     }
 
     sealed interface TodoSideEffect : BaseContract.SideEffect {
