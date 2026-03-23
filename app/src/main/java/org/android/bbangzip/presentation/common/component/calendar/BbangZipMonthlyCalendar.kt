@@ -114,9 +114,11 @@ fun MonthlyCalendar(
         onDateSelected(selectedDate)
     }
 
+    val anchorYearMonth = remember { initialYearMonth }
+
     val currentYearMonth =
-        remember(pagerState.currentPage, initialYearMonth) {
-            initialYearMonth.plusMonths((pagerState.currentPage - STARTING_PAGE_INDEX).toLong())
+        remember(pagerState.currentPage, anchorYearMonth) {
+            anchorYearMonth.plusMonths((pagerState.currentPage - STARTING_PAGE_INDEX).toLong())
         }
 
     Column(
@@ -136,8 +138,8 @@ fun MonthlyCalendar(
             modifier = Modifier.fillMaxWidth(),
         ) { pageIndex ->
             val yearMonthForPage =
-                remember(pageIndex, initialYearMonth) {
-                    initialYearMonth.plusMonths((pageIndex - STARTING_PAGE_INDEX).toLong())
+                remember(pageIndex, anchorYearMonth) {
+                    anchorYearMonth.plusMonths((pageIndex - STARTING_PAGE_INDEX).toLong())
                 }
 
             val daysInMonth =
@@ -165,7 +167,7 @@ fun MonthlyCalendar(
                         val newSelectedYearMonth = YearMonth.from(day.date)
 
                         if (newSelectedYearMonth != yearMonthForPage) {
-                            val monthDiff = ChronoUnit.MONTHS.between(initialYearMonth, newSelectedYearMonth)
+                            val monthDiff = ChronoUnit.MONTHS.between(anchorYearMonth, newSelectedYearMonth)
                             val targetPage = STARTING_PAGE_INDEX + monthDiff.toInt()
                             scope.launch {
                                 pagerState.animateScrollToPage(targetPage)
@@ -220,9 +222,11 @@ private fun CalendarHeader(
             modifier =
                 Modifier
                     .noRippleClickable(onClick = {
-                        scope.launch {
-                            if (pagerState.currentPage > 0) {
-                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                        if (!pagerState.isScrollInProgress) {
+                            scope.launch {
+                                if (pagerState.currentPage > 0) {
+                                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                                }
                             }
                         }
                     }),
@@ -237,9 +241,11 @@ private fun CalendarHeader(
             modifier =
                 Modifier
                     .noRippleClickable(onClick = {
-                        scope.launch {
-                            if (pagerState.currentPage < pagerState.pageCount - 1) {
-                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        if (!pagerState.isScrollInProgress) {
+                            scope.launch {
+                                if (pagerState.currentPage < pagerState.pageCount - 1) {
+                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                }
                             }
                         }
                     }),
