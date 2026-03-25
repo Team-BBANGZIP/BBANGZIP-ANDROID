@@ -67,7 +67,7 @@ fun TodoSettingBottomSheet(
 
                 Text(
                     text = categoryName,
-                    style = BbangZipTheme.typography.title3SemiBold,
+                    style = BbangZipTheme.typography.subTitle2Regular,
                     color = BbangZipTheme.color.labelAlternative_A29D96,
                 )
 
