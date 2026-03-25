@@ -44,6 +44,7 @@ fun ChangeDateBottomSheet(
     onDateSelect: (LocalDate) -> Unit,
     modifier: Modifier = Modifier,
     isDateSavable: Boolean = false,
+    isSundayStart: Boolean = false,
 ) {
     BbangZipBottomSheetSlot(
         isBottomSheetVisible = isBottomSheetVisible,
@@ -66,6 +67,7 @@ fun ChangeDateBottomSheet(
                     initialDate = date,
                     initialYearMonth = YearMonth.of(date.year, date.month),
                     onDateSelected = onDateSelect,
+                    isSundayStart = isSundayStart,
                 )
 
                 Gap(40.dp)

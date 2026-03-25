@@ -60,4 +60,13 @@ class UserDefaultRepositoryImpl
                     .build()
             }
         }
+
+        override suspend fun setIsSundayStart(isSundayStart: Boolean) {
+            userDataSource.updateUserPreferences { userData ->
+                userData
+                    .toBuilder()
+                    .setIsSundayStart(isSundayStart)
+                    .build()
+            }
+        }
     }

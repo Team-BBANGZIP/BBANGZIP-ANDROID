@@ -5,6 +5,7 @@ import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 import java.time.format.DateTimeFormatter
+import java.time.temporal.TemporalAdjusters
 import java.util.Locale
 
 fun LocalTime.formatTimeWithAmPm(): String {
@@ -24,7 +25,7 @@ fun LocalTime.to12HourText(): Int =
 fun LocalTime.toAmPmText(): String = if (this.hour < 12) AmPm.AM.displayText else AmPm.PM.displayText
 
 fun LocalDate.startOfWeek(startDayOfWeek: DayOfWeek): LocalDate {
-    return this.with(startDayOfWeek)
+    return this.with(TemporalAdjusters.previousOrSame(startDayOfWeek))
 }
 
 /**
