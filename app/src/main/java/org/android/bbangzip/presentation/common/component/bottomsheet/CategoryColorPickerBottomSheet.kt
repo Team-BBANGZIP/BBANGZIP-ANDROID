@@ -1,15 +1,13 @@
 package org.android.bbangzip.presentation.common.component.bottomsheet
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBarsPadding
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,9 +19,10 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.Fill
+import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.type.CategoryColor
@@ -36,6 +35,7 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
 @Composable
 fun CategoryColorPickerBottomSheet(
     isBottomSheetVisible: Boolean,
+    selectedColorString: String,
     onDismissRequest: () -> Unit,
     onColorItemClick: (String) -> Unit,
 ) {
@@ -53,13 +53,14 @@ fun CategoryColorPickerBottomSheet(
         },
         content = {
             FlowRow(
-                horizontalArrangement = Arrangement.spacedBy(16.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
                 CategoryColor.entries.forEach {
                     ColorChip(
                         color = it.color,
                         onClick = { onColorItemClick(it.name) },
+                        isSelected = it.name == selectedColorString,
                     )
                 }
             }
@@ -71,18 +72,30 @@ fun CategoryColorPickerBottomSheet(
 
 @Composable
 private fun ColorChip(
-    modifier: Modifier = Modifier,
     color: Color,
-    size: Dp = 48.dp,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    isSelected: Boolean = false,
 ) {
-    Box(
-        modifier =
-            modifier
-                .size(size)
-                .background(color = color, shape = CircleShape)
-                .noRippleClickable(onClick = onClick),
-    )
+    Canvas(
+        modifier = modifier
+            .size(56.dp)
+            .noRippleClickable(onClick = onClick),
+    ) {
+        // 테두리
+        if(isSelected){
+            drawCircle(
+                color = color,
+                style = Stroke(width = 2.5.dp.toPx())
+            )
+        }
+
+        drawCircle(
+            color = color,
+            radius = 24.dp.toPx(),
+            style = Fill
+        )
+    }
 }
 
 @Preview(showBackground = true, showSystemUi = true)
@@ -115,6 +128,7 @@ private fun CategoryColorPickerBottomSheetPreview() {
             isBottomSheetVisible = isBottomSheetVisible,
             onDismissRequest = { isBottomSheetVisible = false },
             onColorItemClick = { selectedColor = it },
+            selectedColorString = selectedColor,
         )
     }
 }

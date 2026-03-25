@@ -101,6 +101,7 @@ fun AddCategoryScreen(
 
         CategoryColorPickerBottomSheet(
             isBottomSheetVisible = isColorPickerBottomSheetVisible,
+            selectedColorString = selectedColorString,
             onDismissRequest = onColorPickerBottomSheetDismissRequest,
             onColorItemClick = onColorItemClick,
         )
