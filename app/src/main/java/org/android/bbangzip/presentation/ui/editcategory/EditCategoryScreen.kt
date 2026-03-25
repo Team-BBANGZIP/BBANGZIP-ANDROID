@@ -142,6 +142,7 @@ fun EditCategoryScreen(
 
         CategoryColorPickerBottomSheet(
             isBottomSheetVisible = isColorPickerBottomSheetVisible,
+            selectedColorString = selectedColorString,
             onDismissRequest = onColorPickerBottomSheetDismissRequest,
             onColorItemClick = onColorItemClick,
         )

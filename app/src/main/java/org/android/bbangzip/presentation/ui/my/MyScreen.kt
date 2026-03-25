@@ -48,7 +48,6 @@ fun MyScreen(
     state: MyContract.MyState,
     onClickProfileArea: () -> Unit,
     onClickScreenSetting: () -> Unit,
-    onClickNotification: () -> Unit,
     onClickCustomerCenter: () -> Unit,
     onClickTermsOfService: () -> Unit,
     onClickFeedback: () -> Unit,
@@ -110,26 +109,6 @@ fun MyScreen(
                 MyPageMenuItem(
                     title = stringResource(R.string.my_screen),
                     onClickMenu = onClickScreenSetting,
-                )
-
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = BbangZipTheme.color.secondaryNormal_F6F1EE,
-                    modifier = Modifier.padding(horizontal = 20.dp, vertical = 24.dp),
-                )
-
-                Icon(
-                    painter = painterResource(R.drawable.ic_notification_20),
-                    contentDescription = null,
-                    modifier = Modifier.padding(start = 24.dp),
-                    tint = Color.Unspecified,
-                )
-
-                Gap(height = 12.dp)
-
-                MyPageMenuItem(
-                    title = stringResource(R.string.my_notification),
-                    onClickMenu = onClickNotification,
                 )
 
                 HorizontalDivider(
@@ -530,7 +509,6 @@ fun MyScreenPreview() {
                 ),
             onClickProfileArea = {},
             onClickScreenSetting = {},
-            onClickNotification = {},
             onClickCustomerCenter = {},
             onClickTermsOfService = {},
             onClickFeedback = {},

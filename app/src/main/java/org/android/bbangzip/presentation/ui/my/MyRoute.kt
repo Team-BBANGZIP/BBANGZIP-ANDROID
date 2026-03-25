@@ -44,7 +44,6 @@ fun MyRoute(
         state = state,
         onClickProfileArea = { viewModel.setEvent(MyContract.MyEvent.OnClickProfileArea) },
         onClickScreenSetting = { viewModel.setEvent(MyContract.MyEvent.OnClickScreenSetting) },
-        onClickNotification = { viewModel.setEvent(MyContract.MyEvent.OnClickAlarmSetting) },
         onClickCustomerCenter = { viewModel.setEvent(MyContract.MyEvent.OnClickCustomerCenter) },
         onClickTermsOfService = { viewModel.setEvent(MyContract.MyEvent.OnClickTermsOfService) },
         onClickFeedback = { viewModel.setEvent(MyContract.MyEvent.OnClickFeedback) },

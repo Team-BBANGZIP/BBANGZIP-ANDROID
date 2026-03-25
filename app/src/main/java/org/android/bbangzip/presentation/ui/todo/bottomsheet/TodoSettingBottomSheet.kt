@@ -42,7 +42,6 @@ fun TodoSettingBottomSheet(
     todoName: String,
     categoryName: String,
     isCompleted: Boolean,
-    isNotificationEnabled: Boolean,
     modifier: Modifier = Modifier,
     onEditButtonClick: () -> Unit = {},
     onDeleteButtonClick: () -> Unit = {},
@@ -67,7 +66,7 @@ fun TodoSettingBottomSheet(
 
                 Text(
                     text = categoryName,
-                    style = BbangZipTheme.typography.title3SemiBold,
+                    style = BbangZipTheme.typography.subTitle2Regular,
                     color = BbangZipTheme.color.labelAlternative_A29D96,
                 )
 
@@ -122,20 +121,12 @@ fun TodoSettingBottomSheet(
                                                 )
                                             }
 
-                                            TodoSettingActionType.NOTIFICATION -> {
-                                                BbangZipSwitch(
-                                                    modifier = Modifier.fillMaxWidth(44 / 335f),
-                                                    isChecked = isNotificationEnabled,
-                                                    onCheckedChange = { onActionRowClick(actionType) },
-                                                )
-                                            }
-
                                             else -> {}
                                         }
                                     },
                                 )
 
-                                if (index == 1) {
+                                if (index == 0) {
                                     HorizontalDivider(
                                         modifier = Modifier.padding(vertical = 4.dp),
                                         color = BbangZipTheme.color.componentStrong_F6F6F5,
@@ -165,7 +156,7 @@ private fun InteractionButtons(
             onClick = onEditButtonClick,
             leadingIcon = {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_return_thin_24),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_pencil_default_24),
                     contentDescription = null,
                     modifier = Modifier.size(20.dp),
                     tint = BbangZipTheme.color.staticWhite_FFFFFF,
@@ -224,7 +215,6 @@ fun TodoSettingBottomSheetPreview() {
         todoName = "미완료 바텀시트",
         categoryName = "바텀시트",
         isCompleted = false,
-        isNotificationEnabled = isNotificationEnabled,
     )
 
     TodoSettingBottomSheet(
@@ -233,6 +223,5 @@ fun TodoSettingBottomSheetPreview() {
         todoName = "완료 바텀시트",
         categoryName = "바텀시트",
         isCompleted = true,
-        isNotificationEnabled = isNotificationEnabled,
     )
 }

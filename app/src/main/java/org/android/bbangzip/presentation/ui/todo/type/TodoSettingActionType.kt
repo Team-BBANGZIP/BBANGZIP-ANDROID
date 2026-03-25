@@ -15,11 +15,11 @@ enum class TodoSettingActionType(
         actionName = R.string.todo_setting_start_time_action_name,
         hasActionButton = true,
     ),
-    NOTIFICATION(
-        interactionIconResId = R.drawable.ic_bell_default_24,
-        actionName = R.string.todo_setting_notification_action_name,
-        hasActionButton = true,
-    ),
+//    NOTIFICATION(
+//        interactionIconResId = R.drawable.ic_bell_default_24,
+//        actionName = R.string.todo_setting_notification_action_name,
+//        hasActionButton = true,
+//    ),
     POSTPONE(
         interactionIconResId = R.drawable.ic_move_back_default_24,
         actionName = R.string.todo_setting_move_back_action_name,

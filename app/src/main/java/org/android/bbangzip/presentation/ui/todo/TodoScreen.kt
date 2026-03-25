@@ -378,14 +378,12 @@ fun TodoScreen(
                 todoName = selectedTodoItem.todo.content,
                 categoryName = selectedTodoItem.category.name,
                 isCompleted = selectedTodoItem.todo.isCompleted,
-                isNotificationEnabled = false,
                 startTime = selectedTodoItem.todo.startTime,
                 onEditButtonClick = onModifyTodoNameButtonClick,
                 onDeleteButtonClick = onDeleteTodoButtonClick,
                 onActionRowClick = { actionType ->
                     when (actionType) {
                         TodoSettingActionType.START_TIME -> onModifyTodoStartTimeClick()
-                        TodoSettingActionType.NOTIFICATION -> {}
                         TodoSettingActionType.POSTPONE -> onMoveTodoToTomorrowClick()
                         TodoSettingActionType.DUPLICATE -> onCopyTodoClick()
                         TodoSettingActionType.CHANGE_DATE -> onModifyTodoDateClick()

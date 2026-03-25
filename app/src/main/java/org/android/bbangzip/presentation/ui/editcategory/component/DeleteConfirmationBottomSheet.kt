@@ -77,9 +77,10 @@ private fun DeleteConfirmationInteractionRow(
             onClick = onCancelButtonClick,
             trailingIcon = {
                 Icon(
-                    imageVector = ImageVector.vectorResource(R.drawable.ic_return_thin_24),
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_go_back_default_24),
                     contentDescription = null,
-                    modifier = Modifier.size(20.dp),
+                    tint = BbangZipTheme.color.staticWhite_FFFFFF,
+                    modifier = Modifier.size(16.dp),
                 )
             },
             content = {
