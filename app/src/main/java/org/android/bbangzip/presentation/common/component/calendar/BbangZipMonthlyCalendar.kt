@@ -97,6 +97,7 @@ fun MonthlyCalendar(
     modifier: Modifier = Modifier,
     initialYearMonth: YearMonth = YearMonth.now(),
     initialDate: LocalDate = LocalDate.now(),
+    isSundayStart: Boolean = false,
     onDateSelected: (LocalDate) -> Unit = {},
     colors: MonthlyCalendarColors = BbangZipMonthlyCalendarDefaults.colors(),
     typography: MonthlyCalendarTypography = BbangZipMonthlyCalendarDefaults.typography(),
@@ -143,15 +144,17 @@ fun MonthlyCalendar(
                 }
 
             val daysInMonth =
-                remember(key1 = yearMonthForPage, key2 = today) {
+                remember(key1 = yearMonthForPage, key2 = today, key3 = isSundayStart) {
                     generateMonthDays(
                         yearMonth = yearMonthForPage,
                         today = today,
+                        startDayOfWeek = if (isSundayStart) DayOfWeek.SUNDAY else DayOfWeek.MONDAY,
                     )
                 }
 
             Column(modifier = Modifier.fillMaxWidth()) {
                 DayOfWeekHeader(
+                    isSundayStart = isSundayStart,
                     color = colors.dayOfWeekTextColor,
                     typography = typography.dayOfWeekTextStyle,
                 )
@@ -262,6 +265,7 @@ private fun CalendarHeader(
  */
 @Composable
 private fun DayOfWeekHeader(
+    isSundayStart: Boolean,
     color: Color,
     typography: TextStyle,
 ) {
@@ -269,7 +273,12 @@ private fun DayOfWeekHeader(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = BbangZipMonthlyCalendarDefaults.DayCellHorizontalSpacing),
     ) {
-        val daysOfWeek = remember { getDaysOfWeekStartingFrom() }
+        val daysOfWeek =
+            remember(isSundayStart) {
+                getDaysOfWeekStartingFrom(
+                    startDayOfWeek = if (isSundayStart) DayOfWeek.SUNDAY else DayOfWeek.MONDAY,
+                )
+            }
 
         for (dayOfWeek in daysOfWeek) {
             Text(

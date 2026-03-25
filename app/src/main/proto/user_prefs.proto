@@ -7,4 +7,5 @@ message UserPreferences {
     string access_token = 1;
     string refresh_token = 2;
     bool is_login = 3;
+    bool is_sunday_start = 4;
 }

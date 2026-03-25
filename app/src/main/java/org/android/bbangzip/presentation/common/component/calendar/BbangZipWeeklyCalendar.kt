@@ -103,15 +103,25 @@ fun BbangZipWeeklyCalendar(
             pageCount = { PAGER_PAGE_COUNT },
         )
 
-    val firstDayOfInitialPagerWeek =
-        remember(key1 = initialDate, key2 = startDayOfWeek) {
+    val pivotWeek =
+        remember(key1 = startDayOfWeek) {
             initialDate.startOfWeek(startDayOfWeek)
         }
 
     val currentDisplayWeekStartDate by remember {
         derivedStateOf {
             val weeksOffset = pagerState.currentPage - INITIAL_PAGE_INDEX
-            firstDayOfInitialPagerWeek.plusWeeks(weeksOffset.toLong())
+            pivotWeek.plusWeeks(weeksOffset.toLong())
+        }
+    }
+
+    LaunchedEffect(key1 = initialDate, key2 = startDayOfWeek) {
+        val targetWeek = initialDate.startOfWeek(startDayOfWeek)
+        val weeksOffset = java.time.temporal.ChronoUnit.WEEKS.between(pivotWeek, targetWeek).toInt()
+        val targetPage = INITIAL_PAGE_INDEX + weeksOffset
+
+        if (pagerState.currentPage != targetPage) {
+            pagerState.scrollToPage(targetPage)
         }
     }
 
@@ -156,8 +166,8 @@ fun BbangZipWeeklyCalendar(
         ) { pageIndex ->
             val weeksOffset = pageIndex - INITIAL_PAGE_INDEX
             val firstDayForThisPage =
-                remember(key1 = firstDayOfInitialPagerWeek, key2 = weeksOffset) {
-                    firstDayOfInitialPagerWeek.plusWeeks(weeksOffset.toLong())
+                remember(key1 = pivotWeek, key2 = weeksOffset) {
+                    pivotWeek.plusWeeks(weeksOffset.toLong())
                 }
             val currentPageWeekDays by remember(key1 = firstDayForThisPage, key2 = today) {
                 derivedStateOf {

@@ -7,6 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.android.bbangzip.domain.repository.CommitmentRepository
 import org.android.bbangzip.domain.repository.TodoRepository
+import org.android.bbangzip.domain.repository.UserDefaultRepository
 import org.android.bbangzip.presentation.common.base.BaseViewModel
 import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.model.ListItem
@@ -40,6 +41,7 @@ class TodoViewModel
         savedStateHandle: SavedStateHandle,
         private val todoRepository: TodoRepository,
         private val commitmentRepository: CommitmentRepository,
+        private val userDefaultRepository: UserDefaultRepository,
     ) : BaseViewModel<TodoEvent, TodoState, TodoReduce, TodoSideEffect>(savedStateHandle) {
         override fun createInitialState(savedState: Parcelable?): TodoState {
             return savedState as? TodoState ?: TodoState()
@@ -53,6 +55,11 @@ class TodoViewModel
             when (event) {
                 is TodoEvent.Initialize -> {
                     getTodoList()
+                    viewModelScope.launch {
+                        userDefaultRepository.userPreferenceFlow.collect { preferences ->
+                            updateState(TodoReduce.UpdateIsSundayStart(isSundayStart = preferences.isSundayStart))
+                        }
+                    }
                 }
 
                 is TodoEvent.OnTodoCheckBoxClick -> {
@@ -748,6 +755,10 @@ class TodoViewModel
                         flatList = reduce.flatList,
                         confirmedCommitmentMessage = reduce.confirmedCommitmentMessage,
                     )
+                }
+
+                is TodoReduce.UpdateIsSundayStart -> {
+                    state.copy(isSundayStart = reduce.isSundayStart)
                 }
             }
         }

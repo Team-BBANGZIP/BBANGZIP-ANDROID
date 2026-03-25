@@ -34,6 +34,7 @@ class TodoContract {
         val selectedMonthlyCalendarDate: LocalDate = LocalDate.now(),
         val isRepeat: Boolean = false,
         val isDateSavable: Boolean = false,
+        val isSundayStart: Boolean = false,
     ) : BaseContract.State, Parcelable {
         override fun toParcelable(): Parcelable = this
 
@@ -149,6 +150,8 @@ class TodoContract {
             val flatList: List<ListItem>,
             val confirmedCommitmentMessage: String,
         ) : TodoReduce
+
+        data class UpdateIsSundayStart(val isSundayStart: Boolean) : TodoReduce
     }
 
     sealed interface TodoSideEffect : BaseContract.SideEffect {

@@ -15,4 +15,6 @@ interface UserDefaultRepository {
     suspend fun clearRefreshToken()
 
     suspend fun setIsLogin(isLogin: Boolean)
+
+    suspend fun setIsSundayStart(isSundayStart: Boolean)
 }
