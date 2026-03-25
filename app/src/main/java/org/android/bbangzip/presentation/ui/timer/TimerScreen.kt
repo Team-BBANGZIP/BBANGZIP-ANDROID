@@ -295,32 +295,6 @@ fun MainTimerButton(
                     iconTint = BbangZipTheme.color.primaryNormal_897869,
                 ),
             onClick = onStopClick,
-            modifier =
-                modifier
-                    .innerShadow(
-                        shape = CircleShape,
-                        color = BbangZipTheme.color.primaryStrong_4B4137.copy(BbangZipTheme.opacity.opacity20),
-                        blur = 1.dp,
-                        offsetX = 0.dp,
-                        offsetY = 1.dp,
-                        spread = 0.dp,
-                    )
-                    .innerShadow(
-                        shape = CircleShape,
-                        color = BbangZipTheme.color.primaryStrong_4B4137.copy(BbangZipTheme.opacity.opacity20),
-                        blur = 10.dp,
-                        offsetX = 0.dp,
-                        offsetY = 2.dp,
-                        spread = 0.dp,
-                    )
-                    .dropShadow(
-                        shape = CircleShape,
-                        color = BbangZipTheme.color.primaryStrong_4B4137.copy(BbangZipTheme.opacity.opacity20),
-                        blur = 5.dp,
-                        offsetX = 0.dp,
-                        offsetY = 2.dp,
-                        spread = 0.dp,
-                    ),
         )
     } else {
         TimerButton(
