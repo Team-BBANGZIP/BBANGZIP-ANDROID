@@ -97,6 +97,7 @@ fun MonthlyCalendar(
     modifier: Modifier = Modifier,
     initialYearMonth: YearMonth = YearMonth.now(),
     initialDate: LocalDate = LocalDate.now(),
+    isSundayStart: Boolean = false,
     onDateSelected: (LocalDate) -> Unit = {},
     colors: MonthlyCalendarColors = BbangZipMonthlyCalendarDefaults.colors(),
     typography: MonthlyCalendarTypography = BbangZipMonthlyCalendarDefaults.typography(),
@@ -114,9 +115,11 @@ fun MonthlyCalendar(
         onDateSelected(selectedDate)
     }
 
+    val anchorYearMonth = remember { initialYearMonth }
+
     val currentYearMonth =
-        remember(pagerState.currentPage, initialYearMonth) {
-            initialYearMonth.plusMonths((pagerState.currentPage - STARTING_PAGE_INDEX).toLong())
+        remember(pagerState.currentPage, anchorYearMonth) {
+            anchorYearMonth.plusMonths((pagerState.currentPage - STARTING_PAGE_INDEX).toLong())
         }
 
     Column(
@@ -136,20 +139,22 @@ fun MonthlyCalendar(
             modifier = Modifier.fillMaxWidth(),
         ) { pageIndex ->
             val yearMonthForPage =
-                remember(pageIndex, initialYearMonth) {
-                    initialYearMonth.plusMonths((pageIndex - STARTING_PAGE_INDEX).toLong())
+                remember(pageIndex, anchorYearMonth) {
+                    anchorYearMonth.plusMonths((pageIndex - STARTING_PAGE_INDEX).toLong())
                 }
 
             val daysInMonth =
-                remember(key1 = yearMonthForPage, key2 = today) {
+                remember(key1 = yearMonthForPage, key2 = today, key3 = isSundayStart) {
                     generateMonthDays(
                         yearMonth = yearMonthForPage,
                         today = today,
+                        startDayOfWeek = if (isSundayStart) DayOfWeek.SUNDAY else DayOfWeek.MONDAY,
                     )
                 }
 
             Column(modifier = Modifier.fillMaxWidth()) {
                 DayOfWeekHeader(
+                    isSundayStart = isSundayStart,
                     color = colors.dayOfWeekTextColor,
                     typography = typography.dayOfWeekTextStyle,
                 )
@@ -165,7 +170,7 @@ fun MonthlyCalendar(
                         val newSelectedYearMonth = YearMonth.from(day.date)
 
                         if (newSelectedYearMonth != yearMonthForPage) {
-                            val monthDiff = ChronoUnit.MONTHS.between(initialYearMonth, newSelectedYearMonth)
+                            val monthDiff = ChronoUnit.MONTHS.between(anchorYearMonth, newSelectedYearMonth)
                             val targetPage = STARTING_PAGE_INDEX + monthDiff.toInt()
                             scope.launch {
                                 pagerState.animateScrollToPage(targetPage)
@@ -220,9 +225,11 @@ private fun CalendarHeader(
             modifier =
                 Modifier
                     .noRippleClickable(onClick = {
-                        scope.launch {
-                            if (pagerState.currentPage > 0) {
-                                pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                        if (!pagerState.isScrollInProgress) {
+                            scope.launch {
+                                if (pagerState.currentPage > 0) {
+                                    pagerState.animateScrollToPage(pagerState.currentPage - 1)
+                                }
                             }
                         }
                     }),
@@ -237,9 +244,11 @@ private fun CalendarHeader(
             modifier =
                 Modifier
                     .noRippleClickable(onClick = {
-                        scope.launch {
-                            if (pagerState.currentPage < pagerState.pageCount - 1) {
-                                pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                        if (!pagerState.isScrollInProgress) {
+                            scope.launch {
+                                if (pagerState.currentPage < pagerState.pageCount - 1) {
+                                    pagerState.animateScrollToPage(pagerState.currentPage + 1)
+                                }
                             }
                         }
                     }),
@@ -256,6 +265,7 @@ private fun CalendarHeader(
  */
 @Composable
 private fun DayOfWeekHeader(
+    isSundayStart: Boolean,
     color: Color,
     typography: TextStyle,
 ) {
@@ -263,7 +273,12 @@ private fun DayOfWeekHeader(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(space = BbangZipMonthlyCalendarDefaults.DayCellHorizontalSpacing),
     ) {
-        val daysOfWeek = remember { getDaysOfWeekStartingFrom() }
+        val daysOfWeek =
+            remember(isSundayStart) {
+                getDaysOfWeekStartingFrom(
+                    startDayOfWeek = if (isSundayStart) DayOfWeek.SUNDAY else DayOfWeek.MONDAY,
+                )
+            }
 
         for (dayOfWeek in daysOfWeek) {
             Text(

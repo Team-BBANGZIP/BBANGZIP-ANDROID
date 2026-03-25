@@ -86,6 +86,7 @@ import org.android.bbangzip.presentation.ui.todo.bottomsheet.EditTodoBottomSheet
 import org.android.bbangzip.presentation.ui.todo.bottomsheet.TodoSettingBottomSheet
 import org.android.bbangzip.presentation.ui.todo.type.TodoSettingActionType
 import org.android.bbangzip.ui.theme.BbangZipTheme
+import java.time.DayOfWeek
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -114,6 +115,8 @@ fun TodoScreen(
     selectedTodoItem: ListItem.TodoItem?,
     selectedMonthlyDate: LocalDate,
     isDateSavable: Boolean,
+    isSundayStart: Boolean,
+    selectedDate: LocalDate,
     onMenuClick: () -> Unit,
     onListItemMove: (from: Int, to: Int) -> Unit,
     onTodoCheckBoxClick: (todoId: Int, categoryId: Int, isChecked: Boolean) -> Unit,
@@ -288,6 +291,8 @@ fun TodoScreen(
                     onManageCategoryClick = onManageCategoryClick,
                     onAddCategoryClick = onAddCategoryClick,
                     onDateSelect = onDateSelect,
+                    isSundayStart = isSundayStart,
+                    selectedDate = selectedDate,
                 )
             }
 
@@ -403,9 +408,10 @@ fun TodoScreen(
             isBottomSheetVisible = isMonthlyCalendarBottomSheetVisible,
             onDismissRequest = onMonthlyCalendarBottomSheetDismissRequest,
             date = selectedMonthlyDate,
-            isDateSavable = isDateSavable,
-            onDateSelect = onMonthlyDateSelect,
             onSaveButtonClick = onDateSaveButtonClick,
+            onDateSelect = onMonthlyDateSelect,
+            isDateSavable = isDateSavable,
+            isSundayStart = isSundayStart,
         )
     }
 }
@@ -565,6 +571,8 @@ private fun ListHeader(
     onManageCategoryClick: () -> Unit,
     onAddCategoryClick: () -> Unit,
     onDateSelect: (LocalDate) -> Unit,
+    isSundayStart: Boolean,
+    selectedDate: LocalDate,
 ) {
     Column {
         CommitmentMessageBox(
@@ -574,6 +582,8 @@ private fun ListHeader(
 
         Box(modifier = Modifier.fillMaxWidth()) {
             BbangZipWeeklyCalendar(
+                initialDate = selectedDate,
+                startDayOfWeek = if (isSundayStart) DayOfWeek.SUNDAY else DayOfWeek.MONDAY,
                 onDateSelected = onDateSelect,
                 onMenuClick = onMenuClick,
             )
@@ -860,5 +870,7 @@ fun TodoScreenPreview() {
         onDateSaveButtonClick = { },
         onMonthlyDateSelect = {},
         isDateSavable = false,
+        isSundayStart = TODO(),
+        selectedDate = TODO(),
     )
 }

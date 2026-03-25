@@ -16,13 +16,35 @@ class FakeTodoRepository
     @Inject
     constructor() : TodoRepository {
         override suspend fun getTodoList(date: String): Result<TodoList> {
+            val dateObj = LocalDate.parse(date)
             return Result.success(
                 TodoList(
-                    commitmentMessage = "Fake Commitment",
-                    todoSummary = TodoSummary(date = LocalDate.now(), totalCount = 0, completedCount = 0),
+                    commitmentMessage = "오늘도 빵을 구워봅시다!",
+                    todoSummary = TodoSummary(date = dateObj, totalCount = 4, completedCount = 1),
                     categories =
                         listOf(
-                            Category(categoryId = 1, categoryName = "Fake Category", categoryColor = "RED1", isStopped = false, todos = emptyList()),
+                            Category(
+                                categoryId = 1,
+                                categoryName = "공부",
+                                categoryColor = "PURPLE1",
+                                isStopped = false,
+                                todos =
+                                    listOf(
+                                        Todo(todoId = 101, content = "알고리즘 문제 풀기", isCompleted = false, startTime = LocalTime.of(10, 0)),
+                                        Todo(todoId = 102, content = "영어 단어 외우기", isCompleted = false, startTime = LocalTime.of(13, 0)),
+                                    ),
+                            ),
+                            Category(
+                                categoryId = 2,
+                                categoryName = "생활",
+                                categoryColor = "BLUE1",
+                                isStopped = false,
+                                todos =
+                                    listOf(
+                                        Todo(todoId = 201, content = "운동하기", isCompleted = true, startTime = LocalTime.of(7, 0)),
+                                        Todo(todoId = 202, content = "장보기", isCompleted = false, startTime = LocalTime.of(18, 30)),
+                                    ),
+                            ),
                         ),
                 ),
             )
