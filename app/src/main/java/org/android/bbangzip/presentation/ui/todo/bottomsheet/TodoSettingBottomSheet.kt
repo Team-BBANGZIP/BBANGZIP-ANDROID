@@ -42,7 +42,6 @@ fun TodoSettingBottomSheet(
     todoName: String,
     categoryName: String,
     isCompleted: Boolean,
-    isNotificationEnabled: Boolean,
     modifier: Modifier = Modifier,
     onEditButtonClick: () -> Unit = {},
     onDeleteButtonClick: () -> Unit = {},
@@ -122,20 +121,12 @@ fun TodoSettingBottomSheet(
                                                 )
                                             }
 
-                                            TodoSettingActionType.NOTIFICATION -> {
-                                                BbangZipSwitch(
-                                                    modifier = Modifier.fillMaxWidth(44 / 335f),
-                                                    isChecked = isNotificationEnabled,
-                                                    onCheckedChange = { onActionRowClick(actionType) },
-                                                )
-                                            }
-
                                             else -> {}
                                         }
                                     },
                                 )
 
-                                if (index == 1) {
+                                if (index == 0) {
                                     HorizontalDivider(
                                         modifier = Modifier.padding(vertical = 4.dp),
                                         color = BbangZipTheme.color.componentStrong_F6F6F5,
@@ -224,7 +215,6 @@ fun TodoSettingBottomSheetPreview() {
         todoName = "미완료 바텀시트",
         categoryName = "바텀시트",
         isCompleted = false,
-        isNotificationEnabled = isNotificationEnabled,
     )
 
     TodoSettingBottomSheet(
@@ -233,6 +223,5 @@ fun TodoSettingBottomSheetPreview() {
         todoName = "완료 바텀시트",
         categoryName = "바텀시트",
         isCompleted = true,
-        isNotificationEnabled = isNotificationEnabled,
     )
 }
