@@ -1,15 +1,15 @@
 [versions]
 # Kotlin
-agp = "8.7.3"
-kotlin = "2.0.0"
+agp = "9.1.0"
+kotlin = "2.3.0"
 
 # Androidx
 coreKtx = "1.16.0"
 kotlinxCollectionsImmutable = "0.4.0"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.1"
-composeBom = "2025.04.01"
-hilt = "2.52"
+composeBom = "2026.03.00"
+hilt = "2.59.2"
 navigation = "2.8.9"
 navigationHilt = "1.2.0"
 appcompat = "1.7.0"
@@ -30,7 +30,7 @@ kotlinSerializationJson = "1.6.3"
 coil = "3.0.3"
 timber = "5.0.1"
 ktlint = "12.1.1"
-ksp = "2.0.0-1.0.21"
+ksp = "2.3.6"
 kakaoV2User = "2.21.1"
 hotSwan = "1.0.8"
 
@@ -39,7 +39,7 @@ hotSwan = "1.0.8"
 # DataStore
 datastore = "1.1.5"
 protobuf = "3.24.1"
-protobufPlugin = "0.9.4"
+protobufPlugin = "0.9.6"
 
 [libraries]
 # Androidx
