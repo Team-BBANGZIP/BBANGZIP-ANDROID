@@ -12,6 +12,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import okhttp3.internal.toImmutableList
+import android.app.Activity
+import android.widget.Toast
+import androidx.activity.compose.BackHandler
+import androidx.compose.runtime.mutableLongStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
+import org.android.bbangzip.R
 import org.android.bbangzip.presentation.ui.main.component.BottomNavigationBar
 import org.android.bbangzip.presentation.ui.main.component.MainNavHost
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
@@ -22,6 +30,22 @@ fun MainScreen(
     navigator: MainNavigator,
     sharedViewModel: SharedViewModel,
 ) {
+    val context = LocalContext.current
+    val backPressedTime = remember { mutableLongStateOf(0L) }
+
+    val canPop = navigator.navHostController.previousBackStackEntry != null
+    val exitToastMessage = stringResource(id = R.string.double_back_press_to_exit_toast_message)
+
+    BackHandler(enabled = !canPop) {
+        val currentTime = System.currentTimeMillis()
+        if (currentTime - backPressedTime.longValue < 2000L) {
+            (context as? Activity)?.finish()
+        } else {
+            backPressedTime.longValue = currentTime
+            Toast.makeText(context, exitToastMessage, Toast.LENGTH_SHORT).show()
+        }
+    }
+
     MainScreenContent(
         navigator = navigator,
         sharedViewModel = sharedViewModel,

@@ -151,7 +151,7 @@ class OnboardingViewModel
                         ),
                 ).onSuccess {
                     Timber.d("[온보딩] 완료")
-                    setSideEffect(OnboardingContract.OnboardingSideEffect.NavigateToTodo)
+                    setSideEffect(OnboardingContract.OnboardingSideEffect.NavigateToTimer)
                 }.onFailure {
                     Timber.d("[온보딩] 실패")
                 }

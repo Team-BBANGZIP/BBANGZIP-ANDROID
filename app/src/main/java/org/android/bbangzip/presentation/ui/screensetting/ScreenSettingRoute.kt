@@ -24,7 +24,7 @@ fun ScreenSettingRoute(
 
     ScreenSettingScreen(
         state = state,
-        onClickBack = { viewModel.setEvent(ScreenSettingContract.ScreenSettingEvent.OnBackIconClick) },
-        onToggleSundayStart = { viewModel.setEvent(ScreenSettingContract.ScreenSettingEvent.OnSundayStartToggle) },
+        onBackIconClick = { viewModel.setEvent(ScreenSettingContract.ScreenSettingEvent.OnBackIconClick) },
+        onSundayStartToggle = { viewModel.setEvent(ScreenSettingContract.ScreenSettingEvent.OnSundayStartToggle) },
     )
 }

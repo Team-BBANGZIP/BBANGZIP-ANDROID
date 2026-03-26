@@ -31,7 +31,7 @@ class LoginViewModel
             when (event) {
                 is LoginContract.LoginEvent.OnClickKakaoLoginBtn -> {
                     if (currentUiState.isOnboardingCompleted) {
-                        setSideEffect(LoginContract.LoginSideEffect.NavigateToTodo)
+                        setSideEffect(LoginContract.LoginSideEffect.NavigateToTimer)
                     } else {
                         Timber.d("[카카오 로그인] -> 버튼 누름")
                         kakaoAuthService.loginKakao(
@@ -76,7 +76,7 @@ class LoginViewModel
                         )
 
                         if (userEntity.isSignUpComplete) {
-                            setSideEffect(LoginContract.LoginSideEffect.NavigateToTodo)
+                            setSideEffect(LoginContract.LoginSideEffect.NavigateToTimer)
                         } else {
                             setSideEffect(LoginContract.LoginSideEffect.NavigateToOnboarding)
                         }

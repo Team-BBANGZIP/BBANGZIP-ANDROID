@@ -60,7 +60,7 @@ class OnboardingContract {
     }
 
     sealed interface OnboardingSideEffect : BaseContract.SideEffect {
-        data object NavigateToTodo : OnboardingSideEffect
+        data object NavigateToTimer : OnboardingSideEffect
 
         data object NavigateToLogin : OnboardingSideEffect
 

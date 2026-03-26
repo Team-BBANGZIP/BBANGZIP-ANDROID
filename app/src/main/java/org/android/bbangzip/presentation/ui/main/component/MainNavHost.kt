@@ -35,12 +35,12 @@ fun MainNavHost(
         )
 
         loginNavGraph(
-            navigateToTodo = navigator::navigateToTodoAfterLogin,
+            navigateToTimer = navigator::navigateToTimerAfterLogin,
             navigateToOnboarding = navigator::navigateToOnboarding,
         )
 
         onboardingNavGraph(
-            navigateToTodo = navigator::navigateToTodoAfterLogin,
+            navigateToTimer = navigator::navigateToTimerAfterLogin,
             navigateToLogin = navigator::navigateToLoginAndClearStack,
         )
 
@@ -80,7 +80,7 @@ fun MainNavHost(
         )
 
         profileEditNavGraph(
-            navigateToMy = navigator::popBackStack,
+            navigateToBack = navigator::popBackStack,
         )
 
         screenSettingNavGraph(

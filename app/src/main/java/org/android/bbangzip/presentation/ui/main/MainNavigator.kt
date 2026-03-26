@@ -65,8 +65,8 @@ class MainNavigator(
         }
     }
 
-    fun navigateToTodoAfterLogin() {
-        navHostController.navigateToTodo(
+    fun navigateToTimerAfterLogin() {
+        navHostController.navigateToTimer(
             navOptions =
                 navOptions {
                     popUpTo(LoginRoute::class.qualifiedName.orEmpty()) {

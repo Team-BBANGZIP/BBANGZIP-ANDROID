@@ -31,8 +31,8 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
 @Composable
 fun ScreenSettingScreen(
     state: ScreenSettingContract.ScreenSettingState,
-    onClickBack: () -> Unit,
-    onToggleSundayStart: () -> Unit,
+    onBackIconClick: () -> Unit,
+    onSundayStartToggle: () -> Unit,
 ) {
     Column(
         modifier =
@@ -48,14 +48,14 @@ fun ScreenSettingScreen(
             backGroundColor = BbangZipTheme.color.backgroundNormal_FFFFFF,
             leadingIcon = R.drawable.ic_arrow_left_24,
             leadingIconColor = BbangZipTheme.color.labelAssistive_C9C7C5,
-            onLeadingIconClick = onClickBack,
+            onLeadingIconClick = onBackIconClick,
         )
 
         Gap(height = 20.dp)
 
         SundayStartSettingItem(
             isEnabled = state.isSundayStartEnabled,
-            onToggle = onToggleSundayStart,
+            onToggle = onSundayStartToggle,
         )
     }
 }
@@ -112,8 +112,8 @@ fun ScreenSettingScreenPreview() {
                 ScreenSettingContract.ScreenSettingState(
                     isSundayStartEnabled = isSundayStartEnabled,
                 ),
-            onClickBack = {},
-            onToggleSundayStart = {
+            onBackIconClick = {},
+            onSundayStartToggle = {
                 isSundayStartEnabled = !isSundayStartEnabled
             },
         )

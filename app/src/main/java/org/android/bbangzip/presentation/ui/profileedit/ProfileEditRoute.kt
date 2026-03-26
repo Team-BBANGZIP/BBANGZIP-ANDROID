@@ -1,16 +1,26 @@
 package org.android.bbangzip.presentation.ui.profileedit
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun ProfileEditRoute(
-    navigateToMy: () -> Unit,
+    navigateToBack: () -> Unit,
     viewModel: ProfileEditViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
+
+    LaunchedEffect(viewModel.uiSideEffect) {
+        viewModel.uiSideEffect.collectLatest { sideEffect ->
+            when (sideEffect) {
+                is ProfileEditContract.ProfileEditSideEffect.NavigateToBack -> navigateToBack()
+            }
+        }
+    }
 
     ProfileEditScreen(
         state = state,

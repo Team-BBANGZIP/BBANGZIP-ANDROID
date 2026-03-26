@@ -28,6 +28,6 @@ class LoginContract {
     sealed interface LoginSideEffect : BaseContract.SideEffect {
         data object NavigateToOnboarding : LoginSideEffect
 
-        data object NavigateToTodo : LoginSideEffect
+        data object NavigateToTimer : LoginSideEffect
     }
 }
