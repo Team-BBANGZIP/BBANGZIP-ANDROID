@@ -18,7 +18,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
-import androidx.navigation.compose.currentBackStackEntryAsState
+import org.android.bbangzip.R
 import org.android.bbangzip.presentation.ui.main.component.BottomNavigationBar
 import org.android.bbangzip.presentation.ui.main.component.MainNavHost
 import org.android.bbangzip.presentation.ui.shared.SharedViewModel
@@ -32,7 +32,6 @@ fun MainScreen(
     val context = LocalContext.current
     val backPressedTime = remember { mutableLongStateOf(0L) }
 
-    // Enable BackHandler ONLY when we are at the root (no previous backstack entry)
     val canPop = navigator.navHostController.previousBackStackEntry != null
 
     BackHandler(enabled = !canPop) {
@@ -41,7 +40,7 @@ fun MainScreen(
             (context as? Activity)?.finish()
         } else {
             backPressedTime.longValue = currentTime
-            Toast.makeText(context, "뒤로 가기 버튼을 한 번 더 누르면 종료됩니다.", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, context.getString(R.string.double_back_press_to_exit_toast_message), Toast.LENGTH_SHORT).show()
         }
     }
 
