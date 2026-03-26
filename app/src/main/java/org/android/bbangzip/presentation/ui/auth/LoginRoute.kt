@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun LoginRoute(
-    navigateToTodo: () -> Unit,
+    navigateToTimer: () -> Unit,
     navigateToOnboarding: () -> Unit,
     viewModel: LoginViewModel = hiltViewModel(),
 ) {
@@ -20,7 +20,7 @@ fun LoginRoute(
     LaunchedEffect(viewModel.uiSideEffect) {
         viewModel.uiSideEffect.collectLatest { effect ->
             when (effect) {
-                is LoginContract.LoginSideEffect.NavigateToTodo -> navigateToTodo()
+                is LoginContract.LoginSideEffect.NavigateToTimer -> navigateToTimer()
                 is LoginContract.LoginSideEffect.NavigateToOnboarding -> navigateToOnboarding()
             }
         }

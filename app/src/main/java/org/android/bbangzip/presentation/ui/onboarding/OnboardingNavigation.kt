@@ -14,12 +14,12 @@ fun NavController.navigateToOnboarding() {
 }
 
 fun NavGraphBuilder.onboardingNavGraph(
-    navigateToTodo: () -> Unit = {},
+    navigateToTimer: () -> Unit = {},
     navigateToLogin: () -> Unit = {},
 ) {
     composable<OnboardingRoute> {
         OnboardingRoute(
-            navigateToTodo = navigateToTodo,
+            navigateToTimer = navigateToTimer,
             navigateToLogin = navigateToLogin,
         )
     }
