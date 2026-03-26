@@ -67,14 +67,16 @@ class MyContract {
 
         data object NavigateToScreenSetting : MySideEffect
 
-        data object OpenCustomerCenterWeb : MySideEffect
-
-        data object OpenInstagram : MySideEffect
-
-        data object OpenFeedbackForm : MySideEffect
-
-        data object OpenAppStoreReview : MySideEffect
-
         data object NavigateToLogin : MySideEffect
+
+        sealed class OpenExternalUrl(val url: String) : MySideEffect {
+            data class AppStoreReview(val packageName: String) : OpenExternalUrl("https://play.google.com/store/apps/details?id=$packageName")
+
+            data object CustomerCenter : OpenExternalUrl("https://southern-comet-4a3.notion.site/2ac01508929380518f17feaa3aa64870?source=copy_link")
+
+            data object Instagram : OpenExternalUrl("https://www.instagram.com/bbangzip.official/")
+
+            data object FeedbackForm : OpenExternalUrl("https://southern-comet-4a3.notion.site/2ac01508929380518f17feaa3aa64870?source=copy_link")
+        }
     }
 }

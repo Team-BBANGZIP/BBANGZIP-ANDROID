@@ -28,26 +28,8 @@ fun MyRoute(
                 MyContract.MySideEffect.NavigateToProfileEdit -> navigateToProfileEdit()
                 MyContract.MySideEffect.NavigateToScreenSetting -> navigateToScreenSetting()
                 MyContract.MySideEffect.NavigateToLogin -> navigateToLogin()
-                MyContract.MySideEffect.OpenAppStoreReview -> {
-                    uriHandler.openUri("https://play.google.com/store/apps/details?id=${context.packageName}")
-                }
-
-                MyContract.MySideEffect.OpenCustomerCenterWeb -> {
-                    // TODO: Replace with actual URL
-                    val url = "https://southern-comet-4a3.notion.site/2ac01508929380518f17feaa3aa64870?source=copy_link"
-                    if (url.isNotEmpty()) uriHandler.openUri(url)
-                }
-
-                MyContract.MySideEffect.OpenFeedbackForm -> {
-                    // TODO: Replace with actual URL
-                    val url = "https://southern-comet-4a3.notion.site/2ac01508929380518f17feaa3aa64870?source=copy_link"
-                    if (url.isNotEmpty()) uriHandler.openUri(url)
-                }
-
-                MyContract.MySideEffect.OpenInstagram -> {
-                    // TODO: Replace with actual URL
-                    val url = "https://www.instagram.com/bbangzip.official/"
-                    if (url.isNotEmpty()) uriHandler.openUri(url)
+                is MyContract.MySideEffect.OpenExternalUrl -> {
+                    if (effect.url.isNotEmpty()) uriHandler.openUri(effect.url)
                 }
             }
         }
