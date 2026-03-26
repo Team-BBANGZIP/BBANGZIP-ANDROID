@@ -8,6 +8,7 @@ import kotlinx.coroutines.launch
 import org.android.bbangzip.domain.repository.UserRepository
 import org.android.bbangzip.presentation.common.base.BaseViewModel
 import org.android.bbangzip.presentation.common.util.constant.OnboardingConstants
+import org.android.bbangzip.presentation.common.util.device.AppInfo
 import org.android.bbangzip.presentation.common.util.device.DeviceInfo
 import timber.log.Timber
 import javax.inject.Inject
@@ -17,7 +18,7 @@ class MyViewModel
     @Inject
     constructor(
         private val userRepository: UserRepository,
-        private val deviceInfo: DeviceInfo,
+        private val appInfo: AppInfo,
         savedStateHandle: SavedStateHandle,
     ) : BaseViewModel<MyContract.MyEvent, MyContract.MyState, MyContract.MyReduce, MyContract.MySideEffect>(
             savedStateHandle = savedStateHandle,
@@ -30,7 +31,7 @@ class MyViewModel
             when (event) {
                 MyContract.MyEvent.Initialize -> {
                     loadInitialData()
-                    updateState(MyContract.MyReduce.UpdateMyAppVersion(appVersion = deviceInfo.appVersion))
+                    updateState(MyContract.MyReduce.UpdateMyAppVersion(appVersion = appInfo.appVersion))
                 }
 
                 MyContract.MyEvent.OnClickProfileArea -> {
@@ -41,24 +42,20 @@ class MyViewModel
                     setSideEffect(MyContract.MySideEffect.NavigateToScreenSetting)
                 }
 
-                MyContract.MyEvent.OnClickAlarmSetting -> {
-                    // 현재 인터랙션 없음(알람 설정 페이지 무효)
-                }
-
                 MyContract.MyEvent.OnClickCustomerCenter -> {
-                    setSideEffect(MyContract.MySideEffect.OpenCustomerCenterWeb)
+                    setSideEffect(MyContract.MySideEffect.OpenExternalUrl.CustomerCenter)
                 }
 
                 MyContract.MyEvent.OnClickFeedback -> {
-                    setSideEffect(MyContract.MySideEffect.OpenFeedbackForm)
+                    setSideEffect(MyContract.MySideEffect.OpenExternalUrl.FeedbackForm)
                 }
 
                 MyContract.MyEvent.OnClickReviewApp -> {
-                    setSideEffect(MyContract.MySideEffect.OpenAppStoreReview)
+                    setSideEffect(MyContract.MySideEffect.OpenExternalUrl.AppStoreReview(appInfo.packageName))
                 }
 
                 MyContract.MyEvent.OnClickTermsOfService -> {
-                    setSideEffect(MyContract.MySideEffect.OpenTermsOfServiceWeb)
+                    setSideEffect(MyContract.MySideEffect.OpenExternalUrl.Instagram)
                 }
 
                 MyContract.MyEvent.OnClickLogoutBtn -> updateState(MyContract.MyReduce.UpdateLogoutBottomSheetVisibility(isVisible = true))

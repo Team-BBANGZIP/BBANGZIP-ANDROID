@@ -6,6 +6,7 @@ import org.android.bbangzip.domain.model.OnboardingInfo
 import org.android.bbangzip.domain.model.ReissueToken
 import org.android.bbangzip.domain.model.UserTokenInfo
 import org.android.bbangzip.domain.repository.UserRepository
+import org.android.bbangzip.presentation.common.util.device.AppInfo
 import org.android.bbangzip.presentation.common.util.device.DeviceInfo
 import timber.log.Timber
 import javax.inject.Inject
@@ -15,6 +16,7 @@ class UserRepositoryImpl
     constructor(
         private val userRemoteDataSource: UserRemoteDataSource,
         private val deviceInfo: DeviceInfo,
+        private val appInfo: AppInfo,
     ) : UserRepository {
         override suspend fun login(code: String): Result<UserTokenInfo> =
             runCatching {
@@ -26,7 +28,7 @@ class UserRepositoryImpl
                         deviceType = deviceInfo.deviceType,
                         provider = "KAKAO",
                         role = "USER",
-                        appVersion = deviceInfo.appVersion,
+                        appVersion = appInfo.appVersion,
                         osVersion = deviceInfo.osVersion,
                         osType = deviceInfo.osType,
                     )
