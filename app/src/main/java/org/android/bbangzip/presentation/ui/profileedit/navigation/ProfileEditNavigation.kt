@@ -13,11 +13,11 @@ fun NavController.navigateToProfileEdit() {
 }
 
 fun NavGraphBuilder.profileEditNavGraph(
-    navigateToMy: () -> Unit,
+    navigateToBack: () -> Unit,
 ) {
     composable<ProfileEditRoute> {
         ProfileEditRoute(
-            navigateToMy = navigateToMy,
+            navigateToBack = navigateToBack,
         )
     }
 }

@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun ProfileEditRoute(
-    navigateToMy: () -> Unit,
+    navigateToBack: () -> Unit,
     viewModel: ProfileEditViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()

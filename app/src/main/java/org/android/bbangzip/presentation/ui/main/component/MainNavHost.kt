@@ -80,7 +80,7 @@ fun MainNavHost(
         )
 
         profileEditNavGraph(
-            navigateToMy = navigator::popBackStack,
+            navigateToBack = navigator::popBackStack,
         )
 
         screenSettingNavGraph(
