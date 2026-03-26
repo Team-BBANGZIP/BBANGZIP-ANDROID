@@ -18,6 +18,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.mutableLongStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.ui.main.component.BottomNavigationBar
 import org.android.bbangzip.presentation.ui.main.component.MainNavHost
@@ -33,6 +34,7 @@ fun MainScreen(
     val backPressedTime = remember { mutableLongStateOf(0L) }
 
     val canPop = navigator.navHostController.previousBackStackEntry != null
+    val exitToastMessage = stringResource(id = R.string.double_back_press_to_exit_toast_message)
 
     BackHandler(enabled = !canPop) {
         val currentTime = System.currentTimeMillis()
@@ -40,7 +42,7 @@ fun MainScreen(
             (context as? Activity)?.finish()
         } else {
             backPressedTime.longValue = currentTime
-            Toast.makeText(context, context.getString(R.string.double_back_press_to_exit_toast_message), Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, exitToastMessage, Toast.LENGTH_SHORT).show()
         }
     }
 
