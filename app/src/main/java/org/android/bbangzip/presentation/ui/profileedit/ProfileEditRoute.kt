@@ -17,7 +17,7 @@ fun ProfileEditRoute(
     LaunchedEffect(viewModel.uiSideEffect) {
         viewModel.uiSideEffect.collectLatest { sideEffect ->
             when (sideEffect) {
-                is ProfileEditContract.ProfileEditSideEffect.NavigateToBack -> navigateToMy()
+                is ProfileEditContract.ProfileEditSideEffect.NavigateToBack -> navigateToBack()
             }
         }
     }
