@@ -25,8 +25,6 @@ class MyContract {
 
         data object OnClickScreenSetting : MyEvent
 
-        data object OnClickAlarmSetting : MyEvent
-
         data object OnClickCustomerCenter : MyEvent
 
         data object OnClickTermsOfService : MyEvent
@@ -71,7 +69,7 @@ class MyContract {
 
         data object OpenCustomerCenterWeb : MySideEffect
 
-        data object OpenTermsOfServiceWeb : MySideEffect
+        data object OpenInstagram : MySideEffect
 
         data object OpenFeedbackForm : MySideEffect
 

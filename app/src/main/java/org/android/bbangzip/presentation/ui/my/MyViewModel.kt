@@ -41,10 +41,6 @@ class MyViewModel
                     setSideEffect(MyContract.MySideEffect.NavigateToScreenSetting)
                 }
 
-                MyContract.MyEvent.OnClickAlarmSetting -> {
-                    // 현재 인터랙션 없음(알람 설정 페이지 무효)
-                }
-
                 MyContract.MyEvent.OnClickCustomerCenter -> {
                     setSideEffect(MyContract.MySideEffect.OpenCustomerCenterWeb)
                 }
@@ -58,7 +54,7 @@ class MyViewModel
                 }
 
                 MyContract.MyEvent.OnClickTermsOfService -> {
-                    setSideEffect(MyContract.MySideEffect.OpenTermsOfServiceWeb)
+                    setSideEffect(MyContract.MySideEffect.OpenInstagram)
                 }
 
                 MyContract.MyEvent.OnClickLogoutBtn -> updateState(MyContract.MyReduce.UpdateLogoutBottomSheetVisibility(isVisible = true))
