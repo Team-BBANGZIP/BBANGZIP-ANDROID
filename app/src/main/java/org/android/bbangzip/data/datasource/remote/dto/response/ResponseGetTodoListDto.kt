@@ -12,7 +12,7 @@ import java.time.LocalTime
 
 @Serializable
 data class ResponseGetTodoListDto(
-    val commitmentMessage: String,
+    val commitmentMessage: String?,
     val todoSummary: TodoSummaryDto,
     val categories: List<CategoryDto>,
 ) {

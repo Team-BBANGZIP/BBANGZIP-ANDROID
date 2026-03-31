@@ -4,7 +4,7 @@ import java.time.LocalDate
 import java.time.LocalTime
 
 data class TodoList(
-    val commitmentMessage: String,
+    val commitmentMessage: String?,
     val todoSummary: TodoSummary,
     val categories: List<Category>,
 )

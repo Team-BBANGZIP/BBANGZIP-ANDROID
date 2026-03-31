@@ -11,7 +11,7 @@ object ApiConstants {
     const val CATEGORY = "categories"
 
     // User
-    const val USER = "user"
+    const val USER = "users"
     const val AUTH = "auth"
     const val SIGN_IN = "signin"
     const val REISSUE = "re-issue"
