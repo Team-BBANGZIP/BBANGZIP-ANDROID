@@ -28,15 +28,15 @@ class FakeUserRepository
             )
         }
 
-        override suspend fun logout(): Result<String> {
-            return Result.success("Success")
+        override suspend fun logout(): Result<Unit> {
+            return Result.success(Unit)
         }
 
-        override suspend fun withdraw(): Result<String> {
-            return Result.success("Success")
+        override suspend fun withdraw(): Result<Unit> {
+            return Result.success(Unit)
         }
 
-        override suspend fun onboardingComplete(onboardingEntity: OnboardingInfo): Result<String> {
-            return Result.success("Success")
+        override suspend fun onboardingComplete(onboardingEntity: OnboardingInfo): Result<Unit> {
+            return Result.success(Unit)
         }
     }

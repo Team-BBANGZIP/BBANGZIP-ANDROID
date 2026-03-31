@@ -33,15 +33,15 @@ interface UserService {
     suspend fun reissue(): BaseResponse<ResponseGetReissueDto>
 
     @DELETE("$API/$VERSIONS/$AUTH/$SIGN_OUT")
-    suspend fun logout(): BaseResponse<String>
+    suspend fun logout(): BaseResponse<Unit>
 
     @DELETE("$API/$VERSIONS/$AUTH/$WITHDRAW")
-    suspend fun withdraw(): BaseResponse<String>
+    suspend fun withdraw(): BaseResponse<Unit>
 
     @POST("$API/$VERSIONS/$AUTH/$SIGN_UP")
     suspend fun onboardingComplete(
         @Body requestOnboardingDto: RequestPostOnboardingDto,
-    ): BaseResponse<String>
+    ): BaseResponse<Unit>
 
     @POST("$API/$VERSIONS/$USER/commitments")
     suspend fun postTodoCommitment(

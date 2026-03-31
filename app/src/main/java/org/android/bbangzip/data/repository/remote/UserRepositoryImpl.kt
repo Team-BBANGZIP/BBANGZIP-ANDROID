@@ -38,11 +38,9 @@ class UserRepositoryImpl
                 responseData!!.toUserTokenInfo()
             }
 
-        override suspend fun logout(): Result<String> =
+        override suspend fun logout(): Result<Unit> =
             runCatching {
-                val response = userRemoteDataSource.logout()
-                val responseData = response.data
-                responseData.toString()
+                userRemoteDataSource.logout()
             }
 
         override suspend fun reissue(): Result<ReissueToken> =
@@ -52,17 +50,13 @@ class UserRepositoryImpl
                 responseData!!.toReissueToken()
             }
 
-        override suspend fun withdraw(): Result<String> =
+        override suspend fun withdraw(): Result<Unit> =
             runCatching {
-                val response = userRemoteDataSource.withDraw()
-                val responseData = response.data
-                responseData!!
+                userRemoteDataSource.withDraw()
             }
 
-        override suspend fun onboardingComplete(onboardingEntity: OnboardingInfo): Result<String> =
+        override suspend fun onboardingComplete(onboardingEntity: OnboardingInfo): Result<Unit> =
             runCatching {
-                val response = userRemoteDataSource.onboardingComplete(requestOnboardingDto = onboardingEntity.toRequestPostOnboardingDto())
-                val responseData = response.data
-                responseData!!
+                userRemoteDataSource.onboardingComplete(requestOnboardingDto = onboardingEntity.toRequestPostOnboardingDto())
             }
     }

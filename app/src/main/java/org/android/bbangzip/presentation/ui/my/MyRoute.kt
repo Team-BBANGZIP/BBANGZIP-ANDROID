@@ -3,7 +3,6 @@ package org.android.bbangzip.presentation.ui.my
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.compose.LifecycleEventEffect
@@ -19,7 +18,6 @@ fun MyRoute(
     viewModel: MyViewModel = hiltViewModel(),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
-    val context = LocalContext.current
     val uriHandler = LocalUriHandler.current
 
     LaunchedEffect(viewModel.uiSideEffect) {
