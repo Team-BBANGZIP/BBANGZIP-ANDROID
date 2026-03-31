@@ -11,10 +11,10 @@ import org.android.bbangzip.data.datasource.remote.dto.response.ResponseProfileI
 import org.android.bbangzip.data.datasource.remote.util.base.BaseResponse
 import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.API
 import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.AUTH
+import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.LOGOUT
 import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.PROV_TOKEN
 import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.REISSUE
 import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.SIGN_IN
-import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.SIGN_OUT
 import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.SIGN_UP
 import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.USER
 import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.VERSIONS
@@ -36,7 +36,7 @@ interface UserService {
     @POST("$API/$VERSIONS/$AUTH/$REISSUE")
     suspend fun reissue(): BaseResponse<ResponseGetReissueDto>
 
-    @DELETE("$API/$VERSIONS/$AUTH/$SIGN_OUT")
+    @DELETE("$API/$VERSIONS/$AUTH/$LOGOUT")
     suspend fun logout(): BaseResponse<Unit>
 
     @DELETE("$API/$VERSIONS/$AUTH/$WITHDRAW")
