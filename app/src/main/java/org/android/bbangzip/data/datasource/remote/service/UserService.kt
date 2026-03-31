@@ -1,11 +1,13 @@
 package org.android.bbangzip.data.datasource.remote.service
 
+import org.android.bbangzip.data.datasource.remote.dto.request.RequestPatchProfileInformationDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostCommitmentDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostOnboardingDto
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostUserInfoDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseGetReissueDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponseGetUserDto
 import org.android.bbangzip.data.datasource.remote.dto.response.ResponsePostCommitmentDto
+import org.android.bbangzip.data.datasource.remote.dto.response.ResponseProfileInformationDto
 import org.android.bbangzip.data.datasource.remote.util.base.BaseResponse
 import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.API
 import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.AUTH
@@ -19,7 +21,9 @@ import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.VE
 import org.android.bbangzip.data.datasource.remote.util.constant.ApiConstants.WITHDRAW
 import retrofit2.http.Body
 import retrofit2.http.DELETE
+import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 
 interface UserService {
@@ -47,4 +51,12 @@ interface UserService {
     suspend fun postTodoCommitment(
         @Body requestTodoCommitmentDto: RequestPostCommitmentDto,
     ): BaseResponse<ResponsePostCommitmentDto>
+
+    @GET("$API/$VERSIONS/$USER/profile")
+    suspend fun getProfileInformation() : BaseResponse<ResponseProfileInformationDto>
+
+    @PATCH("$API/$VERSIONS/$USER/profile")
+    suspend fun patchProfileInformation(
+        @Body requestProfileInformationDto: RequestPatchProfileInformationDto,
+    ) : BaseResponse<ResponseProfileInformationDto>
 }

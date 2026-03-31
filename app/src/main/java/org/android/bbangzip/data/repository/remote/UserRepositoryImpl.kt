@@ -3,6 +3,7 @@ package org.android.bbangzip.data.repository.remote
 import org.android.bbangzip.data.datasource.remote.UserRemoteDataSource
 import org.android.bbangzip.data.datasource.remote.dto.request.RequestPostUserInfoDto
 import org.android.bbangzip.domain.model.OnboardingInfo
+import org.android.bbangzip.domain.model.ProfileInformation
 import org.android.bbangzip.domain.model.ReissueToken
 import org.android.bbangzip.domain.model.UserTokenInfo
 import org.android.bbangzip.domain.repository.UserRepository
@@ -58,5 +59,27 @@ class UserRepositoryImpl
         override suspend fun onboardingComplete(onboardingEntity: OnboardingInfo): Result<Unit> =
             runCatching {
                 userRemoteDataSource.onboardingComplete(requestOnboardingDto = onboardingEntity.toRequestPostOnboardingDto())
+            }
+
+        override suspend fun getProfileInformation(): Result<ProfileInformation> =
+            runCatching {
+                val response = userRemoteDataSource.getProfileInformation()
+                val responseData = requireNotNull(response.data) {
+                    "data가 null입니다."
+                }
+                responseData.toProfileInformation()
+            }
+
+        override suspend fun modifyProfileInformation(
+            profileImageKey: Int,
+            nickname: String,
+            commitmentMessage: String
+        ): Result<Unit> =
+            runCatching {
+                userRemoteDataSource.patchProfileInformation(
+                    profileImageKey = profileImageKey,
+                    nickname = nickname,
+                    commitmentMessage = commitmentMessage,
+                )
             }
     }
