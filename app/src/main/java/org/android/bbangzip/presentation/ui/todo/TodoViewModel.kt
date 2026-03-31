@@ -670,7 +670,7 @@ class TodoViewModel
                             TodoReduce.UpdateTodoListData(
                                 categories = categoryList,
                                 flatList = categoryList.toFlatList(),
-                                confirmedCommitmentMessage = data.commitmentMessage,
+                                confirmedCommitmentMessage = data.commitmentMessage ?: "",
                             ),
                         )
                     }.onFailure { throwable ->
