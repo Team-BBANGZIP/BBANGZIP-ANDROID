@@ -111,6 +111,7 @@
 
     <!-- Manage Category Screen -->
     <string name="manage_category_screen_title">카테고리 관리</string>
+    <string name="manage_category_stopped_section_header">종료한 카테고리</string>
 
     <!-- Edit Category Screen -->
     <string name="edit_category_screen_title">카테고리 관리</string>
