@@ -8,7 +8,7 @@ import org.android.bbangzip.presentation.common.base.BaseContract
 class MyContract {
     @Parcelize
     data class MyState(
-        val profileImgRes: Int = R.drawable.ic_profile_default_100,
+        val profileImgUrl: String = "",
         val nickname: String = "",
         val commitmentMessage: String = "다짐 메세지를 입력해 주세요.",
         val appVersion: String = "",
@@ -55,7 +55,7 @@ class MyContract {
 
         data class UpdateMyAppVersion(val appVersion: String) : MyReduce
 
-        data class UpdateUserInfo(val nickname: String, val commitmentMessage: String, val profileImgRes: Int) : MyReduce
+        data class UpdateUserInfo(val nickname: String, val commitmentMessage: String, val profileImgUrl: String) : MyReduce
 
         data class UpdateLogoutBottomSheetVisibility(val isVisible: Boolean) : MyReduce
 

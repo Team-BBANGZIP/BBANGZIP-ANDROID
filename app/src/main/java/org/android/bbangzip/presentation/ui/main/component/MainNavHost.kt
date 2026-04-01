@@ -63,6 +63,7 @@ fun MainNavHost(
         myNavGraph(
             navigateToProfileEdit = navigator::navigateToProfileEdit,
             navigateToScreenSetting = navigator::navigateToScreenSetting,
+            navigateToLogin = navigator::navigateToLoginAndClearStack
         )
 
         manageCategoryNavGraph(

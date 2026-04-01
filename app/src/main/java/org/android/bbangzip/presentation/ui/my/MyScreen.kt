@@ -34,6 +34,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.bottomsheet.BbangZipBottomSheetSlot
 import org.android.bbangzip.presentation.common.component.button.BbangZipButtonDefaults
@@ -81,7 +82,7 @@ fun MyScreen(
             ProfileArea(
                 nickname = state.nickname,
                 commitmentMessage = state.commitmentMessage,
-                profileImgResId = state.profileImgRes,
+                profileImgUrl = state.profileImgUrl,
                 onClickProfileArea = onClickProfileArea,
             )
 
@@ -186,7 +187,7 @@ private fun ProfileArea(
     modifier: Modifier = Modifier,
     nickname: String,
     commitmentMessage: String,
-    @DrawableRes profileImgResId: Int,
+    profileImgUrl: String,
     onClickProfileArea: () -> Unit,
 ) {
     Row(
@@ -197,10 +198,11 @@ private fun ProfileArea(
                 .padding(horizontal = 20.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Image(
-            painter = painterResource(id = profileImgResId),
+        AsyncImage(
+            model = profileImgUrl,
             contentDescription = null,
             contentScale = ContentScale.Crop,
+            error = painterResource(R.drawable.ic_profile_default_100),
             modifier =
                 Modifier
                     .size(60.dp)

@@ -7,9 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import org.android.bbangzip.domain.repository.UserRepository
 import org.android.bbangzip.presentation.common.base.BaseViewModel
-import org.android.bbangzip.presentation.common.util.constant.OnboardingConstants
 import org.android.bbangzip.presentation.common.util.device.AppInfo
-import org.android.bbangzip.presentation.common.util.device.DeviceInfo
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -82,7 +80,7 @@ class MyViewModel
                     state.copy(
                         nickname = reduce.nickname,
                         commitmentMessage = reduce.commitmentMessage,
-                        profileImgRes = reduce.profileImgRes,
+                        profileImgUrl = reduce.profileImgUrl,
                     )
 
                 is MyContract.MyReduce.UpdateLogoutBottomSheetVisibility -> state.copy(isLogoutConfirmBottomSheetVisible = reduce.isVisible)
@@ -91,17 +89,20 @@ class MyViewModel
             }
         }
 
-        private fun convertKeyToResId(
-            profileImgKey: Int,
-        ): Int {
-            return when (profileImgKey) {
-                0 -> OnboardingConstants.DEFAULT_PROFILE_IMG_RES_ID
-                else -> OnboardingConstants.PROFILE_IMG_RES_IDS.indexOf(profileImgKey - 1)
-            }
-        }
-
         private fun loadInitialData() {
             viewModelScope.launch {
+                userRepository.getProfileInformation()
+                    .onSuccess { profileInformation ->
+                        updateState(
+                            MyContract.MyReduce.UpdateUserInfo(
+                                nickname = profileInformation.nickname,
+                                commitmentMessage = profileInformation.commitmentMessage,
+                                profileImgUrl = profileInformation.profileImageUrl,
+                            )
+                        )
+                    }.onFailure {
+                        Timber.e(it, "[마이페이지] 프로필 정보 불러오기 실패")
+                    }
             }
         }
 
