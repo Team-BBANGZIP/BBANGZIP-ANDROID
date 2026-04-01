@@ -62,7 +62,7 @@ class ManageCategoryViewModel
                         categoryRepository.reorderCategories(
                             categoryOrder = reorderedList.map { it.id.toLong() },
                         ).onSuccess {
-                            Timber.d("reorderCategories 성공")
+                            Timber.d("reorderCategories 성공: ${reorderedList.map { it.id }}")
                         }.onFailure {
                             Timber.d("reorderCategories 실패")
                         }
@@ -96,8 +96,9 @@ class ManageCategoryViewModel
             from: Int,
             to: Int,
         ): List<Category> {
-            val reorderableList = currentUiState.categories.toMutableList()
-            reorderableList.add(to, reorderableList.removeAt(from))
-            return reorderableList.toList()
+            val activeCategories = currentUiState.categories.filter { !it.isStopped }.toMutableList()
+            val stoppedCategories = currentUiState.categories.filter { it.isStopped }
+            activeCategories.add(to, activeCategories.removeAt(from))
+            return activeCategories + stoppedCategories
         }
     }

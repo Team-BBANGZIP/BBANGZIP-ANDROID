@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
@@ -70,6 +71,10 @@ fun ManageCategoryScreen(
 ) {
     val localDensity = LocalDensity.current
 
+    val activeCategories = remember(categories) { categories.filter { !it.isStopped } }
+    val stoppedCategories = remember(categories) { categories.filter { it.isStopped } }
+    val activeCount = activeCategories.size
+
     val lazyListState = rememberLazyListState()
 
     // 자동 스크롤 변수
@@ -115,7 +120,14 @@ fun ManageCategoryScreen(
                                     } ?: return@awaitEachGesture
                             val pressedLazyColumnIndex = pressedLazyColumnItem.index
                             draggingItemIndex = pressedLazyColumnIndex - LIST_HEADER_COUNT
-                            val pressedItemOfCategories = categories.getOrNull(draggingItemIndex!!)
+                            val pressedItemOfCategories = activeCategories.getOrNull(draggingItemIndex!!)
+
+                            // stopped 영역(헤더 포함)은 드래그 차단
+                            if (draggingItemIndex!! >= activeCount) {
+                                awaitDragOrCancellation(down.id)
+                                draggingItemIndex = null
+                                return@awaitEachGesture
+                            }
 
                             if (longPress != null) {
                                 fakeOffset = Offset(0f, pressedLazyColumnItem.offset.toFloat())
@@ -136,6 +148,7 @@ fun ManageCategoryScreen(
                                                 lazyListState = lazyListState,
                                                 touchPointY = change.position.y,
                                                 currentTargetIndex = targetIndex,
+                                                activeCount = activeCount,
                                             )
                                         val scrollDirection =
                                             when {
@@ -161,6 +174,7 @@ fun ManageCategoryScreen(
                                                                     lazyListState = lazyListState,
                                                                     touchPointY = currentTouchPointY,
                                                                     currentTargetIndex = targetIndex,
+                                                                    activeCount = activeCount,
                                                                 )
 
                                                             lazyListState.scrollBy(speed)
@@ -178,7 +192,7 @@ fun ManageCategoryScreen(
                                 } finally {
                                     autoScrollJob?.cancel()
                                     targetIndex?.let {
-                                        if (draggingItemIndex != it && it in categories.indices) {
+                                        if (draggingItemIndex != it && it in 0 until activeCount) {
                                             onCategoryDragEnd(
                                                 draggingItemIndex!!,
                                                 it,
@@ -216,8 +230,8 @@ fun ManageCategoryScreen(
 
             item { Gap(height = 22.dp) }
 
-            items(count = categories.size, key = { index -> categories[index].id }) { index ->
-                val category = categories[index]
+            items(count = activeCount, key = { index -> activeCategories[index].id }) { index ->
+                val category = activeCategories[index]
                 val animatedShiftTarget =
                     calculateAnimatedShift(
                         currentItemIndex = index,
@@ -254,6 +268,31 @@ fun ManageCategoryScreen(
                             },
                     isTrailingIconVisible = false,
                 )
+            }
+
+            if (stoppedCategories.isNotEmpty()) {
+                item(key = "stopped_header") {
+                    Text(
+                        text = stringResource(R.string.manage_category_stopped_section_header),
+                        style = BbangZipTheme.typography.label6Medium,
+                        color = BbangZipTheme.color.labelAlternative_A29D96,
+                        modifier = Modifier.padding(start = 20.dp, top = 30.dp, bottom = 2.dp),
+                    )
+                }
+
+                items(count = stoppedCategories.size, key = { index -> stoppedCategories[index].id }) { index ->
+                    val category = stoppedCategories[index]
+                    BbangZipCategoryChip(
+                        categoryColor = CategoryColor.fromString(category.color).color,
+                        categoryName = category.name,
+                        onClick = { onCategoryChipClick(category) },
+                        modifier =
+                            Modifier
+                                .padding(start = 20.dp)
+                                .padding(vertical = 10.dp),
+                        isTrailingIconVisible = false,
+                    )
+                }
             }
         }
 
@@ -310,6 +349,7 @@ private fun updateTargetIndex(
     lazyListState: LazyListState,
     touchPointY: Float,
     currentTargetIndex: Int?,
+    activeCount: Int,
 ): Int {
     var newTargetIndex = currentTargetIndex ?: -1
 
@@ -321,7 +361,7 @@ private fun updateTargetIndex(
         }
         ?.let {
             val listIndex = it.index - LIST_HEADER_COUNT
-            if (listIndex >= 0) {
+            if (listIndex in 0 until activeCount) {
                 newTargetIndex = listIndex
             }
         }
