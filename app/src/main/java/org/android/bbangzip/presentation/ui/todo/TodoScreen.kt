@@ -362,7 +362,7 @@ fun TodoScreen(
             onCancleButtonClick = onTimePickerBottomSheetDismissRequest,
             onConfirmButtonClick = onTimeConfirmButtonClick,
             initialTime = selectedStartTime ?: LocalTime.of(12, 0),
-            onClearButtonClick = {}
+            onClearButtonClick = onTimePickerBottomSheetClearButtonClick
         )
         CommitmentBottomSheet(
             isBottomSheetVisible = isCommitmentBottomSheetVisible,
