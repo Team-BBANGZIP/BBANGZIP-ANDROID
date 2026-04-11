@@ -40,6 +40,7 @@ fun BbangZipUnderLinedTextField(
     leadingIcon: @Composable (() -> Unit)? = null,
     @StringRes placeholder: Int? = null,
     @StringRes guideline: Int? = null,
+    maxCharacter: Int = 20,
     textStyles: TextFieldTypography = BbangZipUnderlinedTextFieldDefaults.typography(),
     colors: TextFieldColors = BbangZipUnderlinedTextFieldDefaults.colors(),
     contentPadding: PaddingValues = BbangZipUnderlinedTextFieldDefaults.CONTENT_PADDING,
@@ -74,6 +75,7 @@ fun BbangZipUnderLinedTextField(
         contentPadding = contentPadding,
         isUnderLined = isUnderLined,
         maxLines = 1,
+        maxCharacter = maxCharacter,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
     )
