@@ -8,6 +8,8 @@ import org.android.bbangzip.domain.model.ProfileInformation
 data class ResponseProfileInformationDto(
     @SerialName("profileImageUrl")
     val profileImageUrl: String,
+    @SerialName("profileImageKey")
+    val profileImageKey: Int,
     @SerialName("nickname")
     val nickname: String,
     @SerialName("commitmentMessage")
@@ -16,6 +18,7 @@ data class ResponseProfileInformationDto(
     fun toProfileInformation() =
         ProfileInformation(
             profileImageUrl = profileImageUrl,
+            profileImageKey = profileImageKey,
             nickname = nickname,
             commitmentMessage = commitmentMessage,
         )
