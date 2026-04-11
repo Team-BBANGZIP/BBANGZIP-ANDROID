@@ -54,20 +54,12 @@ class ProfileEditViewModel
                     updateState(UpdateState(currentUiState.copy(nickname = event.nickname)))
                 }
 
-                ProfileEditContract.ProfileEditEvent.OnNicknameClick -> {
-                    updateState(UpdateState(currentUiState.copy(isNicknameBottomSheetVisible = true)))
-                }
-
                 ProfileEditContract.ProfileEditEvent.OnProfileImgClick -> {
                     updateState(UpdateState(currentUiState.copy(isProfileImgBottomSheetVisible = true)))
                 }
 
                 is ProfileEditContract.ProfileEditEvent.OnProfileImageSelect -> {
                     updateState(UpdateState(currentUiState.copy(selectedProfileImageKey = OnboardingConstants.PROFILE_IMG_RES_IDS.indexOf(event.imageRes) + 1)))
-                }
-
-                ProfileEditContract.ProfileEditEvent.OnNicknameBottomSheetDismissRequest -> {
-                    updateState(UpdateState(currentUiState.copy(isNicknameBottomSheetVisible = false)))
                 }
 
                 ProfileEditContract.ProfileEditEvent.OnProfileImgBottomSheetDismissRequest -> {
@@ -101,23 +93,6 @@ class ProfileEditViewModel
         ): ProfileEditContract.ProfileEditState {
             return when (reduce) {
                 is ProfileEditContract.ProfileEditReduce.UpdateState -> reduce.state
-            }
-        }
-
-        private fun convertResIdToKey(
-            @DrawableRes imgResId: Int,
-        ): Int {
-            return when (imgResId) {
-                DEFAULT_PROFILE_IMG_RES_ID -> 0
-
-                else -> {
-                    val index = OnboardingConstants.PROFILE_IMG_RES_IDS.indexOf(imgResId)
-                    if (index != -1) {
-                        index + 1
-                    } else {
-                        0
-                    }
-                }
             }
         }
 

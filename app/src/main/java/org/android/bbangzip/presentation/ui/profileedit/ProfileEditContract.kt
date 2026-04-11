@@ -13,7 +13,6 @@ class ProfileEditContract {
         val selectedProfileImageKey: Int = 1,
         val isProfileImgBottomSheetVisible: Boolean = false,
         val nickname: String = "",
-        val isNicknameBottomSheetVisible: Boolean = false,
         val commitmentMessage: String = "",
         val isCommitmentBottomSheetVisible: Boolean = false,
     ) : BaseContract.State, Parcelable {
@@ -29,8 +28,6 @@ class ProfileEditContract {
 
         data object OnProfileImgClick : ProfileEditEvent
 
-        data object OnNicknameClick : ProfileEditEvent
-
         data object OnCommitmentMessageClick : ProfileEditEvent
 
         data class OnProfileImageSelect(val imageRes: Int) : ProfileEditEvent
@@ -40,8 +37,6 @@ class ProfileEditContract {
         data object OnProfileImgBottomSheetDismissRequest : ProfileEditEvent
 
         data class OnNicknameChange(val nickname: String) : ProfileEditEvent
-
-        data object OnNicknameBottomSheetDismissRequest : ProfileEditEvent
 
         data class OnCommitmentMessageChange(val commitmentMessage: String) : ProfileEditEvent
 

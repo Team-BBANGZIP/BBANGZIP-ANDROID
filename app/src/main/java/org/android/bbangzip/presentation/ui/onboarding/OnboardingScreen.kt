@@ -1,7 +1,6 @@
 package org.android.bbangzip.presentation.ui.onboarding
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -44,7 +42,6 @@ import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import org.android.bbangzip.ui.theme.defaultBbangZipColor
-import org.android.bbangzip.ui.theme.defaultBbangZipTypography
 
 @Composable
 fun OnboardingScreen(
@@ -168,50 +165,6 @@ private fun ProfileImageArea(
                 Modifier
                     .size(24.dp)
                     .align(Alignment.BottomEnd),
-        )
-    }
-}
-
-@Composable
-private fun NicknameClickableField(
-    value: String,
-    onClick: () -> Unit,
-    @StringRes placeholder: Int,
-    modifier: Modifier = Modifier,
-) {
-    val textColor =
-        if (value.isEmpty()) {
-            defaultBbangZipColor.labelAssistive_C9C7C5
-        } else {
-            defaultBbangZipColor.labelNormal_6B6560
-        }
-
-    val textToShow =
-        if (value.isEmpty()) {
-            stringResource(placeholder)
-        } else {
-            value
-        }
-
-    Column(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .noRippleClickable(onClick = onClick),
-    ) {
-        Text(
-            text = textToShow,
-            style = defaultBbangZipTypography.body1Medium,
-            color = textColor,
-            modifier = Modifier.padding(start = 2.dp),
-        )
-
-        Gap(height = 8.dp)
-
-        HorizontalDivider(
-            thickness = 2.dp,
-            color = defaultBbangZipColor.primaryNormal_897869,
         )
     }
 }

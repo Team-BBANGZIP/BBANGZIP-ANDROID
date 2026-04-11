@@ -20,7 +20,6 @@ fun OnboardingRoute(
             when (effect) {
                 OnboardingContract.OnboardingSideEffect.NavigateToTimer -> navigateToTimer()
                 OnboardingContract.OnboardingSideEffect.NavigateToLogin -> navigateToLogin()
-                OnboardingContract.OnboardingSideEffect.DismissNicknameInputBottomSheet -> viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickNicknameBottomSheetDismissRequest)
                 OnboardingContract.OnboardingSideEffect.DismissProfileImgBottomSheet -> viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickProfileImgBottomSheetDismissRequest)
             }
         }
