@@ -1,5 +1,6 @@
 package org.android.bbangzip.presentation.common.component.bottomsheet
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -16,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -28,6 +30,7 @@ import org.android.bbangzip.presentation.common.component.button.BbangZipButtonD
 import org.android.bbangzip.presentation.common.component.button.BbangzipBaseButton
 import org.android.bbangzip.presentation.common.component.timepicker.BbangZipTimePicker
 import org.android.bbangzip.presentation.common.util.extension.Gap
+import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import java.time.LocalTime
@@ -39,6 +42,7 @@ fun TimePickerBottomSheet(
     onDismissRequest: () -> Unit,
     onCancleButtonClick: () -> Unit,
     onConfirmButtonClick: (LocalTime) -> Unit,
+    onClearButtonClick: () -> Unit,
     initialTime: LocalTime,
 ) {
     var selectedTime by remember(initialTime) { mutableStateOf(initialTime) }
@@ -47,10 +51,8 @@ fun TimePickerBottomSheet(
         isBottomSheetVisible = isBottomSheetVisible,
         onDismissRequest = onDismissRequest,
         title = {
-            Text(
-                text = stringResource(R.string.time_picker_title),
-                color = BbangZipTheme.color.labelAlternative_A29D96,
-                style = BbangZipTheme.typography.title3SemiBold,
+            TimePickerBottomSheetTitle(
+                onClearButtonClick = onClearButtonClick
             )
         },
         content = {
@@ -115,10 +117,57 @@ fun TimePickerBottomSheet(
     )
 }
 
+@Composable
+fun TimePickerBottomSheetTitle(
+    onClearButtonClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(
+        modifier = modifier
+            .fillMaxWidth(),
+    ){
+        ClearTimeButton(
+            modifier = Modifier.align(Alignment.CenterStart),
+            onClick = onClearButtonClick
+        )
+
+        Text(
+            text = stringResource(R.string.time_picker_title),
+            color = BbangZipTheme.color.labelAlternative_A29D96,
+            style = BbangZipTheme.typography.title3SemiBold,
+            modifier = Modifier.align(Alignment.Center)
+        )
+    }
+}
+
+@Composable
+private fun ClearTimeButton(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier.noRippleClickable{ onClick() },
+        verticalAlignment = Alignment.CenterVertically,
+    ){
+        Icon(
+            imageVector = ImageVector.vectorResource(R.drawable.ic_return_default_24),
+            contentDescription = null,
+            tint = BbangZipTheme.color.todoRed2_F09C86,
+            modifier = Modifier.size(20.dp)
+        )
+
+        Text(
+            text = "초기화",
+            style = BbangZipTheme.typography.label2Regular,
+            color = BbangZipTheme.color.todoRed2_F09C86,
+        )
+    }
+}
+
 @Preview(showBackground = true, showSystemUi = true)
 @Composable
 fun TimePickerBottomSheetPreview() {
-    var isBottomSheetVisible by remember { mutableStateOf(false) }
+    var isBottomSheetVisible by remember { mutableStateOf(true) }
 
     BBANGZIPANDROIDTheme {
         Column(
@@ -144,6 +193,7 @@ fun TimePickerBottomSheetPreview() {
                 onDismissRequest = { isBottomSheetVisible = !isBottomSheetVisible },
                 onCancleButtonClick = {},
                 onConfirmButtonClick = {},
+                onClearButtonClick = {},
                 initialTime = LocalTime.now(),
             )
         }

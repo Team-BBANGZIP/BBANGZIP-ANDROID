@@ -215,6 +215,17 @@ class TodoViewModel
                     }
                 }
 
+                TodoEvent.OnTimePickerBottomSheetClearButtonClick -> {
+                    updateState(
+                        UpdateTodoState(
+                            currentUiState.copy(
+                                selectedStartTime = null,
+                                isTimePickerBottomSheetVisible = false
+                            )
+                        )
+                    )
+                }
+
                 TodoEvent.OnAddTodoBottomSheetDismissRequest -> {
                     if (currentUiState.todoText.isNotBlank()) {
                         addTodo(

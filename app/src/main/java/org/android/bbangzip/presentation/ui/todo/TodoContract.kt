@@ -66,6 +66,8 @@ class TodoContract {
 
         data object OnTimePickerBottomSheetDismissRequest : TodoEvent
 
+        data object OnTimePickerBottomSheetClearButtonClick : TodoEvent
+
         data object OnAddTodoBottomSheetDismissRequest : TodoEvent
 
         data object OnTimePickerBottomSheetShowRequest : TodoEvent

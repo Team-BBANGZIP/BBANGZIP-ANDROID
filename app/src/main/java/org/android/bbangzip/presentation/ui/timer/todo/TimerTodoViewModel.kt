@@ -113,6 +113,11 @@ class TimerTodoViewModel
                     updateState(UpdateTimePickerBottomSheetState(isTimePickerBottomSheetVisible = true))
                 }
 
+                TimerTodoEvent.OnTimePickerBottomSheetClearButtonClick -> {
+                    updateState(UpdateSelectedStartTime(null))
+                    updateState(UpdateTimePickerBottomSheetState(isTimePickerBottomSheetVisible = false))
+                }
+
                 is TimerTodoEvent.OnTodoTextChange -> {
                     updateState(UpdateTodoText(event.todoText))
                 }

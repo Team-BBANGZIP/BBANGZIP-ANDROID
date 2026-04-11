@@ -65,6 +65,7 @@ fun TimerTodoRoute(
                 onTimeConfirmButtonClick = { startTime -> viewModel.setEvent(TimerTodoEvent.OnTimeConfirmButtonClick(startTime)) },
                 onTimePickerBottomSheetDismissRequest = { viewModel.setEvent(TimerTodoEvent.OnTimePickerBottomSheetDismissRequest) },
                 onTimePickerBottomSheetShowRequest = { viewModel.setEvent(TimerTodoEvent.OnTimePickerBottomSheetShowRequest) },
+                onTimePickerBottomSheetClearButtonClick = { viewModel.setEvent(TimerTodoEvent.OnTimePickerBottomSheetClearButtonClick) },
                 onTodoTextChange = { todoText -> viewModel.setEvent(TimerTodoEvent.OnTodoTextChange(todoText)) },
             )
 

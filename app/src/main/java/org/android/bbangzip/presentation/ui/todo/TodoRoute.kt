@@ -70,6 +70,9 @@ fun TodoRoute(
         onTimePickerBottomSheetDismissRequest = {
             viewModel.setEvent(TodoEvent.OnTimePickerBottomSheetDismissRequest)
         },
+        onTimePickerBottomSheetClearButtonClick = {
+            viewModel.setEvent(TodoEvent.OnTimePickerBottomSheetClearButtonClick)
+        },
         onAddTodoBottomSheetDismissRequest = {
             viewModel.setEvent(TodoEvent.OnAddTodoBottomSheetDismissRequest)
         },
