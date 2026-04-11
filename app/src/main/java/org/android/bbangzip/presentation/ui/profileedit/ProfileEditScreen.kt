@@ -33,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.bottomsheet.CommitmentBottomSheet
 import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileImgPickerBottomSheet
-import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileNicknameInputBottomSheet
 import org.android.bbangzip.presentation.common.component.textfield.BbangZipUnderLinedTextField
 import org.android.bbangzip.presentation.common.component.topbar.BbangZipBaseTopBar
 import org.android.bbangzip.presentation.common.util.extension.Gap
@@ -46,11 +45,8 @@ fun ProfileEditScreen(
     state: ProfileEditContract.ProfileEditState,
     onBackIconClick: () -> Unit = {},
     onProfileImageClick: () -> Unit = {},
-    onNicknameClick: () -> Unit = {},
     onCommitmentAreaClick: () -> Unit = {},
     onNicknameChange: (String) -> Unit = {},
-    onNicknameInputBottomSheetDismissRequest: () -> Unit = {},
-    onNicknameInputDoneAction: () -> Unit = {},
     onProfileImageBottomSheetDismissRequest: () -> Unit = {},
     onSelectProfileImage: (Int) -> Unit = {},
     onProfileImageCancelBtnClick: () -> Unit = {},
@@ -90,7 +86,7 @@ fun ProfileEditScreen(
 
         NicknameArea(
             nickname = state.nickname,
-            onNicknameClick = onNicknameClick,
+            onNicknameChange = onNicknameChange,
             focusManager = focusManager,
             focusRequester = focusRequester,
         )
@@ -111,18 +107,6 @@ fun ProfileEditScreen(
         onCancelClick = onProfileImageCancelBtnClick,
         onCompleteClick = onProfileImageCompleteBtnClick,
         selectedImgResId = state.selectedProfileImageResId,
-    )
-
-    ProfileNicknameInputBottomSheet(
-        isBottomSheetVisible = state.isNicknameBottomSheetVisible,
-        onDismissRequest = onNicknameInputBottomSheetDismissRequest,
-        nickname = state.nickname,
-        focusManager = focusManager,
-        onNicknameChange = onNicknameChange,
-        onDoneAction = {
-            focusManager.clearFocus()
-            onNicknameInputDoneAction()
-        },
     )
 
     CommitmentBottomSheet(
@@ -174,8 +158,8 @@ private fun NicknameArea(
     nickname: String,
     focusManager: FocusManager,
     focusRequester: FocusRequester,
+    onNicknameChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onNicknameClick: () -> Unit = {},
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
@@ -194,7 +178,8 @@ private fun NicknameArea(
 
             BbangZipUnderLinedTextField(
                 value = nickname,
-                onValueChange = {i ->},
+                onValueChange = onNicknameChange,
+                placeholder = R.string.onboarding_name_description,
                 focusManager = focusManager,
                 focusRequester = focusRequester,
             )

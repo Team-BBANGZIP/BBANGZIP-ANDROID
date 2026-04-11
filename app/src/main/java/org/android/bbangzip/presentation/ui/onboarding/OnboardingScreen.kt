@@ -19,9 +19,11 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
@@ -32,9 +34,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileImgPickerBottomSheet
-import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileNicknameInputBottomSheet
 import org.android.bbangzip.presentation.common.component.button.BbangZipButtonDefaults
 import org.android.bbangzip.presentation.common.component.button.BbangzipBaseButton
+import org.android.bbangzip.presentation.common.component.textfield.BbangZipUnderLinedTextField
 import org.android.bbangzip.presentation.common.component.topbar.BbangZipBaseTopBar
 import org.android.bbangzip.presentation.common.util.constant.OnboardingConstants.DEFAULT_PROFILE_IMG_RES_ID
 import org.android.bbangzip.presentation.common.util.extension.Gap
@@ -48,9 +50,6 @@ import org.android.bbangzip.ui.theme.defaultBbangZipTypography
 fun OnboardingScreen(
     state: OnboardingContract.OnboardingState,
     onNicknameChange: (String) -> Unit = {},
-    onClickNicknameTextField: () -> Unit = {},
-    onClickNicknameInputBottomSheetDismissRequest: () -> Unit = {},
-    onNicknameInputDoneAction: () -> Unit = {},
     onClickProfileImg: () -> Unit = {},
     onSelectProfileImg: (Int) -> Unit = {},
     onClickProfileImgBottomSheetDismissRequest: () -> Unit = {},
@@ -60,6 +59,7 @@ fun OnboardingScreen(
     onClickSaveBtn: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
 
     Column(
         modifier =
@@ -86,9 +86,12 @@ fun OnboardingScreen(
 
         Gap(height = 48.dp)
 
-        NicknameClickableField(
+        BbangZipUnderLinedTextField(
+            modifier = Modifier.padding(horizontal = 20.dp),
             value = state.nickname,
-            onClick = onClickNicknameTextField,
+            onValueChange = onNicknameChange,
+            focusManager = focusManager,
+            focusRequester = focusRequester,
             placeholder = R.string.onboarding_name_description,
         )
 
@@ -123,18 +126,6 @@ fun OnboardingScreen(
             },
         )
     }
-
-    ProfileNicknameInputBottomSheet(
-        isBottomSheetVisible = state.isNicknameBottomSheetVisible,
-        onDismissRequest = onClickNicknameInputBottomSheetDismissRequest,
-        nickname = state.nickname,
-        focusManager = focusManager,
-        onNicknameChange = onNicknameChange,
-        onDoneAction = {
-            focusManager.clearFocus()
-            onNicknameInputDoneAction()
-        },
-    )
 
     ProfileImgPickerBottomSheet(
         isBottomSheetVisible = state.isProfileImgBottomSheetVisible,
