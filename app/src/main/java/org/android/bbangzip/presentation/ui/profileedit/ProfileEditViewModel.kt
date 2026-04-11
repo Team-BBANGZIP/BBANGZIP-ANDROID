@@ -23,6 +23,11 @@ class ProfileEditViewModel
     ) : BaseViewModel<ProfileEditContract.ProfileEditEvent, ProfileEditContract.ProfileEditState, ProfileEditContract.ProfileEditReduce, ProfileEditContract.ProfileEditSideEffect>(
             savedStateHandle = savedStateHandle,
         ) {
+
+        init {
+            loadInitialData()
+        }
+
         override fun createInitialState(savedState: Parcelable?): ProfileEditContract.ProfileEditState {
             return savedState as? ProfileEditContract.ProfileEditState ?: ProfileEditContract.ProfileEditState()
         }
@@ -57,8 +62,8 @@ class ProfileEditViewModel
                     updateState(UpdateState(currentUiState.copy(isProfileImgBottomSheetVisible = true)))
                 }
 
-                is ProfileEditContract.ProfileEditEvent.OnProfileImgSelect -> {
-                    updateState(UpdateState(currentUiState.copy(selectedImg = event.imgRes)))
+                is ProfileEditContract.ProfileEditEvent.OnProfileImageSelect -> {
+                    updateState(UpdateState(currentUiState.copy(selectedProfileImageKey = OnboardingConstants.PROFILE_IMG_RES_IDS.indexOf(event.imageRes) + 1)))
                 }
 
                 ProfileEditContract.ProfileEditEvent.OnNicknameBottomSheetDismissRequest -> {
@@ -77,7 +82,7 @@ class ProfileEditViewModel
                     updateState(
                         UpdateState(
                             currentUiState.copy(
-                                profileImg = currentUiState.selectedImg,
+                                profileImageResId = currentUiState.selectedProfileImageResId,
                                 isProfileImgBottomSheetVisible = false,
                             ),
                         ),
@@ -116,7 +121,17 @@ class ProfileEditViewModel
             viewModelScope.launch {
                 userRepository.getProfileInformation()
                     .onSuccess { profileInformation ->
-
+                        updateState(
+                            UpdateState(
+                                currentUiState.copy(
+                                    profileImageResId = OnboardingConstants.PROFILE_IMG_RES_IDS.getOrNull(profileInformation.profileImageKey - 1)
+                                        ?: DEFAULT_PROFILE_IMG_RES_ID,
+                                    selectedProfileImageKey = profileInformation.profileImageKey,
+                                    nickname = profileInformation.nickname,
+                                    commitmentMessage = profileInformation.commitmentMessage,
+                                ),
+                            ),
+                        )
                     }.onFailure {
                         Timber.e(it, "[마이페이지] 프로필 정보 불러오기 실패")
                     }
@@ -126,7 +141,7 @@ class ProfileEditViewModel
         private fun modifyProfile() {
             viewModelScope.launch {
                 userRepository.modifyProfileInformation(
-                    profileImageKey = convertResIdToKey(currentUiState.selectedImg),
+                    profileImageKey = currentUiState.selectedProfileImageKey,
                     nickname = currentUiState.nickname,
                     commitmentMessage = currentUiState.commitmentMessage,
                 ).onSuccess {

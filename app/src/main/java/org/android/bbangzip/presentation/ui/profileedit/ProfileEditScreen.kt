@@ -18,9 +18,12 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
@@ -31,6 +34,7 @@ import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.bottomsheet.CommitmentBottomSheet
 import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileImgPickerBottomSheet
 import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileNicknameInputBottomSheet
+import org.android.bbangzip.presentation.common.component.textfield.BbangZipUnderLinedTextField
 import org.android.bbangzip.presentation.common.component.topbar.BbangZipBaseTopBar
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
@@ -48,13 +52,14 @@ fun ProfileEditScreen(
     onNicknameInputBottomSheetDismissRequest: () -> Unit = {},
     onNicknameInputDoneAction: () -> Unit = {},
     onProfileImageBottomSheetDismissRequest: () -> Unit = {},
-    onSelectProfileImg: (Int) -> Unit = {},
+    onSelectProfileImage: (Int) -> Unit = {},
     onProfileImageCancelBtnClick: () -> Unit = {},
     onProfileImageCompleteBtnClick: () -> Unit = {},
     onCommitmentBottomSheetDismissRequest: () -> Unit = {},
     onCommitmentMessageChange: (String) -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
 
     Column(
         modifier =
@@ -77,7 +82,7 @@ fun ProfileEditScreen(
         Gap(height = 28.dp)
 
         ProfileImageArea(
-            currentProfileResId = state.profileImg,
+            currentProfileResId = state.profileImageResId,
             onClick = onProfileImageClick,
         )
 
@@ -86,6 +91,8 @@ fun ProfileEditScreen(
         NicknameArea(
             nickname = state.nickname,
             onNicknameClick = onNicknameClick,
+            focusManager = focusManager,
+            focusRequester = focusRequester,
         )
 
         Gap(height = 48.dp)
@@ -100,10 +107,10 @@ fun ProfileEditScreen(
         confirmButtonLabel = stringResource(R.string.button_label_save),
         isBottomSheetVisible = state.isProfileImgBottomSheetVisible,
         onDismissRequest = onProfileImageBottomSheetDismissRequest,
-        onProfileImgItemClick = onSelectProfileImg,
+        onProfileImgItemClick = onSelectProfileImage,
         onCancelClick = onProfileImageCancelBtnClick,
         onCompleteClick = onProfileImageCompleteBtnClick,
-        selectedImgResId = state.selectedImg,
+        selectedImgResId = state.selectedProfileImageResId,
     )
 
     ProfileNicknameInputBottomSheet(
@@ -165,47 +172,32 @@ private fun ProfileImageArea(
 @Composable
 private fun NicknameArea(
     nickname: String,
+    focusManager: FocusManager,
+    focusRequester: FocusRequester,
     modifier: Modifier = Modifier,
     onNicknameClick: () -> Unit = {},
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
-        Row(
+        Column(
             modifier =
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = stringResource(R.string.my_profile_edit_name),
             )
 
-            Gap()
+            Gap(height = 20.dp)
 
-            Row(
-                modifier =
-                    Modifier.noRippleClickable {
-                        onNicknameClick()
-                    },
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = nickname,
-                    style = BbangZipTheme.typography.body1Medium,
-                    color = BbangZipTheme.color.labelStrong_463D34,
-                )
-
-                Gap(width = 8.dp)
-
-                Icon(
-                    modifier = Modifier.padding(4.dp),
-                    painter = painterResource(R.drawable.ic_arrow_right_24),
-                    contentDescription = null,
-                    tint = BbangZipTheme.color.labelAlternative_A29D96,
-                )
-            }
+            BbangZipUnderLinedTextField(
+                value = nickname,
+                onValueChange = {i ->},
+                focusManager = focusManager,
+                focusRequester = focusRequester,
+            )
         }
     }
 }
@@ -274,7 +266,7 @@ fun ProfileEditScreenPreview() {
         ProfileEditScreen(
             state =
                 ProfileEditContract.ProfileEditState(
-                    profileImg = R.drawable.ic_profile_default_100,
+                    profileImageResId = R.drawable.ic_profile_default_100,
                     nickname = "김재민",
                     commitmentMessage = "빵을 굽자",
                 ),
