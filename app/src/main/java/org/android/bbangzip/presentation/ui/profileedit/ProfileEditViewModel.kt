@@ -88,6 +88,10 @@ class ProfileEditViewModel
                         ),
                     )
                 }
+
+                ProfileEditContract.ProfileEditEvent.OnSaveButtonClick -> {
+                    modifyProfile()
+                }
             }
         }
 
@@ -145,6 +149,7 @@ class ProfileEditViewModel
                     nickname = currentUiState.nickname,
                     commitmentMessage = currentUiState.commitmentMessage,
                 ).onSuccess {
+                    setSideEffect(ProfileEditContract.ProfileEditSideEffect.NavigateToBack)
                 }.onFailure {
                     Timber.e(it,"[마이페이지] 프로필 정보 수정 실패")
                 }

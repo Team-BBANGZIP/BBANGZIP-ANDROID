@@ -24,15 +24,19 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusManager
 import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.bottomsheet.CommitmentBottomSheet
 import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileImgPickerBottomSheet
+import org.android.bbangzip.presentation.common.component.button.BbangZipButtonDefaults
+import org.android.bbangzip.presentation.common.component.button.BbangzipBaseButton
 import org.android.bbangzip.presentation.common.component.textfield.BbangZipUnderLinedTextField
 import org.android.bbangzip.presentation.common.component.topbar.BbangZipBaseTopBar
 import org.android.bbangzip.presentation.common.util.extension.Gap
@@ -53,6 +57,7 @@ fun ProfileEditScreen(
     onProfileImageCompleteBtnClick: () -> Unit = {},
     onCommitmentBottomSheetDismissRequest: () -> Unit = {},
     onCommitmentMessageChange: (String) -> Unit = {},
+    onSaveButtonClick: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
     val focusRequester = remember { FocusRequester() }
@@ -96,6 +101,36 @@ fun ProfileEditScreen(
         CommitmentMessageArea(
             commitmentMessage = state.commitmentMessage,
             onCommitmentAreaClick = onCommitmentAreaClick,
+        )
+
+        Gap()
+
+        BbangzipBaseButton(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
+            onClick = onSaveButtonClick,
+            trailingIcon = {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_check_default_24),
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                )
+            },
+            colors =
+                BbangZipButtonDefaults.colors(
+                    enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
+                    enabledContentColor = BbangZipTheme.color.staticWhite_FFFFFF,
+                    disabledContainerColor = BbangZipTheme.color.labelDisable_E4E2E0,
+                    disabledContentColor = BbangZipTheme.color.labelAssistive_C9C7C5,
+                ),
+            content = {
+                Text(
+                    text = stringResource(R.string.button_label_save),
+                    style = BbangZipTheme.typography.body2Medium,
+                )
+            },
         )
     }
 

@@ -54,5 +54,8 @@ fun ProfileEditRoute(
         onCommitmentMessageChange = {
             viewModel.setEvent(ProfileEditContract.ProfileEditEvent.OnCommitmentMessageChange(it))
         },
+        onSaveButtonClick = {
+            viewModel.setEvent(ProfileEditContract.ProfileEditEvent.OnSaveButtonClick)
+        },
     )
 }

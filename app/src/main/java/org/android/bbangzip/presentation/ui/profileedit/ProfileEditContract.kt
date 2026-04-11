@@ -46,6 +46,8 @@ class ProfileEditContract {
         data class OnCommitmentMessageChange(val commitmentMessage: String) : ProfileEditEvent
 
         data object OnCommitmentBottomSheetDismissRequest : ProfileEditEvent
+
+        data object OnSaveButtonClick : ProfileEditEvent
     }
 
     sealed interface ProfileEditReduce : BaseContract.Reduce {
