@@ -34,7 +34,7 @@ fun BbangZipTextFieldSlot(
             trailingIcon()
         }
         guideline()
-        characterCount()
         underLine()
+        characterCount()
     }
 }
