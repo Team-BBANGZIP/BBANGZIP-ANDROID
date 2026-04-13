@@ -24,8 +24,6 @@ import org.android.bbangzip.presentation.ui.timer.todo.contract.TimerTodoContrac
 import org.android.bbangzip.presentation.ui.timer.todo.contract.TimerTodoContract.TimerTodoSideEffect
 import org.android.bbangzip.presentation.ui.timer.todo.contract.TimerTodoContract.TimerTodoSideEffect.NavigateToTimer
 import org.android.bbangzip.presentation.ui.timer.todo.contract.TimerTodoContract.TimerTodoState
-import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce
-import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateTodoState
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalTime
@@ -166,43 +164,41 @@ class TimerTodoViewModel
             }
         }
 
-    private fun getTodoList() {
-        viewModelScope.launch {
-            todoRepository
-                .getTodoList(
-                    date = LocalDate.now().toYyyyMmDdString(),
-                )
-                .onSuccess { data ->
-                    val categoryList =
-                        data.categories.map { category ->
-                            Category(
-                                id = category.categoryId,
-                                name = category.categoryName,
-                                color = category.categoryColor,
-                                todos =
-                                    category.todos.map { todo ->
-                                        Todo(
-                                            todoId = todo.todoId,
-                                            content = todo.content,
-                                            isCompleted = todo.isCompleted,
-                                            startTime = todo.startTime,
-                                        )
-                                    },
-                            )
-                        }
+    private suspend fun getTodoList() {
+        todoRepository
+            .getTodoList(
+                date = LocalDate.now().toYyyyMmDdString(),
+            )
+            .onSuccess { data ->
+                val categoryList =
+                    data.categories.map { category ->
+                        Category(
+                            id = category.categoryId,
+                            name = category.categoryName,
+                            color = category.categoryColor,
+                            todos =
+                                category.todos.map { todo ->
+                                    Todo(
+                                        todoId = todo.todoId,
+                                        content = todo.content,
+                                        isCompleted = todo.isCompleted,
+                                        startTime = todo.startTime,
+                                    )
+                                },
+                        )
+                    }
 
-                    updateState(
-                        TimerTodoReduce.UpdateTimerTodoState(
-                            currentUiState.copy(
-                                categories = categoryList,
-                                flatList = categoryList.toFlatList(),
-                            )
-                        ),
-                    )
-                }.onFailure { throwable ->
-                    Timber.d("TimerTodoViewmodel 초기화 실패 $throwable")
-                }
-        }
+                updateState(
+                    TimerTodoReduce.UpdateTimerTodoState(
+                        currentUiState.copy(
+                            categories = categoryList,
+                            flatList = categoryList.toFlatList(),
+                        )
+                    ),
+                )
+            }.onFailure { throwable ->
+                Timber.d("TimerTodoViewmodel 초기화 실패 $throwable")
+            }
     }
 
     private fun patchTodoCompletion(
