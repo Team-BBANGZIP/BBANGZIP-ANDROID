@@ -128,7 +128,7 @@ class MainNavigator(
             navOptions =
                 navOptions {
                     popUpTo(BottomNavigationRoute.Timer()) {
-                        saveState = true
+                        inclusive = false
                     }
                     launchSingleTop = true
                 },
