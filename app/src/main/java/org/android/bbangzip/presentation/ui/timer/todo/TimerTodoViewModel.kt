@@ -54,26 +54,11 @@ class TimerTodoViewModel
                 }
 
                 is TimerTodoEvent.OnTodoCheckBoxClick -> {
-                    val updatedCategories =
-                        currentUiState.categories.map { category ->
-                            if (category.id == event.categoryId) {
-                                category.copy(
-                                    todos =
-                                        category.todos.map { todo ->
-                                            if (todo.todoId == event.todoId) {
-                                                todo.copy(isCompleted = event.isChecked)
-                                            } else {
-                                                todo
-                                            }
-                                        },
-                                )
-                            } else {
-                                category
-                            }
-                        }
-                    updateCategoriesAndFlatList(updatedCategories)
-
-                    postCheckedTodo()
+                    patchTodoCompletion(
+                        categoryId = event.categoryId,
+                        todoId = event.todoId,
+                        isChecked = event.isChecked,
+                    )
                 }
 
                 is TimerTodoEvent.OnBackIconClick -> {
@@ -207,6 +192,59 @@ class TimerTodoViewModel
         }
     }
 
+    private fun patchTodoCompletion(
+        categoryId: Int,
+        todoId: Int,
+        isChecked: Boolean,
+    ) {
+        toggleCheckBox(
+            categoryList = currentUiState.categories,
+            categoryId = categoryId,
+            todoId = todoId,
+            isChecked = isChecked,
+        )
+        viewModelScope.launch {
+            todoRepository
+                .toggleTodoCompletion(todoId = todoId.toLong(), isCompleted = isChecked)
+                .onSuccess { data ->
+                    Timber.d("투두 체크 변경 성공")
+                }.onFailure {
+                    Timber.d("투두 체크 변경 실패")
+                    toggleCheckBox(
+                        categoryList = currentUiState.categories,
+                        categoryId = categoryId,
+                        todoId = todoId,
+                        isChecked = !isChecked,
+                    )
+                }
+        }
+    }
+
+    private fun toggleCheckBox(
+        categoryList: List<Category>,
+        categoryId: Int,
+        todoId: Int,
+        isChecked: Boolean,
+    ) {
+        val updatedCategories =
+            categoryList.map { category ->
+                if (category.id == categoryId) {
+                    category.copy(
+                        todos =
+                            category.todos.map { todo ->
+                                if (todo.todoId == todoId) {
+                                    todo.copy(isCompleted = isChecked)
+                                } else {
+                                    todo
+                                }
+                            },
+                    )
+                } else {
+                    category
+                }
+            }
+        updateCategoriesAndFlatList(updatedCategories)
+    }
 
     fun onTodoAdd(
             categoryId: Int,
@@ -232,6 +270,4 @@ class TimerTodoViewModel
                 }
             updateCategoriesAndFlatList(updatedCategories)
         }
-
-        private fun postCheckedTodo() {}
     }
