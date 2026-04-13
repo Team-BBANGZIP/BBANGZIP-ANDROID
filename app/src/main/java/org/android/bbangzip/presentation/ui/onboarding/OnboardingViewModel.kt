@@ -33,18 +33,8 @@ class OnboardingViewModel
                     setSideEffect(OnboardingContract.OnboardingSideEffect.NavigateToLogin)
                 }
 
-                // 닉네임
-                OnboardingContract.OnboardingEvent.OnClickNicknameTextField -> {
-                    updateState(OnboardingContract.OnboardingReduce.UpdateNicknameBottomSheetVisibility(isVisible = true))
-                }
-
                 is OnboardingContract.OnboardingEvent.OnChangeNickname -> {
                     updateState(OnboardingContract.OnboardingReduce.UpdateNickname(event.input))
-                }
-
-                OnboardingContract.OnboardingEvent.OnClickNicknameBottomSheetDismissRequest -> {
-                    updateState(OnboardingContract.OnboardingReduce.UpdateNicknameBottomSheetVisibility(isVisible = false))
-                    refreshSaveButtonState(nickname = currentUiState.nickname, profileImg = currentUiState.profileImg)
                 }
 
                 OnboardingContract.OnboardingEvent.OnNicknameInputDone -> {

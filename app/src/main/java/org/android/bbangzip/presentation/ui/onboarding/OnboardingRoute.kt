@@ -20,7 +20,6 @@ fun OnboardingRoute(
             when (effect) {
                 OnboardingContract.OnboardingSideEffect.NavigateToTimer -> navigateToTimer()
                 OnboardingContract.OnboardingSideEffect.NavigateToLogin -> navigateToLogin()
-                OnboardingContract.OnboardingSideEffect.DismissNicknameInputBottomSheet -> viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickNicknameBottomSheetDismissRequest)
                 OnboardingContract.OnboardingSideEffect.DismissProfileImgBottomSheet -> viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickProfileImgBottomSheetDismissRequest)
             }
         }
@@ -29,9 +28,6 @@ fun OnboardingRoute(
     OnboardingScreen(
         state = state,
         onNicknameChange = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnChangeNickname(it)) },
-        onClickNicknameTextField = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickNicknameTextField) },
-        onClickNicknameInputBottomSheetDismissRequest = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickNicknameBottomSheetDismissRequest) },
-        onNicknameInputDoneAction = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnNicknameInputDone) },
         onClickProfileImg = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickProfileImgSettingBtn) },
         onSelectProfileImg = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnSelectProfileImg(it)) },
         onClickProfileImgBottomSheetDismissRequest = { viewModel.setEvent(OnboardingContract.OnboardingEvent.OnClickProfileImgBottomSheetDismissRequest) },

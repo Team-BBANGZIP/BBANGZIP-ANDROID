@@ -18,19 +18,26 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusManager
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.bottomsheet.CommitmentBottomSheet
 import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileImgPickerBottomSheet
-import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileNicknameInputBottomSheet
+import org.android.bbangzip.presentation.common.component.button.BbangZipButtonDefaults
+import org.android.bbangzip.presentation.common.component.button.BbangzipBaseButton
+import org.android.bbangzip.presentation.common.component.textfield.BbangZipUnderLinedTextField
 import org.android.bbangzip.presentation.common.component.topbar.BbangZipBaseTopBar
 import org.android.bbangzip.presentation.common.util.extension.Gap
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
@@ -42,19 +49,18 @@ fun ProfileEditScreen(
     state: ProfileEditContract.ProfileEditState,
     onBackIconClick: () -> Unit = {},
     onProfileImageClick: () -> Unit = {},
-    onNicknameClick: () -> Unit = {},
     onCommitmentAreaClick: () -> Unit = {},
     onNicknameChange: (String) -> Unit = {},
-    onNicknameInputBottomSheetDismissRequest: () -> Unit = {},
-    onNicknameInputDoneAction: () -> Unit = {},
     onProfileImageBottomSheetDismissRequest: () -> Unit = {},
-    onSelectProfileImg: (Int) -> Unit = {},
+    onSelectProfileImage: (Int) -> Unit = {},
     onProfileImageCancelBtnClick: () -> Unit = {},
     onProfileImageCompleteBtnClick: () -> Unit = {},
     onCommitmentBottomSheetDismissRequest: () -> Unit = {},
     onCommitmentMessageChange: (String) -> Unit = {},
+    onSaveButtonClick: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
 
     Column(
         modifier =
@@ -77,7 +83,7 @@ fun ProfileEditScreen(
         Gap(height = 28.dp)
 
         ProfileImageArea(
-            currentProfileResId = state.profileImg,
+            currentProfileResId = state.profileImageResId,
             onClick = onProfileImageClick,
         )
 
@@ -85,7 +91,9 @@ fun ProfileEditScreen(
 
         NicknameArea(
             nickname = state.nickname,
-            onNicknameClick = onNicknameClick,
+            onNicknameChange = onNicknameChange,
+            focusManager = focusManager,
+            focusRequester = focusRequester,
         )
 
         Gap(height = 48.dp)
@@ -94,28 +102,46 @@ fun ProfileEditScreen(
             commitmentMessage = state.commitmentMessage,
             onCommitmentAreaClick = onCommitmentAreaClick,
         )
+
+        Gap()
+
+        BbangzipBaseButton(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 24.dp),
+            onClick = onSaveButtonClick,
+            trailingIcon = {
+                Icon(
+                    imageVector = ImageVector.vectorResource(R.drawable.ic_check_default_24),
+                    contentDescription = null,
+                    modifier = Modifier.size(20.dp),
+                )
+            },
+            colors =
+                BbangZipButtonDefaults.colors(
+                    enabledContainerColor = BbangZipTheme.color.primaryStrong_4B4137,
+                    enabledContentColor = BbangZipTheme.color.staticWhite_FFFFFF,
+                    disabledContainerColor = BbangZipTheme.color.labelDisable_E4E2E0,
+                    disabledContentColor = BbangZipTheme.color.labelAssistive_C9C7C5,
+                ),
+            content = {
+                Text(
+                    text = stringResource(R.string.button_label_save),
+                    style = BbangZipTheme.typography.body2Medium,
+                )
+            },
+        )
     }
 
     ProfileImgPickerBottomSheet(
         confirmButtonLabel = stringResource(R.string.button_label_save),
         isBottomSheetVisible = state.isProfileImgBottomSheetVisible,
         onDismissRequest = onProfileImageBottomSheetDismissRequest,
-        onProfileImgItemClick = onSelectProfileImg,
+        onProfileImgItemClick = onSelectProfileImage,
         onCancelClick = onProfileImageCancelBtnClick,
         onCompleteClick = onProfileImageCompleteBtnClick,
-        selectedImgResId = state.selectedImg,
-    )
-
-    ProfileNicknameInputBottomSheet(
-        isBottomSheetVisible = state.isNicknameBottomSheetVisible,
-        onDismissRequest = onNicknameInputBottomSheetDismissRequest,
-        nickname = state.nickname,
-        focusManager = focusManager,
-        onNicknameChange = onNicknameChange,
-        onDoneAction = {
-            focusManager.clearFocus()
-            onNicknameInputDoneAction()
-        },
+        selectedImgResId = state.selectedProfileImageResId,
     )
 
     CommitmentBottomSheet(
@@ -165,47 +191,33 @@ private fun ProfileImageArea(
 @Composable
 private fun NicknameArea(
     nickname: String,
+    focusManager: FocusManager,
+    focusRequester: FocusRequester,
+    onNicknameChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    onNicknameClick: () -> Unit = {},
 ) {
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
-        Row(
+        Column(
             modifier =
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = stringResource(R.string.my_profile_edit_name),
             )
 
-            Gap()
+            Gap(height = 20.dp)
 
-            Row(
-                modifier =
-                    Modifier.noRippleClickable {
-                        onNicknameClick()
-                    },
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = nickname,
-                    style = BbangZipTheme.typography.body1Medium,
-                    color = BbangZipTheme.color.labelStrong_463D34,
-                )
-
-                Gap(width = 8.dp)
-
-                Icon(
-                    modifier = Modifier.padding(4.dp),
-                    painter = painterResource(R.drawable.ic_arrow_right_24),
-                    contentDescription = null,
-                    tint = BbangZipTheme.color.labelAlternative_A29D96,
-                )
-            }
+            BbangZipUnderLinedTextField(
+                value = nickname,
+                onValueChange = onNicknameChange,
+                placeholder = R.string.onboarding_name_description,
+                focusManager = focusManager,
+                focusRequester = focusRequester,
+            )
         }
     }
 }
@@ -274,7 +286,7 @@ fun ProfileEditScreenPreview() {
         ProfileEditScreen(
             state =
                 ProfileEditContract.ProfileEditState(
-                    profileImg = R.drawable.ic_profile_default_100,
+                    profileImageResId = R.drawable.ic_profile_default_100,
                     nickname = "김재민",
                     commitmentMessage = "빵을 굽자",
                 ),

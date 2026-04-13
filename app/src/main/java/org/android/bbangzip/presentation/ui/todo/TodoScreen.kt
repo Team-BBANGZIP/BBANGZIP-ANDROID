@@ -126,6 +126,7 @@ fun TodoScreen(
     onAddTodoBottomSheetDismissRequest: () -> Unit,
     onTodoSettingBottomSheetDismissRequest: () -> Unit,
     onTimePickerBottomSheetShowRequest: () -> Unit,
+    onTimePickerBottomSheetClearButtonClick: () -> Unit,
     onMonthlyCalendarBottomSheetDismissRequest: () -> Unit,
     onDateSaveButtonClick: () -> Unit,
     onMonthlyDateSelect: (LocalDate) -> Unit,
@@ -361,6 +362,7 @@ fun TodoScreen(
             onCancleButtonClick = onTimePickerBottomSheetDismissRequest,
             onConfirmButtonClick = onTimeConfirmButtonClick,
             initialTime = selectedStartTime ?: LocalTime.of(12, 0),
+            onClearButtonClick = onTimePickerBottomSheetClearButtonClick
         )
         CommitmentBottomSheet(
             isBottomSheetVisible = isCommitmentBottomSheetVisible,
@@ -848,6 +850,7 @@ fun TodoScreenPreview() {
         onTimePickerBottomSheetDismissRequest = {},
         onAddTodoBottomSheetDismissRequest = {},
         onTimePickerBottomSheetShowRequest = {},
+        onTimePickerBottomSheetClearButtonClick = {},
         onTodoTextChange = {},
         onCategoryChipClick = {},
         textFieldCommitmentMessage = "",

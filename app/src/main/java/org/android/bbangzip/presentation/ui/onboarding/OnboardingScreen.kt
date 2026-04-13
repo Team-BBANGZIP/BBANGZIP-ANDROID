@@ -1,7 +1,6 @@
 package org.android.bbangzip.presentation.ui.onboarding
 
 import androidx.annotation.DrawableRes
-import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
@@ -15,13 +14,14 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalFocusManager
@@ -32,9 +32,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileImgPickerBottomSheet
-import org.android.bbangzip.presentation.common.component.bottomsheet.ProfileNicknameInputBottomSheet
 import org.android.bbangzip.presentation.common.component.button.BbangZipButtonDefaults
 import org.android.bbangzip.presentation.common.component.button.BbangzipBaseButton
+import org.android.bbangzip.presentation.common.component.textfield.BbangZipUnderLinedTextField
 import org.android.bbangzip.presentation.common.component.topbar.BbangZipBaseTopBar
 import org.android.bbangzip.presentation.common.util.constant.OnboardingConstants.DEFAULT_PROFILE_IMG_RES_ID
 import org.android.bbangzip.presentation.common.util.extension.Gap
@@ -42,15 +42,11 @@ import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import org.android.bbangzip.ui.theme.BbangZipTheme
 import org.android.bbangzip.ui.theme.defaultBbangZipColor
-import org.android.bbangzip.ui.theme.defaultBbangZipTypography
 
 @Composable
 fun OnboardingScreen(
     state: OnboardingContract.OnboardingState,
     onNicknameChange: (String) -> Unit = {},
-    onClickNicknameTextField: () -> Unit = {},
-    onClickNicknameInputBottomSheetDismissRequest: () -> Unit = {},
-    onNicknameInputDoneAction: () -> Unit = {},
     onClickProfileImg: () -> Unit = {},
     onSelectProfileImg: (Int) -> Unit = {},
     onClickProfileImgBottomSheetDismissRequest: () -> Unit = {},
@@ -60,6 +56,7 @@ fun OnboardingScreen(
     onClickSaveBtn: () -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
+    val focusRequester = remember { FocusRequester() }
 
     Column(
         modifier =
@@ -86,9 +83,12 @@ fun OnboardingScreen(
 
         Gap(height = 48.dp)
 
-        NicknameClickableField(
+        BbangZipUnderLinedTextField(
+            modifier = Modifier.padding(horizontal = 20.dp),
             value = state.nickname,
-            onClick = onClickNicknameTextField,
+            onValueChange = onNicknameChange,
+            focusManager = focusManager,
+            focusRequester = focusRequester,
             placeholder = R.string.onboarding_name_description,
         )
 
@@ -123,18 +123,6 @@ fun OnboardingScreen(
             },
         )
     }
-
-    ProfileNicknameInputBottomSheet(
-        isBottomSheetVisible = state.isNicknameBottomSheetVisible,
-        onDismissRequest = onClickNicknameInputBottomSheetDismissRequest,
-        nickname = state.nickname,
-        focusManager = focusManager,
-        onNicknameChange = onNicknameChange,
-        onDoneAction = {
-            focusManager.clearFocus()
-            onNicknameInputDoneAction()
-        },
-    )
 
     ProfileImgPickerBottomSheet(
         isBottomSheetVisible = state.isProfileImgBottomSheetVisible,
@@ -177,50 +165,6 @@ private fun ProfileImageArea(
                 Modifier
                     .size(24.dp)
                     .align(Alignment.BottomEnd),
-        )
-    }
-}
-
-@Composable
-private fun NicknameClickableField(
-    value: String,
-    onClick: () -> Unit,
-    @StringRes placeholder: Int,
-    modifier: Modifier = Modifier,
-) {
-    val textColor =
-        if (value.isEmpty()) {
-            defaultBbangZipColor.labelAssistive_C9C7C5
-        } else {
-            defaultBbangZipColor.labelNormal_6B6560
-        }
-
-    val textToShow =
-        if (value.isEmpty()) {
-            stringResource(placeholder)
-        } else {
-            value
-        }
-
-    Column(
-        modifier =
-            modifier
-                .fillMaxWidth()
-                .padding(horizontal = 20.dp)
-                .noRippleClickable(onClick = onClick),
-    ) {
-        Text(
-            text = textToShow,
-            style = defaultBbangZipTypography.body1Medium,
-            color = textColor,
-            modifier = Modifier.padding(start = 2.dp),
-        )
-
-        Gap(height = 8.dp)
-
-        HorizontalDivider(
-            thickness = 2.dp,
-            color = defaultBbangZipColor.primaryNormal_897869,
         )
     }
 }

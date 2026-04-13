@@ -8,7 +8,6 @@ class OnboardingContract {
     @Parcelize
     data class OnboardingState(
         val nickname: String = "",
-        val isNicknameValid: Boolean = false,
         val isNicknameBottomSheetVisible: Boolean = false,
         val isSaveBtnEnabled: Boolean = false,
         val profileImg: Int? = null,
@@ -22,11 +21,7 @@ class OnboardingContract {
     sealed interface OnboardingEvent : BaseContract.Event {
         data object OnClickPreviousBtn : OnboardingEvent
 
-        data object OnClickNicknameTextField : OnboardingEvent
-
         data class OnChangeNickname(val input: String) : OnboardingEvent
-
-        data object OnClickNicknameBottomSheetDismissRequest : OnboardingEvent
 
         data object OnNicknameInputDone : OnboardingEvent
 
@@ -65,7 +60,5 @@ class OnboardingContract {
         data object NavigateToLogin : OnboardingSideEffect
 
         data object DismissProfileImgBottomSheet : OnboardingSideEffect
-
-        data object DismissNicknameInputBottomSheet : OnboardingSideEffect
     }
 }

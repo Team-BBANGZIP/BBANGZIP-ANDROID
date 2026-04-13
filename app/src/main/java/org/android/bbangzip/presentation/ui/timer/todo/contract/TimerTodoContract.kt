@@ -42,6 +42,8 @@ class TimerTodoContract {
 
         data object OnTimePickerBottomSheetShowRequest : TimerTodoEvent
 
+        data object OnTimePickerBottomSheetClearButtonClick : TimerTodoEvent
+
         data object OnRestartTimerBtnClick : TimerTodoEvent
 
         data object OnExitBtnClick : TimerTodoEvent

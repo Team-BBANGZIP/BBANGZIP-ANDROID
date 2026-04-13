@@ -215,6 +215,71 @@ class TodoViewModel
                     }
                 }
 
+                TodoEvent.OnTimePickerBottomSheetClearButtonClick -> {
+                    if (currentUiState.isEditMode) {
+                        val prevStartTime = currentUiState.selectedStartTime
+                        val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
+                        viewModelScope.launch {
+                            todoRepository.modifyTodoTime(
+                                todoId = selectedTodoId.toLong(),
+                                startTime = null,
+                            ).onSuccess {
+                                val updatedCategories =
+                                    currentUiState.categories.map { category ->
+                                        category.copy(
+                                            todos =
+                                                category.todos.map {
+                                                    if (it.todoId == selectedTodoId) {
+                                                        it.copy(startTime = null)
+                                                    } else {
+                                                        it
+                                                    }
+                                                },
+                                        )
+                                    }
+                                updateState(
+                                    UpdateTodoState(
+                                        currentUiState.copy(
+                                            selectedStartTime = null,
+                                            categories = updatedCategories,
+                                            flatList = updatedCategories.toFlatList(),
+                                            isTimePickerBottomSheetVisible = false,
+                                            isTodoSettingBottomSheetVisible = true,
+                                            selectedTodoItem =
+                                                currentUiState.selectedTodoItem!!.copy(
+                                                    todo =
+                                                        currentUiState.selectedTodoItem!!.todo.copy(
+                                                            startTime = null,
+                                                        ),
+                                                ),
+                                        ),
+                                    ),
+                                )
+                            }.onFailure {
+                                updateState(
+                                    UpdateTodoState(
+                                        currentUiState.copy(
+                                            selectedStartTime = prevStartTime,
+                                            isTimePickerBottomSheetVisible = false,
+                                            isTodoSettingBottomSheetVisible = true,
+                                        ),
+                                    ),
+                                )
+                            }
+                        }
+                    } else {
+                        updateState(
+                            UpdateTodoState(
+                                currentUiState.copy(
+                                    selectedStartTime = null,
+                                    isAddTodoBottomSheetVisible = true,
+                                    isTimePickerBottomSheetVisible = false,
+                                ),
+                            ),
+                        )
+                    }
+                }
+
                 TodoEvent.OnAddTodoBottomSheetDismissRequest -> {
                     if (currentUiState.todoText.isNotBlank()) {
                         addTodo(
@@ -251,6 +316,7 @@ class TodoViewModel
                             currentUiState.copy(
                                 selectedCategory = event.category,
                                 isAddTodoBottomSheetVisible = true,
+                                isEditMode = false
                             ),
                         ),
                     )

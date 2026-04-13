@@ -44,6 +44,7 @@ import java.time.LocalTime
 fun TimerTodoScreen(
     uiState: TimerTodoContract.TimerTodoState,
     timeOptionIndex: Int,
+    onTimePickerBottomSheetClearButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
     onBackIconClick: () -> Unit = {},
     onExitBtnClick: () -> Unit = {},
@@ -124,7 +125,8 @@ fun TimerTodoScreen(
             onDismissRequest = onTimePickerBottomSheetDismissRequest,
             onCancleButtonClick = onTimePickerBottomSheetDismissRequest,
             onConfirmButtonClick = onTimeConfirmButtonClick,
-            initialTime = uiState.selectedStartTime ?: LocalTime.of(12, 0),
+            onClearButtonClick = onTimePickerBottomSheetClearButtonClick,
+            initialTime = uiState.selectedStartTime ?: LocalTime.of(12, 0)
         )
     }
 }
@@ -312,6 +314,6 @@ private fun TimerTodoScreenPreview() {
                 categories = exampleCategories,
                 flatList = flatList,
             )
-        TimerTodoScreen(uiState = previewState, timeOptionIndex = 0)
+        TimerTodoScreen(uiState = previewState, timeOptionIndex = 0, onTimePickerBottomSheetClearButtonClick = {})
     }
 }
