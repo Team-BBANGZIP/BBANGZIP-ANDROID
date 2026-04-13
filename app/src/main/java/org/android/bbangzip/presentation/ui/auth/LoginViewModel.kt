@@ -88,18 +88,16 @@ class LoginViewModel
             }
         }
 
-        private fun saveUserInfoInLocal(
+        private suspend fun saveUserInfoInLocal(
             accessToken: String,
             refreshToken: String,
             isLogin: Boolean,
         ) {
             Timber.d("[로그인] 데이터스토어에 저장할래~ -> $isLogin")
-            viewModelScope.launch {
-                with(userDefaultRepository) {
-                    setAccessToken(accessToken = accessToken)
-                    setRefreshToken(refreshToken = refreshToken)
-                    setIsLogin(isLogin = isLogin)
-                }
+            with(userDefaultRepository) {
+                setAccessToken(accessToken = accessToken)
+                setRefreshToken(refreshToken = refreshToken)
+                setIsLogin(isLogin = isLogin)
             }
         }
 
