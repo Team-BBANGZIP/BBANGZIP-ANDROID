@@ -5,6 +5,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import org.android.bbangzip.domain.repository.UserDefaultRepository
 import org.android.bbangzip.domain.repository.UserRepository
 import org.android.bbangzip.presentation.common.base.BaseViewModel
 import org.android.bbangzip.presentation.common.util.device.AppInfo
@@ -16,6 +17,7 @@ class MyViewModel
     @Inject
     constructor(
         private val userRepository: UserRepository,
+        private val userDefaultRepository: UserDefaultRepository,
         private val appInfo: AppInfo,
         savedStateHandle: SavedStateHandle,
     ) : BaseViewModel<MyContract.MyEvent, MyContract.MyState, MyContract.MyReduce, MyContract.MySideEffect>(
@@ -110,6 +112,11 @@ class MyViewModel
             viewModelScope.launch {
                 userRepository.logout()
                     .onSuccess {
+                        with(userDefaultRepository) {
+                            clearAccessToken()
+                            clearRefreshToken()
+                            setIsLogin(false)
+                        }
                         setSideEffect(MyContract.MySideEffect.NavigateToLogin)
                     }.onFailure {
                         Timber.d("[마이페이지] 로그아웃 실패")
