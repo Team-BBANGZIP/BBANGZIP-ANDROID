@@ -152,7 +152,7 @@ class MainNavigator(
             route = LoginRoute,
             navOptions =
                 navOptions {
-                    popUpTo(navHostController.graph.findStartDestination().id) {
+                    popUpTo(navHostController.graph.id) {
                         inclusive = true
                     }
                     launchSingleTop = true
