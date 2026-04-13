@@ -25,6 +25,7 @@ import org.android.bbangzip.presentation.ui.timer.todo.contract.TimerTodoContrac
 import org.android.bbangzip.presentation.ui.timer.todo.contract.TimerTodoContract.TimerTodoSideEffect.NavigateToTimer
 import org.android.bbangzip.presentation.ui.timer.todo.contract.TimerTodoContract.TimerTodoState
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce
+import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateTodoState
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalTime
@@ -84,10 +85,22 @@ class TimerTodoViewModel
                 }
 
                 is TimerTodoEvent.OnAddTodoDone -> {
-                    if (event.todoContent.isNotBlank() && event.category != null) {
-                        onTodoAdd(event.category.id, event.todoContent, event.startTime)
-                        updateState(ClearAddTodoState)
-                        updateState(UpdateAddTodoBottomSheetState(false))
+                    if (event.todoContent.isNotBlank()) {
+                        addTodo(
+                            categoryId = currentUiState.selectedCategory!!.id,
+                            todoContent = currentUiState.todoText,
+                            startTime = currentUiState.selectedStartTime,
+                        )
+                    } else {
+                        updateState(
+                            TimerTodoReduce.UpdateTimerTodoState(
+                                currentUiState.copy(
+                                    isAddTodoBottomSheetVisible = false,
+                                    selectedCategory = null,
+                                    selectedStartTime = null,
+                                ),
+                            ),
+                        )
                     }
                 }
 
@@ -246,28 +259,51 @@ class TimerTodoViewModel
         updateCategoriesAndFlatList(updatedCategories)
     }
 
-    fun onTodoAdd(
+    private fun addTodo(
             categoryId: Int,
             todoContent: String,
             startTime: LocalTime?,
         ) {
-            val newTodoId = (currentUiState.categories.flatMap { it.todos }.maxOfOrNull { it.todoId } ?: 0) + 1
-            val newTodo =
-                Todo(
-                    todoId = newTodoId,
-                    content = todoContent,
-                    isCompleted = false,
-                    startTime = startTime,
-                )
-
-            val updatedCategories =
-                currentUiState.categories.map { category ->
-                    if (category.id == categoryId) {
-                        category.copy(todos = category.todos + newTodo)
-                    } else {
-                        category
+            viewModelScope.launch {
+                todoRepository
+                    .addTodo(
+                        categoryId = categoryId.toLong(),
+                        content = todoContent,
+                        targetDate = LocalDate.now(),
+                        startTime = startTime,
+                    )
+                    .onSuccess { data ->
+                        val newTodo =
+                            Todo(
+                                todoId = data.todoId,
+                                content = data.content,
+                                isCompleted = data.isCompleted,
+                                startTime = data.startTime,
+                            )
+                        val updatedCategories =
+                            currentUiState.categories.map { category ->
+                                if (category.id == categoryId) {
+                                    category.copy(todos = category.todos + newTodo)
+                                } else {
+                                    category
+                                }
+                            }
+                        updateState(
+                            TimerTodoReduce.UpdateTimerTodoState(
+                                currentUiState.copy(
+                                    todoText = "",
+                                    selectedCategory = null,
+                                    selectedStartTime = null,
+                                    isAddTodoBottomSheetVisible = false,
+                                    categories = updatedCategories,
+                                    flatList = updatedCategories.toFlatList(),
+                                ),
+                            ),
+                        )
+                        Timber.d("Update Todo 성공!")
+                    }.onFailure {
+                        Timber.d("Todo 생성 싪패!")
                     }
-                }
-            updateCategoriesAndFlatList(updatedCategories)
+            }
         }
     }
