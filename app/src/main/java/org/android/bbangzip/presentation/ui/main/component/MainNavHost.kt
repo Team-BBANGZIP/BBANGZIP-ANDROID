@@ -32,6 +32,7 @@ fun MainNavHost(
     ) {
         splashNavGraph(
             navigateToLogin = navigator::navigateToLoginFromSplash,
+            navigateToTimer = navigator::navigateToTimerFromSplash,
         )
 
         loginNavGraph(

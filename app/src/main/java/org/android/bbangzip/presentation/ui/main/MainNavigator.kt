@@ -77,6 +77,18 @@ class MainNavigator(
         )
     }
 
+    fun navigateToTimerFromSplash() {
+        navHostController.navigateToTimer(
+            navOptions =
+                navOptions {
+                    popUpTo(SplashRoute::class.qualifiedName.orEmpty()) {
+                        inclusive = true
+                    }
+                    launchSingleTop = true
+                },
+        )
+    }
+
     fun navigateToLoginFromSplash() {
         navHostController.navigate(
             route = LoginRoute,
