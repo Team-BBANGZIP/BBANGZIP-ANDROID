@@ -573,6 +573,15 @@ class TodoViewModel
                             )
                         }.onFailure {
                             Timber.d("투두 이름 변경 실패")
+                            updateState(
+                                UpdateTodoState(
+                                    currentUiState.copy(
+                                        selectedTodoItem = null,
+                                        selectedCategory = null,
+                                        isEditTodoNameBottomSheetVisible = false,
+                                    ),
+                                ),
+                            )
                         }
                     }
                 }
