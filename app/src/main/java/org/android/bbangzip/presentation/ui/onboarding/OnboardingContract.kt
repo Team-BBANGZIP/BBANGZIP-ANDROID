@@ -9,12 +9,14 @@ class OnboardingContract {
     data class OnboardingState(
         val nickname: String = "",
         val isNicknameBottomSheetVisible: Boolean = false,
-        val isSaveBtnEnabled: Boolean = false,
         val profileImg: Int? = null,
         val selectedImg: Int? = null,
         val isProfileImgBottomSheetVisible: Boolean = false,
         val onboardingState: Boolean = false,
     ) : BaseContract.State, Parcelable {
+        val isSaveBtnEnabled: Boolean
+            get() = nickname.isNotEmpty() && profileImg != null
+
         override fun toParcelable(): Parcelable = this
     }
 
@@ -22,8 +24,6 @@ class OnboardingContract {
         data object OnClickPreviousBtn : OnboardingEvent
 
         data class OnChangeNickname(val input: String) : OnboardingEvent
-
-        data object OnNicknameInputDone : OnboardingEvent
 
         data object OnClickSaveBtn : OnboardingEvent
 
@@ -44,8 +44,6 @@ class OnboardingContract {
         data class UpdateNickname(val nickname: String) : OnboardingReduce
 
         data class UpdateNicknameBottomSheetVisibility(val isVisible: Boolean) : OnboardingReduce
-
-        data class UpdateSaveButtonEnabled(val isEnabled: Boolean) : OnboardingReduce
 
         data class UpdateProfileImgBottomSheetVisibility(val isVisible: Boolean) : OnboardingReduce
 
