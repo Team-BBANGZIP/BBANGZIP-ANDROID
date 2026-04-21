@@ -99,6 +99,6 @@ class AuthInterceptor
         companion object {
             const val AUTHORIZATION = "Authorization"
             const val EXPIRE_TOKEN_CODE = 401
-            const val BEARER = "Bearer"
+            const val BEARER = "Bearer "
         }
     }
