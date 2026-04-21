@@ -3,6 +3,7 @@ package org.android.bbangzip.data.auth.interceptor
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
+import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
@@ -44,13 +45,19 @@ class AuthInterceptor
                 }
 
             val response = chain.proceed(authRequest)
+            val url = BuildConfig.BASE_URL.toHttpUrl().newBuilder()
+                .addPathSegment(ApiConstants.API) // "api"
+                .addPathSegments(ApiConstants.VERSIONS) // "v1"
+                .addPathSegment(ApiConstants.AUTH)     // "auth"
+                .addPathSegment(ApiConstants.REISSUE)  // "reissue"
+                .build()
 
             when (response.code) {
                 EXPIRE_TOKEN_CODE -> {
                     response.close()
                     val refreshTokenRequest =
-                        originalRequest.newBuilder().get()
-                            .url("${BuildConfig.BASE_URL}${ApiConstants.VERSIONS}/${ApiConstants.AUTH}/${ApiConstants.REISSUE}")
+                        originalRequest.newBuilder()
+                            .url(url)
                             .post("".toRequestBody())
                             .addHeader(AUTHORIZATION, refreshToken ?: "")
                             .build()
