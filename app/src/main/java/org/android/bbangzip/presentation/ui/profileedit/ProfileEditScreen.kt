@@ -231,31 +231,15 @@ private fun CommitmentMessageArea(
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
-        Row(
+        Text(
+            text = stringResource(R.string.my_profile_commitment_message),
+            style = BbangZipTheme.typography.body1Medium,
+            color = BbangZipTheme.color.labelNormal_6B6560,
             modifier =
                 Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Text(
-                text = stringResource(R.string.my_profile_commitment_message),
-                style = BbangZipTheme.typography.body1Medium,
-                color = BbangZipTheme.color.labelNormal_6B6560,
-            )
-
-            Gap()
-
-            Icon(
-                modifier =
-                    Modifier
-                        .noRippleClickable(onClick = onCommitmentAreaClick)
-                        .padding(4.dp),
-                painter = painterResource(R.drawable.ic_arrow_right_24),
-                contentDescription = null,
-                tint = BbangZipTheme.color.labelAlternative_A29D96,
-            )
-        }
+        )
 
         Gap(height = 20.dp)
 
@@ -268,6 +252,7 @@ private fun CommitmentMessageArea(
                         color = BbangZipTheme.color.componentStrong_F6F6F5,
                         shape = RoundedCornerShape(8.dp),
                     )
+                    .noRippleClickable(onClick = onCommitmentAreaClick)
                     .padding(horizontal = 12.dp, vertical = 11.dp),
         ) {
             Text(
