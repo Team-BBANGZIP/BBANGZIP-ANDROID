@@ -14,7 +14,7 @@ import org.android.bbangzip.R
 
 @Composable
 fun CompleteBottomSheet(
-    iisBottomSheetVisible: Boolean,
+    isBottomSheetVisible: Boolean,
     onRestartBtnClick: () -> Unit,
     onCheckTodoBtnClick: () -> Unit,
     onDismissRequest: () -> Unit,
@@ -37,7 +37,7 @@ fun CompleteBottomSheet(
     val rawRes = if (timeOptionIndex == 0) R.raw.one_bread_success_lottie else R.raw.two_bread_success_lottie
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(rawRes))
     TimerActionBottomSheet(
-        isBottomSheetVisible = iisBottomSheetVisible,
+        isBottomSheetVisible = isBottomSheetVisible,
         titleText = stringResource(R.string.complete_sheet_title),
         subTitleText = subTitleText,
         leftBtnText = leftBtnText,

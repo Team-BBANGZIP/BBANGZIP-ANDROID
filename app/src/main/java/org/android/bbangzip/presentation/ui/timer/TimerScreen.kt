@@ -173,7 +173,7 @@ fun TimerScreen(
         )
 
         CompleteBottomSheet(
-            iisBottomSheetVisible = timerState.bottomSheetState.complete,
+            isBottomSheetVisible = timerState.bottomSheetState.complete,
             onRestartBtnClick = onCompleteSheetRestartBtnClick,
             onCheckTodoBtnClick = onCompleteSheetCheckBtnClick,
             onDismissRequest = onCompleteSheetDismissRequest,
