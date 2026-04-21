@@ -28,7 +28,7 @@ fun RestartBottomSheet(
         rightBtnIcon = R.drawable.ic_x_default_24,
         content = {
             Image(
-                painter = painterResource(id = R.drawable.img_shine_bread_n1),
+                painter = painterResource(R.drawable.img_refresh_timer),
                 contentDescription = null,
                 modifier =
                     Modifier
