@@ -111,6 +111,9 @@ dependencies {
 
     // Kakao
     implementation(libs.kakao.v2.user)
+
+    // Lottie
+    implementation(libs.lottie.compose)
 }
 
 protobuf {
