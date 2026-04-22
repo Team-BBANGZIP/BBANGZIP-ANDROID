@@ -531,6 +531,7 @@ class TodoViewModel
                     updateState(
                         UpdateTodoState(
                             currentUiState.copy(
+                                todoText = currentUiState.selectedTodoItem!!.todo.content,
                                 isEditTodoNameBottomSheetVisible = true,
                                 isTodoSettingBottomSheetVisible = false,
                             ),
