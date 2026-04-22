@@ -213,6 +213,7 @@ class TimerViewModel
             launch {
                 delay(1000L)
                 startTimer(currentUiState.timerOption.totalTime)
+                updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Running))
             }
         }
 
