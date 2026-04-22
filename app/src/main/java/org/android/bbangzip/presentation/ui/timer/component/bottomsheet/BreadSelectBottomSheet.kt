@@ -40,6 +40,8 @@ import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.presentation.ui.timer.contract.model.BreadInfoUiState
 import org.android.bbangzip.ui.theme.BbangZipTheme
 
+private val MINIMUM_GRID_SIZE = 9
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BreadSelectBottomSheet(
@@ -123,6 +125,8 @@ private fun BreadSelectionGrid(
     onBreadSelect: (Int) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val minimumBreadList = breadList.padToMinimumSize()
+
     LazyVerticalGrid(
         columns = GridCells.Fixed(3),
         modifier = modifier.fillMaxWidth(),
@@ -131,7 +135,7 @@ private fun BreadSelectionGrid(
         contentPadding = PaddingValues(0.dp),
     ) {
         items(
-            items = breadList,
+            items = minimumBreadList,
             key = { breadInfo -> breadInfo.id },
         ) { breadInfo ->
             BreadItem(
@@ -257,6 +261,14 @@ fun CheckBox(modifier: Modifier = Modifier) {
                     .align(Alignment.Center),
         )
     }
+}
+
+private fun List<BreadInfoUiState>.padToMinimumSize(): List<BreadInfoUiState> {
+    if (size >= MINIMUM_GRID_SIZE) return this
+    val lockedPadding = List(MINIMUM_GRID_SIZE - size) { index ->
+        BreadInfoUiState(id = -1 - index, name = "", isUnLocked = false, requiredCount = -1)
+    }
+    return this + lockedPadding
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

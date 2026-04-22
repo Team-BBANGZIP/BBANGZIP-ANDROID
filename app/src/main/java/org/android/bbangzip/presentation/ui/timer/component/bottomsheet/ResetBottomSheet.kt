@@ -86,7 +86,7 @@ private fun getBottomSheetState(
                     val minutesToMilestone = TimeUnit.MILLISECONDS.toMinutes(timeToMilestoneMillis).coerceAtLeast(1)
                     stringResource(R.string.reset_sheet_sub_title_minute_n1, minutesToMilestone)
                 }
-            ResetBottomSheetInfo(title = title, breadImg = R.drawable.img_shine_bread_n1)
+            ResetBottomSheetInfo(title = title, breadImg = R.drawable.img_one_bread_stop_timer)
         }
 
         1 -> {
@@ -100,7 +100,7 @@ private fun getBottomSheetState(
                         val minutesToMilestone = TimeUnit.MILLISECONDS.toMinutes(timeToMilestoneMillis).coerceAtLeast(1)
                         stringResource(R.string.reset_sheet_sub_title_minute_n1, minutesToMilestone)
                     }
-                ResetBottomSheetInfo(title = title, breadImg = R.drawable.img_shine_bread_n1)
+                ResetBottomSheetInfo(title = title, breadImg = R.drawable.img_one_bread_stop_timer)
             } else {
                 val timeToMilestoneMillis = milestone60min - elapsedTimeMillis
                 val secondsToMilestone = TimeUnit.MILLISECONDS.toSeconds(timeToMilestoneMillis).coerceAtLeast(0)
@@ -111,14 +111,14 @@ private fun getBottomSheetState(
                         val minutesToMilestone = TimeUnit.MILLISECONDS.toMinutes(timeToMilestoneMillis).coerceAtLeast(1)
                         stringResource(R.string.reset_sheet_sub_title_minute_n2, minutesToMilestone)
                     }
-                ResetBottomSheetInfo(title = title, breadImg = R.drawable.img_shine_bread_n2)
+                ResetBottomSheetInfo(title = title, breadImg = R.drawable.img_two_bread_stop_timer)
             }
         }
 
         else ->
             ResetBottomSheetInfo(
                 title = stringResource(id = R.string.reset_sheet_title),
-                breadImg = R.drawable.img_shine_bread_n1,
+                breadImg = R.drawable.img_one_bread_stop_timer,
             )
     }
 }
