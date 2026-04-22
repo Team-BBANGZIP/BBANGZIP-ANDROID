@@ -565,6 +565,7 @@ class TodoViewModel
                                     currentUiState.copy(
                                         selectedTodoItem = null,
                                         selectedCategory = null,
+                                        todoText = "",
                                         isEditTodoNameBottomSheetVisible = false,
                                         categories = updatedCategories,
                                         flatList = updatedCategories.toFlatList(),
@@ -578,6 +579,7 @@ class TodoViewModel
                                     currentUiState.copy(
                                         selectedTodoItem = null,
                                         selectedCategory = null,
+                                        todoText = "",
                                         isEditTodoNameBottomSheetVisible = false,
                                     ),
                                 ),
