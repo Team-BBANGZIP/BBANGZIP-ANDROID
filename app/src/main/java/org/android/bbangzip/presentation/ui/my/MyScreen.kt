@@ -93,7 +93,7 @@ fun MyScreen(
             Column(
                 modifier =
                     Modifier
-                        .fillMaxWidth()
+                        .fillMaxSize()
                         .clip(RoundedCornerShape(topStart = 30.dp, topEnd = 30.dp))
                         .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
                         .padding(vertical = 32.dp),
