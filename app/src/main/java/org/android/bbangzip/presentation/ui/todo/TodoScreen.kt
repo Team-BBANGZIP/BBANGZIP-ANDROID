@@ -15,12 +15,15 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -50,6 +53,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.boundsInParent
+import androidx.compose.ui.layout.boundsInRoot
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalFocusManager
@@ -59,8 +63,6 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.Popup
-import androidx.compose.ui.window.PopupProperties
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -166,13 +168,16 @@ fun TodoScreen(
     var touchPointY by remember { mutableFloatStateOf(0f) }
 
     val focusManager = LocalFocusManager.current
+    val statusBarHeight = WindowInsets.statusBars.asPaddingValues().calculateTopPadding()
+    var calendarBoxTop by remember { mutableFloatStateOf(0f) }
+
 
     Box(
         modifier =
             modifier
                 .fillMaxSize()
                 .background(BbangZipTheme.color.backgroundNormal_FFFFFF)
-                .statusBarsPadding(),
+                .statusBarsPadding()
     ) {
         LazyColumn(
             modifier =
@@ -283,16 +288,14 @@ fun TodoScreen(
             item {
                 ListHeader(
                     commitmentMessage = commitmentMessage,
-                    isMenuOpen = isMenuOpen,
                     onMenuClick = onMenuClick,
                     onCommitmentAreaClick = onCommitmentAreaClick,
                     completedTodoCount = completedTodoCount,
                     totalTodoCount = totalTodoCount,
-                    onManageCategoryClick = onManageCategoryClick,
-                    onAddCategoryClick = onAddCategoryClick,
                     onDateSelect = onDateSelect,
                     isSundayStart = isSundayStart,
                     selectedDate = selectedDate,
+                    onCalendarBoxPositioned = { calendarBoxTop = it },
                 )
             }
 
@@ -412,6 +415,25 @@ fun TodoScreen(
             isDateSavable = isDateSavable,
             isSundayStart = isSundayStart,
         )
+        if (isMenuOpen) {
+            Box(
+                modifier =
+                    Modifier
+                        .fillMaxSize()
+                        .noRippleClickable { onMenuClick() },
+            )
+            MenuPopup(
+                modifier =
+                    Modifier
+                        .align(Alignment.TopEnd)
+                        .offset(
+                            x = (-20).dp,
+                            y = with(localDensity) { (calendarBoxTop).toDp() - statusBarHeight + 52.dp },
+                        ),
+                onManageCategoryClick = onManageCategoryClick,
+                onAddCategoryClick = onAddCategoryClick,
+            )
+        }
     }
 }
 
@@ -562,16 +584,14 @@ private fun DraggableListItem(
 @Composable
 private fun ListHeader(
     commitmentMessage: String,
-    isMenuOpen: Boolean,
     onMenuClick: () -> Unit,
     onCommitmentAreaClick: () -> Unit,
     completedTodoCount: Int,
     totalTodoCount: Int,
-    onManageCategoryClick: () -> Unit,
-    onAddCategoryClick: () -> Unit,
     onDateSelect: (LocalDate) -> Unit,
     isSundayStart: Boolean,
     selectedDate: LocalDate,
+    onCalendarBoxPositioned: (Float) -> Unit,
 ) {
     Column {
         CommitmentMessageBox(
@@ -579,23 +599,20 @@ private fun ListHeader(
             onCommitmentAreaClick = onCommitmentAreaClick,
         )
 
-        Box(modifier = Modifier.fillMaxWidth()) {
+        Box(
+            modifier =
+                Modifier
+                    .fillMaxWidth()
+                    .onGloballyPositioned { coordinates ->
+                        onCalendarBoxPositioned(coordinates.boundsInRoot().top)
+                    },
+        ) {
             BbangZipWeeklyCalendar(
                 initialDate = selectedDate,
                 startDayOfWeek = if (isSundayStart) DayOfWeek.SUNDAY else DayOfWeek.MONDAY,
                 onDateSelected = onDateSelect,
                 onMenuClick = onMenuClick,
             )
-            if (isMenuOpen) {
-                MenuPopup(
-                    modifier =
-                        Modifier
-                            .offset(x = (-20).dp, y = 9.dp),
-                    onDismissRequest = onMenuClick,
-                    onManageCategoryClick = onManageCategoryClick,
-                    onAddCategoryClick = onAddCategoryClick,
-                )
-            }
         }
 
         Gap(height = 20.dp)
@@ -688,19 +705,13 @@ private fun CompleteTodoCounter(
 @Composable
 private fun MenuPopup(
     modifier: Modifier = Modifier,
-    onDismissRequest: () -> Unit = {},
     onManageCategoryClick: () -> Unit = {},
     onAddCategoryClick: () -> Unit = {},
 ) {
-    Popup(
-        alignment = Alignment.BottomEnd,
-        onDismissRequest = onDismissRequest,
-        properties = PopupProperties(focusable = true),
-    ) {
-        Box(
-            modifier =
-                modifier
-                    .dropShadow(
+    Box(
+        modifier =
+            modifier
+                .dropShadow(
                         shape = RoundedCornerShape(12.dp),
                         color = BbangZipTheme.color.staticBlack_121212.copy(0.15f),
                         blur = 4.dp,
@@ -774,7 +785,6 @@ private fun MenuPopup(
                 }
             }
         }
-    }
 }
 
 @Preview
