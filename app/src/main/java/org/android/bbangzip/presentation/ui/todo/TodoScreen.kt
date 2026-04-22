@@ -102,8 +102,7 @@ fun TodoScreen(
     totalTodoCount: Int,
     completedTodoCount: Int,
     isMenuOpen: Boolean,
-    textFieldCommitmentMessage: String,
-    confirmedCommitmentMessage: String,
+    commitmentMessage: String,
     isCommitmentBottomSheetVisible: Boolean,
     isTimePickerBottomSheetVisible: Boolean,
     isAddTodoBottomSheetVisible: Boolean,
@@ -283,7 +282,7 @@ fun TodoScreen(
         ) {
             item {
                 ListHeader(
-                    commitmentMessage = confirmedCommitmentMessage,
+                    commitmentMessage = commitmentMessage,
                     isMenuOpen = isMenuOpen,
                     onMenuClick = onMenuClick,
                     onCommitmentAreaClick = onCommitmentAreaClick,
@@ -368,7 +367,7 @@ fun TodoScreen(
             isBottomSheetVisible = isCommitmentBottomSheetVisible,
             onDismissRequest = onCommitmentBottomSheetDismissRequest,
             focusManager = focusManager,
-            commitmentMessage = textFieldCommitmentMessage,
+            commitmentMessage = commitmentMessage,
             oncommitmentMessageChange = onTextFieldCommitmentMessageChange,
             onDoneAction = onCommitmentDone,
         )
@@ -853,8 +852,7 @@ fun TodoScreenPreview() {
         onTimePickerBottomSheetClearButtonClick = {},
         onTodoTextChange = {},
         onCategoryChipClick = {},
-        textFieldCommitmentMessage = "",
-        confirmedCommitmentMessage = "",
+        commitmentMessage = "",
         isCommitmentBottomSheetVisible = false,
         onCommitmentAreaClick = {},
         onCommitmentDone = {},
