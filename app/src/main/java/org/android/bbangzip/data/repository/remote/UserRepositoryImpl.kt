@@ -35,8 +35,8 @@ class UserRepositoryImpl
                     )
 
                 val response = userRemoteDataSource.login(code = code, request)
-                val responseData = response.data
-                responseData!!.toUserTokenInfo()
+                val responseData = requireNotNull(response.data) { "data가 null입니다." }
+                responseData.toUserTokenInfo()
             }
 
         override suspend fun logout(): Result<Unit> =
@@ -47,8 +47,8 @@ class UserRepositoryImpl
         override suspend fun reissue(): Result<ReissueToken> =
             runCatching {
                 val response = userRemoteDataSource.reissue()
-                val responseData = response.data
-                responseData!!.toReissueToken()
+                val responseData = requireNotNull(response.data) { "data가 null입니다." }
+                responseData.toReissueToken()
             }
 
         override suspend fun withdraw(): Result<Unit> =
