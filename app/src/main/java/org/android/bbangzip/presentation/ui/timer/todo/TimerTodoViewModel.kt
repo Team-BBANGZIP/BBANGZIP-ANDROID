@@ -96,9 +96,10 @@ class TimerTodoViewModel
                 }
 
                 is TimerTodoEvent.OnAddTodoDone -> {
-                    if (event.todoContent.isNotBlank()) {
+                    val selectedCategory = currentUiState.selectedCategory
+                    if (event.todoContent.isNotBlank() && selectedCategory != null) {
                         addTodo(
-                            categoryId = currentUiState.selectedCategory!!.id,
+                            categoryId = selectedCategory.id,
                             todoContent = currentUiState.todoText,
                             startTime = currentUiState.selectedStartTime,
                         )

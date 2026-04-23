@@ -149,8 +149,8 @@ fun BbangZipBaseTextField(
                         .then(heightModifier),
                 value = value,
                 onValueChange = {
-                    val filtered = it.replace(RegexCaches.EMOJI_AND_UNASSIGNED_REGEX, "")
-                    if (maxCharacter == null || it.length <= maxCharacter) onValueChange(filtered)
+                    val filtered = it.replace(RegexCaches.STRICT_NO_EMOJI_REGEX, "")
+                    if (maxCharacter == null || filtered.length <= maxCharacter) onValueChange(filtered)
                 },
                 keyboardActions = keyboardActions,
                 keyboardOptions = keyboardOptions.copy(imeAction = ImeAction.Done),

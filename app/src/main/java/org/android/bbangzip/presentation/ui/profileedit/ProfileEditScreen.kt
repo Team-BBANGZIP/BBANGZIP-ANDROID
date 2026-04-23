@@ -111,6 +111,7 @@ fun ProfileEditScreen(
                     .fillMaxWidth()
                     .padding(horizontal = 24.dp),
             onClick = onSaveButtonClick,
+            enabled = state.isSaveButtonEnabled,
             trailingIcon = {
                 Icon(
                     imageVector = ImageVector.vectorResource(R.drawable.ic_check_default_24),
