@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.presentation.common.base.BaseContract
 import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.model.ListItem
+import org.android.bbangzip.presentation.common.util.extension.getBbangZipDate
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -13,7 +14,7 @@ class TimerTodoContract {
     data class TimerTodoState(
         val categories: List<Category> = emptyList(),
         val flatList: List<ListItem> = emptyList(),
-        val todayDate: LocalDate = LocalDate.now(),
+        val todayDate: LocalDate = getBbangZipDate(),
         val isAddTodoBottomSheetVisible: Boolean = false,
         val isTimePickerBottomSheetVisible: Boolean = false,
         val todoText: String = "",

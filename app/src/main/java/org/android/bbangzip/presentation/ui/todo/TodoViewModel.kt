@@ -27,6 +27,7 @@ import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateT
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateTodoText
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoSideEffect
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoState
+import org.android.bbangzip.presentation.common.util.extension.getBbangZipDate
 import timber.log.Timber
 import java.time.LocalDate
 import java.time.LocalTime
@@ -52,7 +53,9 @@ class TodoViewModel
         override fun handleEvent(event: TodoEvent) {
             when (event) {
                 is TodoEvent.Initialize -> {
-                    getTodoList()
+                    val today = getBbangZipDate()
+                    updateState(UpdateSelectedDate(today))
+                    getTodoList(today)
                     viewModelScope.launch {
                         userDefaultRepository.userPreferenceFlow.collect { preferences ->
                             updateState(TodoReduce.UpdateIsSundayStart(isSundayStart = preferences.isSundayStart))
@@ -611,7 +614,7 @@ class TodoViewModel
                                         currentUiState.copy(
                                             isCalendarBottomSheetVisible = false,
                                             selectedTodoItem = null,
-                                            selectedMonthlyCalendarDate = LocalDate.now(),
+                                            selectedMonthlyCalendarDate = getBbangZipDate(),
                                         ),
                                     ),
                                 )
@@ -637,7 +640,7 @@ class TodoViewModel
                                             selectedTodoItem = null,
                                             categories = updatedCategories,
                                             flatList = updatedCategories.toFlatList(),
-                                            selectedMonthlyCalendarDate = LocalDate.now(),
+                                            selectedMonthlyCalendarDate = getBbangZipDate(),
                                         ),
                                     ),
                                 )
@@ -654,7 +657,7 @@ class TodoViewModel
                             currentUiState.copy(
                                 isCalendarBottomSheetVisible = false,
                                 selectedTodoItem = null,
-                                selectedMonthlyCalendarDate = LocalDate.now(),
+                                selectedMonthlyCalendarDate = getBbangZipDate(),
                             ),
                         ),
                     )

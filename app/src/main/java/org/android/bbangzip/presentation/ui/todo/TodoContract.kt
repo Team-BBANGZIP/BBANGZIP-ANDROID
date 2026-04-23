@@ -5,6 +5,7 @@ import kotlinx.parcelize.Parcelize
 import org.android.bbangzip.presentation.common.base.BaseContract
 import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.model.ListItem
+import org.android.bbangzip.presentation.common.util.extension.getBbangZipDate
 import java.time.LocalDate
 import java.time.LocalTime
 
@@ -13,7 +14,7 @@ class TodoContract {
     data class TodoState(
         val categories: List<Category> = emptyList(),
         val flatList: List<ListItem> = emptyList(),
-        val selectedDate: LocalDate = LocalDate.now(),
+        val selectedDate: LocalDate = getBbangZipDate(),
         val isMenuOpen: Boolean = false,
         // commitment state
         val isCommitmentBottomSheetVisible: Boolean = false,
@@ -30,7 +31,7 @@ class TodoContract {
         val selectedTodoItem: ListItem.TodoItem? = null,
         val isEditTodoNameBottomSheetVisible: Boolean = false,
         val isCalendarBottomSheetVisible: Boolean = false,
-        val selectedMonthlyCalendarDate: LocalDate = LocalDate.now(),
+        val selectedMonthlyCalendarDate: LocalDate = getBbangZipDate(),
         val isRepeat: Boolean = false,
         val isDateSavable: Boolean = false,
         val isSundayStart: Boolean = false,

@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import kotlinx.coroutines.launch
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.util.extension.Gap
+import org.android.bbangzip.presentation.common.util.extension.getBbangZipDate
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.presentation.common.util.extension.startOfWeek
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
@@ -94,7 +95,7 @@ fun BbangZipWeeklyCalendar(
     onMenuClick: () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
-    val today = remember { LocalDate.now() }
+    val today = remember { getBbangZipDate() }
     var selectedDate by remember(key1 = initialDate) { mutableStateOf(value = initialDate) }
 
     val pagerState =

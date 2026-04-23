@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.launch
 import org.android.bbangzip.R
 import org.android.bbangzip.presentation.common.util.extension.Gap
+import org.android.bbangzip.presentation.common.util.extension.getBbangZipDate
 import org.android.bbangzip.presentation.common.util.extension.noRippleClickable
 import org.android.bbangzip.ui.theme.BBANGZIPANDROIDTheme
 import timber.log.Timber
@@ -108,7 +109,7 @@ fun MonthlyCalendar(
             pageCount = { Int.MAX_VALUE },
         )
     var selectedDate by remember { mutableStateOf(value = initialDate) }
-    val today = remember { LocalDate.now() }
+    val today = remember { getBbangZipDate() }
     val scope = rememberCoroutineScope()
 
     LaunchedEffect(selectedDate) {
