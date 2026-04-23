@@ -27,7 +27,7 @@ import org.android.bbangzip.ui.theme.BbangZipTheme
 @Composable
 fun TimerRoute(
     sharedViewModel: SharedViewModel,
-    navigateToTimerTodo: (timeOptionIndex: Int) -> Unit,
+    navigateToTimerTodo: (timeOptionIndex: Int, timerStartDate: String) -> Unit,
     shouldRestartTimer: Boolean,
     modifier: Modifier = Modifier,
     timerViewmodel: TimerViewModel = hiltViewModel(),
@@ -39,7 +39,7 @@ fun TimerRoute(
     LaunchedEffect(timerViewmodel.uiSideEffect) {
         timerViewmodel.uiSideEffect.collectLatest { effect ->
             when (effect) {
-                is TimerContract.TimerSideEffect.NavigateToTimerTodo -> navigateToTimerTodo(effect.timeOptionIndex)
+                is TimerContract.TimerSideEffect.NavigateToTimerTodo -> navigateToTimerTodo(effect.timeOptionIndex, effect.timerStartDate)
             }
         }
     }

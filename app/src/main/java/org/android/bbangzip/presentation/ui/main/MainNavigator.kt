@@ -135,8 +135,8 @@ class MainNavigator(
         )
     }
 
-    fun navigateToTimerTodo(timeOptionIndex: Int) {
-        navHostController.navigateTimerTodo(timeOptionIndex = timeOptionIndex)
+    fun navigateToTimerTodo(timeOptionIndex: Int, timerStartDate: String) {
+        navHostController.navigateTimerTodo(timeOptionIndex = timeOptionIndex, timerStartDate = timerStartDate)
     }
 
     fun navigateToManageCategory() = navHostController.navigateToManageCategory()

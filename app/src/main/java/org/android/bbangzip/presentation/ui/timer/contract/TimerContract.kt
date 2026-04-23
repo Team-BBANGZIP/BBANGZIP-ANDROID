@@ -28,6 +28,7 @@ class TimerContract {
         val breadList: ImmutableList<BreadInfoUiState> = emptyList<BreadInfoUiState>().toImmutableList(),
         val totalBreadCount: Int = 0,
         val todayBreadCount: Int = 0,
+        val timerStartDate: String = "",
     ) : BaseContract.State, Parcelable {
         @IgnoredOnParcel
         val progress: Float by lazy {
@@ -108,9 +109,11 @@ class TimerContract {
         data class UpdateTimeOption(val option: TimeOption) : TimerReduce
 
         data class UpdateTodayBreadCount(val breadCount: Int) : TimerReduce
+
+        data class UpdateTimerStartDate(val date: String) : TimerReduce
     }
 
     sealed interface TimerSideEffect : BaseContract.SideEffect {
-        data class NavigateToTimerTodo(val timeOptionIndex: Int) : TimerSideEffect
+        data class NavigateToTimerTodo(val timeOptionIndex: Int, val timerStartDate: String) : TimerSideEffect
     }
 }
