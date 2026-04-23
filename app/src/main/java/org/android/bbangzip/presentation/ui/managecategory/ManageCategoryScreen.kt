@@ -119,11 +119,12 @@ fun ManageCategoryScreen(
                                         down.position.y >= itemTopY && down.position.y <= itemBottomY
                                     } ?: return@awaitEachGesture
                             val pressedLazyColumnIndex = pressedLazyColumnItem.index
-                            draggingItemIndex = pressedLazyColumnIndex - LIST_HEADER_COUNT
-                            val pressedItemOfCategories = activeCategories.getOrNull(draggingItemIndex!!)
+                            val currentDraggingIndex = pressedLazyColumnIndex - LIST_HEADER_COUNT
+                            draggingItemIndex = currentDraggingIndex
+                            val pressedItemOfCategories = activeCategories.getOrNull(currentDraggingIndex)
 
                             // stopped 영역(헤더 포함)은 드래그 차단
-                            if (draggingItemIndex!! >= activeCount) {
+                            if (currentDraggingIndex >= activeCount) {
                                 awaitDragOrCancellation(down.id)
                                 draggingItemIndex = null
                                 return@awaitEachGesture
@@ -192,11 +193,8 @@ fun ManageCategoryScreen(
                                 } finally {
                                     autoScrollJob?.cancel()
                                     targetIndex?.let {
-                                        if (draggingItemIndex != it && it in 0 until activeCount) {
-                                            onCategoryDragEnd(
-                                                draggingItemIndex!!,
-                                                it,
-                                            )
+                                        if (currentDraggingIndex != it && it in 0 until activeCount) {
+                                            onCategoryDragEnd(currentDraggingIndex, it)
                                         }
                                     }
                                     draggingItem = null
