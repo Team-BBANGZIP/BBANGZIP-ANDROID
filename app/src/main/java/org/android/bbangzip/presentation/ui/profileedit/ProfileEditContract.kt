@@ -19,6 +19,7 @@ class ProfileEditContract {
         override fun toParcelable(): Parcelable = this
 
         val selectedProfileImageResId get() = OnboardingConstants.PROFILE_IMG_RES_IDS[selectedProfileImageKey-1]
+        val isSaveButtonEnabled get() = nickname.isNotEmpty()
     }
 
     sealed interface ProfileEditEvent : BaseContract.Event {
