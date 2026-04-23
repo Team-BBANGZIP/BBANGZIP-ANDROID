@@ -359,7 +359,7 @@ private fun DayCell(
 private fun LocalDate.getDisplayMonth(selectedDate: LocalDate): LocalDate {
     val lastDayOfWeek = this.plusDays(DAYS_IN_WEEK - 1L)
     return if (this.month != lastDayOfWeek.month) {
-        if (selectedDate.isAfter(this) && selectedDate.isBefore(lastDayOfWeek) && selectedDate.month == lastDayOfWeek.month) {
+        if (selectedDate.isAfter(this) && !selectedDate.isAfter(lastDayOfWeek) && selectedDate.month == lastDayOfWeek.month) {
             selectedDate
         } else {
             this
