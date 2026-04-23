@@ -109,8 +109,9 @@ class TodoViewModel
 
                 TodoEvent.OnAddTodoDone -> {
                     if (currentUiState.todoText.isNotBlank()) {
+                        val categoryId = currentUiState.selectedCategory?.id ?: return
                         addTodo(
-                            categoryId = currentUiState.selectedCategory!!.id,
+                            categoryId = categoryId,
                             todoContent = currentUiState.todoText,
                             targetDate = currentUiState.selectedDate,
                             startTime = currentUiState.selectedStartTime,
@@ -131,7 +132,8 @@ class TodoViewModel
                 is TodoEvent.OnTimeConfirmButtonClick -> {
                     if (currentUiState.isEditMode) {
                         val prevStartTime = currentUiState.selectedStartTime
-                        val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
+                        val selectedTodoItem = currentUiState.selectedTodoItem ?: return
+                        val selectedTodoId = selectedTodoItem.todo.todoId
                         viewModelScope.launch {
                             todoRepository.modifyTodoTime(
                                 todoId = selectedTodoId.toLong(),
@@ -159,9 +161,9 @@ class TodoViewModel
                                             isTimePickerBottomSheetVisible = false,
                                             isTodoSettingBottomSheetVisible = true,
                                             selectedTodoItem =
-                                                currentUiState.selectedTodoItem!!.copy(
+                                                selectedTodoItem.copy(
                                                     todo =
-                                                        currentUiState.selectedTodoItem!!.todo.copy(
+                                                        selectedTodoItem.todo.copy(
                                                             startTime = event.startTime,
                                                         ),
                                                 ),
@@ -219,7 +221,8 @@ class TodoViewModel
                 TodoEvent.OnTimePickerBottomSheetClearButtonClick -> {
                     if (currentUiState.isEditMode) {
                         val prevStartTime = currentUiState.selectedStartTime
-                        val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
+                        val selectedTodoItem = currentUiState.selectedTodoItem ?: return
+                        val selectedTodoId = selectedTodoItem.todo.todoId
                         viewModelScope.launch {
                             todoRepository.modifyTodoTime(
                                 todoId = selectedTodoId.toLong(),
@@ -247,9 +250,9 @@ class TodoViewModel
                                             isTimePickerBottomSheetVisible = false,
                                             isTodoSettingBottomSheetVisible = true,
                                             selectedTodoItem =
-                                                currentUiState.selectedTodoItem!!.copy(
+                                                selectedTodoItem.copy(
                                                     todo =
-                                                        currentUiState.selectedTodoItem!!.todo.copy(
+                                                        selectedTodoItem.todo.copy(
                                                             startTime = null,
                                                         ),
                                                 ),
@@ -283,8 +286,9 @@ class TodoViewModel
 
                 TodoEvent.OnAddTodoBottomSheetDismissRequest -> {
                     if (currentUiState.todoText.isNotBlank()) {
+                        val categoryId = currentUiState.selectedCategory?.id ?: return
                         addTodo(
-                            categoryId = currentUiState.selectedCategory!!.id,
+                            categoryId = categoryId,
                             todoContent = currentUiState.todoText,
                             targetDate = currentUiState.selectedDate,
                             startTime = currentUiState.selectedStartTime,
@@ -391,7 +395,7 @@ class TodoViewModel
 
                 TodoEvent.OnCopyTodoClick -> {
                     viewModelScope.launch {
-                        val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
+                        val selectedTodoId = currentUiState.selectedTodoItem?.todo?.todoId ?: return@launch
                         todoRepository.copyTodo(
                             todoId = selectedTodoId.toLong(),
                         ).onSuccess { data ->
@@ -433,7 +437,7 @@ class TodoViewModel
 
                 TodoEvent.OnDeleteTodoButtonClick -> {
                     viewModelScope.launch {
-                        val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
+                        val selectedTodoId = currentUiState.selectedTodoItem?.todo?.todoId ?: return@launch
                         todoRepository.deleteTodo(
                             todoId = selectedTodoId.toLong(),
                         ).onSuccess {
@@ -487,7 +491,7 @@ class TodoViewModel
 
                 TodoEvent.OnMoveTodoToTomorrowClick -> {
                     viewModelScope.launch {
-                        val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
+                        val selectedTodoId = currentUiState.selectedTodoItem?.todo?.todoId ?: return@launch
                         todoRepository.modifyTodoDate(
                             todoId = selectedTodoId.toLong(),
                             targetDate = null,
@@ -529,10 +533,11 @@ class TodoViewModel
                 }
 
                 TodoEvent.OnModifyTodoNameButtonClick -> {
+                    val selectedTodoItem = currentUiState.selectedTodoItem ?: return
                     updateState(
                         UpdateTodoState(
                             currentUiState.copy(
-                                todoText = currentUiState.selectedTodoItem!!.todo.content,
+                                todoText = selectedTodoItem.todo.content,
                                 isEditTodoNameBottomSheetVisible = true,
                                 isTodoSettingBottomSheetVisible = false,
                             ),
@@ -544,7 +549,7 @@ class TodoViewModel
                 TodoEvent.OnEditTodoNameBottomSheetDismissRequest,
                 -> {
                     viewModelScope.launch {
-                        val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
+                        val selectedTodoId = currentUiState.selectedTodoItem?.todo?.todoId ?: return@launch
                         todoRepository.modifyTodoName(
                             todoId = selectedTodoId.toLong(),
                             content = currentUiState.todoText,
@@ -603,7 +608,7 @@ class TodoViewModel
 
                 TodoEvent.OnSaveDateClick -> {
                     viewModelScope.launch {
-                        val selectedTodoId = currentUiState.selectedTodoItem!!.todo.todoId
+                        val selectedTodoId = currentUiState.selectedTodoItem?.todo?.todoId ?: return@launch
                         if (currentUiState.isRepeat) {
                             todoRepository.repeatTodo(
                                 todoId = selectedTodoId.toLong(),
