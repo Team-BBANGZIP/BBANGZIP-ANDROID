@@ -78,15 +78,15 @@ class TodoViewModel
                     if (from == to) return
 
                     val currentFlatList = currentUiState.flatList.toMutableList()
-                    val movedItem: ListItem.TodoItem = currentFlatList.removeAt(from) as ListItem.TodoItem
+                    val movedItem = currentFlatList.removeAt(from) as? ListItem.TodoItem ?: return
                     currentFlatList.add(to, movedItem)
 
                     synchronizeListState(currentFlatList)
                     val newCategories = reconstructCategoriesFromFlatList(currentFlatList)
                     val targetCategory =
-                        currentFlatList.filterIsInstance<ListItem.TodoItem>().filter {
+                        currentFlatList.filterIsInstance<ListItem.TodoItem>().firstOrNull {
                             it.todo.todoId == movedItem.todo.todoId
-                        }[0].category
+                        }?.category ?: return
 
                     updateState(UpdateCategoriesAndFlatList(newCategories, currentFlatList.toList()))
                     viewModelScope.launch {
