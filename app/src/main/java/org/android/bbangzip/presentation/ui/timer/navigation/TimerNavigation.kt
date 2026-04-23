@@ -12,7 +12,7 @@ import org.android.bbangzip.presentation.ui.timer.todo.TimerTodoRoute
 
 fun NavGraphBuilder.timerNavGraph(
     sharedViewModel: SharedViewModel,
-    navigateToTimerTodo: (Int) -> Unit = {},
+    navigateToTimerTodo: (Int, String) -> Unit = { _, _ -> },
 ) {
     composable<BottomNavigationRoute.Timer> { backStackEntry ->
         val item = backStackEntry.toRoute<BottomNavigationRoute.Timer>()
@@ -29,11 +29,11 @@ fun NavGraphBuilder.timerTodoNavGraph(
     navigateToBack: () -> Unit,
 ) {
     composable<TimerTodo> { backStackEntry ->
-        val timeOptionIndex = backStackEntry.toRoute<TimerTodo>().timeOptionIndex
+        val route = backStackEntry.toRoute<TimerTodo>()
         TimerTodoRoute(
             navigateToTimer = navigateToTimer,
             navigateToBack = navigateToBack,
-            timeOptionIndex = timeOptionIndex,
+            timeOptionIndex = route.timeOptionIndex,
         )
     }
 }
@@ -48,8 +48,8 @@ fun NavController.navigateToTimer(
     )
 }
 
-fun NavController.navigateTimerTodo(timeOptionIndex: Int) {
+fun NavController.navigateTimerTodo(timeOptionIndex: Int, timerStartDate: String) {
     navigate(
-        route = TimerTodo(timeOptionIndex = timeOptionIndex),
+        route = TimerTodo(timeOptionIndex = timeOptionIndex, timerStartDate = timerStartDate),
     )
 }

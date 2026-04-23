@@ -81,6 +81,7 @@ class TimerViewModel
 
                 is TimerContract.TimerEvent.OnRestartSheetApproveBtnClick -> {
                     resetTimer()
+                    updateState(TimerContract.TimerReduce.UpdateTimerStartDate(getBbangZipTimerDate()))
                     updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Running))
                     startTimer(currentUiState.timerOption.totalTime)
                     updateState(TimerContract.TimerReduce.UpdateBottomSheetState(TimerBottomSheetVisibleState(restart = false)))
@@ -98,7 +99,7 @@ class TimerViewModel
                     updateState(TimerContract.TimerReduce.UpdateBottomSheetState(TimerBottomSheetVisibleState(complete = false)))
                     launch {
                         delay(200L)
-                        setSideEffect(TimerContract.TimerSideEffect.NavigateToTimerTodo(currentUiState.timerOption.timeOptionIndex))
+                        setSideEffect(TimerContract.TimerSideEffect.NavigateToTimerTodo(currentUiState.timerOption.timeOptionIndex, currentUiState.timerStartDate))
                         resetTimer(moveToReady = true)
                     }
                 }
@@ -148,6 +149,9 @@ class TimerViewModel
                         todayBreadCount = reduce.breadCount,
                     )
 
+                is TimerContract.TimerReduce.UpdateTimerStartDate ->
+                    state.copy(timerStartDate = reduce.date)
+
                 is TimerContract.TimerReduce.UpdateTimerState -> reduce.timerState
             }
         }
@@ -160,6 +164,9 @@ class TimerViewModel
         private fun handleStartOrResumeTimer() {
             val sessionState = currentUiState.timerSessionState
             if (sessionState is TimerSessionUiState.Ready || sessionState is TimerSessionUiState.Paused) {
+                if (sessionState is TimerSessionUiState.Ready) {
+                    updateState(TimerContract.TimerReduce.UpdateTimerStartDate(getBbangZipTimerDate()))
+                }
                 updateState(TimerContract.TimerReduce.UpdateTimerSessionState(TimerSessionUiState.Running))
                 startTimer(currentUiState.remainingTime)
             }

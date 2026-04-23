@@ -1,5 +1,6 @@
 package org.android.bbangzip.presentation.common.util.extension
 
+import java.time.LocalDate
 import java.time.ZoneId
 import java.time.ZonedDateTime
 import java.time.format.DateTimeFormatter
@@ -12,4 +13,9 @@ fun getBbangZipTimerDate(): String {
     val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
     return adjustedDateTime.format(formatter)
+}
+
+fun getBbangZipDate(): LocalDate {
+    val nowInSeoul = ZonedDateTime.now(ZoneId.of("Asia/Seoul"))
+    return nowInSeoul.minusHours(5).toLocalDate()
 }

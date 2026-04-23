@@ -10,7 +10,9 @@ import org.android.bbangzip.presentation.common.base.BaseViewModel
 import org.android.bbangzip.presentation.common.model.Category
 import org.android.bbangzip.presentation.common.model.ListItem
 import org.android.bbangzip.presentation.common.model.Todo
+import org.android.bbangzip.presentation.common.util.extension.getBbangZipDate
 import org.android.bbangzip.presentation.common.util.extension.toYyyyMmDdString
+import java.time.LocalDate
 import org.android.bbangzip.presentation.ui.timer.todo.contract.TimerTodoContract.TimerTodoEvent
 import org.android.bbangzip.presentation.ui.timer.todo.contract.TimerTodoContract.TimerTodoReduce
 import org.android.bbangzip.presentation.ui.timer.todo.contract.TimerTodoContract.TimerTodoReduce.ClearAddTodoState
@@ -25,7 +27,6 @@ import org.android.bbangzip.presentation.ui.timer.todo.contract.TimerTodoContrac
 import org.android.bbangzip.presentation.ui.timer.todo.contract.TimerTodoContract.TimerTodoSideEffect.NavigateToTimer
 import org.android.bbangzip.presentation.ui.timer.todo.contract.TimerTodoContract.TimerTodoState
 import timber.log.Timber
-import java.time.LocalDate
 import java.time.LocalTime
 import javax.inject.Inject
 
@@ -36,6 +37,12 @@ class TimerTodoViewModel
         private val todoRepository: TodoRepository,
         savedStateHandle: SavedStateHandle,
     ) : BaseViewModel<TimerTodoEvent, TimerTodoState, TimerTodoReduce, TimerTodoSideEffect>(savedStateHandle) {
+        private val timerStartDate: LocalDate by lazy {
+            savedStateHandle.get<String>("timerStartDate")
+                ?.let { runCatching { LocalDate.parse(it) }.getOrNull() }
+                ?: getBbangZipDate()
+        }
+
         override fun createInitialState(savedState: Parcelable?): TimerTodoState {
             return savedState as? TimerTodoState ?: TimerTodoState()
         }
@@ -47,8 +54,14 @@ class TimerTodoViewModel
         override fun handleEvent(event: TimerTodoEvent) {
             when (event) {
                 is TimerTodoEvent.Initialize -> {
+                    val startDate = timerStartDate
+                    updateState(
+                        TimerTodoReduce.UpdateTimerTodoState(
+                            currentUiState.copy(todayDate = startDate),
+                        ),
+                    )
                     launch {
-                        getTodoList()
+                        getTodoList(startDate)
                     }
                 }
 
@@ -164,10 +177,10 @@ class TimerTodoViewModel
             }
         }
 
-    private suspend fun getTodoList() {
+    private suspend fun getTodoList(date: LocalDate = currentUiState.todayDate) {
         todoRepository
             .getTodoList(
-                date = LocalDate.now().toYyyyMmDdString(),
+                date = date.toYyyyMmDdString(),
             )
             .onSuccess { data ->
                 val categoryList =
@@ -265,7 +278,7 @@ class TimerTodoViewModel
                     .addTodo(
                         categoryId = categoryId.toLong(),
                         content = todoContent,
-                        targetDate = LocalDate.now(),
+                        targetDate = currentUiState.todayDate,
                         startTime = startTime,
                     )
                     .onSuccess { data ->
