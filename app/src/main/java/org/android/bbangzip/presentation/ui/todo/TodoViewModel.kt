@@ -17,14 +17,12 @@ import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoEvent
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategories
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateCategoriesAndFlatList
-import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateConfirmedCommitmentMessage
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateFlatList
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateIsAddTodoBottomSheetVisible
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateIsCommitmentBottomSheetVisible
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateIsMenuOpen
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateIsTimePickerBottomSheetVisible
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateSelectedDate
-import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateTextFieldCommitmentMessage
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateTodoState
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoReduce.UpdateTodoText
 import org.android.bbangzip.presentation.ui.todo.TodoContract.TodoSideEffect
@@ -342,22 +340,22 @@ class TodoViewModel
                 }
 
                 TodoEvent.OnCommitmentDone -> {
-                    val prevCommitment = currentUiState.confirmedCommitmentMessage
-                    updateState(UpdateConfirmedCommitmentMessage(commitmentMessage = currentUiState.textFieldCommitmentMessage))
+                    val prevCommitment = currentUiState.commitmentMessage
+                    updateState(TodoReduce.UpdateCommitmentMessage(commitmentMessage = currentUiState.commitmentMessage))
                     updateState(UpdateIsCommitmentBottomSheetVisible(false))
                     viewModelScope.launch {
                         commitmentRepository
-                            .submitCommitmentMessage(commitmentMessage = currentUiState.textFieldCommitmentMessage)
+                            .submitCommitmentMessage(commitmentMessage = currentUiState.commitmentMessage)
                             .onSuccess { data ->
                             }.onFailure {
                                 Timber.d("다짐 메세지 작성 실패")
-                                updateState(UpdateConfirmedCommitmentMessage(commitmentMessage = prevCommitment))
+                                updateState(TodoReduce.UpdateCommitmentMessage(commitmentMessage = prevCommitment))
                             }
                     }
                 }
 
                 is TodoEvent.OnTextFieldCommitmentMessageChange -> {
-                    updateState(UpdateTextFieldCommitmentMessage(commitmentMessage = event.text))
+                    updateState(TodoReduce.UpdateCommitmentMessage(commitmentMessage = event.text))
                 }
 
                 TodoEvent.OnCommitmentBottomSheetDismissRequest -> {
@@ -531,6 +529,7 @@ class TodoViewModel
                     updateState(
                         UpdateTodoState(
                             currentUiState.copy(
+                                todoText = currentUiState.selectedTodoItem!!.todo.content,
                                 isEditTodoNameBottomSheetVisible = true,
                                 isTodoSettingBottomSheetVisible = false,
                             ),
@@ -565,6 +564,7 @@ class TodoViewModel
                                     currentUiState.copy(
                                         selectedTodoItem = null,
                                         selectedCategory = null,
+                                        todoText = "",
                                         isEditTodoNameBottomSheetVisible = false,
                                         categories = updatedCategories,
                                         flatList = updatedCategories.toFlatList(),
@@ -578,6 +578,7 @@ class TodoViewModel
                                     currentUiState.copy(
                                         selectedTodoItem = null,
                                         selectedCategory = null,
+                                        todoText = "",
                                         isEditTodoNameBottomSheetVisible = false,
                                     ),
                                 ),
@@ -745,7 +746,7 @@ class TodoViewModel
                             TodoReduce.UpdateTodoListData(
                                 categories = categoryList,
                                 flatList = categoryList.toFlatList(),
-                                confirmedCommitmentMessage = data.commitmentMessage ?: "",
+                                commitmentMessage = data.commitmentMessage ?: "",
                             ),
                         )
                     }.onFailure { throwable ->
@@ -812,12 +813,8 @@ class TodoViewModel
                     state.copy(isCommitmentBottomSheetVisible = reduce.isVisible)
                 }
 
-                is TodoReduce.UpdateTextFieldCommitmentMessage -> {
-                    state.copy(textFieldCommitmentMessage = reduce.commitmentMessage)
-                }
-
-                is TodoReduce.UpdateConfirmedCommitmentMessage -> {
-                    state.copy(confirmedCommitmentMessage = reduce.commitmentMessage)
+                is TodoReduce.UpdateCommitmentMessage -> {
+                    state.copy(commitmentMessage = reduce.commitmentMessage)
                 }
 
                 is TodoReduce.UpdateTodoState -> {
@@ -828,7 +825,7 @@ class TodoViewModel
                     state.copy(
                         categories = reduce.categories,
                         flatList = reduce.flatList,
-                        confirmedCommitmentMessage = reduce.confirmedCommitmentMessage,
+                        commitmentMessage = reduce.commitmentMessage,
                     )
                 }
 

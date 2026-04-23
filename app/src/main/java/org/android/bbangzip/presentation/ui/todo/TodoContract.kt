@@ -17,8 +17,7 @@ class TodoContract {
         val isMenuOpen: Boolean = false,
         // commitment state
         val isCommitmentBottomSheetVisible: Boolean = false,
-        val confirmedCommitmentMessage: String = "나만의 다짐을 적어보세요.",
-        val textFieldCommitmentMessage: String = "",
+        val commitmentMessage: String = "나만의 다짐을 적어보세요.",
         // add todo state
         val isAddTodoBottomSheetVisible: Boolean = false,
         val isTimePickerBottomSheetVisible: Boolean = false,
@@ -141,16 +140,14 @@ class TodoContract {
 
         data object ClearAddTodoState : TodoReduce
 
-        data class UpdateTextFieldCommitmentMessage(val commitmentMessage: String) : TodoReduce
-
-        data class UpdateConfirmedCommitmentMessage(val commitmentMessage: String) : TodoReduce
+        data class UpdateCommitmentMessage(val commitmentMessage: String) : TodoReduce
 
         data class UpdateIsCommitmentBottomSheetVisible(val isVisible: Boolean) : TodoReduce
 
         data class UpdateTodoListData(
             val categories: List<Category>,
             val flatList: List<ListItem>,
-            val confirmedCommitmentMessage: String,
+            val commitmentMessage: String,
         ) : TodoReduce
 
         data class UpdateIsSundayStart(val isSundayStart: Boolean) : TodoReduce
